@@ -10,7 +10,10 @@
  * Objects that would be important to develop:
  *
  *   - Kicker object
- *     * Will most likely use the following objects: 
+ *     * Will most likely use the following objects:
+ *
+ *   - Pulley object
+ *     * Will most likely use the following objects:
  */
 
 package edu.wpi.first.wpilibj.templates;
