@@ -5,9 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+//<<<<<<< .mine
+/*
+ * This is Derek.
+ */
+//=======
 /*
  *This is Jac.
  */
+//>>>>>>> .r14
 
 /**
  * Objects that would be important to develop:
