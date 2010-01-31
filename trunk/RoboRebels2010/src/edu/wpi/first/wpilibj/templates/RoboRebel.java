@@ -43,7 +43,14 @@ public class RoboRebel extends IterativeRobot {
      */
     public void RoboRebel()
     {
-        
+        /**
+         * Set up the following:
+         *
+         *   - Create a new RobotDrive object specifying 4 motors
+         *   - Grab an instance of the DriveStation object
+         *   - Create Joystick objects which map to the approprite modules
+         *   - 
+         */
     }
 
     /**
