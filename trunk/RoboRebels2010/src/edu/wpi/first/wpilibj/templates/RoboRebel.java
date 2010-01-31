@@ -39,6 +39,14 @@ public class RoboRebel extends IterativeRobot {
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
 
     /**
+     * Constructor
+     */
+    public void RoboRebel()
+    {
+        
+    }
+
+    /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
