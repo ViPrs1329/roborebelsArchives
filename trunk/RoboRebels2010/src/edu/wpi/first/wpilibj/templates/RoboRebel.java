@@ -4,6 +4,9 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
+// This is a chance
+
+
 
 //<<<<<<< .mine
 /*
@@ -74,23 +77,19 @@ public class RoboRebel extends IterativeRobot {
          *   - Set up Joystick button map array
          */
         
-        System.out.println("BuiltinDefaultCode Constructor Started\n");
+        System.out.println("RoboRebel Constructor Started\n");
 
-// Create a robot using standard right/left robot drive on PWMS 1, 2, 3, and #4
-m_robotDrive = new RobotDrive(1, 3, 2, 4);
+        // Create a robot using standard right/left robot drive on PWMS 1, 2, 3, and #4
+        m_robotDrive = new RobotDrive(1, 3, 2, 4);
 
-                // Define joysticks being used at USB port #1 and USB port #2 on the Drivers Station
-m_rightStick = new Joystick(1);
-m_leftStick = new Joystick(2);
+                        // Define joysticks being used at USB port #1 and USB port #2 on the Drivers Station
+        m_rightStick = new Joystick(1);
+        m_leftStick = new Joystick(2);
 
-                // Iterate over all the buttons on each joystick, setting state to false for each
-int buttonNum = 1;	 // start counting buttons at button 1
-for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
-m_rightStickButtonState[buttonNum] = false;
-m_leftStickButtonState[buttonNum] = false;
-}
+                        // Iterate over all the buttons on each joystick, setting state to false for each
 
-        System.out.println("BuiltinDefaultCode Constructor Completed\n");
+
+        System.out.println("RoboRebel Constructor Completed\n");
     }
 
     /**
@@ -149,25 +148,25 @@ m_leftStickButtonState[buttonNum] = false;
     {
 
         // feed the user watchdog at every period when in autonomous
-Watchdog.getInstance().feed();
+        Watchdog.getInstance().feed();
 
-/*
- * No longer needed since periodic loops are now synchronized with incoming packets.
-if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
-*/
-/*
- * Code placed in here will be called only when a new packet of information
- * has been received by the Driver Station.  Any code which needs new information
- * from the DS should go in here
- */
+        /*
+         * No longer needed since periodic loops are now synchronized with incoming packets.
+        if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
+        */
+        /*
+         * Code placed in here will be called only when a new packet of information
+         * has been received by the Driver Station.  Any code which needs new information
+         * from the DS should go in here
+         */
 
-// use tank drive
-m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
+        // use tank drive
+        m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
 
 
-/*
-}  // if (m_ds->GetPacketNumber()...
-*/
+        /*
+        }  // if (m_ds->GetPacketNumber()...
+        */
 
         
     }
