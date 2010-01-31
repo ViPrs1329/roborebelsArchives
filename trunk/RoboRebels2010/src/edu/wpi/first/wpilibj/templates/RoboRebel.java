@@ -5,6 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+
+/**
+ * Objects that would be important to develop:
+ *
+ *   - Kicker object
+ *     * Will most likely use the following objects: 
+ */
+
 package edu.wpi.first.wpilibj.templates;
 
 
@@ -49,7 +57,7 @@ public class RoboRebel extends IterativeRobot {
          *   - Create a new RobotDrive object specifying 4 motors
          *   - Grab an instance of the DriveStation object
          *   - Create Joystick objects which map to the approprite modules
-         *   - 
+         *   - Set up Joystick button map array
          */
     }
 
@@ -79,6 +87,18 @@ public class RoboRebel extends IterativeRobot {
 
     /**
      * This function is called periodically during autonomous
+     *
+     * Notes:
+     *
+     *   - We can use the RobotDrive.drive() method to drive the robot programatically
+     *   - Use the camera to for guidance (???)
+     *   - Use gyro (???)
+     *   - Use kicker object
+     *
+     * What it needs to do:
+     *
+     *   - Feed the Watchdog
+     *   -
      */
     public void autonomousPeriodic()
     {
@@ -87,6 +107,11 @@ public class RoboRebel extends IterativeRobot {
 
     /**
      * This function is called periodically during operator control
+     *
+     * What it needs to do:
+     *
+     *   - Feed the Watchdog
+     *   - Scan Joystick for button values, then pack the
      */
     public void teleopPeriodic()
     {
@@ -95,8 +120,38 @@ public class RoboRebel extends IterativeRobot {
 
     /**
      * This function is called periodically during the disabled state
+     *
+     * What it needs to do:
+     *
+     *   - Feed the Watchdog
      */
     public void disabledPeriodic()
+    {
+        
+    }
+
+    /**
+     * The VM will try to call this function as often as possible during the autonomous state
+     *
+     */
+    public void autonomousContinuous()
+    {
+        
+    }
+
+    /**
+     * The VM will try to call this function as often as possible during the teleop state
+     *
+     */
+    public void teleopContinuous()
+    {
+
+    }
+
+    /**
+     * The VM will try to call this function as often as possible during the disbabled state
+     */
+    public void disabledContinuous()
     {
         
     }
