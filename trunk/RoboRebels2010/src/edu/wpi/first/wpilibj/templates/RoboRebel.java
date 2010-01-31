@@ -6,7 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package edu.wpi.first.wpilibj.templates;
-//Test
+
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
@@ -24,6 +24,11 @@ public class RoboRebel extends IterativeRobot {
      */
     public void robotInit() {
 
+    }
+
+    public void autonomousInit()
+    {
+        
     }
 
     /**
