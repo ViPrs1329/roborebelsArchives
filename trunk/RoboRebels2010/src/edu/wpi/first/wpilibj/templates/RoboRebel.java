@@ -28,6 +28,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -71,6 +72,24 @@ public class RoboRebel extends IterativeRobot {
          *   - Create Joystick objects which map to the approprite modules
          *   - Set up Joystick button map array
          */
+        
+        System.out.println("BuiltinDefaultCode Constructor Started\n");
+
+		// Create a robot using standard right/left robot drive on PWMS 1, 2, 3, and #4
+		m_robotDrive = new RobotDrive(1, 3, 2, 4);
+
+                // Define joysticks being used at USB port #1 and USB port #2 on the Drivers Station
+		m_rightStick = new Joystick(1);
+		m_leftStick = new Joystick(2);
+
+                // Iterate over all the buttons on each joystick, setting state to false for each
+		int buttonNum = 1;						// start counting buttons at button 1
+		for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
+			m_rightStickButtonState[buttonNum] = false;
+			m_leftStickButtonState[buttonNum] = false;
+		}
+
+        System.out.println("BuiltinDefaultCode Constructor Completed\n");
     }
 
     /**
@@ -127,6 +146,28 @@ public class RoboRebel extends IterativeRobot {
      */
     public void teleopPeriodic()
     {
+
+        // feed the user watchdog at every period when in autonomous
+		Watchdog.getInstance().feed();
+
+		/*
+		 * No longer needed since periodic loops are now synchronized with incoming packets.
+		if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
+		*/
+			/*
+			 * Code placed in here will be called only when a new packet of information
+			 * has been received by the Driver Station.  Any code which needs new information
+			 * from the DS should go in here
+			 */
+
+				// use tank drive
+				m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
+
+
+		/*
+		}  // if (m_ds->GetPacketNumber()...
+		*/
+
         
     }
 
@@ -139,7 +180,7 @@ public class RoboRebel extends IterativeRobot {
      */
     public void disabledPeriodic()
     {
-        
+     
     }
 
     /**
