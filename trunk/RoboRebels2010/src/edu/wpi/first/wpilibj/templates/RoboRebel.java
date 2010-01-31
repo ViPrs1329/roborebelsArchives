@@ -8,6 +8,7 @@
 //<<<<<<< .mine
 /*
  * This is Derek.
+ * All your base are belong to iPhone.
  */
 //=======
 /*
@@ -44,7 +45,7 @@ import edu.wpi.first.wpilibj.Joystick;
 public class RoboRebel extends IterativeRobot {
 
     // Declare variable for the robot drive system
-    RobotDrive m_robotDrive;		// robot will use PWM 1-4 for drive motors
+    RobotDrive m_robotDrive;	 // robot will use PWM 1-4 for drive motors
 
     // Declare a variable to use to access the driver station object
     DriverStation m_ds;                     // driver station object
@@ -52,8 +53,8 @@ public class RoboRebel extends IterativeRobot {
     int m_dsPacketsReceivedInCurrentSecond;	// keep track of the ds packets received in the current second
 
     // Declare variables for the two joysticks being used
-    Joystick m_rightStick;			// joystick 1 (arcade stick or right tank stick)
-    Joystick m_leftStick;			// joystick 2 (tank left stick)
+    Joystick m_rightStick;	 // joystick 1 (arcade stick or right tank stick)
+    Joystick m_leftStick;	 // joystick 2 (tank left stick)
 
     static final int NUM_JOYSTICK_BUTTONS = 16;
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
@@ -75,19 +76,19 @@ public class RoboRebel extends IterativeRobot {
         
         System.out.println("BuiltinDefaultCode Constructor Started\n");
 
-		// Create a robot using standard right/left robot drive on PWMS 1, 2, 3, and #4
-		m_robotDrive = new RobotDrive(1, 3, 2, 4);
+// Create a robot using standard right/left robot drive on PWMS 1, 2, 3, and #4
+m_robotDrive = new RobotDrive(1, 3, 2, 4);
 
                 // Define joysticks being used at USB port #1 and USB port #2 on the Drivers Station
-		m_rightStick = new Joystick(1);
-		m_leftStick = new Joystick(2);
+m_rightStick = new Joystick(1);
+m_leftStick = new Joystick(2);
 
                 // Iterate over all the buttons on each joystick, setting state to false for each
-		int buttonNum = 1;						// start counting buttons at button 1
-		for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
-			m_rightStickButtonState[buttonNum] = false;
-			m_leftStickButtonState[buttonNum] = false;
-		}
+int buttonNum = 1;	 // start counting buttons at button 1
+for (buttonNum = 1; buttonNum <= NUM_JOYSTICK_BUTTONS; buttonNum++) {
+m_rightStickButtonState[buttonNum] = false;
+m_leftStickButtonState[buttonNum] = false;
+}
 
         System.out.println("BuiltinDefaultCode Constructor Completed\n");
     }
@@ -148,25 +149,25 @@ public class RoboRebel extends IterativeRobot {
     {
 
         // feed the user watchdog at every period when in autonomous
-		Watchdog.getInstance().feed();
+Watchdog.getInstance().feed();
 
-		/*
-		 * No longer needed since periodic loops are now synchronized with incoming packets.
-		if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
-		*/
-			/*
-			 * Code placed in here will be called only when a new packet of information
-			 * has been received by the Driver Station.  Any code which needs new information
-			 * from the DS should go in here
-			 */
+/*
+ * No longer needed since periodic loops are now synchronized with incoming packets.
+if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
+*/
+/*
+ * Code placed in here will be called only when a new packet of information
+ * has been received by the Driver Station.  Any code which needs new information
+ * from the DS should go in here
+ */
 
-				// use tank drive
-				m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
+// use tank drive
+m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
 
 
-		/*
-		}  // if (m_ds->GetPacketNumber()...
-		*/
+/*
+}  // if (m_ds->GetPacketNumber()...
+*/
 
         
     }
