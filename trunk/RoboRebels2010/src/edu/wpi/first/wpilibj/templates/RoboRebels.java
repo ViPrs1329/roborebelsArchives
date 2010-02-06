@@ -87,6 +87,8 @@ public class RoboRebels extends IterativeRobot {
 	static final int TANK_DRIVE = 2;
 	int m_driveMode;
 
+        int m_autoPeriodicLoops = 0;
+
 	
 
     /**
@@ -169,74 +171,34 @@ public class RoboRebels extends IterativeRobot {
 		// feed the user watchdog at every period when in autonomous
 		Watchdog.getInstance().feed();
 
-		
-
-		
-
-		/* the below code (if uncommented) would drive the robot forward at half speed
-		 * for two seconds.  This code is provided as an example of how to drive the
-		 * robot in autonomous mode, but is not enabled in the default code in order
-		 * to prevent an unsuspecting team from having their robot drive autonomously!
-		 */
-		/* below code commented out for safety
-		if (m_autoPeriodicLoops == 1) {
+                if (m_autoPeriodicLoops == 1) {
 			// When on the first periodic loop in autonomous mode, start driving forwards at half speed
-			m_robotDrive->Drive(0.5, 0.0);			// drive forwards at half speed
+			m_robotDrive.drive(0.5, 0.0);			// drive forwards at half speed
 		}
 		if (m_autoPeriodicLoops == (2 * GetLoopsPerSec())) {
 			// After 2 seconds, stop the robot
-			m_robotDrive->Drive(0.0, 0.0);			// stop robot
+			m_robotDrive.drive(0.0, 0.0);			// stop robot
 		}
-		*/
+		m_autoPeriodicLoops++;
 	}
 
 
 	public void teleopPeriodic() {
-		// feed the user watchdog at every period when in autonomous
-		Watchdog.getInstance().feed();
-
-		
-
-		/*
-		 * No longer needed since periodic loops are now synchronized with incoming packets.
-		if (m_ds->GetPacketNumber() != m_priorPacketNumber) {
-		*/
-			/*
-			 * Code placed in here will be called only when a new packet of information
-			 * has been received by the Driver Station.  Any code which needs new information
-			 * from the DS should go in here
-			 */
-
-			m_dsPacketsReceivedInCurrentSecond++;					// increment DS packets received
-
-			// put Driver Station-dependent code here
-
-			
+            // feed the user watchdog at every period
+            Watchdog.getInstance().feed();
 
 
-			// determine if tank or arcade mode, based upon position of "Z" wheel on kit joystick
-                        
-			/*if (m_rightStick.getZ() <= 0) {    // Logitech Attack3 has z-polarity reversed; up is negative
-				// use arcade drive
-				m_robotDrive.arcadeDrive(m_rightStick,false);			// drive with arcade style (use right stick)
-				if (m_driveMode != ARCADE_DRIVE) {
-					// if newly entered arcade drive, print out a message
-					System.out.println("Arcade Drive\n");
-					m_driveMode = ARCADE_DRIVE;
-				}
-                         
-			} else {*/
-				// use tank drive
-				m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
-				if (m_driveMode != TANK_DRIVE) {
-					// if newly entered tank drive, print out a message
-					System.out.println("Tank Drive\n");
-					m_driveMode = TANK_DRIVE;
-				}
-			//}
-		/*
-		}  // if (m_ds->GetPacketNumber()...
-		*/
+            m_dsPacketsReceivedInCurrentSecond++;					// increment DS packets received
+
+
+
+            m_robotDrive.tankDrive(m_leftStick, m_rightStick);	// drive with tank style
+            if (m_driveMode != TANK_DRIVE) {
+                // if newly entered tank drive, print out a message
+                System.out.println("Tank Drive\n");
+                m_driveMode = TANK_DRIVE;
+            }
+
 
 	}
 
