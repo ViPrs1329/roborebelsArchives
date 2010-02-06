@@ -6,7 +6,11 @@
  * in charge of encapsulating all kicker functionality.
  *
  * Maintainer:  Luc Bettaieb
- * 
+ *
+ * Objects needed:
+ *
+ *      - Solenoid (for releasing kicking mechanism), Pneumatic contollers,
+ *        
  */
 
 package edu.wpi.first.wpilibj.templates;

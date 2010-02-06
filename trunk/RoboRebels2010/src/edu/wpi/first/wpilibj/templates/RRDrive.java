@@ -7,6 +7,11 @@
  *
  * Maintainer:  David Sescleifer
  *
+ * Objects used:
+ *
+ *      - RobotDrive, Joystick (references of), encoders (for speed),
+ *        gyroscope (position [maybe])
+ *
  */
 
 package edu.wpi.first.wpilibj.templates;
