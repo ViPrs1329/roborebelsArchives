@@ -22,8 +22,14 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Watchdog;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
+import edu.wpi.first.wpilibj.image.ColorImage;
+import edu.wpi.first.wpilibj.image.NIVisionException;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,6 +45,8 @@ public class RoboRebels extends IterativeRobot {
 
     // Declare a variable to use to access the driver station object
     DriverStation m_ds;                     // driver station object
+    DriverStationLCD m_dsLCD;
+    AxisCamera cam;
     int m_priorPacketNumber;                // keep track of the most recent packet number from the DS
     int m_dsPacketsReceivedInCurrentSecond;	// keep track of the ds packets received in the current second
 
@@ -50,6 +58,7 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed;
+    boolean readingTrigger;
 
     RRKicker kicker;
     RRDrive drive;
@@ -67,12 +76,9 @@ public class RoboRebels extends IterativeRobot {
          *   - Create Joystick objects which map to the approprite modules
          *   - Set up Joystick button map array
          */
-        m_robotDrive = new RobotDrive(1, 2, 3, 4);
-        m_rightStick = new Joystick(1);
-        m_leftStick = new Joystick(2);
-        drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
-        m_ds = DriverStation.getInstance();
-        kicker = new RRKicker(5);
+
+        System.out.println( "RoboRebels()" );
+        
     }
 
     /**
@@ -95,7 +101,19 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopInit()
     {
-
+        System.out.println( "teleopInit()" );
+        m_robotDrive = new RobotDrive(1, 2, 3, 4);
+        m_rightStick = new Joystick(1);
+        m_leftStick = new Joystick(2);
+        drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
+        m_ds = DriverStation.getInstance();
+        m_dsLCD = DriverStationLCD.getInstance();
+        kicker = new RRKicker(5);
+        readingTrigger = false;
+        Timer.delay(10.0);
+        cam = AxisCamera.getInstance();
+        cam.writeResolution(AxisCamera.ResolutionT.k160x120);
+        cam.writeBrightness(0);
     }
 
     /**
@@ -132,6 +150,7 @@ public class RoboRebels extends IterativeRobot {
         checkButtons();
         kicker.kick();
         drive.drive(false);
+        processCamera();
     }
 
     /**
@@ -144,7 +163,7 @@ public class RoboRebels extends IterativeRobot {
     public void disabledPeriodic()
     {
         Watchdog.getInstance().feed();
-        System.out.println("Disabled State");
+        //System.out.println("Disabled State");
     }
 
     /**
@@ -170,12 +189,15 @@ public class RoboRebels extends IterativeRobot {
      */
     public void disabledContinuous()
     {
-        System.out.println("Disabled State");
+        //System.out.println("Disabled State");
 
     }
 
     public void checkButtons()
     {
+        System.out.println( "checkButtons()" );
+
+        /*
         for(int i = 0; i < NUM_JOYSTICK_BUTTONS; i++)
         {
             //Check for buttons on the right joystick
@@ -210,12 +232,51 @@ public class RoboRebels extends IterativeRobot {
                 m_leftStickButtonState[i] = false;
             }
         }
-        if(m_rightStick.getTrigger())
-        {
-            kicker.set((triggerPressed == true) ? false : true);
+        */
 
-            System.out.println("Right trigger pressed!");
+        /*
+         * Check trigger code out.  It gets a little jumpy
+         * when the trigger is held down for more than a
+         * microsecond.
+         */
+        if(m_leftStick.getTrigger() && !readingTrigger)
+        {
+            //kicker.set((triggerPressed == true) ? false : true);
+
+            readingTrigger = true;
+
+            if ( m_leftStick.getTrigger() && kicker.get() )
+                kicker.set( false );
+            else if ( m_leftStick.getTrigger() && ! kicker.get() )
+                kicker.set( true );
+
+            readingTrigger = false;
+
+
+            //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
+            //m_dsLCD.updateLCD();
+            System.out.println("Left trigger pressed!");
         }
+    }
+
+
+    public void processCamera()
+    {
+        //System.out.println("processCamera()");
+        
+        try
+        {
+                if (cam.freshImage()) {// && turnController.onTarget()) {
+                    //System.out.println("    - got a fresh image!");
+                    ColorImage image = cam.getImage();
+                    image.free();
+                }
+            } catch (NIVisionException ex) {
+                ex.printStackTrace();
+            } catch (AxisCameraException ex) {
+                ex.printStackTrace();
+        }
+        
     }
 
 }
