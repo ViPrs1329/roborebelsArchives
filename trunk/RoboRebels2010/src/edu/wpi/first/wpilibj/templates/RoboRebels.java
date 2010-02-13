@@ -49,6 +49,9 @@ public class RoboRebels extends IterativeRobot {
     static final int NUM_JOYSTICK_BUTTONS = 16;
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
+    boolean triggerPressed;
+
+    RRKicker kicker;
 
     /**
      * Constructor
@@ -68,6 +71,7 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(2);
         RRDrive drive = new RRDrive();
         m_ds = DriverStation.getInstance();
+        kicker = new RRKicker(5);
     }
 
     /**
@@ -124,40 +128,8 @@ public class RoboRebels extends IterativeRobot {
     public void teleopPeriodic()
     {
         Watchdog.getInstance().feed();
-        for(int i = 0; i < NUM_JOYSTICK_BUTTONS; i++)
-        {
-            //Check for buttons on the right joystick
-            if(m_rightStick.getRawButton(i))
-            {
-                //Only print once.
-                if(m_rightStickButtonState[i] == false)
-                {
-                    System.out.println("Right Button " + i);
-                }
-                m_rightStickButtonState[i] = true;
-
-            }
-            else
-            {
-                m_rightStickButtonState[i] = false;
-            }
-
-            //Check for buttons on the left joystick
-            if(m_leftStick.getRawButton(i))
-            {
-                //Only print it once.
-                if(m_leftStickButtonState[i] == false)
-                {
-                    System.out.println("Left Button " + i);
-                }
-
-                m_leftStickButtonState[i] = true;
-            }
-            else
-            {
-                m_leftStickButtonState[i] = false;
-            }
-        }
+        checkButtons();
+        kicker.kick();
     }
 
     /**
@@ -198,6 +170,50 @@ public class RoboRebels extends IterativeRobot {
     {
         System.out.println("Disabled State");
 
+    }
+
+    public void checkButtons()
+    {
+        for(int i = 0; i < NUM_JOYSTICK_BUTTONS; i++)
+        {
+            //Check for buttons on the right joystick
+            if(m_rightStick.getRawButton(i))
+            {
+                //Only print once.
+                if(m_rightStickButtonState[i] == false)
+                {
+                    System.out.println("Right Button " + i);
+                }
+                m_rightStickButtonState[i] = true;
+
+            }
+            else
+            {
+                m_rightStickButtonState[i] = false;
+            }
+
+            //Check for buttons on the left joystick
+            if(m_leftStick.getRawButton(i))
+            {
+                //Only print it once.
+                if(m_leftStickButtonState[i] == false)
+                {
+                    System.out.println("Left Button " + i);
+                }
+
+                m_leftStickButtonState[i] = true;
+            }
+            else
+            {
+                m_leftStickButtonState[i] = false;
+            }
+        }
+        if(m_rightStick.getTrigger())
+        {
+            kicker.set((triggerPressed == true) ? false : true);
+
+            System.out.println("Right trigger pressed!");
+        }
     }
 
 }
