@@ -17,8 +17,6 @@
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 
 
 public class RRDrive {
@@ -43,12 +41,26 @@ public class RRDrive {
 
     }
 
+    public RRDrive(RobotDrive robotDrive)
+    {
+        m_robotDrive = robotDrive;
+        m_rightStick = m_leftStick = null;
+    }
+
     public void drive( boolean tankDrive )
     {
+        if ( m_rightStick == null || m_leftStick == null )
+            return;
+
         if ( tankDrive )
             m_robotDrive.tankDrive(m_leftStick, m_rightStick);
         else
             m_robotDrive.arcadeDrive(m_leftStick);
+    }
+
+    public void drive(double speed, double curve)
+    {
+        m_robotDrive.drive(speed, curve);
     }
     
 }

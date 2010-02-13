@@ -47,8 +47,8 @@ public class RoboRebels extends IterativeRobot {
     DriverStation m_ds;                     // driver station object
     DriverStationLCD m_dsLCD;
     AxisCamera cam;
-    int m_priorPacketNumber;                // keep track of the most recent packet number from the DS
-    int m_dsPacketsReceivedInCurrentSecond;	// keep track of the ds packets received in the current second
+
+    long        autonomousStartTime;
 
     // Declare variables for the two joysticks being used
     Joystick m_rightStick;			// joystick 1 (arcade stick or right tank stick)
@@ -87,6 +87,8 @@ public class RoboRebels extends IterativeRobot {
      */
     public void robotInit()
     {
+        System.out.println( "robotInit()" );
+         m_robotDrive = new RobotDrive(1, 2, 3, 4);
     }
 
     public void disabledInit()
@@ -96,13 +98,14 @@ public class RoboRebels extends IterativeRobot {
 
     public void autonomousInit()
     {
-
+        System.out.println( "autonomousInit()" );
+        drive = new RRDrive(m_robotDrive);
+        autonomousStartTime = Timer.getUsClock();
     }
 
     public void teleopInit()
     {
         System.out.println( "teleopInit()" );
-        m_robotDrive = new RobotDrive(1, 2, 3, 4);
         m_rightStick = new Joystick(1);
         m_leftStick = new Joystick(2);
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
@@ -133,7 +136,8 @@ public class RoboRebels extends IterativeRobot {
      */
     public void autonomousPeriodic()
     {
-
+        Watchdog.getInstance().feed();
+        drive.drive(-0.25, -1.0);
     }
 
     /**
@@ -260,6 +264,11 @@ public class RoboRebels extends IterativeRobot {
     }
 
 
+    /*
+     * This function is currently unneeded as when you
+     * get a camera instance in the init function
+     * the camera works automatcally.
+     */
     public void processCamera()
     {
         //System.out.println("processCamera()");
