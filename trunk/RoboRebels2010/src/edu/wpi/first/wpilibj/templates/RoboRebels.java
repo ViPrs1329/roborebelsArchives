@@ -52,6 +52,7 @@ public class RoboRebels extends IterativeRobot {
     boolean triggerPressed;
 
     RRKicker kicker;
+    RRDrive drive;
 
     /**
      * Constructor
@@ -69,7 +70,7 @@ public class RoboRebels extends IterativeRobot {
         m_robotDrive = new RobotDrive(1, 2, 3, 4);
         m_rightStick = new Joystick(1);
         m_leftStick = new Joystick(2);
-        RRDrive drive = new RRDrive();
+        drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
         m_ds = DriverStation.getInstance();
         kicker = new RRKicker(5);
     }
@@ -130,6 +131,7 @@ public class RoboRebels extends IterativeRobot {
         Watchdog.getInstance().feed();
         checkButtons();
         kicker.kick();
+        drive.drive(false);
     }
 
     /**

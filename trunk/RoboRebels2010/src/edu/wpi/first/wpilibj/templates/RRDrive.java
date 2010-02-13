@@ -26,15 +26,29 @@ public class RRDrive {
     Joystick m_rightStick;
     Joystick m_leftStick;
 
-    public void RRDrive(RobotDrive robotDrive, Joystick rightStick, Joystick leftStick, boolean[] rightButtonStates, boolean[] leftButtonStates) {
+    public RRDrive(RobotDrive robotDrive, Joystick rightStick, Joystick leftStick)
+    {
         m_robotDrive = robotDrive;
         m_rightStick = rightStick;
         m_leftStick = leftStick;
 
+
+        /*
         m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        */
+
+
+    }
+
+    public void drive( boolean tankDrive )
+    {
+        if ( tankDrive )
+            m_robotDrive.tankDrive(m_leftStick, m_rightStick);
+        else
+            m_robotDrive.arcadeDrive(m_leftStick);
     }
     
 }
