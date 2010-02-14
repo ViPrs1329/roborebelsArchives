@@ -152,7 +152,7 @@ public class RoboRebels extends IterativeRobot {
     {
         Watchdog.getInstance().feed();
         checkButtons();
-        kicker.kick();
+        kicker.spin();
         drive.drive(false);
         processCamera();
     }
@@ -243,19 +243,14 @@ public class RoboRebels extends IterativeRobot {
          * when the trigger is held down for more than a
          * microsecond.
          */
-        if(m_leftStick.getTrigger() && !readingTrigger)
+        if(m_leftStick.getTrigger())
         {
             //kicker.set((triggerPressed == true) ? false : true);
-
-            readingTrigger = true;
 
             if ( m_leftStick.getTrigger() && kicker.get() )
                 kicker.set( false );
             else if ( m_leftStick.getTrigger() && ! kicker.get() )
                 kicker.set( true );
-
-            readingTrigger = false;
-
 
             //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
             //m_dsLCD.updateLCD();
