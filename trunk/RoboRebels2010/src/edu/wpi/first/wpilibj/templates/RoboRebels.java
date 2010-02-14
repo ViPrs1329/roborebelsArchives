@@ -60,7 +60,7 @@ public class RoboRebels extends IterativeRobot {
     boolean triggerPressed;
     boolean readingTrigger;
 
-    RRKicker kicker;
+    RRSpinner kicker;
     RRDrive drive;
 
     /**
@@ -111,7 +111,7 @@ public class RoboRebels extends IterativeRobot {
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
         m_ds = DriverStation.getInstance();
         m_dsLCD = DriverStationLCD.getInstance();
-        kicker = new RRKicker(5);
+        kicker = new RRSpinner(5);
         readingTrigger = false;
         Timer.delay(10.0);
         cam = AxisCamera.getInstance();
