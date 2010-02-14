@@ -132,14 +132,10 @@ public class RoboRebels extends IterativeRobot {
      * Notes:
      *
      *   - We can use the RobotDrive.drive() method to drive the robot programatically
-     *   - Use the camera to for guidance (???)
      *   - Use kicker object
      *
-     * What it needs to do:
-     *
-     *   - Feed the Watchdog
-     *   -
      */
+    
     public void autonomousPeriodic()
     {
         /*
