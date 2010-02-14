@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * This functions
  */
 
 package edu.wpi.first.wpilibj.templates;
@@ -49,5 +48,21 @@ public class RRSpinner
             victor.set(0.0);
         }
 
+    }
+
+    public void rampUp()
+    {
+        System.out.println("rampUp()");
+        for ( int i = 0; i < 5; i++ )
+            victor.set( i * 0.2 );
+        isKicking = true;
+    }
+
+    public void rampDown()
+    {
+        System.out.println("rampDown()");
+        for ( int i = 5; i > 0; i++ )
+            victor.set( i * 0.2 );
+        isKicking = false;
     }
 }

@@ -88,7 +88,8 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit()
     {
         System.out.println( "robotInit()" );
-         m_robotDrive = new RobotDrive(1, 2, 3, 4);
+        m_robotDrive = new RobotDrive(1, 2, 3, 4);
+        spinner = new RRSpinner(5);
     }
 
     public void disabledInit()
@@ -110,16 +111,19 @@ public class RoboRebels extends IterativeRobot {
         m_rightStick = new Joystick(1);
         m_leftStick = new Joystick(2);
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
+
+        /* Drive station code */
         m_ds = DriverStation.getInstance();
         m_dsLCD = DriverStationLCD.getInstance();
-        System.out.println(spinner);
-        spinner = new RRSpinner(5);
-        System.out.println(spinner);
         readingTrigger = false;
-        Timer.delay(10.0);
-        cam = AxisCamera.getInstance();
-        cam.writeResolution(AxisCamera.ResolutionT.k160x120);
-        cam.writeBrightness(0);
+
+        /*
+         * Camera code.  Uncomment when we get a working camera
+         */
+        //Timer.delay(5.0);
+        //cam = AxisCamera.getInstance();
+        //cam.writeResolution(AxisCamera.ResolutionT.k160x120);
+        //cam.writeBrightness(0);
     }
 
     /**
@@ -129,7 +133,6 @@ public class RoboRebels extends IterativeRobot {
      *
      *   - We can use the RobotDrive.drive() method to drive the robot programatically
      *   - Use the camera to for guidance (???)
-     *   - Use gyro (???)
      *   - Use kicker object
      *
      * What it needs to do:
@@ -139,8 +142,11 @@ public class RoboRebels extends IterativeRobot {
      */
     public void autonomousPeriodic()
     {
+        /*
+         * Negative direction moves left
+         */
         Watchdog.getInstance().feed();
-        drive.drive(-0.25, -1.0);
+        drive.drive(-0.25, -0.2);
     }
 
     /**
@@ -204,42 +210,7 @@ public class RoboRebels extends IterativeRobot {
     {
         System.out.println( "checkButtons()" );
 
-        /*
-        for(int i = 0; i < NUM_JOYSTICK_BUTTONS; i++)
-        {
-            //Check for buttons on the right joystick
-            if(m_rightStick.getRawButton(i))
-            {
-                //Only print once.
-                if(m_rightStickButtonState[i] == false)
-                {
-                    System.out.println("Right Button " + i);
-                }
-                m_rightStickButtonState[i] = true;
-
-            }
-            else
-            {
-                m_rightStickButtonState[i] = false;
-            }
-
-            //Check for buttons on the left joystick
-            if(m_leftStick.getRawButton(i))
-            {
-                //Only print it once.
-                if(m_leftStickButtonState[i] == false)
-                {
-                    System.out.println("Left Button " + i);
-                }
-
-                m_leftStickButtonState[i] = true;
-            }
-            else
-            {
-                m_leftStickButtonState[i] = false;
-            }
-        }
-        */
+        
 
         /*
          * Check trigger code out.  It gets a little jumpy
@@ -251,9 +222,15 @@ public class RoboRebels extends IterativeRobot {
             //kicker.set((triggerPressed == true) ? false : true);
 
             if ( m_leftStick.getTrigger() && spinner.get() )
-                spinner.set( false );
+            {
+                //spinner.set( false );
+                spinner.rampDown();
+            }
             else if ( m_leftStick.getTrigger() && ! spinner.get() )
-                spinner.set( true );
+            {
+                //spinner.set( true );
+                spinner.rampUp();
+            }
 
             //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
             //m_dsLCD.updateLCD();
@@ -273,7 +250,7 @@ public class RoboRebels extends IterativeRobot {
         
         try
         {
-                if (cam.freshImage()) {// && turnController.onTarget()) {
+                if (cam.freshImage()) {
                     //System.out.println("    - got a fresh image!");
                     ColorImage image = cam.getImage();
                     image.free();
