@@ -19,7 +19,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
 
 
-public class RRDrive {
+public class RRDrive
+{
     RobotDrive m_robotDrive;
     Joystick m_rightStick;
     Joystick m_leftStick;
