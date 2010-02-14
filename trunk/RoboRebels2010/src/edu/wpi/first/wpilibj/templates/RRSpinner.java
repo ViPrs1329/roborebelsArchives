@@ -23,12 +23,12 @@ public class RRSpinner
 
     public boolean set(boolean value)
     {
-        System.out.println("set() - setting kicker state to: " + value);
-        if (Timer.getUsClock()- lastSetTime>=250000 || lastSetTime == 0)
+        if (Timer.getUsClock() - lastSetTime >= 250000 || lastSetTime == 0)
         {
-        isKicking = value;
-        lastSetTime = Timer.getUsClock();
-        return true;
+            System.out.println("set() - setting kicker state to: " + value);
+            isKicking = value;
+            lastSetTime = Timer.getUsClock();
+            return true;
         }
         return false;
     }
@@ -42,12 +42,10 @@ public class RRSpinner
 
         if(isKicking)
         {
-            System.out.println("spin() - enabling");
             victor.set(1.0);
         }
         else
         {
-            System.out.println("spin() - disabling");
             victor.set(0.0);
         }
 

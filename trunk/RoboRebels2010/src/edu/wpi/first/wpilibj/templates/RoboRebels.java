@@ -60,7 +60,7 @@ public class RoboRebels extends IterativeRobot {
     boolean triggerPressed;
     boolean readingTrigger;
 
-    RRSpinner kicker;
+    RRSpinner spinner;
     RRDrive drive;
 
     /**
@@ -105,13 +105,16 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopInit()
     {
+        Watchdog.getInstance().feed();
         System.out.println( "teleopInit()" );
         m_rightStick = new Joystick(1);
         m_leftStick = new Joystick(2);
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
         m_ds = DriverStation.getInstance();
         m_dsLCD = DriverStationLCD.getInstance();
-        kicker = new RRSpinner(5);
+        System.out.println(spinner);
+        spinner = new RRSpinner(5);
+        System.out.println(spinner);
         readingTrigger = false;
         Timer.delay(10.0);
         cam = AxisCamera.getInstance();
@@ -152,9 +155,9 @@ public class RoboRebels extends IterativeRobot {
     {
         Watchdog.getInstance().feed();
         checkButtons();
-        kicker.spin();
+        spinner.spin();
         drive.drive(false);
-        processCamera();
+        //processCamera();
     }
 
     /**
@@ -247,10 +250,10 @@ public class RoboRebels extends IterativeRobot {
         {
             //kicker.set((triggerPressed == true) ? false : true);
 
-            if ( m_leftStick.getTrigger() && kicker.get() )
-                kicker.set( false );
-            else if ( m_leftStick.getTrigger() && ! kicker.get() )
-                kicker.set( true );
+            if ( m_leftStick.getTrigger() && spinner.get() )
+                spinner.set( false );
+            else if ( m_leftStick.getTrigger() && ! spinner.get() )
+                spinner.set( true );
 
             //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
             //m_dsLCD.updateLCD();
