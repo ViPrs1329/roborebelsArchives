@@ -49,12 +49,24 @@ public class RRKicker
         //I've been told that there is a separate location for the Spikes on the board, so yeah.
     }
 
+    /*
+     * NOTE: I don't believe that we can use a main method in any
+     * of our classes (unless you have been using this for on-
+     * computer debugging; and if so does it work well?).  Perhaps
+     * this code should be moved to the main Robot class,
+     * RoboRebels.java.
+     *
+     * - Derek Ward
+     */
+
+    /*
     public static void main (String[]args)
     {
         RRKicker kicker = new RRKicker(1, 2, 3, 4);
         kicker.compressorLoop();
 
     }
+    */
 
 
     /*
