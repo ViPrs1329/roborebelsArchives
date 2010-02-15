@@ -59,6 +59,7 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed;
     boolean readingTrigger;
+    double lastZValue;
 
     RRSpinner spinner;
     RRDrive drive;
@@ -152,7 +153,6 @@ public class RoboRebels extends IterativeRobot {
     {
         Watchdog.getInstance().feed();
         checkButtons();
-        spinner.spin();
         drive.drive(false);
         //processCamera();
     }
@@ -199,7 +199,9 @@ public class RoboRebels extends IterativeRobot {
 
     public void checkButtons()
     {
-        System.out.println( "checkButtons()" );
+
+
+        //System.out.println( "checkButtons()" );
 
         /*
          * Check trigger code out.  It gets a little jumpy
@@ -210,12 +212,12 @@ public class RoboRebels extends IterativeRobot {
         {
             //kicker.set((triggerPressed == true) ? false : true);
 
-            if ( m_leftStick.getTrigger() && spinner.get() )
+            if ( m_leftStick.getTrigger() && spinner.isKicking() )
             {
                 //spinner.set( false );
                 spinner.rampDown();
             }
-            else if ( m_leftStick.getTrigger() && ! spinner.get() )
+            else if ( m_leftStick.getTrigger() && ! spinner.isKicking() )
             {
                 //spinner.set( true );
                 spinner.rampUp();
@@ -223,9 +225,18 @@ public class RoboRebels extends IterativeRobot {
 
             //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
             //m_dsLCD.updateLCD();
-            System.out.println("Left trigger pressed!");
+            //System.out.println("Left trigger pressed!");
         }
+
+        if ( lastZValue != m_leftStick.getZ() )
+        {
+            lastZValue = m_leftStick.getZ();
+            spinner.setSpeedFromJoystick(lastZValue);
+        }
+        //System.out.println("joystick.getZ() = " + m_leftStick.getZ() );
     }
+
+
 
 
     /*
