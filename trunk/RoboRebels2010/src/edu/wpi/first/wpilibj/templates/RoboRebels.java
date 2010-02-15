@@ -85,7 +85,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void disabledInit()
     {
-
+        spinner.rampDown();
     }
 
     public void autonomousInit()
@@ -134,7 +134,6 @@ public class RoboRebels extends IterativeRobot {
          */
         Watchdog.getInstance().feed();
         drive.drive(-0.25, -0.2);
-        spinner.stopSpinner();
     }
 
     /**

@@ -84,6 +84,13 @@ public class RRKicker
      * kicker/compressor has sufficient pressure to execute a kick.  We could use this
      * method trigger a light on the robot or on the console.
      *
+     * QUESTION: Currently, the compressorLoop method is locked in an infinite
+     * loop.  Remember that we are using a periodic calling convention for this
+     * robot, so, unless this will be put into it's own thread this might not
+     * work.   - Derek Ward
+     *
+     *
+     *
      */
     public void compressorLoop()
     {

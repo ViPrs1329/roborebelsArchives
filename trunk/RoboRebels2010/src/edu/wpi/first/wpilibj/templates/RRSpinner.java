@@ -61,27 +61,12 @@ public class RRSpinner
         return currentSpeed;
     }
 
-    public void stopSpinner()
-    {
-        rampDown();
-    }
-
     /*
-    public void spin()
-    {
-
-        if(isKicking)
-        {
-            victor.set(currentSpeed);
-        }
-        else
-        {
-            victor.set(0.0);
-        }
-
-    }
-     * */
-
+     * Sets the speed of the spinner, but does
+     * not update the victor.  Expects a range
+     * from 0.0 to 1.0
+     */
+    
     public boolean setSpeed( double s )
     {
         if ( s >= 0.0 && s <= 1.0 )
@@ -133,6 +118,11 @@ public class RRSpinner
             System.out.println("rampUp() - ramp function called too soon!");
         }
     }
+
+    /*
+     * Ramps the spinner motor down by factors of rampDownIncrement.  This is to prevent
+     * too much stress on the spinner motor.
+     */
 
     public void rampDown()
     {
