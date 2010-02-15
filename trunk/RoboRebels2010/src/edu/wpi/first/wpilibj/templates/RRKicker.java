@@ -56,6 +56,23 @@ public class RRKicker
 
     }
 
+
+    /*
+     * FIXME: 2/15/2010  The compressorLoop() method below continuously loops over
+     * the entire kicking cycle which is not what we need for the competition.
+     * We need to be able to trigger a kicking event from the console.  These
+     * are the changes I think we need to make:
+     * (1) Move the contents of the else block below into a new kick() method.
+     * (2) Leave the logic in the compressorLoop() method related to continuously
+     * checking the pressure levels in the tanks and turning the compressor on and off.
+     * (3) Change the compressorOn() and compressorOff() methods to no longer use
+     * the Relay class and instead make use of the edu.wpi.first.wpilibj.Compressor
+     * class.
+     * (4) Add a new kickerReady() method (?) that returns a boolean indicating if the
+     * kicker/compressor has sufficient pressure to execute a kick.  We could use this
+     * method trigger a light on the robot or on the console.
+     *
+     */
     public void compressorLoop()
     {
         int p = 50; //pressure variable
