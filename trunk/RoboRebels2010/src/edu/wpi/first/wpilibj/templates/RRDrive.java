@@ -26,16 +26,6 @@ public class RRDrive
         m_robotDrive = robotDrive;
         m_rightStick = rightStick;
         m_leftStick = leftStick;
-
-
-        /*
-        m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-        m_robotDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        */
-
-
     }
 
     public RRDrive(RobotDrive robotDrive)

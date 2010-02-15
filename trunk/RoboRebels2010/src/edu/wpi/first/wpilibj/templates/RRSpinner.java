@@ -3,10 +3,6 @@
  *
  * Issues:
  *
- *   - There is a bug where if the spinner is enabled and
- *     the robot goes into disabled mode and is then re-
- *     enabled the spinner will start up again!
- *
  *   - 
  */
 
@@ -38,23 +34,18 @@ public class RRSpinner
     }
 
     /*
-    public boolean set(boolean value)
-    {
-        if (Timer.getUsClock() - lastSetTime >= 250000 || lastSetTime == 0)
-        {
-            System.out.println("set() - setting kicker state to: " + value);
-            isKicking = value;
-            lastSetTime = Timer.getUsClock();
-            return true;
-        }
-        return false;
-    }
-    */
+     * Is the spinner spinning?
+     */
 
     public boolean isSpinning()
     {
         return isSpinning;
     }
+
+    /*
+     * Get the current spinner's speed.
+     * Returns a value from 0.0 - 1.0
+     */
 
     public double getSpinnerSpeed()
     {
@@ -76,6 +67,12 @@ public class RRSpinner
         }
         return false;
     }
+
+    /*
+     * Sets the speed of the spinner, which can take values
+     * from 0.0 - 1.0, from the values given from the Z
+     * knob on the Joystick.
+     */
 
     public boolean setSpeedFromJoystick( double j )
     {
@@ -101,22 +98,21 @@ public class RRSpinner
         // check to see when the last time a ramp command was issued and go ahead if it has been more than 0.25 seconds
         if (Timer.getUsClock() - lastRampTime >= 250000 || lastRampTime == 0)
         {
-            System.out.println("rampUp() - rampUpIncrement = " + rampUpIncrement + " currentSpeed = " + currentSpeed);
+            //System.out.println("rampUp() - rampUpIncrement = " + rampUpIncrement + " currentSpeed = " + currentSpeed);
             for ( int i = 0; i <= rampUpIncrement; i++ )
             {
-                //System.out.println("-- i = " + i);
                 setSpeed = i * (currentSpeed / (double) rampUpIncrement);
-                System.out.println("rampUp()::setSpeed = " + setSpeed);
+                //System.out.println("rampUp()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
             currentSpeed = setSpeed;
             lastRampTime = Timer.getUsClock();
             isSpinning = true;
         }
-        else
+        /*else
         {
             System.out.println("rampUp() - ramp function called too soon!");
-        }
+        }*/
     }
 
     /*
@@ -129,12 +125,12 @@ public class RRSpinner
         double setSpeed = 0.0;
         if (Timer.getUsClock() - lastRampTime >= 250000 || lastRampTime == 0)
         {
-            System.out.println("rampDown() - rampDownIncrement = " + rampDownIncrement + " currentSpeed = " + currentSpeed);
+            //System.out.println("rampDown() - rampDownIncrement = " + rampDownIncrement + " currentSpeed = " + currentSpeed);
             for ( int i = rampDownIncrement; i > 0; i-- )
             {
                 //System.out.println("-- i = " + i);
                 setSpeed = i * (currentSpeed / (double) rampDownIncrement);
-                System.out.println("rampDown()::setSpeed = " + setSpeed);
+                //System.out.println("rampDown()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
             currentSpeed = 0.0;
@@ -142,18 +138,21 @@ public class RRSpinner
             lastRampTime = Timer.getUsClock();
             isSpinning = false;
         }
-        else
+        /*else
         {
             System.out.println("rampDown() - ramp function called too soon!");
-        }
+        }*/
     }
 
 
+    /*
+     * Sets the speed and updates the victo.
+     */
     public void setSpeedAndUpdate(double s)
     {
         if ( setSpeed(s) )
         {
-            System.out.println("setSpeedAndUpdate() - Setting speed to: " + s);
+            //System.out.println("setSpeedAndUpdate() - Setting speed to: " + s);
             victor.set(s);
         }
     }
@@ -162,7 +161,7 @@ public class RRSpinner
     {
         if ( setSpeedFromJoystick(j) )
         {
-            System.out.println("setSpeedAndUpdateFromJoystick() - Setting speed to: " + currentSpeed);
+            //System.out.println("setSpeedAndUpdateFromJoystick() - Setting speed to: " + currentSpeed);
             victor.set(currentSpeed);
         }
     }

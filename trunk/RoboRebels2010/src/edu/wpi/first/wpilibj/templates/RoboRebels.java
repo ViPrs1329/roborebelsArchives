@@ -80,6 +80,10 @@ public class RoboRebels extends IterativeRobot {
     {
         System.out.println( "robotInit()" );
         m_robotDrive = new RobotDrive(1, 2, 3, 4);
+
+        // This was moved here because we were getting exceptions
+        // whenever the robot was enabled, then disabled and then
+        // enabled again
         spinner = new RRSpinner(5, 5, 100);
     }
 
@@ -91,8 +95,8 @@ public class RoboRebels extends IterativeRobot {
     public void autonomousInit()
     {
         System.out.println( "autonomousInit()" );
-        drive = new RRDrive(m_robotDrive);
-        autonomousStartTime = Timer.getUsClock();
+        //drive = new RRDrive(m_robotDrive);
+        //autonomousStartTime = Timer.getUsClock();
     }
 
     public void teleopInit()
@@ -138,6 +142,10 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * This function is called periodically during operator control
+     *
+     * ---------------------
+     * This is the most important method in this class
+     * ---------------------
      */
     public void teleopPeriodic()
     {
@@ -184,10 +192,12 @@ public class RoboRebels extends IterativeRobot {
      */
     public void disabledContinuous()
     {
-        //System.out.println("Disabled State");
-
+        
     }
 
+    /*
+     * This method checks buttons and sets states accordingly
+     */
     public void checkButtons()
     {
 
@@ -223,9 +233,6 @@ public class RoboRebels extends IterativeRobot {
                 spinner.rampUp();
             }
         }
-
-        
-        //System.out.println("joystick.getZ() = " + m_leftStick.getZ() );
     }
 
 
@@ -261,9 +268,9 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Snr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Spnr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
         m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
-        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd: ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
         m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
         m_dsLCD.updateLCD();
     }
