@@ -90,7 +90,7 @@ public class RoboRebels extends IterativeRobot {
     {
         System.out.println( "robotInit()" );
         m_robotDrive = new RobotDrive(1, 2, 3, 4);
-        spinner = new RRSpinner(5);
+        spinner = new RRSpinner(5, 5, 100);
     }
 
     public void disabledInit()
@@ -212,12 +212,12 @@ public class RoboRebels extends IterativeRobot {
         {
             //kicker.set((triggerPressed == true) ? false : true);
 
-            if ( m_leftStick.getTrigger() && spinner.isKicking() )
+            if ( m_leftStick.getTrigger() && spinner.isSpinning() )
             {
                 //spinner.set( false );
                 spinner.rampDown();
             }
-            else if ( m_leftStick.getTrigger() && ! spinner.isKicking() )
+            else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
             {
                 //spinner.set( true );
                 spinner.rampUp();
@@ -228,10 +228,10 @@ public class RoboRebels extends IterativeRobot {
             //System.out.println("Left trigger pressed!");
         }
 
-        if ( lastZValue != m_leftStick.getZ() )
+        if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
         {
             lastZValue = m_leftStick.getZ();
-            spinner.setSpeedFromJoystick(lastZValue);
+            spinner.setSpeedAndUpdateFromJoystick(lastZValue);
         }
         //System.out.println("joystick.getZ() = " + m_leftStick.getZ() );
     }

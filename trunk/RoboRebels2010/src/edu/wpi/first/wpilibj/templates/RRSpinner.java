@@ -43,7 +43,7 @@ public class RRSpinner
     }
     */
 
-    public boolean isKicking()
+    public boolean isSpinning()
     {
         return isSpinning;
     }
@@ -142,6 +142,18 @@ public class RRSpinner
     public void setSpeedAndUpdate(double s)
     {
         if ( setSpeed(s) )
+        {
+            System.out.println("setSpeedAndUpdate() - Setting speed to: " + s);
             victor.set(s);
+        }
+    }
+
+    public void setSpeedAndUpdateFromJoystick(double j)
+    {
+        if ( setSpeedFromJoystick(j) )
+        {
+            System.out.println("setSpeedAndUpdateFromJoystick() - Setting speed to: " + currentSpeed);
+            victor.set(currentSpeed);
+        }
     }
 }
