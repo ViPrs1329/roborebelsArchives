@@ -106,7 +106,6 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopInit()
     {
-        Watchdog.getInstance().feed();
         System.out.println( "teleopInit()" );
         m_rightStick = new Joystick(1);
         m_leftStick = new Joystick(2);
@@ -120,6 +119,7 @@ public class RoboRebels extends IterativeRobot {
         /*
          * Camera code.  Uncomment when we get a working camera
          */
+
         //Timer.delay(5.0);
         //cam = AxisCamera.getInstance();
         //cam.writeResolution(AxisCamera.ResolutionT.k160x120);
@@ -147,11 +147,6 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * This function is called periodically during operator control
-     *
-     * What it needs to do:
-     *
-     *   - Feed the Watchdog
-     *   - Scan Joystick for button values, then pack the
      */
     public void teleopPeriodic()
     {
@@ -205,8 +200,6 @@ public class RoboRebels extends IterativeRobot {
     public void checkButtons()
     {
         System.out.println( "checkButtons()" );
-
-        
 
         /*
          * Check trigger code out.  It gets a little jumpy
