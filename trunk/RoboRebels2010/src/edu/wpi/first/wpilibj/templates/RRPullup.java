@@ -25,14 +25,17 @@ public class RRPullup
                             winchUnwound;
     private     long        extendStartTime,
                             retractStartTime,
-                            pullupStartTime;
-    private     double      armSpeed;
+                            pullupStartTime,
+                            unwindStartTime;
+
+    private     double      armSpeed,
+                            winchSpeed;
 
     /*
      * Pass in the arm and winch motor victor channel
      */
 
-    public RRPullup( int armMotorChannel, int winchMotorChannel, double aS )
+    public RRPullup( int armMotorChannel, int winchMotorChannel, double aS, double wS )
     {
         armMotor = new Victor(armMotorChannel);
         winchMotor = new Victor(winchMotorChannel);
@@ -44,6 +47,11 @@ public class RRPullup
             armSpeed = aS;
         else
             armSpeed = 1.0;
+
+        if ( wS >= 0.0 && wS <= 1.0 )
+            winchSpeed = aS;
+        else
+            winchSpeed = 1.0;
     }
 
     public boolean extendArm(long armExtendTime)
@@ -133,28 +141,89 @@ public class RRPullup
         armRetracting = false;
     }
 
-    public void pullUp()
+    public boolean pullUp(long windTime)
     {
+        // if we are not in the process of winding our winch and
+        // we are not already wound save the start time and
+        // start the motor
+        if ( winchWinding == false && winchWound == false )
+        {
+            pullupStartTime = Timer.getUsClock();
+            windWinchStart();
+        }
 
+        // if we are in the process of winding our winch
+        // and it is not already wound then check the time
+        if ( winchWinding == true && winchWound == false )
+        {
+            // if the time between from when we started and what it is
+            // now stop the motor and set the Retracted state to true
+            if ( Timer.getUsClock() - pullupStartTime >= windTime )
+            {
+                windWinchStop();
+                winchWound = true;
+            }
+        }
+
+        // if the winch has been wound return true, otherwise return false
+        if (winchWound == true)
+            return true;
+        else
+            return false;
     }
 
     public void windWinchStart()
     {
-
+        winchMotor.set(winchSpeed);
+        winchWinding = true;
     }
 
     public void windWinchStop()
     {
+        winchMotor.set(0.0);
+        winchWinding = false;
+    }
 
+    public boolean unwind(long windTime)
+    {
+        // if we are not in the process of Unwinding our winch and
+        // we are not already wound save the start time and
+        // start the motor
+        if ( winchUnwinding == false && winchUnwound == false )
+        {
+            unwindStartTime = Timer.getUsClock();
+            unwindWinchStart();
+        }
+
+        // if we are in the process of Unwinding our winch
+        // and it is not already wound then check the time
+        if ( winchUnwinding == true && winchUnwound == false )
+        {
+            // if the time between from when we started and what it is
+            // now stop the motor and set the Retracted state to true
+            if ( Timer.getUsClock() - unwindStartTime >= windTime )
+            {
+                unwindWinchStop();
+                winchUnwound = true;
+            }
+        }
+
+        // if the winch has been wound return true, otherwise return false
+        if (winchUnwound == true)
+            return true;
+        else
+            return false;
     }
 
     public void unwindWinchStart()
     {
-
+        winchMotor.set(-1.0 * winchSpeed);
+        winchUnwinding = true;
     }
 
     public void unwindWinchStop()
     {
-
+        winchMotor.set(0.0);
+        winchUnwinding = false;
     }
 }
