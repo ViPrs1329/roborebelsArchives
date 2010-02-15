@@ -58,7 +58,6 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed;
-    boolean readingTrigger;
     double lastZValue;
 
     RRSpinner spinner;
@@ -69,15 +68,6 @@ public class RoboRebels extends IterativeRobot {
      */
     public void RoboRebels()
     {
-        /**
-         * Set up the following:
-         *
-         *   - Create a new RobotDrive object specifying 4 motors
-         *   - Grab an instance of the DriveStation object
-         *   - Create Joystick objects which map to the approprite modules
-         *   - Set up Joystick button map array
-         */
-
         System.out.println( "RoboRebels()" );
         
     }
@@ -115,7 +105,7 @@ public class RoboRebels extends IterativeRobot {
         /* Drive station code */
         m_ds = DriverStation.getInstance();
         m_dsLCD = DriverStationLCD.getInstance();
-        readingTrigger = false;
+
 
         /*
          * Camera code.  Uncomment when we get a working camera
@@ -144,6 +134,7 @@ public class RoboRebels extends IterativeRobot {
          */
         Watchdog.getInstance().feed();
         drive.drive(-0.25, -0.2);
+        spinner.stopSpinner();
     }
 
     /**
@@ -154,6 +145,7 @@ public class RoboRebels extends IterativeRobot {
         Watchdog.getInstance().feed();
         checkButtons();
         drive.drive(false);
+        updateDSLCD();
         //processCamera();
     }
 
@@ -203,11 +195,19 @@ public class RoboRebels extends IterativeRobot {
 
         //System.out.println( "checkButtons()" );
 
+        if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
+        {
+            lastZValue = m_leftStick.getZ();
+            spinner.setSpeedAndUpdateFromJoystick(lastZValue);
+        }
+
         /*
          * Check trigger code out.  It gets a little jumpy
          * when the trigger is held down for more than a
          * microsecond.
          */
+
+
         if(m_leftStick.getTrigger())
         {
             //kicker.set((triggerPressed == true) ? false : true);
@@ -220,19 +220,12 @@ public class RoboRebels extends IterativeRobot {
             else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
             {
                 //spinner.set( true );
+                spinner.setSpeedFromJoystick(m_leftStick.getZ());
                 spinner.rampUp();
             }
-
-            //m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Left trigger pressed!");
-            //m_dsLCD.updateLCD();
-            //System.out.println("Left trigger pressed!");
         }
 
-        if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
-        {
-            lastZValue = m_leftStick.getZ();
-            spinner.setSpeedAndUpdateFromJoystick(lastZValue);
-        }
+        
         //System.out.println("joystick.getZ() = " + m_leftStick.getZ() );
     }
 
@@ -261,6 +254,19 @@ public class RoboRebels extends IterativeRobot {
                 ex.printStackTrace();
         }
         
+    }
+    
+    /*
+     * Sends useful information to the LCD on the DriverStation
+     */
+
+    public void updateDSLCD()
+    {
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Snr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
+        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd: ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
+        m_dsLCD.updateLCD();
     }
 
 }

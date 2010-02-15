@@ -1,5 +1,13 @@
 /*
- * This functions
+ *
+ *
+ * Issues:
+ *
+ *   - There is a bug where if the spinner is enabled and
+ *     the robot goes into disabled mode and is then re-
+ *     enabled the spinner will start up again!
+ *
+ *   - 
  */
 
 package edu.wpi.first.wpilibj.templates;
@@ -46,6 +54,16 @@ public class RRSpinner
     public boolean isSpinning()
     {
         return isSpinning;
+    }
+
+    public double getSpinnerSpeed()
+    {
+        return currentSpeed;
+    }
+
+    public void stopSpinner()
+    {
+        rampDown();
     }
 
     /*
@@ -106,6 +124,7 @@ public class RRSpinner
                 System.out.println("rampUp()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
+            currentSpeed = setSpeed;
             lastRampTime = Timer.getUsClock();
             isSpinning = true;
         }
@@ -128,6 +147,7 @@ public class RRSpinner
                 System.out.println("rampDown()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
+            currentSpeed = 0.0;
             victor.set(0.0);
             lastRampTime = Timer.getUsClock();
             isSpinning = false;
