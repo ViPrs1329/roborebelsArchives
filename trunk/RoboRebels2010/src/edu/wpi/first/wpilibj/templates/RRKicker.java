@@ -34,6 +34,7 @@ public class RRKicker
     Relay shootingCylinder;
 
     boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
+    boolean canKick = false;
 
     //So these are the objects
 
@@ -96,13 +97,64 @@ public class RRKicker
      *
      *
      */
+
+
+    /*
+     *  FIXME: I'm not sure if this will work or if it what you're actually talking about.
+     * -Luc Bettaieb
+     */
+    public void kickerReady() //Method to see if the kicker is ready or not
+    {
+        boolean isKickerReady = false; //Boolean set to false, as not to start anything crazy.
+
+        while(true) //Infinte loop
+        {
+            if (isKickerReady == true) //Checks if the kicker is ready
+            {
+                //Kick!
+            }
+            if (isKickerReady == false) //Checks if the kicker is not ready
+            {
+                //Do nothing
+            }
+        }
+    }
+
+    
+    /*
+     * The below method checks to see if a boolean variable (isButtonPressed) is true or false.
+     * If it is true, it will set the canKick boolean variable to true, enabling the compressorLoop.
+     * If it is not true, it will disable the compressor loop, or do nothing.
+     * 
+     * -Luc Bettaieb
+     */
+    public void kick()
+    {
+        boolean isButtonPressed = false;
+
+        while (true)
+        {
+            if (isButtonPressed == true)
+            {
+                canKick = true;
+            }
+            if (isButtonPressed == false)
+            {
+                canKick = false;
+            }
+        }
+    }
+    
+
     public void compressorLoop()
     {
         int p = 50; //pressure variable
 
         expand(drivingCylinder); //Expands the driving cylinder so the robot can go over the bump
 
-        while (true)
+        while (canKick = true) //I changed the condition for the while to check if the global boolean (canKick) is true.
+                                //FIXME:  The contents of this loop will need to be changed so that the compressor filling
+                                    //part of it will always be going no matter what.
         {
 
             if (p < 40) //checks to see if the compressor is under 40 psi
@@ -153,7 +205,9 @@ public class RRKicker
         if (isCompressorOn == false)
         {
             compressor.set(Relay.Value.kOn);
+            //TODO: This will possibly need to be changed.
             isCompressorOn = true;
+
         }
 
     }
@@ -166,6 +220,7 @@ public class RRKicker
         if (isCompressorOn == true)
         {
             compressor.set(Relay.Value.kOff);
+            //TODO: This will possibly need to be changed.
             isCompressorOn = false;
         }
 
