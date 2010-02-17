@@ -14,6 +14,7 @@
  */
 
 package edu.wpi.first.wpilibj.templates;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Relay;
 
 public class RRKicker
@@ -28,7 +29,7 @@ public class RRKicker
      *   'switch'
      */
     
-    Relay compressor;
+    Compressor compressor;
     Relay drivingCylinder;
     Relay lockCylinder;
     Relay shootingCylinder;
@@ -36,18 +37,118 @@ public class RRKicker
     boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
     boolean isButtonPressed = false; //Boolean set to false, as not to start anything crazy.
 
-    //So these are the objects
-
-    public RRKicker(int channel_1, int channel_2, int channel_3, int channel_4)
-            //The constructor takes a channel for the location of the Spikes
+    /**
+     * Create a new instance of the kicker class
+     *
+     * @param channel_1 Pressure switch channel
+     * @param channel_2 Compressor relay channel
+     * @param channel_3 Driving cylinder relay channel
+     * @param channel_4 Locking cylinder relay channel
+     * @param channel_5 Shooting cylinder relay channel
+     */
+    public RRKicker(int channel_1, int channel_2, int channel_3, int channel_4, int channel_5)
     {
-        compressor = new Relay(channel_1);
-        drivingCylinder = new Relay(channel_2);
-        lockCylinder = new Relay(channel_3);
-        shootingCylinder = new Relay(channel_4);
+        // TODO:  should we be using Solenoids instead of Relays?
+        // The WPLib users guide (p. 34) suggests the use of Solenoids to simplify the
+        // pneumatic system.  That we can control the pneumatic actuators directly
+        // without the need for an additional relay. (In the past a Spike relay
+        // was required along with a digital output port to control a pneumatics
+        // component.)
+        compressor = new Compressor(channel_1, channel_2);
+        drivingCylinder = new Relay(channel_3);
+        lockCylinder = new Relay(channel_4);
+        shootingCylinder = new Relay(channel_5);
 
-        //And these are the locations of the Spikes which control the cylinders on the Sidecar
-        //I've been told that there is a separate location for the Spikes on the board, so yeah.
+        // Start up all systems associated with the kicking mechanism
+        startUp();
+    }
+
+    /**
+     * Startup the kicker.  This method will start the
+     * compressor.  The compressor is stopped by default
+     * and won't operate until it is started.
+     */
+    public void startUp() {
+        if (! compressor.enabled()) {
+            compressor.start();
+        }
+    }
+
+    /**
+     * Shutdown the kicker.  This method will stop the
+     * compressor from turning on.
+     */
+    public void shutDown() {
+        if (compressor.enabled()) {
+            compressor.stop();
+        }
+    }
+
+    /**
+     * Return true if tthe system pressure is above the high
+     * set point and the compressor is off.  This method
+     * could be used to trigger a status light either on the
+     * robot or the drivers control panel.
+     *
+     * @return true if the system is fully pressurized
+     */
+    public boolean isKickerReady() {
+        // The Compressor class automatically creates a task that runs in the
+        // background twice a second and turns the compressor on or off based
+        // on the pressure switch value. If the system pressure is above the
+        // high set point (Compressor.getPressureSwitchValue() == true), the
+        // compressor turns off. If the pressure is below the low set point
+        // (Compressor.getPressureSwitchValue() == false), the compressor
+        // turns on.
+        if (compressor.enabled() ) {
+            // If the pressure switch is above the high set point then we 
+            // consider the system to be fully pressurized and ready to kick
+            return compressor.getPressureSwitchValue();
+        }
+        return false;
+    }
+
+    /**
+     * Execute a kick by proceeding through the sequence of steps on the 
+     * pneumatic system required to perform the action:
+     * <ol>
+     * <li>extend the locking cylinder to engage the lock</li>
+     * <li>compress the driving cylinder to disengage it</li>
+     * <li>extend the shooting cylinder to load up the springs</li>
+     * <li>compress the locking cylinder to fire the kicker </li>
+     * <li>compress the shooting cylinder to reset the kicker</li>
+     * <li>extend the driving cylinder to put the robot back in driving mode</li>
+     * </ol>
+     */
+    public void kick() {
+        // Progress through the steps needed to shoot.
+        expand(lockCylinder);
+        compress(drivingCylinder);
+        expand(shootingCylinder);
+
+        compress(lockCylinder);
+        compress(shootingCylinder);
+
+        expand(drivingCylinder);
+    }
+
+    /*
+     * This method compresses a cylinder with a relay.
+     */
+    private void compress(Relay relay)
+    {
+        //TODO: this will possibly need to be changed
+        relay.set(Relay.Value.kOff);
+    }
+
+
+    /*
+     * This method compresses a cylinder with a relay.
+     */
+    private void expand(Relay relay)
+    {
+        //TODO: this will possibly need to be changed
+        relay.set(Relay.Value.kOn);
     }
 
     /*
@@ -104,43 +205,43 @@ public class RRKicker
      * -Luc Bettaieb
      */
 
-    public void startUp()
-    {
-        while(true)
-        {
+//    public void startUp()
+//    {
+//        while(true)
+//        {
+//
+//            if (compressorCheck())
+//            {
+//                expand(drivingCylinder);
+//                kickerButtonCheck();
+//            }
+//
+//        }
+//
+//    }
 
-            if (compressorCheck())
-            {
-                expand(drivingCylinder);
-                kickerButtonCheck();
-            }
-
-        }
-
-    }
-
-    public boolean compressorCheck()
-    {
-        int p = 100; //Pressure variable
-        //TODO:  This will change when we have the pressure sensor installed and applied.
-
-            if (p < 90) //checks to see if the compressor is under 90 psi
-            {
-                compressorOn(); //turns the compressor on
-                //wait however long it takes to get to a good pressure, or check the sensor continuously
-                //see when we have enough.
-                return false;
-            }
-
-            else if(p >= 115) //checks to see if the compressor is at or over 115 psi
-            {
-                compressorOff(); //turns the compressor off
-                return true;
-            }
-        
-            return false;
-
-    }
+//    public boolean compressorCheck()
+//    {
+//        int p = 100; //Pressure variable
+//        //TODO:  This will change when we have the pressure sensor installed and applied.
+//
+//            if (p < 90) //checks to see if the compressor is under 90 psi
+//            {
+//                compressorOn(); //turns the compressor on
+//                //wait however long it takes to get to a good pressure, or check the sensor continuously
+//                //see when we have enough.
+//                return false;
+//            }
+//
+//            else if(p >= 115) //checks to see if the compressor is at or over 115 psi
+//            {
+//                compressorOff(); //turns the compressor off
+//                return true;
+//            }
+//
+//            return false;
+//
+//    }
 
     /*
      * The below method checks to see if a boolean variable (isButtonPressed) is true or false.
@@ -165,64 +266,45 @@ public class RRKicker
  * TODO:  There should be a wait function called in between the processes of expanding and compressing the cylinders
  * as to not cause a catastrophe.
  */
-    public void kick()
-    {
-        expand(lockCylinder);
-        compress(drivingCylinder);
-        expand(shootingCylinder);
-        compress(lockCylinder);
-        compress(shootingCylinder);
-        // expand(drivingCylinder);  This may not be needed
-    }  
-
-    /*
-     * This method compresses a cylinder with a relay.
-     */
-    private void compress(Relay relay)
-    {
-        relay.set(Relay.Value.kOff);
-        //TODO: this will possibly need to be changed
-    }
-
-
-    /*
-     * This method compresses a cylinder with a relay.
-     */
-    private void expand(Relay relay)
-    {
-        relay.set(Relay.Value.kOn);
-        //TODO: this will possibly need to be changed
-    }
+//    public void kick()
+//    {
+//        expand(lockCylinder);
+//        compress(drivingCylinder);
+//        expand(shootingCylinder);
+//        compress(lockCylinder);
+//        compress(shootingCylinder);
+//        // expand(drivingCylinder);  This may not be needed
+//    }
 
 
     /*
      * Checks to see if the compressor is off, and if it is off, it turns it on.
      */
-    private void compressorOn()
-    {
-        if (isCompressorOn == false)
-        {
-            compressor.set(Relay.Value.kOn);
-            //TODO: This will possibly need to be changed.
-            isCompressorOn = true;
-
-        }
-
-    }
+//    private void compressorOn()
+//    {
+//        if (isCompressorOn == false)
+//        {
+//            compressor.set(Relay.Value.kOn);
+//            //TODO: This will possibly need to be changed.
+//            isCompressorOn = true;
+//
+//        }
+//
+//    }
 
 
     /*
      * Checks to see if the compressor is on, and if it is on, turns it off.
      */
-    private void compressorOff()
-    {
-        if (isCompressorOn == true)
-        {
-            compressor.set(Relay.Value.kOff);
-            //TODO: This will possibly need to be changed.
-            isCompressorOn = false;
-        }
-
-    }
+//    private void compressorOff()
+//    {
+//        if (isCompressorOn == true)
+//        {
+//            compressor.set(Relay.Value.kOff);
+//            //TODO: This will possibly need to be changed.
+//            isCompressorOn = false;
+//        }
+//
+//    }
  
 }
