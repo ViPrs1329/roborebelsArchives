@@ -34,7 +34,7 @@ public class RRKicker
     Relay shootingCylinder;
 
     boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
-    boolean canKick = false;
+    boolean isButtonPressed = false; //Boolean set to false, as not to start anything crazy.
 
     //So these are the objects
 
@@ -103,104 +103,102 @@ public class RRKicker
      *  FIXME: I'm not sure if this will work or if it what you're actually talking about.
      * -Luc Bettaieb
      */
-    public void kickerReady() //Method to see if the kicker is ready or not
-    {
-        boolean isKickerReady = false; //Boolean set to false, as not to start anything crazy.
 
-        while(true) //Infinte loop
+    public void startUp()
+    {
+        while(true)
         {
-            if (isKickerReady == true) //Checks if the kicker is ready
+
+            if (compressorCheck())
             {
-                //Kick!
+                expand(drivingCylinder);
+                kickerButtonCheck();
             }
-            if (isKickerReady == false) //Checks if the kicker is not ready
-            {
-                //Do nothing
-            }
+
         }
+
     }
 
-    
+    public boolean compressorCheck()
+    {
+        int p = 100; //Pressure variable
+        //TODO:  This will change when we have the pressure sensor installed and applied.
+
+            if (p < 90) //checks to see if the compressor is under 90 psi
+            {
+                compressorOn(); //turns the compressor on
+                //wait however long it takes to get to a good pressure, or check the sensor continuously
+                //see when we have enough.
+                return false;
+            }
+
+            else if(p >= 115) //checks to see if the compressor is at or over 115 psi
+            {
+                compressorOff(); //turns the compressor off
+                return true;
+            }
+        
+            return false;
+
+    }
+
     /*
      * The below method checks to see if a boolean variable (isButtonPressed) is true or false.
      * If it is true, it will set the canKick boolean variable to true, enabling the compressorLoop.
      * If it is not true, it will disable the compressor loop, or do nothing.
-     * 
+     *
      * -Luc Bettaieb
      */
+    public void kickerButtonCheck() //Method to see if the kicker is ready or not with the button on the joystick
+    {
+        if (isButtonPressed == true) //Checks if the kicker is ready by seeing if the button is pressed or not
+        {
+            kick();
+        }
+            
+    }
+
+    
+/*
+ * This method goes through the kicking process.
+ *
+ * TODO:  There should be a wait function called in between the processes of expanding and compressing the cylinders
+ * as to not cause a catastrophe.
+ */
     public void kick()
     {
-        boolean isButtonPressed = false;
+        expand(lockCylinder);
+        compress(drivingCylinder);
+        expand(shootingCylinder);
+        compress(lockCylinder);
+        compress(shootingCylinder);
+        // expand(drivingCylinder);  This may not be needed
+    }  
 
-        while (true)
-        {
-            if (isButtonPressed == true)
-            {
-                canKick = true;
-            }
-            if (isButtonPressed == false)
-            {
-                canKick = false;
-            }
-        }
-    }
-    
-
-    public void compressorLoop()
-    {
-        int p = 50; //pressure variable
-
-        expand(drivingCylinder); //Expands the driving cylinder so the robot can go over the bump
-
-        while (canKick = true) //I changed the condition for the while to check if the global boolean (canKick) is true.
-                                //FIXME:  The contents of this loop will need to be changed so that the compressor filling
-                                    //part of it will always be going no matter what.
-        {
-
-            if (p < 40) //checks to see if the compressor is under 40 psi
-            {
-                compressorOn(); //turns the compressor on
-            }
-
-            else if(p >= 60) //checks to see if the compressor is at or over 60 psi
-            {
-                compressorOff(); //turns the compressor off
-            }
-
-            else
-            {
-                //These steps compress and expand the cylinders in the order needed to shoot.
-
-                expand(lockCylinder);
-                compress(drivingCylinder);
-                expand(shootingCylinder);
-
-                compress(lockCylinder);
-                compress(shootingCylinder);
-
-                expand(drivingCylinder);
-
-            }
-
-        }
-    }
-
-    private void compress(Relay relay) //Method to compress a cylinder with a relay
+    /*
+     * This method compresses a cylinder with a relay.
+     */
+    private void compress(Relay relay)
     {
         relay.set(Relay.Value.kOff);
         //TODO: this will possibly need to be changed
     }
 
-    private void expand(Relay relay) //Method to expand a cylinder with a relay
+
+    /*
+     * This method compresses a cylinder with a relay.
+     */
+    private void expand(Relay relay)
     {
         relay.set(Relay.Value.kOn);
         //TODO: this will possibly need to be changed
     }
 
+
     /*
      * Checks to see if the compressor is off, and if it is off, it turns it on.
      */
-    private void compressorOn() //checks if
+    private void compressorOn()
     {
         if (isCompressorOn == false)
         {
@@ -211,6 +209,7 @@ public class RRKicker
         }
 
     }
+
 
     /*
      * Checks to see if the compressor is on, and if it is on, turns it off.
