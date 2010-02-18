@@ -27,7 +27,6 @@ public class RRPullup
                             retractStartTime,
                             pullupStartTime,
                             unwindStartTime;
-
     private     double      armSpeed,
                             winchSpeed;
 
@@ -84,7 +83,7 @@ public class RRPullup
         else
             return false;
     }
-
+    
     public void extendArmStart()
     {
         armMotor.set(armSpeed);
