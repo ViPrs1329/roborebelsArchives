@@ -5,7 +5,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 
 /*
  * Controls the pullup device.
@@ -15,6 +15,7 @@ public class RRPullup
 {
     private     Victor      armMotor,
                             winchMotor;
+    /*
     private     boolean     armExtending,
                             armExtended,
                             armRetracting,
@@ -27,6 +28,7 @@ public class RRPullup
                             retractStartTime,
                             pullupStartTime,
                             unwindStartTime;
+    */
     private     double      armSpeed,
                             winchSpeed;
 
@@ -39,9 +41,11 @@ public class RRPullup
         armMotor = new Victor(armMotorChannel);
         winchMotor = new Victor(winchMotorChannel);
 
+        /*
         armExtending = armExtended = armRetracting = armRetracted = false;
         winchWinding = winchWound = winchUnwinding = winchUnwound = false;
         extendStartTime = retractStartTime = pullupStartTime = 0;
+        */
         if ( aS >= 0.0 && aS <= 1.0 )
             armSpeed = aS;
         else
@@ -90,14 +94,14 @@ public class RRPullup
     {
         System.out.println(armSpeed);
         armMotor.set(armSpeed);
-        armExtending = true;
+        //armExtending = true;
     }
 
     public void extendArmStop()
     {
-        extendStartTime = 0;
+        //extendStartTime = 0;
         armMotor.set(0.0);
-        armExtending = false;
+        //armExtending = false;
     }
 
     /*
@@ -137,13 +141,13 @@ public class RRPullup
     {
         System.out.println(-1.0 * armSpeed);
         armMotor.set(-1.0 * armSpeed);
-        armRetracting = true;
+        //armRetracting = true;
     }
 
     public void retractArmStop()
     {
         armMotor.set(0.0);
-        armRetracting = false;
+        //armRetracting = false;
     }
 
     /*
@@ -182,13 +186,13 @@ public class RRPullup
     public void windWinchStart()
     {
         winchMotor.set(winchSpeed);
-        winchWinding = true;
+        //winchWinding = true;
     }
 
     public void windWinchStop()
     {
         winchMotor.set(0.0);
-        winchWinding = false;
+        //winchWinding = false;
     }
 
     /*
@@ -227,12 +231,12 @@ public class RRPullup
     public void unwindWinchStart()
     {
         winchMotor.set(-1.0 * winchSpeed);
-        winchUnwinding = true;
+        //winchUnwinding = true;
     }
 
     public void unwindWinchStop()
     {
         winchMotor.set(0.0);
-        winchUnwinding = false;
+        //winchUnwinding = false;
     }
 }

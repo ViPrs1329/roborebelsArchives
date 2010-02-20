@@ -16,7 +16,7 @@ public class RRSpinner
 
     private boolean isSpinning;
     private Victor victor;
-    private long lastSetTime;
+    //private long lastSetTime;
     private long lastRampTime;
     private double currentSpeed;
     private int rampUpIncrement;
@@ -25,7 +25,7 @@ public class RRSpinner
     public RRSpinner(int channel, int rUI, int rDI)
     {
         victor = new Victor(channel);
-        lastSetTime = 0;
+        //lastSetTime = 0;
         lastRampTime = 0;
         rampUpIncrement = rUI;
         rampDownIncrement = rDI;

@@ -34,6 +34,13 @@ public class RRDrive
         m_rightStick = m_leftStick = null;
     }
 
+    public RRDrive(RobotDrive robotDrive, Joystick j)
+    {
+        m_robotDrive = robotDrive;
+        m_leftStick = j;
+        m_rightStick = null;
+    }
+
     public void drive( boolean tankDrive )
     {
         if ( m_rightStick == null || m_leftStick == null )
