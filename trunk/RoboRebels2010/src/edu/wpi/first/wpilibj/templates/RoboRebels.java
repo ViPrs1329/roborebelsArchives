@@ -90,9 +90,11 @@ public class RoboRebels extends IterativeRobot {
 
         // front left, rear left, front right, rear right
         /*
+         *     ^
+         *     |
          * +-------+
          * |J4   J2|
-         * |J3   J1|
+         *L|J3   J1|R
          * |       |
          * |       |
          * +-------+
