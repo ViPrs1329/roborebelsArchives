@@ -68,7 +68,7 @@ public class RRKicker
      * compressor.  The compressor is stopped by default
      * and won't operate until it is started.
      */
-    public void startUp() {
+    private void startUp() {
         if (! compressor.enabled()) {
             compressor.start();
         }

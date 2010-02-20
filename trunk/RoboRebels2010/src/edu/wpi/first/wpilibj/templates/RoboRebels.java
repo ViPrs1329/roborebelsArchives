@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
@@ -54,6 +55,7 @@ public class RoboRebels extends IterativeRobot {
     Joystick m_rightStick;			// joystick 1 (arcade stick or right tank stick)
     Joystick m_leftStick;			// joystick 2 (tank left stick)
 
+
     static final int NUM_JOYSTICK_BUTTONS = 16;
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
@@ -61,6 +63,7 @@ public class RoboRebels extends IterativeRobot {
     double lastZValue;
 
     RRSpinner spinner;
+    //RRPullup pullUP;
     RRDrive drive;
 
     /**
@@ -234,7 +237,17 @@ public class RoboRebels extends IterativeRobot {
             }
         }
     }
-
+    /*public void pullUPcontrol()
+        {
+            if (m_leftStick.getButton(button3))
+            {
+            pullUP.extendArmStart ();
+            }
+            else
+            {
+            pullUP.extendArmStop();
+            }
+        }*/
 
 
 
