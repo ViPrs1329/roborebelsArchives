@@ -53,6 +53,7 @@ public class RRPullup
             winchSpeed = 1.0;
     }
 
+    /*
     public boolean extendArm(long armExtendTime)
     {
         // if we are not in the process of extending our arm and
@@ -83,9 +84,11 @@ public class RRPullup
         else
             return false;
     }
+    */
     
     public void extendArmStart()
     {
+        System.out.println(armSpeed);
         armMotor.set(armSpeed);
         armExtending = true;
     }
@@ -97,6 +100,7 @@ public class RRPullup
         armExtending = false;
     }
 
+    /*
     public boolean retractArm(long armRetractTime)
     {
         // if we are not in the process of Retracting our arm and
@@ -127,9 +131,11 @@ public class RRPullup
         else
             return false;
     }
+    */
 
     public void retractArmStart()
     {
+        System.out.println(-1.0 * armSpeed);
         armMotor.set(-1.0 * armSpeed);
         armRetracting = true;
     }
@@ -140,6 +146,7 @@ public class RRPullup
         armRetracting = false;
     }
 
+    /*
     public boolean pullUp(long windTime)
     {
         // if we are not in the process of winding our winch and
@@ -170,6 +177,7 @@ public class RRPullup
         else
             return false;
     }
+    */
 
     public void windWinchStart()
     {
@@ -183,6 +191,7 @@ public class RRPullup
         winchWinding = false;
     }
 
+    /*
     public boolean unwind(long windTime)
     {
         // if we are not in the process of Unwinding our winch and
@@ -213,6 +222,7 @@ public class RRPullup
         else
             return false;
     }
+    */
 
     public void unwindWinchStart()
     {

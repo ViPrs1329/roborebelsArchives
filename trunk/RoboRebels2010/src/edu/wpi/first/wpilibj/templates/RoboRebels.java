@@ -65,6 +65,8 @@ public class RoboRebels extends IterativeRobot {
     double lastZValue;
     double robotDriveSensitivity = 0.5;
 
+
+
     RRSpinner spinner;
     RRPullup pullUP;
     RRDrive drive;
@@ -92,7 +94,7 @@ public class RoboRebels extends IterativeRobot {
         // enabled again
         spinner = new RRSpinner(5, 5, 100);
 
-        pullUP = new RRPullup(6, 7, 0.1, 0.1);
+        pullUP = new RRPullup(6, 7, 1.0, 0.5);
     }
 
     public void disabledInit()
@@ -235,35 +237,41 @@ public class RoboRebels extends IterativeRobot {
             }
         }
 
-        //Check the buttons that control the pullup class.
-        //The code is commented because the pullUP variable is commented out on line 66
-        /*if (m_leftStick.getRawButton(2))
-        {
-            //pullUP.retractArm();
-        }
-        */
 
-        // Top button
+        // Arm extending code
         if (m_leftStick.getRawButton(3))
         {
-            System.out.println("Extending arm start");
+            System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
-        else
+
+        if (m_leftStick.getRawButton(2))
         {
-            System.out.println("Extending arm stop");
+            System.out.println("***** Retract arm start");
+            pullUP.retractArmStart();
+        }
+
+        if ( !m_leftStick.getRawButton(3) && !m_leftStick.getRawButton(2) )
+        {
             pullUP.extendArmStop();
         }
 
-        // Top-left button
+        
+        // Wench handling
         if (m_leftStick.getRawButton(4))
         {
-            System.out.println("Winch wind start");
+            System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
-        else
+
+        if (m_leftStick.getRawButton(5))
         {
-            System.out.println("Winch wind stop");
+            System.out.println("***** Winch unwind start");
+            pullUP.unwindWinchStart();
+        }
+
+        if ( !m_leftStick.getRawButton(4) && !m_leftStick.getRawButton(5) )
+        {
             pullUP.windWinchStop();
         }
     }
