@@ -236,6 +236,21 @@ public class RoboRebels extends IterativeRobot {
                 spinner.rampUp();
             }
         }
+        //Check the buttons that control the pullup class.
+        //The code is commented because the pullUP variable is commented out on line 66
+        if (m_leftStick.getRawButton(2))
+        {
+            //pullUP.retractArm()
+        }
+
+        if (m_leftStick.getRawButton(3))
+        {
+            //pullUP.extendArm();
+        }
+        if (m_leftStick.getRawButton(4))
+        {
+            //pullUP.pullUp();
+        }
     }
     /*public void pullUPcontrol()
         {
