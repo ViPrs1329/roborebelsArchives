@@ -48,7 +48,7 @@ public class RRPullup
             armSpeed = 1.0;
 
         if ( wS >= 0.0 && wS <= 1.0 )
-            winchSpeed = aS;
+            winchSpeed = wS;
         else
             winchSpeed = 1.0;
     }
