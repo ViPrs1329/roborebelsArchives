@@ -89,12 +89,26 @@ public class RoboRebels extends IterativeRobot {
         System.out.println( "robotInit()" );
 
         // front left, rear left, front right, rear right
+
         /*
+         * NOTE:  Swap the PWM connectors for the Jags!!!!
+         *
          *     ^
          *     |
          * +-------+
          * |J4   J2|
          *L|J3   J1|R
+         * |       |
+         * |       |
+         * +-------+
+         *
+         * - to -
+         *
+         *     ^
+         *     |
+         * +-------+
+         * |J2   J4|
+         *L|J1   J3|R
          * |       |
          * |       |
          * +-------+
@@ -257,13 +271,13 @@ public class RoboRebels extends IterativeRobot {
         // Arm extending code
         if (m_leftStick.getRawButton(3))
         {
-            System.out.println("***** Extending arm start");
+            //System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
 
         if (m_leftStick.getRawButton(2))
         {
-            System.out.println("***** Retract arm start");
+            //System.out.println("***** Retract arm start");
             pullUP.retractArmStart();
         }
 
@@ -276,13 +290,13 @@ public class RoboRebels extends IterativeRobot {
         // Wench handling
         if (m_leftStick.getRawButton(4))
         {
-            System.out.println("***** Winch wind start");
+            //System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
 
         if (m_leftStick.getRawButton(5))
         {
-            System.out.println("***** Winch unwind start");
+            //System.out.println("***** Winch unwind start");
             pullUP.unwindWinchStart();
         }
 
