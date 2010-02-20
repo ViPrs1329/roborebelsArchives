@@ -27,10 +27,9 @@ public class RRSpinner
         victor = new Victor(channel);
         lastSetTime = 0;
         lastRampTime = 0;
-        rampUpIncrement = 5;
-        rampDownIncrement = 100;
         rampUpIncrement = rUI;
         rampDownIncrement = rDI;
+        isSpinning = false;
     }
 
     /*
@@ -95,10 +94,12 @@ public class RRSpinner
     {
         double setSpeed = 0.0;
 
+        //victor.set(1.0);
+
         // check to see when the last time a ramp command was issued and go ahead if it has been more than 0.25 seconds
         if (Timer.getUsClock() - lastRampTime >= 250000 || lastRampTime == 0)
         {
-            //System.out.println("rampUp() - rampUpIncrement = " + rampUpIncrement + " currentSpeed = " + currentSpeed);
+            System.out.println("rampUp() - rampUpIncrement = " + rampUpIncrement + " currentSpeed = " + currentSpeed);
             for ( int i = 0; i <= rampUpIncrement; i++ )
             {
                 setSpeed = i * (currentSpeed / (double) rampUpIncrement);
@@ -109,10 +110,10 @@ public class RRSpinner
             lastRampTime = Timer.getUsClock();
             isSpinning = true;
         }
-        /*else
+        else
         {
             System.out.println("rampUp() - ramp function called too soon!");
-        }*/
+        }
     }
 
     /*
@@ -123,9 +124,12 @@ public class RRSpinner
     public void rampDown()
     {
         double setSpeed = 0.0;
+
+        //victor.set(0.0);
+
         if (Timer.getUsClock() - lastRampTime >= 250000 || lastRampTime == 0)
         {
-            //System.out.println("rampDown() - rampDownIncrement = " + rampDownIncrement + " currentSpeed = " + currentSpeed);
+            System.out.println("rampDown() - rampDownIncrement = " + rampDownIncrement + " currentSpeed = " + currentSpeed);
             for ( int i = rampDownIncrement; i > 0; i-- )
             {
                 //System.out.println("-- i = " + i);
@@ -138,15 +142,15 @@ public class RRSpinner
             lastRampTime = Timer.getUsClock();
             isSpinning = false;
         }
-        /*else
+        else
         {
             System.out.println("rampDown() - ramp function called too soon!");
-        }*/
+        }
     }
 
 
     /*
-     * Sets the speed and updates the victo.
+     * Sets the speed and updates the victor.
      */
     public void setSpeedAndUpdate(double s)
     {

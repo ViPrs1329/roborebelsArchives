@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -61,9 +63,10 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed;
     double lastZValue;
+    double robotDriveSensitivity = 0.5;
 
     RRSpinner spinner;
-    //RRPullup pullUP;
+    RRPullup pullUP;
     RRDrive drive;
 
     /**
@@ -88,6 +91,8 @@ public class RoboRebels extends IterativeRobot {
         // whenever the robot was enabled, then disabled and then
         // enabled again
         spinner = new RRSpinner(5, 5, 100);
+
+        pullUP = new RRPullup(6, 7, 0.1, 0.1);
     }
 
     public void disabledInit()
@@ -203,8 +208,6 @@ public class RoboRebels extends IterativeRobot {
      */
     public void checkButtons()
     {
-
-
         //System.out.println( "checkButtons()" );
 
         if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
@@ -214,44 +217,57 @@ public class RoboRebels extends IterativeRobot {
         }
 
         /*
-         * Check trigger code out.  It gets a little jumpy
-         * when the trigger is held down for more than a
-         * microsecond.
+         * Spinner is activated via the joystick trigger
          */
-
 
         if(m_leftStick.getTrigger())
         {
-            //kicker.set((triggerPressed == true) ? false : true);
-
             if ( m_leftStick.getTrigger() && spinner.isSpinning() )
             {
-                //spinner.set( false );
+                System.out.println( "rampDown()");
                 spinner.rampDown();
             }
             else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
             {
-                //spinner.set( true );
+                System.out.println( "rampUp()" );
                 spinner.setSpeedFromJoystick(m_leftStick.getZ());
                 spinner.rampUp();
             }
         }
+
         //Check the buttons that control the pullup class.
         //The code is commented because the pullUP variable is commented out on line 66
-        if (m_leftStick.getRawButton(2))
+        /*if (m_leftStick.getRawButton(2))
         {
-            //pullUP.retractArm()
+            //pullUP.retractArm();
         }
+        */
 
+        // Top button
         if (m_leftStick.getRawButton(3))
         {
-            //pullUP.extendArm();
+            System.out.println("Extending arm start");
+            pullUP.extendArmStart();
         }
+        else
+        {
+            System.out.println("Extending arm stop");
+            pullUP.extendArmStop();
+        }
+
+        // Top-left button
         if (m_leftStick.getRawButton(4))
         {
-            //pullUP.pullUp();
+            System.out.println("Winch wind start");
+            pullUP.windWinchStart();
+        }
+        else
+        {
+            System.out.println("Winch wind stop");
+            pullUP.windWinchStop();
         }
     }
+
     /*public void pullUPcontrol()
         {
             if (m_leftStick.getButton(button3))
@@ -263,6 +279,7 @@ public class RoboRebels extends IterativeRobot {
             pullUP.extendArmStop();
             }
         }*/
+
 
 
 
