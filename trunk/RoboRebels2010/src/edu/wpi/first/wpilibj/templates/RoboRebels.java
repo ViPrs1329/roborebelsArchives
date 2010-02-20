@@ -87,7 +87,21 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit()
     {
         System.out.println( "robotInit()" );
-        m_robotDrive = new RobotDrive(1, 2, 3, 4);
+
+        // front left, rear left, front right, rear right
+        /*
+         * +-------+
+         * |J4   J2|
+         * |J3   J1|
+         * |       |
+         * |       |
+         * +-------+
+         *
+         * Match jag numbers with the dig i/o ports
+         *
+         */
+        
+        m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
 
         // This was moved here because we were getting exceptions
         // whenever the robot was enabled, then disabled and then
