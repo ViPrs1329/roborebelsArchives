@@ -52,6 +52,7 @@ public class RoboRebels extends IterativeRobot {
     AxisCamera cam;
 
     long        autonomousStartTime;
+    String kickMethod; //either 'spin' or 'pneumatics'
 
     // Declare variables for the two joysticks being used
     Joystick m_rightStick;			// joystick 1 (arcade stick or right tank stick)
@@ -68,6 +69,7 @@ public class RoboRebels extends IterativeRobot {
 
 
     RRSpinner spinner;
+    RRKicker kicker;
     RRPullup pullUP;
     RRDrive drive;
 
@@ -112,7 +114,20 @@ public class RoboRebels extends IterativeRobot {
         // This was moved here because we were getting exceptions
         // whenever the robot was enabled, then disabled and then
         // enabled again
-        spinner = new RRSpinner(5, 5, 25);
+
+        kickMethod = "spin";
+        if ( kickMethod.equals("spin") )
+        {
+            spinner = new RRSpinner(5, 5, 25);
+        }
+        else if( kickMethod.equals("pneumatics") )
+        {
+            //Change these to correct channels.
+            //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
+            //locking cylinder relay channel, and shooting cylinder relay channel.
+            kicker = new RRKicker(0, 0, 0, 0, 0);
+        }
+
 
         pullUP = new RRPullup(6, 7, 1.0, 0.2, 0.75);
     }
@@ -239,21 +254,31 @@ public class RoboRebels extends IterativeRobot {
         }
 
         /*
-         * Spinner is activated via the joystick trigger
+         * Spinner and thepneumatic kicker are activated via the joystick trigger
          */
 
         if(m_leftStick.getTrigger())
         {
-            if ( m_leftStick.getTrigger() && spinner.isSpinning() )
+            if ( kickMethod.equals( "spin" ) )
             {
-                //System.out.println( "rampDown()");
-                spinner.rampDown();
+                if ( m_leftStick.getTrigger() && spinner.isSpinning() )
+                {
+                    //System.out.println( "rampDown()");
+                    spinner.rampDown();
+                }
+                else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
+                {
+                    //System.out.println( "rampUp()" );
+                    spinner.setSpeedFromJoystick(m_leftStick.getZ());
+                    spinner.rampUp();
+                }
             }
-            else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
+            else if ( kickMethod.equals( "pneumatics" ) )
             {
-                //System.out.println( "rampUp()" );
-                spinner.setSpeedFromJoystick(m_leftStick.getZ());
-                spinner.rampUp();
+                if ( kicker.isKickerReady() )
+                {
+                    kicker.kick();
+                }
             }
         }
 

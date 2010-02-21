@@ -40,13 +40,13 @@ public class RRKicker
     /**
      * Create a new instance of the kicker class
      *
-     * @param channel_1 Pressure switch channel
-     * @param channel_2 Compressor relay channel
-     * @param channel_3 Driving cylinder relay channel
-     * @param channel_4 Locking cylinder relay channel
-     * @param channel_5 Shooting cylinder relay channel
+     * @param compChannel_1 Pressure switch channel
+     * @param compChannel_2 Compressor relay channel
+     * @param drivingChannel Driving cylinder relay channel
+     * @param lockChannel Locking cylinder relay channel
+     * @param shootingChannel Shooting cylinder relay channel
      */
-    public RRKicker(int channel_1, int channel_2, int channel_3, int channel_4, int channel_5)
+    public RRKicker(int compChannel_1, int compChannel_2, int drivingChannel, int lockChannel, int shootingChannel)
     {
         // TODO:  should we be using Solenoids instead of Relays?
         // The WPLib users guide (p. 34) suggests the use of Solenoids to simplify the
@@ -54,10 +54,10 @@ public class RRKicker
         // without the need for an additional relay. (In the past a Spike relay
         // was required along with a digital output port to control a pneumatics
         // component.)
-        compressor = new Compressor(channel_1, channel_2);
-        drivingCylinder = new Relay(channel_3);
-        lockCylinder = new Relay(channel_4);
-        shootingCylinder = new Relay(channel_5);
+        compressor = new Compressor(compChannel_1, compChannel_2);
+        drivingCylinder = new Relay(drivingChannel);
+        lockCylinder = new Relay(lockChannel);
+        shootingCylinder = new Relay(shootingChannel);
 
         // Start up all systems associated with the kicking mechanism
         startUp();
