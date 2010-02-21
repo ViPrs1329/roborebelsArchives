@@ -30,13 +30,14 @@ public class RRPullup
                             unwindStartTime;
     */
     private     double      armSpeed,
+                            armRetractSpeed,
                             winchSpeed;
 
     /*
      * Pass in the arm and winch motor victor channel
      */
 
-    public RRPullup( int armMotorChannel, int winchMotorChannel, double aS, double wS )
+    public RRPullup( int armMotorChannel, int winchMotorChannel, double aS, double aRS, double wS )
     {
         armMotor = new Victor(armMotorChannel);
         winchMotor = new Victor(winchMotorChannel);
@@ -50,6 +51,11 @@ public class RRPullup
             armSpeed = aS;
         else
             armSpeed = 1.0;
+
+        if ( aRS >= 0.0 && aRS <= 1.0 )
+            armRetractSpeed = -1.0 * aRS;
+        else
+            armRetractSpeed = -0.5;
 
         if ( wS >= 0.0 && wS <= 1.0 )
             winchSpeed = wS;
@@ -139,8 +145,8 @@ public class RRPullup
 
     public void retractArmStart()
     {
-        System.out.println(-1.0 * armSpeed);
-        armMotor.set(-1.0 * armSpeed);
+        System.out.println(armRetractSpeed);
+        armMotor.set(armRetractSpeed);
         //armRetracting = true;
     }
 

@@ -25,8 +25,10 @@ public class RRSpinner
     public RRSpinner(int channel, int rUI, int rDI)
     {
         victor = new Victor(channel);
+        System.out.println("RRSpinner() - c=" + channel);
+        System.out.println(victor.toString());
         //lastSetTime = 0;
-        lastRampTime = 0;
+        lastRampTime = Timer.getUsClock();
         rampUpIncrement = rUI;
         rampDownIncrement = rDI;
         isSpinning = false;
@@ -103,7 +105,7 @@ public class RRSpinner
             for ( int i = 0; i <= rampUpIncrement; i++ )
             {
                 setSpeed = i * (currentSpeed / (double) rampUpIncrement);
-                //System.out.println("rampUp()::setSpeed = " + setSpeed);
+                System.out.println("rampUp()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
             currentSpeed = setSpeed;
@@ -112,7 +114,7 @@ public class RRSpinner
         }
         else
         {
-            System.out.println("rampUp() - ramp function called too soon!");
+            //System.out.println("rampUp() - ramp function called too soon!");
         }
     }
 
@@ -130,11 +132,11 @@ public class RRSpinner
         if (Timer.getUsClock() - lastRampTime >= 250000 || lastRampTime == 0)
         {
             System.out.println("rampDown() - rampDownIncrement = " + rampDownIncrement + " currentSpeed = " + currentSpeed);
-            for ( int i = rampDownIncrement; i > 0; i-- )
+            for ( int i = rampDownIncrement; i > 0 && currentSpeed != 0; i-- )
             {
                 //System.out.println("-- i = " + i);
                 setSpeed = i * (currentSpeed / (double) rampDownIncrement);
-                //System.out.println("rampDown()::setSpeed = " + setSpeed);
+                System.out.println("rampDown()::setSpeed = " + setSpeed);
                 victor.set( setSpeed );
             }
             currentSpeed = 0.0;
@@ -144,7 +146,7 @@ public class RRSpinner
         }
         else
         {
-            System.out.println("rampDown() - ramp function called too soon!");
+            //System.out.println("rampDown() - ramp function called too soon!");
         }
     }
 

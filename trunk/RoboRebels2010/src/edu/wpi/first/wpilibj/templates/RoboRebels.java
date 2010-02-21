@@ -63,7 +63,7 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed;
     double lastZValue;
-    double robotDriveSensitivity = 0.5;
+    double robotDriveSensitivity = 0.25;
 
 
 
@@ -91,18 +91,7 @@ public class RoboRebels extends IterativeRobot {
         // front left, rear left, front right, rear right
 
         /*
-         * NOTE:  Swap the PWM connectors for the Jags!!!!
          *
-         *     ^
-         *     |
-         * +-------+
-         * |J4   J2|
-         *L|J3   J1|R
-         * |       |
-         * |       |
-         * +-------+
-         *
-         * - to -
          *
          *     ^
          *     |
@@ -118,13 +107,14 @@ public class RoboRebels extends IterativeRobot {
          */
         
         m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
+        //m_robotDrive = new RobotDrive(2, 1, 4, 3, robotDriveSensitivity);
 
         // This was moved here because we were getting exceptions
         // whenever the robot was enabled, then disabled and then
         // enabled again
-        spinner = new RRSpinner(5, 5, 100);
+        spinner = new RRSpinner(5, 5, 25);
 
-        pullUP = new RRPullup(6, 7, 1.0, 0.5);
+        pullUP = new RRPullup(6, 7, 1.0, 0.2, 0.75);
     }
 
     public void disabledInit()
@@ -142,8 +132,8 @@ public class RoboRebels extends IterativeRobot {
     public void teleopInit()
     {
         System.out.println( "teleopInit()" );
-        m_rightStick = new Joystick(1);
-        m_leftStick = new Joystick(2);
+        m_rightStick = new Joystick(2);
+        m_leftStick = new Joystick(1);
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
 
         /* Drive station code */
@@ -177,7 +167,7 @@ public class RoboRebels extends IterativeRobot {
          * Negative direction moves left
          */
         Watchdog.getInstance().feed();
-        drive.drive(-0.25, -0.2);
+        drive.drive(0.25, -0.2);
     }
 
     /**
@@ -256,12 +246,12 @@ public class RoboRebels extends IterativeRobot {
         {
             if ( m_leftStick.getTrigger() && spinner.isSpinning() )
             {
-                System.out.println( "rampDown()");
+                //System.out.println( "rampDown()");
                 spinner.rampDown();
             }
             else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
             {
-                System.out.println( "rampUp()" );
+                //System.out.println( "rampUp()" );
                 spinner.setSpeedFromJoystick(m_leftStick.getZ());
                 spinner.rampUp();
             }
