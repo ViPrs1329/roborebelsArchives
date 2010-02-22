@@ -115,7 +115,8 @@ public class RoboRebels extends IterativeRobot {
         // whenever the robot was enabled, then disabled and then
         // enabled again
 
-        kickMethod = "spin";
+        kickMethod = "pneumatics";
+
         if ( kickMethod.equals("spin") )
         {
             spinner = new RRSpinner(5, 5, 25);
@@ -125,7 +126,7 @@ public class RoboRebels extends IterativeRobot {
             //Change these to correct channels.
             //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
             //locking cylinder relay channel, and shooting cylinder relay channel.
-            kicker = new RRKicker(0, 0, 0, 0, 0);
+            kicker = new RRKicker(1, 1, 1, 2, 3, 4);
         }
 
 
@@ -134,7 +135,8 @@ public class RoboRebels extends IterativeRobot {
 
     public void disabledInit()
     {
-        spinner.rampDown();
+        if ( kickMethod.equals("spin") )
+            spinner.rampDown();
     }
 
     public void autonomousInit()
@@ -199,6 +201,7 @@ public class RoboRebels extends IterativeRobot {
         drive.drive(false);
         updateDSLCD();
         //processCamera();
+        
     }
 
     /**
@@ -247,10 +250,13 @@ public class RoboRebels extends IterativeRobot {
     {
         //System.out.println( "checkButtons()" );
 
-        if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
+        if ( kickMethod.equals("spin") )
         {
-            lastZValue = m_leftStick.getZ();
-            spinner.setSpeedAndUpdateFromJoystick(lastZValue);
+            if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
+            {
+                lastZValue = m_leftStick.getZ();
+                spinner.setSpeedAndUpdateFromJoystick(lastZValue);
+            }
         }
 
         /*
@@ -319,6 +325,18 @@ public class RoboRebels extends IterativeRobot {
         {
             pullUP.windWinchStop();
         }
+
+        if ( m_leftStick.getRawButton(6) )
+        {
+            if ( kickMethod.equals( "pneumatics" ) )
+                kicker.compress();
+        }
+
+        if ( m_leftStick.getRawButton(7) )
+        {
+            if ( kickMethod.equals( "pneumatics" ) )
+                kicker.expand();
+        }
     }
 
     /*public void pullUPcontrol()
@@ -366,7 +384,10 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Spnr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
+        if ( kickMethod.equals("spin") )
+        {
+            m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Spnr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
+        }
         m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
         m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
         m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");

@@ -15,7 +15,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.Solenoid;
 
 public class RRKicker
 {
@@ -30,9 +30,10 @@ public class RRKicker
      */
     
     Compressor compressor;
-    Relay drivingCylinder;
-    Relay lockCylinder;
-    Relay shootingCylinder;
+    Solenoid lockCylinderExpand;
+    Solenoid lockCylinderCompress;
+    Solenoid shootingCylinderExpand;
+    Solenoid shootingCylinderCompress;
 
     boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
     boolean isButtonPressed = false; //Boolean set to false, as not to start anything crazy.
@@ -46,7 +47,7 @@ public class RRKicker
      * @param lockChannel Locking cylinder relay channel
      * @param shootingChannel Shooting cylinder relay channel
      */
-    public RRKicker(int compChannel_1, int compChannel_2, int drivingChannel, int lockChannel, int shootingChannel)
+    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel)
     {
         // TODO:  should we be using Solenoids instead of Relays?
         // The WPLib users guide (p. 34) suggests the use of Solenoids to simplify the
@@ -55,9 +56,10 @@ public class RRKicker
         // was required along with a digital output port to control a pneumatics
         // component.)
         compressor = new Compressor(compChannel_1, compChannel_2);
-        drivingCylinder = new Relay(drivingChannel);
-        lockCylinder = new Relay(lockChannel);
-        shootingCylinder = new Relay(shootingChannel);
+        lockCylinderExpand = new Solenoid(lockExpandChannel);
+        lockCylinderCompress = new Solenoid(lockCompressChannel);
+        shootingCylinderExpand = new Solenoid(shootingExpandChannel);
+        shootingCylinderCompress = new Solenoid(shootingCompressChannel);
 
         // Start up all systems associated with the kicking mechanism
         startUp();
@@ -100,7 +102,8 @@ public class RRKicker
         // compressor turns off. If the pressure is below the low set point
         // (Compressor.getPressureSwitchValue() == false), the compressor
         // turns on.
-        if (compressor.enabled() ) {
+
+        if (compressor.enabled()) {
             // If the pressure switch is above the high set point then we 
             // consider the system to be fully pressurized and ready to kick
             return compressor.getPressureSwitchValue();
@@ -122,33 +125,46 @@ public class RRKicker
      */
     public void kick() {
         // Progress through the steps needed to shoot.
+        /*
         expand(lockCylinder);
-        compress(drivingCylinder);
         expand(shootingCylinder);
 
         compress(lockCylinder);
         compress(shootingCylinder);
+        */
+    }
 
-        expand(drivingCylinder);
+    public void compress()
+    {
+        System.out.println("compress()");
+        compress(lockCylinderExpand, lockCylinderCompress);
+    }
+
+    public void expand()
+    {
+        System.out.println("expand()");
+        expand(lockCylinderExpand, lockCylinderCompress);
     }
 
     /*
      * This method compresses a cylinder with a relay.
      */
-    private void compress(Relay relay)
+    private void compress(Solenoid s1, Solenoid s2)
     {
         //TODO: this will possibly need to be changed
-        relay.set(Relay.Value.kOff);
+        s1.set(false);
+        s2.set(true);
     }
 
 
     /*
      * This method compresses a cylinder with a relay.
      */
-    private void expand(Relay relay)
+    private void expand(Solenoid s1, Solenoid s2)
     {
         //TODO: this will possibly need to be changed
-        relay.set(Relay.Value.kOn);
+        s1.set(true);
+        s2.set(false);
     }
 
     /*
