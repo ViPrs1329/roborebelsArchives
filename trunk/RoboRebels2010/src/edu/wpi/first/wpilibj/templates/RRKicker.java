@@ -36,8 +36,6 @@ public class RRKicker
     Solenoid shootingCylinderTail;
     Solenoid shootingCylinderPiston;
 
-    boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
-    boolean isButtonPressed = false; //Boolean set to false, as not to start anything crazy.
     private long lastKickTime = 0;
 
     /**
@@ -127,10 +125,18 @@ public class RRKicker
      */
     public void kick() {
         // Progress through the steps needed to shoot.
-        if (Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0)
+        if ( Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0 )
         {
             expand(lockCylinderTail, lockCylinderPiston);
             expand(shootingCylinderTail, shootingCylinderPiston);
+            try
+            {
+                Thread.sleep(50); // TODO: Check
+            } 
+            catch ( InterruptedException e )
+            {
+                System.out.println( e.toString() );
+            }
 
             compress(lockCylinderTail, lockCylinderPiston);
             compress(shootingCylinderTail, shootingCylinderPiston);
