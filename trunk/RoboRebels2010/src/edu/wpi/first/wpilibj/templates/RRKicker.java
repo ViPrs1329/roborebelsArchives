@@ -131,7 +131,7 @@ public class RRKicker
             expand(shootingCylinderTail, shootingCylinderPiston);
             try
             {
-                Thread.sleep(50); // TODO: Check
+                Thread.sleep(0); // TODO: Check
             } 
             catch ( InterruptedException e )
             {
