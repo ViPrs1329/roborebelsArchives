@@ -137,6 +137,8 @@ public class RoboRebels extends IterativeRobot {
     {
         if ( kickMethod.equals("spin") )
             spinner.rampDown();
+        else if ( kickMethod.equals("pneumatics") )
+            kicker.shutDown();
     }
 
     public void autonomousInit()
@@ -324,18 +326,6 @@ public class RoboRebels extends IterativeRobot {
         if ( !m_leftStick.getRawButton(4) && !m_leftStick.getRawButton(5) )
         {
             pullUP.windWinchStop();
-        }
-
-        if ( m_leftStick.getRawButton(6) )
-        {
-            if ( kickMethod.equals( "pneumatics" ) )
-                kicker.compress();
-        }
-
-        if ( m_leftStick.getRawButton(7) )
-        {
-            if ( kickMethod.equals( "pneumatics" ) )
-                kicker.expand();
         }
     }
 

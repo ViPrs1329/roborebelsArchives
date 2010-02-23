@@ -16,6 +16,7 @@
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 
 public class RRKicker
 {
@@ -30,13 +31,14 @@ public class RRKicker
      */
     
     Compressor compressor;
-    Solenoid lockCylinderExpand;
-    Solenoid lockCylinderCompress;
-    Solenoid shootingCylinderExpand;
-    Solenoid shootingCylinderCompress;
+    Solenoid lockCylinderTail;
+    Solenoid lockCylinderPiston;
+    Solenoid shootingCylinderTail;
+    Solenoid shootingCylinderPiston;
 
     boolean isCompressorOn = false; //boolean variable to check if the compressor is on or off
     boolean isButtonPressed = false; //Boolean set to false, as not to start anything crazy.
+    private long lastKickTime = 0;
 
     /**
      * Create a new instance of the kicker class
@@ -56,10 +58,10 @@ public class RRKicker
         // was required along with a digital output port to control a pneumatics
         // component.)
         compressor = new Compressor(compChannel_1, compChannel_2);
-        lockCylinderExpand = new Solenoid(lockExpandChannel);
-        lockCylinderCompress = new Solenoid(lockCompressChannel);
-        shootingCylinderExpand = new Solenoid(shootingExpandChannel);
-        shootingCylinderCompress = new Solenoid(shootingCompressChannel);
+        lockCylinderTail = new Solenoid(lockExpandChannel);
+        lockCylinderPiston = new Solenoid(lockCompressChannel);
+        shootingCylinderTail = new Solenoid(shootingExpandChannel);
+        shootingCylinderPiston = new Solenoid(shootingCompressChannel);
 
         // Start up all systems associated with the kicking mechanism
         startUp();
@@ -125,28 +127,18 @@ public class RRKicker
      */
     public void kick() {
         // Progress through the steps needed to shoot.
+        if (Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0)
+        {
+            expand(lockCylinderTail, lockCylinderPiston);
+            expand(shootingCylinderTail, shootingCylinderPiston);
+
+            compress(lockCylinderTail, lockCylinderPiston);
+            compress(shootingCylinderTail, shootingCylinderPiston);
+            lastKickTime = Timer.getUsClock();
+        }
+    }
+
         /*
-        expand(lockCylinder);
-        expand(shootingCylinder);
-
-        compress(lockCylinder);
-        compress(shootingCylinder);
-        */
-    }
-
-    public void compress()
-    {
-        System.out.println("compress()");
-        compress(lockCylinderExpand, lockCylinderCompress);
-    }
-
-    public void expand()
-    {
-        System.out.println("expand()");
-        expand(lockCylinderExpand, lockCylinderCompress);
-    }
-
-    /*
      * This method compresses a cylinder with a relay.
      */
     private void compress(Solenoid s1, Solenoid s2)
@@ -167,7 +159,7 @@ public class RRKicker
         s2.set(false);
     }
 
-    /*
+    {/*
      * NOTE: I don't believe that we can use a main method in any
      * of our classes (unless you have been using this for on-
      * computer debugging; and if so does it work well?).  Perhaps
@@ -265,18 +257,10 @@ public class RRKicker
      * If it is not true, it will disable the compressor loop, or do nothing.
      *
      * -Luc Bettaieb
-     */
-    public void kickerButtonCheck() //Method to see if the kicker is ready or not with the button on the joystick
-    {
-        if (isButtonPressed == true) //Checks if the kicker is ready by seeing if the button is pressed or not
-        {
-            kick();
-        }
-            
-    }
+     */}
 
     
-/*
+    {/*
  * This method goes through the kicking process.
  *
  * TODO:  There should be a wait function called in between the processes of expanding and compressing the cylinders
@@ -322,5 +306,6 @@ public class RRKicker
 //        }
 //
 //    }
+    }
  
 }
