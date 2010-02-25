@@ -55,6 +55,7 @@ public class RRKicker
         // without the need for an additional relay. (In the past a Spike relay
         // was required along with a digital output port to control a pneumatics
         // component.)
+        System.out.println("RRKicker()");
         compressor = new Compressor(compChannel_1, compChannel_2);
         lockCylinderTail = new Solenoid(lockExpandChannel);
         lockCylinderPiston = new Solenoid(lockCompressChannel);
@@ -73,6 +74,8 @@ public class RRKicker
     private void startUp() {
         if (! compressor.enabled()) {
             compressor.start();
+            compress(lockCylinderTail, lockCylinderPiston);
+            compress(shootingCylinderTail, shootingCylinderPiston);
         }
     }
 
@@ -103,12 +106,15 @@ public class RRKicker
         // (Compressor.getPressureSwitchValue() == false), the compressor
         // turns on.
 
+        /*
         if (compressor.enabled()) {
             // If the pressure switch is above the high set point then we 
             // consider the system to be fully pressurized and ready to kick
             return compressor.getPressureSwitchValue();
         }
         return false;
+        */
+        return true;
     }
 
     /**
@@ -127,19 +133,25 @@ public class RRKicker
         // Progress through the steps needed to shoot.
         if ( Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0 )
         {
-            expand(lockCylinderTail, lockCylinderPiston);
-            expand(shootingCylinderTail, shootingCylinderPiston);
+            
             try
             {
-                Thread.sleep(0); // TODO: Check
+                
+                
+                expand(lockCylinderTail, lockCylinderPiston);
+                Thread.currentThread().sleep(500); // TODO: Check
+                expand(shootingCylinderTail, shootingCylinderPiston);
+                Thread.currentThread().sleep(500); // TODO: Check
+                //compress(lockCylinderTail, lockCylinderPiston);
+                //compress(shootingCylinderTail, shootingCylinderPiston);
+                
             } 
             catch ( InterruptedException e )
             {
                 System.out.println( e.toString() );
             }
 
-            compress(lockCylinderTail, lockCylinderPiston);
-            compress(shootingCylinderTail, shootingCylinderPiston);
+            
             lastKickTime = Timer.getUsClock();
         }
     }

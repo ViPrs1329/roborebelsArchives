@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-
+import edu.wpi.first.wpilibj.Relay;
 
 
 /**
@@ -107,7 +107,13 @@ public class RoboRebels extends IterativeRobot {
          * Match jag numbers with the dig i/o ports
          *
          */
-        
+
+        /*
+        Relay r = new Relay(1);
+        r.set(Relay.Value.kForward);
+        System.out.println(r);
+        */
+
         m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
         //m_robotDrive = new RobotDrive(2, 1, 4, 3, robotDriveSensitivity);
 
@@ -115,8 +121,10 @@ public class RoboRebels extends IterativeRobot {
         // whenever the robot was enabled, then disabled and then
         // enabled again
 
+        //kickMethod = "";
         kickMethod = "pneumatics";
 
+        /*
         if ( kickMethod.equals("spin") )
         {
             spinner = new RRSpinner(5, 5, 25);
@@ -126,9 +134,10 @@ public class RoboRebels extends IterativeRobot {
             //Change these to correct channels.
             //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
             //locking cylinder relay channel, and shooting cylinder relay channel.
+            System.out.println("Making kicker");
             kicker = new RRKicker(1, 1, 1, 2, 3, 4);
         }
-
+        */
 
         pullUP = new RRPullup(6, 7, 1.0, 0.2, 0.75);
     }
@@ -136,9 +145,11 @@ public class RoboRebels extends IterativeRobot {
     public void disabledInit()
     {
         if ( kickMethod.equals("spin") )
-            spinner.rampDown();
+            if ( spinner != null )
+                spinner.rampDown();
         else if ( kickMethod.equals("pneumatics") )
-            kicker.shutDown();
+            if ( kicker != null )
+                kicker.shutDown();
     }
 
     public void autonomousInit()
@@ -158,6 +169,21 @@ public class RoboRebels extends IterativeRobot {
         /* Drive station code */
         m_ds = DriverStation.getInstance();
         m_dsLCD = DriverStationLCD.getInstance();
+
+        if ( kickMethod.equals("spin") )
+        {
+            if ( spinner == null )
+                spinner = new RRSpinner(5, 5, 25);
+        }
+        else if( kickMethod.equals("pneumatics") )
+        {
+            //Change these to correct channels.
+            //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
+            //locking cylinder relay channel, and shooting cylinder relay channel.
+            System.out.println("Making kicker");
+            if ( kicker == null )
+                kicker = new RRKicker(1, 1, 1, 2, 3, 4);
+        }
 
 
         /*
