@@ -10,6 +10,8 @@
  * Objects needed:
  *
  *      - Solenoid (for releasing kicking mechanism), Pneumatic contollers,
+ *
+ *      5 & 3
  *        
  */
 
@@ -17,6 +19,9 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Watchdog;
+import edu.wpi.first.wpilibj.Joystick;
+
 
 public class RRKicker
 {
@@ -35,8 +40,12 @@ public class RRKicker
     Solenoid lockCylinderPiston;
     Solenoid shootingCylinderTail;
     Solenoid shootingCylinderPiston;
+    Joystick controllingJoystick;
 
+    private Thread m_task;
     private long lastKickTime = 0;
+    private boolean kickerRun = true;
+    private boolean isLoaded = false;
 
     /**
      * Create a new instance of the kicker class
@@ -47,7 +56,7 @@ public class RRKicker
      * @param lockChannel Locking cylinder relay channel
      * @param shootingChannel Shooting cylinder relay channel
      */
-    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel)
+    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel, Joystick j)
     {
         // TODO:  should we be using Solenoids instead of Relays?
         // The WPLib users guide (p. 34) suggests the use of Solenoids to simplify the
@@ -66,6 +75,69 @@ public class RRKicker
         startUp();
     }
 
+    private class RRKickerThread extends Thread
+    {
+        RRKicker    kicker;
+        boolean     triggerPressed = false,
+                    kickerLoadedPressed = false,
+                    kickerUnloadPressed = false;
+
+        RRKickerThread(RRKicker k)
+        {
+            kicker = k;
+        }
+
+        public void run()
+        {
+            while (kickerRun) 
+            {
+                Watchdog.getInstance().feed();
+                if(controllingJoystick.getTrigger() && triggerPressed == false)
+                {
+                    //System.out.println("checkButtons() - Trigger pressed | triggerPressed = " + triggerPressed);
+                    triggerPressed = true;
+                    if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
+                        {
+                            kicker.kick();
+                        }
+                }
+                else if ( controllingJoystick.getTrigger() == false )       // check to see if the trigger has been depressed
+                {
+                    /*
+                     * If so, the state is false
+                     */
+                    triggerPressed = false;
+                }
+
+                /* loads up the kicker (ie. gets it ready to kick) */
+                if ( controllingJoystick.getRawButton(3) && kickerLoadedPressed == false )
+                {
+                    if ( kicker.isKickerLoaded() == false )
+                    {
+                        kicker.loadKicker();
+                    }
+                }
+                else if ( controllingJoystick.getRawButton(3) == false )
+                {
+                    kickerLoadedPressed = false;
+                }
+
+
+                /*  safely unloads the kicker, without actually kicking */
+                if ( controllingJoystick.getRawButton(4) && kickerUnloadPressed == false )
+                {
+                    kicker.unloadKicker();
+                    kickerUnloadPressed = true;
+                }
+                else
+                {
+                    kickerUnloadPressed = false;
+                }
+                Watchdog.getInstance().feed();
+            }
+        }
+    }
+
     /**
      * Startup the kicker.  This method will start the
      * compressor.  The compressor is stopped by default
@@ -74,9 +146,11 @@ public class RRKicker
     private void startUp() {
         if (! compressor.enabled()) {
             compressor.start();
-            compress(lockCylinderTail, lockCylinderPiston);
-            compress(shootingCylinderTail, shootingCylinderPiston);
+            setupCylinders();
         }
+        
+        //m_task = new RRKickerThread(this);
+        //m_task.start();
     }
 
     /**
@@ -87,6 +161,23 @@ public class RRKicker
         if (compressor.enabled()) {
             compressor.stop();
         }
+        //m_task.interrupt();
+    }
+
+    /**
+     *
+     */
+    public void enable()
+    {
+        kickerRun = true;
+    }
+
+    /**
+     *
+     */
+    public void disable()
+    {
+        kickerRun = false;
     }
 
     /**
@@ -117,6 +208,11 @@ public class RRKicker
         return true;
     }
 
+    public boolean isKickerLoaded()
+    {
+        return isLoaded;
+    }
+
     /**
      * Execute a kick by proceeding through the sequence of steps on the 
      * pneumatic system required to perform the action:
@@ -136,16 +232,16 @@ public class RRKicker
             
             try
             {
-                
-                
-                expand(lockCylinderTail, lockCylinderPiston);
-                Thread.currentThread().sleep(500); // TODO: Check
                 expand(shootingCylinderTail, shootingCylinderPiston);
-                Thread.currentThread().sleep(500); // TODO: Check
-                //compress(lockCylinderTail, lockCylinderPiston);
-                //compress(shootingCylinderTail, shootingCylinderPiston);
-                
-            } 
+                Thread.sleep(250); // TODO: Check
+                Watchdog.getInstance().feed();
+                //setupCylinders();
+                compress(lockCylinderTail, lockCylinderPiston);
+                Thread.sleep(250); // TODO: Check
+                compress(shootingCylinderTail, shootingCylinderPiston);
+                isLoaded = false;
+                Watchdog.getInstance().feed();
+            }
             catch ( InterruptedException e )
             {
                 System.out.println( e.toString() );
@@ -156,14 +252,57 @@ public class RRKicker
         }
     }
 
+    /**
+     * Puts the kicker into a ready loaded state; ready to
+     * be kicked.
+     */
+    public void loadKicker()
+    {
+        expand(lockCylinderTail, lockCylinderPiston);
+        isLoaded = true;
+    }
+
+    /**
+     * Safely unloads the kicker, without actually needing to kick.
+     */
+    public void unloadKicker()
+    {
+        compress(lockCylinderTail, lockCylinderPiston);
+        isLoaded = false;
+    }
+
+    /**
+     * Sets up the kicking cylinders into the default state:
+     * in the compressed state (ie. not loaded)
+     */
+    public void setupCylinders()
+    {
+        try
+        {
+            compress(lockCylinderTail, lockCylinderPiston);
+            Thread.sleep(250); // TODO: Check
+            compress(shootingCylinderTail, shootingCylinderPiston);
+            isLoaded = false;
+        }
+        catch ( InterruptedException e )
+        {
+            System.out.println( e.toString() );
+        }
+    }
+
         /*
      * This method compresses a cylinder with a relay.
      */
     private void compress(Solenoid s1, Solenoid s2)
     {
         //TODO: this will possibly need to be changed
+//        System.out.println("compress() ["  + Timer.getUsClock() + "] " + s1 + " | " + s2);
+//        System.out.println("           s1.get() = " + s1.get() );
         s1.set(false);
+//        System.out.println("           s1.get() = " + s1.get() );
+//        System.out.println("           s2.get() = " + s2.get() );
         s2.set(true);
+//        System.out.println("           s2.get() = " + s2.get() );
     }
 
 
@@ -173,157 +312,12 @@ public class RRKicker
     private void expand(Solenoid s1, Solenoid s2)
     {
         //TODO: this will possibly need to be changed
-        s1.set(true);
+//        System.out.println("expand() [" + Timer.getUsClock() + "] " + s1 + " | " + s2);
+//        System.out.println("           s2.get() = " + s2.get() );
         s2.set(false);
+//        System.out.println("           s2.get() = " + s2.get() );
+//        System.out.println("           s1.get() = " + s1.get() );
+        s1.set(true);
+//        System.out.println("           s1.get() = " + s1.get() );
     }
-
-    {/*
-     * NOTE: I don't believe that we can use a main method in any
-     * of our classes (unless you have been using this for on-
-     * computer debugging; and if so does it work well?).  Perhaps
-     * this code should be moved to the main Robot class,
-     * RoboRebels.java.
-     *
-     * - Derek Ward
-     */
-
-    /*
-    public static void main (String[]args)
-    {
-        RRKicker kicker = new RRKicker(1, 2, 3, 4);
-        kicker.compressorLoop();
-
-    }
-    */
-
-
-    /*
-     * FIXME: 2/15/2010  The compressorLoop() method below continuously loops over
-     * the entire kicking cycle which is not what we need for the competition.
-     * We need to be able to trigger a kicking event from the console.  These
-     * are the changes I think we need to make:
-     * (1) Move the contents of the else block below into a new kick() method.
-     * (2) Leave the logic in the compressorLoop() method related to continuously
-     * checking the pressure levels in the tanks and turning the compressor on and off.
-     * (3) Change the compressorOn() and compressorOff() methods to no longer use
-     * the Relay class and instead make use of the edu.wpi.first.wpilibj.Compressor
-     * class.
-     * (4) Add a new kickerReady() method (?) that returns a boolean indicating if the
-     * kicker/compressor has sufficient pressure to execute a kick.  We could use this
-     * method trigger a light on the robot or on the console.
-     *
-     *
-     *
-     * 
-     * QUESTION: Currently, the compressorLoop method is locked in an infinite
-     * loop.  Remember that we are using a periodic calling convention for this
-     * robot, so, unless this will be put into it's own thread this might not
-     * work.  You may want to consider using states like in the spinner or
-     * pullup object.               - Derek Ward
-     *
-     *
-     *
-     */
-
-
-    /*
-     *  FIXME: I'm not sure if this will work or if it what you're actually talking about.
-     * -Luc Bettaieb
-     */
-
-//    public void startUp()
-//    {
-//        while(true)
-//        {
-//
-//            if (compressorCheck())
-//            {
-//                expand(drivingCylinder);
-//                kickerButtonCheck();
-//            }
-//
-//        }
-//
-//    }
-
-//    public boolean compressorCheck()
-//    {
-//        int p = 100; //Pressure variable
-//        //TODO:  This will change when we have the pressure sensor installed and applied.
-//
-//            if (p < 90) //checks to see if the compressor is under 90 psi
-//            {
-//                compressorOn(); //turns the compressor on
-//                //wait however long it takes to get to a good pressure, or check the sensor continuously
-//                //see when we have enough.
-//                return false;
-//            }
-//
-//            else if(p >= 115) //checks to see if the compressor is at or over 115 psi
-//            {
-//                compressorOff(); //turns the compressor off
-//                return true;
-//            }
-//
-//            return false;
-//
-//    }
-
-    /*
-     * The below method checks to see if a boolean variable (isButtonPressed) is true or false.
-     * If it is true, it will set the canKick boolean variable to true, enabling the compressorLoop.
-     * If it is not true, it will disable the compressor loop, or do nothing.
-     *
-     * -Luc Bettaieb
-     */}
-
-    
-    {/*
- * This method goes through the kicking process.
- *
- * TODO:  There should be a wait function called in between the processes of expanding and compressing the cylinders
- * as to not cause a catastrophe.
- */
-//    public void kick()
-//    {
-//        expand(lockCylinder);
-//        compress(drivingCylinder);
-//        expand(shootingCylinder);
-//        compress(lockCylinder);
-//        compress(shootingCylinder);
-//        // expand(drivingCylinder);  This may not be needed
-//    }
-
-
-    /*
-     * Checks to see if the compressor is off, and if it is off, it turns it on.
-     */
-//    private void compressorOn()
-//    {
-//        if (isCompressorOn == false)
-//        {
-//            compressor.set(Relay.Value.kOn);
-//            //TODO: This will possibly need to be changed.
-//            isCompressorOn = true;
-//
-//        }
-//
-//    }
-
-
-    /*
-     * Checks to see if the compressor is on, and if it is on, turns it off.
-     */
-//    private void compressorOff()
-//    {
-//        if (isCompressorOn == true)
-//        {
-//            compressor.set(Relay.Value.kOff);
-//            //TODO: This will possibly need to be changed.
-//            isCompressorOn = false;
-//        }
-//
-//    }
-    }
- 
 }

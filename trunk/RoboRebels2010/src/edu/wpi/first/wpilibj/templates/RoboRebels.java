@@ -62,7 +62,9 @@ public class RoboRebels extends IterativeRobot {
     static final int NUM_JOYSTICK_BUTTONS = 16;
     boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    boolean triggerPressed;
+    boolean triggerPressed = false,
+            kickerLoadedPressed = false,
+            kickerUnloadPressed = false;;
     double lastZValue;
     double robotDriveSensitivity = 0.25;
 
@@ -108,12 +110,6 @@ public class RoboRebels extends IterativeRobot {
          *
          */
 
-        /*
-        Relay r = new Relay(1);
-        r.set(Relay.Value.kForward);
-        System.out.println(r);
-        */
-
         m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
         //m_robotDrive = new RobotDrive(2, 1, 4, 3, robotDriveSensitivity);
 
@@ -123,21 +119,6 @@ public class RoboRebels extends IterativeRobot {
 
         //kickMethod = "";
         kickMethod = "pneumatics";
-
-        /*
-        if ( kickMethod.equals("spin") )
-        {
-            spinner = new RRSpinner(5, 5, 25);
-        }
-        else if( kickMethod.equals("pneumatics") )
-        {
-            //Change these to correct channels.
-            //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
-            //locking cylinder relay channel, and shooting cylinder relay channel.
-            System.out.println("Making kicker");
-            kicker = new RRKicker(1, 1, 1, 2, 3, 4);
-        }
-        */
 
         pullUP = new RRPullup(6, 7, 1.0, 0.2, 0.75);
     }
@@ -182,7 +163,7 @@ public class RoboRebels extends IterativeRobot {
             //locking cylinder relay channel, and shooting cylinder relay channel.
             System.out.println("Making kicker");
             if ( kicker == null )
-                kicker = new RRKicker(1, 1, 1, 2, 3, 4);
+                kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
         }
 
 
@@ -190,10 +171,10 @@ public class RoboRebels extends IterativeRobot {
          * Camera code.  Uncomment when we get a working camera
          */
 
-        //Timer.delay(5.0);
-        //cam = AxisCamera.getInstance();
-        //cam.writeResolution(AxisCamera.ResolutionT.k160x120);
-        //cam.writeBrightness(0);
+        Timer.delay(5.0);
+        cam = AxisCamera.getInstance();
+        cam.writeResolution(AxisCamera.ResolutionT.k160x120);
+        cam.writeBrightness(0);
     }
 
     /**
@@ -288,11 +269,18 @@ public class RoboRebels extends IterativeRobot {
         }
 
         /*
-         * Spinner and thepneumatic kicker are activated via the joystick trigger
+         * Spinner and the pneumatic kicker are activated via the joystick trigger
+         *
+         * If the joystick trigger has been pressed and the state is false
+         * ...
          */
 
-        if(m_leftStick.getTrigger())
+        
+        if(m_leftStick.getTrigger() && triggerPressed == false)
         {
+            //System.out.println("checkButtons() - Trigger pressed | triggerPressed = " + triggerPressed);
+            triggerPressed = true;
+            
             if ( kickMethod.equals( "spin" ) )
             {
                 if ( m_leftStick.getTrigger() && spinner.isSpinning() )
@@ -309,65 +297,86 @@ public class RoboRebels extends IterativeRobot {
             }
             else if ( kickMethod.equals( "pneumatics" ) )
             {
-                if ( kicker.isKickerReady() )
+                if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
                 {
                     kicker.kick();
                 }
             }
         }
+        else if ( m_leftStick.getTrigger() == false )       // check to see if the trigger has been depressed
+        {
+            
+            triggerPressed = false;
+        }
+
+        // loads up the kicker (ie. gets it ready to kick)
+        if ( m_leftStick.getRawButton(3) && kickerLoadedPressed == false )
+        {
+            if ( kickMethod.equals( "pneumatics" ) )
+            {
+                if ( kicker.isKickerLoaded() == false )
+                {
+                    kicker.loadKicker();
+                }
+            }
+        }
+        else if ( m_leftStick.getRawButton(3) == false )
+        {
+            kickerLoadedPressed = false;
+        }
+
+
+        //  safely unloads the kicker, without actually kicking
+        if ( m_leftStick.getRawButton(4) && kickerUnloadPressed == false )
+        {
+            kicker.unloadKicker();
+            kickerUnloadPressed = true;
+        }
+        else
+        {
+            kickerUnloadPressed = false;
+        }
+        
+
 
 
         // Arm extending code
-        if (m_leftStick.getRawButton(3))
+        if (m_leftStick.getRawButton(6))
         {
             //System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
 
-        if (m_leftStick.getRawButton(2))
+        if (m_leftStick.getRawButton(7))
         {
             //System.out.println("***** Retract arm start");
             pullUP.retractArmStart();
         }
 
-        if ( !m_leftStick.getRawButton(3) && !m_leftStick.getRawButton(2) )
+        if ( !m_leftStick.getRawButton(7) && !m_leftStick.getRawButton(6) )
         {
             pullUP.extendArmStop();
         }
 
         
         // Wench handling
-        if (m_leftStick.getRawButton(4))
+        if (m_leftStick.getRawButton(8))
         {
             //System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
 
-        if (m_leftStick.getRawButton(5))
+        if (m_leftStick.getRawButton(9))
         {
             //System.out.println("***** Winch unwind start");
             pullUP.unwindWinchStart();
         }
 
-        if ( !m_leftStick.getRawButton(4) && !m_leftStick.getRawButton(5) )
+        if ( !m_leftStick.getRawButton(8) && !m_leftStick.getRawButton(9) )
         {
             pullUP.windWinchStop();
         }
     }
-
-    /*public void pullUPcontrol()
-        {
-            if (m_leftStick.getButton(button3))
-            {
-            pullUP.extendArmStart ();
-            }
-            else
-            {
-            pullUP.extendArmStop();
-            }
-        }*/
-
-
 
 
     /*
