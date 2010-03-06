@@ -164,17 +164,11 @@ public class RoboRebels extends IterativeRobot {
 
         if ( kickMethod.equals("spin") )
         {
-            if ( spinner == null )
-                spinner = new RRSpinner(5, 5, 25);
+            initSpinner();
         }
         else if( kickMethod.equals("pneumatics") )
         {
-            //Change these to correct channels.
-            //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
-            //locking cylinder relay channel, and shooting cylinder relay channel.
-            System.out.println("Making kicker");
-            if ( kicker == null )
-                kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
+            initKicker();
         }
 
 
@@ -208,7 +202,7 @@ public class RoboRebels extends IterativeRobot {
          * Negative direction moves left
          */
         Watchdog.getInstance().feed();
-        drive.drive(0.25, -0.2);
+        //drive.drive(0.25, -0.2);
     }
 
     /**
@@ -461,6 +455,22 @@ public class RoboRebels extends IterativeRobot {
         {
             grabber.stop();
         }
+    }
+
+    public void initSpinner()
+    {
+        if ( spinner == null )
+                spinner = new RRSpinner(5, 5, 25);
+    }
+
+    public void initKicker()
+    {
+        //Change these to correct channels.
+        //In order: Pressure switch channel, compressor relay channel, driving cylinder relay channel,
+        //locking cylinder relay channel, and shooting cylinder relay channel.
+        System.out.println("Making kicker");
+        if ( kicker == null )
+            kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
     }
 
 
