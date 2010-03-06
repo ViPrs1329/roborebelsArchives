@@ -74,6 +74,7 @@ public class RoboRebels extends IterativeRobot {
     RRKicker kicker;
     RRPullup pullUP;
     RRDrive drive;
+    RRGrabber grabber;
 
     /**
      * Constructor
@@ -120,7 +121,7 @@ public class RoboRebels extends IterativeRobot {
         //kickMethod = "";
         kickMethod = "pneumatics";
 
-        pullUP = new RRPullup(6, 7, 1.0, 0.2, 0.75);
+        pullUP = new RRPullup(6, 7, 1.0, 0.75, 0.75);
     }
 
     public void disabledInit()
@@ -275,6 +276,9 @@ public class RoboRebels extends IterativeRobot {
          * ...
          */
 
+        // --------------------------------------
+        // ------ joystick kicking code begin
+        // ------ comment out if you use threads
         
         if(m_leftStick.getTrigger() && triggerPressed == false)
         {
@@ -336,25 +340,29 @@ public class RoboRebels extends IterativeRobot {
         {
             kickerUnloadPressed = false;
         }
-        
+
+        // ------ comment out if you use threads
+        // ------ joystick kicking code end
+        // --------------------------------------
 
 
 
         // Arm extending code
         if (m_leftStick.getRawButton(6))
         {
-            //System.out.println("***** Extending arm start");
+            System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
 
         if (m_leftStick.getRawButton(7))
         {
-            //System.out.println("***** Retract arm start");
+            System.out.println("***** Retract arm start");
             pullUP.retractArmStart();
         }
 
         if ( !m_leftStick.getRawButton(7) && !m_leftStick.getRawButton(6) )
         {
+            System.out.println("***** Extend or retract arm stop");
             pullUP.extendArmStop();
         }
 
@@ -362,18 +370,19 @@ public class RoboRebels extends IterativeRobot {
         // Wench handling
         if (m_leftStick.getRawButton(8))
         {
-            //System.out.println("***** Winch wind start");
+            System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
 
         if (m_leftStick.getRawButton(9))
         {
-            //System.out.println("***** Winch unwind start");
+            System.out.println("***** Winch unwind start");
             pullUP.unwindWinchStart();
         }
 
         if ( !m_leftStick.getRawButton(8) && !m_leftStick.getRawButton(9) )
         {
+            System.out.println("***** Wind or unwind wench stop");
             pullUP.windWinchStop();
         }
     }

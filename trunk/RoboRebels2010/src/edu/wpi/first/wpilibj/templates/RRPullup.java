@@ -48,14 +48,14 @@ public class RRPullup
         extendStartTime = retractStartTime = pullupStartTime = 0;
         */
         if ( aS >= 0.0 && aS <= 1.0 )
-            armSpeed = aS;
+            armSpeed = -1.0 * aS;
         else
-            armSpeed = 1.0;
+            armSpeed = -1.0;
 
         if ( aRS >= 0.0 && aRS <= 1.0 )
-            armRetractSpeed = -1.0 * aRS;
+            armRetractSpeed = aRS;
         else
-            armRetractSpeed = -0.5;
+            armRetractSpeed = 0.5;
 
         if ( wS >= 0.0 && wS <= 1.0 )
             winchSpeed = wS;

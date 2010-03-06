@@ -91,6 +91,7 @@ public class RRKicker
         {
             while (kickerRun) 
             {
+                System.out.println( "RRKickerThread.run()");
                 Watchdog.getInstance().feed();
                 if(controllingJoystick.getTrigger() && triggerPressed == false)
                 {
@@ -98,6 +99,7 @@ public class RRKicker
                     triggerPressed = true;
                     if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
                         {
+                            System.out.println( "kicker.kick()" );
                             kicker.kick();
                         }
                 }
@@ -114,6 +116,7 @@ public class RRKicker
                 {
                     if ( kicker.isKickerLoaded() == false )
                     {
+                        System.out.println( "kicker.loadKicker()" );
                         kicker.loadKicker();
                     }
                 }
@@ -126,6 +129,7 @@ public class RRKicker
                 /*  safely unloads the kicker, without actually kicking */
                 if ( controllingJoystick.getRawButton(4) && kickerUnloadPressed == false )
                 {
+                    System.out.println( "kicker.unloadKicker()" );
                     kicker.unloadKicker();
                     kickerUnloadPressed = true;
                 }
@@ -148,9 +152,10 @@ public class RRKicker
             compressor.start();
             setupCylinders();
         }
-        
-        //m_task = new RRKickerThread(this);
-        //m_task.start();
+
+        // uncomment if you use the kicker thread
+//        m_task = new RRKickerThread(this);
+//        m_task.start();
     }
 
     /**
@@ -161,6 +166,8 @@ public class RRKicker
         if (compressor.enabled()) {
             compressor.stop();
         }
+
+        // uncomment if you use the kicker thread
         //m_task.interrupt();
     }
 
