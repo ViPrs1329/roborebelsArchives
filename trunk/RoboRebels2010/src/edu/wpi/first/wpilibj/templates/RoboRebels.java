@@ -235,8 +235,9 @@ public class RoboRebels extends IterativeRobot {
     public void disabledPeriodic()
     {
         Watchdog.getInstance().feed();
-        kicker.disable();
-        System.out.println("Disabled State");
+        if ( kicker != null )
+            kicker.disable();
+        //System.out.println("Disabled State");
     }
 
     /**
@@ -471,6 +472,8 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("Making kicker");
         if ( kicker == null )
             kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
+        else
+            kicker.startUp();
     }
 
 

@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RRKicker
@@ -44,7 +44,7 @@ public class RRKicker
     DigitalInput    lockCylinderSensor;
     Joystick        controllingJoystick;
 
-    private Thread m_task;
+    private RRKickerThread m_task;
     private long lastKickTime = 0;
     private boolean kickerRun = true;
     private boolean isLoaded = false;
@@ -67,6 +67,7 @@ public class RRKicker
         lockCylinderPiston = new Solenoid(lockCompressChannel);
         shootingCylinderTail = new Solenoid(shootingExpandChannel);
         shootingCylinderPiston = new Solenoid(shootingCompressChannel);
+        controllingJoystick = j;
 
         // Start up all systems associated with the kicking mechanism
         startUp();
@@ -75,9 +76,12 @@ public class RRKicker
     private class RRKickerThread extends Thread
     {
         RRKicker    kicker;
+
+        boolean     kickBall = false;
         boolean     triggerPressed = false,
                     kickerLoadedPressed = false,
                     kickerUnloadPressed = false;
+        
 
         RRKickerThread(RRKicker k)
         {
@@ -90,6 +94,15 @@ public class RRKicker
             {
                 System.out.println( "RRKickerThread.run()");
                 Watchdog.getInstance().feed();
+
+                if ( kickBall )
+                {
+                    kicker.kick();
+                    kickerRun = false;
+                }
+
+
+                
                 if(controllingJoystick.getTrigger() && triggerPressed == false)
                 {
                     triggerPressed = true;
@@ -101,13 +114,11 @@ public class RRKicker
                 }
                 else if ( controllingJoystick.getTrigger() == false )       // check to see if the trigger has been depressed
                 {
-                    /*
-                     * If so, the state is false
-                     */
+                    // If so, the state is false
                     triggerPressed = false;
                 }
 
-                /* loads up the kicker (ie. gets it ready to kick) */
+                // loads up the kicker (ie. gets it ready to kick)
                 if ( controllingJoystick.getRawButton(3) && kickerLoadedPressed == false )
                 {
                     if ( kicker.isKickerLoaded() == false )
@@ -122,7 +133,7 @@ public class RRKicker
                 }
 
 
-                /*  safely unloads the kicker, without actually kicking */
+                //  safely unloads the kicker, without actually kicking
                 if ( controllingJoystick.getRawButton(4) && kickerUnloadPressed == false )
                 {
                     System.out.println( "kicker.unloadKicker() [thread]" );
@@ -134,6 +145,7 @@ public class RRKicker
                     kickerUnloadPressed = false;
                 }
                 Watchdog.getInstance().feed();
+                
             }
         }
     }
@@ -143,15 +155,15 @@ public class RRKicker
      * compressor.  The compressor is stopped by default
      * and won't operate until it is started.
      */
-    private void startUp() {
+    public void startUp() {
         if (! compressor.enabled()) {
             compressor.start();
             setupCylinders();
         }
 
         // uncomment if you use the kicker thread
-//        m_task = new RRKickerThread(this);
-//        m_task.start();
+        m_task = new RRKickerThread(this);
+        m_task.start();
     }
 
     /**
@@ -214,6 +226,7 @@ public class RRKicker
         return isLoaded;
     }
 
+
     /**
      * Execute a kick by proceeding through the sequence of steps on the 
      * pneumatic system required to perform the action:
@@ -237,7 +250,7 @@ public class RRKicker
                 Watchdog.getInstance().feed();
                 //setupCylinders();
                 compress(lockCylinderTail, lockCylinderPiston);
-                Thread.sleep(250); // TODO: Check
+                Thread.sleep(350); // TODO: Check
                 compress(shootingCylinderTail, shootingCylinderPiston);
                 isLoaded = false;
                 Watchdog.getInstance().feed();

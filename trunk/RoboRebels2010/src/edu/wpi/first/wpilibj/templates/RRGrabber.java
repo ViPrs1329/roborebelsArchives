@@ -38,7 +38,7 @@ public class RRGrabber
                 setSpeed( -speed );
             }
             lastSpinTime = Timer.getUsClock();
-            System.out.println("Enabling spin");
+            //System.out.println("Enabling spin");
         }
     }
     public void stop()
