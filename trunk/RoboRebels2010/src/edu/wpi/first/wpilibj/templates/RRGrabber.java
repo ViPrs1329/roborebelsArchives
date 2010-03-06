@@ -5,6 +5,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  *
@@ -13,27 +14,31 @@ import edu.wpi.first.wpilibj.Victor;
 public class RRGrabber
 {
     private boolean isSpinning;
-    private boolean clockwise;
+    private long lastSpinTime;
 
-    private final int speed = 1;
+    private final double speed = 1.0;
     private Victor victor;
 
     public RRGrabber( int channel )
     {
         victor = new Victor( channel );
+        lastSpinTime = Timer.getUsClock();
     }
-    public void spin( boolean spinClockwise)
+    public void spin( boolean spinClockwise )
     {
-        isSpinning = true;
-        if( spinClockwise )
+        if (Timer.getUsClock() - lastSpinTime >= 300000 || lastSpinTime == 0)
         {
-            clockwise = true;
-            setSpeed( speed );
-        }
-        else
-        {
-            clockwise = false;
-            setSpeed( -speed );
+            isSpinning = true;
+            if( spinClockwise )
+            {
+                setSpeed( speed );
+            }
+            else
+            {
+                setSpeed( -speed );
+            }
+            lastSpinTime = Timer.getUsClock();
+            System.out.println("Enabling spin");
         }
     }
     public void stop()
@@ -49,5 +54,10 @@ public class RRGrabber
     public double getSpeed()
     {
         return victor.get();
+    }
+
+    public boolean isSpinning()
+    {
+        return isSpinning;
     }
 }

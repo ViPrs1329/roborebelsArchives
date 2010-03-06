@@ -6,14 +6,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/**
- * Objects that would be important to develop:
- *
- *   - Kicker object
- *     * Will most likely use the following objects:
- *
- *   - Pulley object
- *     * Will most likely use the following objects:
+/*
+    Joystick button map
+
+trigger		-	kicks kicker
+2		-	N/A
+3		-	loads kicker
+4		-	unloads kicker
+5		-	N/A
+6		-	extends arm
+7		-	retracts arm
+8		-	wind winch
+9		-	unwind winch
+10		-	change grabber direction
+11		-	enables/disables grabber
+
  */
 
 package edu.wpi.first.wpilibj.templates;
@@ -31,7 +38,6 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.Relay;
 
 
 /**
@@ -64,10 +70,14 @@ public class RoboRebels extends IterativeRobot {
     boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
     boolean triggerPressed = false,
             kickerLoadedPressed = false,
-            kickerUnloadPressed = false;;
+            kickerUnloadPressed = false,
+            grabberEnabledPressed = false,
+            grabberDirectionPressed = false;
     double lastZValue;
     double robotDriveSensitivity = 0.25;
 
+    boolean grabberEnabled = false,
+            grabberClockwise = true;
 
 
     RRSpinner spinner;
@@ -112,16 +122,16 @@ public class RoboRebels extends IterativeRobot {
          */
 
         m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
-        //m_robotDrive = new RobotDrive(2, 1, 4, 3, robotDriveSensitivity);
 
         // This was moved here because we were getting exceptions
         // whenever the robot was enabled, then disabled and then
         // enabled again
 
-        //kickMethod = "";
         kickMethod = "pneumatics";
 
-        pullUP = new RRPullup(6, 7, 1.0, 0.75, 0.75);
+        pullUP = new RRPullup(6, 7, 5.0, 0.54, 0.75);
+
+        grabber = new RRGrabber( 8 );
     }
 
     public void disabledInit()
@@ -168,14 +178,18 @@ public class RoboRebels extends IterativeRobot {
         }
 
 
+        
+
+
         /*
          * Camera code.  Uncomment when we get a working camera
          */
-
+         /*
         Timer.delay(5.0);
         cam = AxisCamera.getInstance();
         cam.writeResolution(AxisCamera.ResolutionT.k160x120);
         cam.writeBrightness(0);
+         */
     }
 
     /**
@@ -211,6 +225,9 @@ public class RoboRebels extends IterativeRobot {
         drive.drive(false);
         updateDSLCD();
         //processCamera();
+        processGrabber();
+
+        
         
     }
 
@@ -224,7 +241,8 @@ public class RoboRebels extends IterativeRobot {
     public void disabledPeriodic()
     {
         Watchdog.getInstance().feed();
-        //System.out.println("Disabled State");
+        kicker.disable();
+        System.out.println("Disabled State");
     }
 
     /**
@@ -284,7 +302,8 @@ public class RoboRebels extends IterativeRobot {
         {
             //System.out.println("checkButtons() - Trigger pressed | triggerPressed = " + triggerPressed);
             triggerPressed = true;
-            
+
+
             if ( kickMethod.equals( "spin" ) )
             {
                 if ( m_leftStick.getTrigger() && spinner.isSpinning() )
@@ -350,19 +369,19 @@ public class RoboRebels extends IterativeRobot {
         // Arm extending code
         if (m_leftStick.getRawButton(6))
         {
-            System.out.println("***** Extending arm start");
+            //System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
 
         if (m_leftStick.getRawButton(7))
         {
-            System.out.println("***** Retract arm start");
+            //System.out.println("***** Retract arm start");
             pullUP.retractArmStart();
         }
 
         if ( !m_leftStick.getRawButton(7) && !m_leftStick.getRawButton(6) )
         {
-            System.out.println("***** Extend or retract arm stop");
+            //System.out.println("***** Extend or retract arm stop");
             pullUP.extendArmStop();
         }
 
@@ -370,20 +389,77 @@ public class RoboRebels extends IterativeRobot {
         // Wench handling
         if (m_leftStick.getRawButton(8))
         {
-            System.out.println("***** Winch wind start");
+            //System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
 
         if (m_leftStick.getRawButton(9))
         {
-            System.out.println("***** Winch unwind start");
+            //System.out.println("***** Winch unwind start");
             pullUP.unwindWinchStart();
         }
 
         if ( !m_leftStick.getRawButton(8) && !m_leftStick.getRawButton(9) )
         {
-            System.out.println("***** Wind or unwind wench stop");
+            //System.out.println("***** Wind or unwind wench stop");
             pullUP.windWinchStop();
+        }
+
+        // Grabber handling
+        /*
+         *  grabberEnabledPressed = false,
+            grabberDirectionPressed = false;
+         */
+
+        // enable grabber
+        if (m_leftStick.getRawButton(11) && grabberEnabledPressed == false)
+        {
+            if ( grabberEnabled )
+                grabberEnabled = false;
+            else
+                grabberEnabled = true;
+
+            grabberEnabledPressed = true;
+
+            System.out.println( "grabber enable : " + grabberEnabled );
+        }
+        else if ( !m_leftStick.getRawButton(11))
+        {
+            grabberEnabledPressed = false;
+        }
+
+        // switch between clockwise or counter clockwise rotation
+        if (m_leftStick.getRawButton(10) && grabberDirectionPressed == false)
+        {
+            if ( grabberClockwise )
+                grabberClockwise = false;
+            else
+                grabberClockwise = true;
+
+            grabberDirectionPressed = true;
+
+            System.out.println( "grabber clockwise : " + grabberClockwise );
+        }
+        else if (!m_leftStick.getRawButton(10))
+        {
+            grabberDirectionPressed = false;
+        }
+    }
+
+    /*
+     * Handle grabber states
+     */
+    public void processGrabber()
+    {
+        
+        if ( grabberEnabled )
+        {
+            //System.out.println("Setting grabber speed");
+            grabber.spin( grabberClockwise );
+        }
+        else
+        {
+            grabber.stop();
         }
     }
 
@@ -393,6 +469,7 @@ public class RoboRebels extends IterativeRobot {
      * get a camera instance in the init function
      * the camera works automatcally.
      */
+    /*
     public void processCamera()
     {
         //System.out.println("processCamera()");
@@ -411,6 +488,7 @@ public class RoboRebels extends IterativeRobot {
         }
         
     }
+     */
     
     /*
      * Sends useful information to the LCD on the DriverStation

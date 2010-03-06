@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 
 public class RRKicker
@@ -35,17 +36,19 @@ public class RRKicker
      *   'switch'
      */
     
-    Compressor compressor;
-    Solenoid lockCylinderTail;
-    Solenoid lockCylinderPiston;
-    Solenoid shootingCylinderTail;
-    Solenoid shootingCylinderPiston;
-    Joystick controllingJoystick;
+    Compressor      compressor;
+    Solenoid        lockCylinderTail;
+    Solenoid        lockCylinderPiston;
+    Solenoid        shootingCylinderTail;
+    Solenoid        shootingCylinderPiston;
+    DigitalInput    lockCylinderSensor;
+    Joystick        controllingJoystick;
 
     private Thread m_task;
     private long lastKickTime = 0;
     private boolean kickerRun = true;
     private boolean isLoaded = false;
+    private boolean shortKick = false;
 
     /**
      * Create a new instance of the kicker class
@@ -58,12 +61,6 @@ public class RRKicker
      */
     public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel, Joystick j)
     {
-        // TODO:  should we be using Solenoids instead of Relays?
-        // The WPLib users guide (p. 34) suggests the use of Solenoids to simplify the
-        // pneumatic system.  That we can control the pneumatic actuators directly
-        // without the need for an additional relay. (In the past a Spike relay
-        // was required along with a digital output port to control a pneumatics
-        // component.)
         System.out.println("RRKicker()");
         compressor = new Compressor(compChannel_1, compChannel_2);
         lockCylinderTail = new Solenoid(lockExpandChannel);
@@ -95,11 +92,10 @@ public class RRKicker
                 Watchdog.getInstance().feed();
                 if(controllingJoystick.getTrigger() && triggerPressed == false)
                 {
-                    //System.out.println("checkButtons() - Trigger pressed | triggerPressed = " + triggerPressed);
                     triggerPressed = true;
                     if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
                         {
-                            System.out.println( "kicker.kick()" );
+                            System.out.println( "kicker.kick() [thread]" );
                             kicker.kick();
                         }
                 }
@@ -116,7 +112,7 @@ public class RRKicker
                 {
                     if ( kicker.isKickerLoaded() == false )
                     {
-                        System.out.println( "kicker.loadKicker()" );
+                        System.out.println( "kicker.loadKicker() [thread]" );
                         kicker.loadKicker();
                     }
                 }
@@ -129,7 +125,7 @@ public class RRKicker
                 /*  safely unloads the kicker, without actually kicking */
                 if ( controllingJoystick.getRawButton(4) && kickerUnloadPressed == false )
                 {
-                    System.out.println( "kicker.unloadKicker()" );
+                    System.out.println( "kicker.unloadKicker() [thread]" );
                     kicker.unloadKicker();
                     kickerUnloadPressed = true;
                 }
@@ -168,7 +164,7 @@ public class RRKicker
         }
 
         // uncomment if you use the kicker thread
-        //m_task.interrupt();
+//        m_task.interrupt();
     }
 
     /**
@@ -187,6 +183,17 @@ public class RRKicker
         kickerRun = false;
     }
 
+
+    public void enableShortKick()
+    {
+        shortKick = true;
+    }
+
+    public void enableLongKick()
+    {
+        shortKick = false;
+    }
+
     /**
      * Return true if tthe system pressure is above the high
      * set point and the compressor is off.  This method
@@ -196,22 +203,9 @@ public class RRKicker
      * @return true if the system is fully pressurized
      */
     public boolean isKickerReady() {
-        // The Compressor class automatically creates a task that runs in the
-        // background twice a second and turns the compressor on or off based
-        // on the pressure switch value. If the system pressure is above the
-        // high set point (Compressor.getPressureSwitchValue() == true), the
-        // compressor turns off. If the pressure is below the low set point
-        // (Compressor.getPressureSwitchValue() == false), the compressor
-        // turns on.
 
-        /*
-        if (compressor.enabled()) {
-            // If the pressure switch is above the high set point then we 
-            // consider the system to be fully pressurized and ready to kick
-            return compressor.getPressureSwitchValue();
-        }
-        return false;
-        */
+        // This method should not be used anymore
+
         return true;
     }
 
@@ -236,7 +230,6 @@ public class RRKicker
         // Progress through the steps needed to shoot.
         if ( Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0 )
         {
-            
             try
             {
                 expand(shootingCylinderTail, shootingCylinderPiston);
@@ -253,7 +246,6 @@ public class RRKicker
             {
                 System.out.println( e.toString() );
             }
-
             
             lastKickTime = Timer.getUsClock();
         }
@@ -265,7 +257,15 @@ public class RRKicker
      */
     public void loadKicker()
     {
-        expand(lockCylinderTail, lockCylinderPiston);
+        if ( shortKick )
+        {
+            
+        }
+        else
+        {
+            expand(lockCylinderTail, lockCylinderPiston);
+        }
+
         isLoaded = true;
     }
 
@@ -302,14 +302,8 @@ public class RRKicker
      */
     private void compress(Solenoid s1, Solenoid s2)
     {
-        //TODO: this will possibly need to be changed
-//        System.out.println("compress() ["  + Timer.getUsClock() + "] " + s1 + " | " + s2);
-//        System.out.println("           s1.get() = " + s1.get() );
         s1.set(false);
-//        System.out.println("           s1.get() = " + s1.get() );
-//        System.out.println("           s2.get() = " + s2.get() );
         s2.set(true);
-//        System.out.println("           s2.get() = " + s2.get() );
     }
 
 
@@ -318,13 +312,7 @@ public class RRKicker
      */
     private void expand(Solenoid s1, Solenoid s2)
     {
-        //TODO: this will possibly need to be changed
-//        System.out.println("expand() [" + Timer.getUsClock() + "] " + s1 + " | " + s2);
-//        System.out.println("           s2.get() = " + s2.get() );
         s2.set(false);
-//        System.out.println("           s2.get() = " + s2.get() );
-//        System.out.println("           s1.get() = " + s1.get() );
         s1.set(true);
-//        System.out.println("           s1.get() = " + s1.get() );
     }
 }
