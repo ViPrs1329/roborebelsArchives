@@ -162,8 +162,8 @@ public class RRKicker
         }
 
         // uncomment if you use the kicker thread
-        m_task = new RRKickerThread(this);
-        m_task.start();
+//        m_task = new RRKickerThread(this);
+//        m_task.start();
     }
 
     /**
@@ -241,16 +241,16 @@ public class RRKicker
      */
     public void kick() {
         // Progress through the steps needed to shoot.
+        System.out.println( "kick()" );
         if ( Timer.getUsClock() - lastKickTime >= 250000 || lastKickTime == 0 )
         {
             try
             {
                 expand(shootingCylinderTail, shootingCylinderPiston);
-                Thread.sleep(250); // TODO: Check
+                Thread.sleep(250);
                 Watchdog.getInstance().feed();
-                //setupCylinders();
                 compress(lockCylinderTail, lockCylinderPiston);
-                Thread.sleep(350); // TODO: Check
+                Thread.sleep(350);
                 compress(shootingCylinderTail, shootingCylinderPiston);
                 isLoaded = false;
                 Watchdog.getInstance().feed();
@@ -270,6 +270,9 @@ public class RRKicker
      */
     public void loadKicker()
     {
+        System.out.println( "loadKicker()" );
+
+        /*
         if ( shortKick )
         {
             
@@ -278,6 +281,9 @@ public class RRKicker
         {
             expand(lockCylinderTail, lockCylinderPiston);
         }
+        */
+
+        expand(lockCylinderTail, lockCylinderPiston);
 
         isLoaded = true;
     }
@@ -297,6 +303,8 @@ public class RRKicker
      */
     public void setupCylinders()
     {
+        System.out.println( "setupCylinders()" );
+
         try
         {
             compress(lockCylinderTail, lockCylinderPiston);

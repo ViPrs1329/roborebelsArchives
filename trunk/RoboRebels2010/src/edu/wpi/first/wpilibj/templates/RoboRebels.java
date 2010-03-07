@@ -214,6 +214,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void teleopPeriodic()
     {
+        //System.out.println( "telopPeriodic()" );
         Watchdog.getInstance().feed();
         checkButtons();
         drive.drive(false);
@@ -317,7 +318,11 @@ public class RoboRebels extends IterativeRobot {
             {
                 if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
                 {
+                    // ------ Test
+                    grabber.stop();
                     kicker.kick();
+                    // ------ Test
+                    grabber.spin( grabberClockwise );
                 }
             }
         }
