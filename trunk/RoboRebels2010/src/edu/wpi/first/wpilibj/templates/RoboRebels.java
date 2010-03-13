@@ -49,42 +49,46 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
  */
 public class RoboRebels extends IterativeRobot {
 
-    // Declare variable for the robot drive system
-    RobotDrive m_robotDrive;		// robot will use PWM 1-4 for drive motors
+    // Declare custom object vars
+    RobotDrive          m_robotDrive;		// robot will use PWM 1-4 for drive motors
+    RRSpinner           spinner;                // spinner kicking device
+    RRKicker            kicker;                 // pneumatic kicker device
+    RRPullup            pullUP;                 // pullup device
+    RRDrive             drive;                  // robot drive device
+    RRGrabber           grabber;                // grabber device
 
     // Declare a variable to use to access the driver station object
-    DriverStation m_ds;                     // driver station object
-    DriverStationLCD m_dsLCD;
-    AxisCamera cam;
-
-    long        autonomousStartTime;
-    String kickMethod; //either 'spin' or 'pneumatics'
-
-    // Declare variables for the two joysticks being used
-    Joystick m_rightStick;			// joystick 1 (arcade stick or right tank stick)
-    Joystick m_leftStick;			// joystick 2 (tank left stick)
+    DriverStation       m_ds;                   // driver station object
+    DriverStationLCD    m_dsLCD;                // driver station LCD object
+    AxisCamera          cam;                    // camera object
 
 
-    static final int NUM_JOYSTICK_BUTTONS = 16;
-    boolean[] m_rightStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    boolean[] m_leftStickButtonState = new boolean[(NUM_JOYSTICK_BUTTONS+1)];
-    boolean triggerPressed = false,
-            kickerLoadedPressed = false,
-            kickerUnloadPressed = false,
-            grabberEnabledPressed = false,
-            grabberDirectionPressed = false;
-    double lastZValue;
-    double robotDriveSensitivity = 0.25;
-
-    boolean grabberEnabled = false,
-            grabberClockwise = true;
 
 
-    RRSpinner spinner;
-    RRKicker kicker;
-    RRPullup pullUP;
-    RRDrive drive;
-    RRGrabber grabber;
+    long                autonomousStartTime;    // holds the start time for autonomous mode
+
+    String              kickMethod;             // either 'spin' or 'pneumatics'
+
+    Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
+    Joystick            m_leftStick;		// joystick 2 (tank left stick)
+
+
+    static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
+
+    boolean             triggerPressed = false,             // has the trigger been pressed?
+                        kickerLoadedPressed = false,        // has the load kicker button been pressed?
+                        kickerUnloadPressed = false,        // has the kicker unload button been pressed?
+                        grabberEnabledPressed = false,      // has the enable grabber button been pressed?
+                        grabberDirectionPressed = false;    // has the grabber direction change button been pressed?
+
+    double              lastZValue;                         // last Z value for the dial on the joystick
+    double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
+
+    boolean             grabberEnabled = false,             // is the grabber enabled?
+                        grabberClockwise = true;            // what direction should it go?
+
+
+    
 
     /**
      * Constructor
@@ -102,6 +106,10 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit()
     {
         System.out.println( "robotInit()" );
+
+
+        kickMethod = "pneumatics";
+
 
         // front left, rear left, front right, rear right
 
@@ -127,8 +135,7 @@ public class RoboRebels extends IterativeRobot {
         // whenever the robot was enabled, then disabled and then
         // enabled again
 
-        kickMethod = "pneumatics";
-
+        // Use PWM / Victor on channel 6 for arm, 7 for wench, 
         pullUP = new RRPullup(6, 7, 5.0, 0.54, 0.75);
 
         grabber = new RRGrabber( 8 );
