@@ -44,7 +44,7 @@ public class RRKicker
     DigitalInput    lockCylinderSensor;
     Joystick        controllingJoystick;
 
-    private RRKickerThread m_task;
+    //private RRKickerThread m_task;
     private long lastKickTime = 0;
     private boolean kickerRun = true;
     private boolean isLoaded = false;
@@ -73,6 +73,7 @@ public class RRKicker
         startUp();
     }
 
+    /*
     private class RRKickerThread extends Thread
     {
         RRKicker    kicker;
@@ -149,6 +150,7 @@ public class RRKicker
             }
         }
     }
+    */
 
     /**
      * Startup the kicker.  This method will start the
@@ -246,6 +248,7 @@ public class RRKicker
         {
             try
             {
+                System.out.println( "kick() - actually kicking" );
                 expand(shootingCylinderTail, shootingCylinderPiston);
                 Thread.sleep(250);
                 Watchdog.getInstance().feed();

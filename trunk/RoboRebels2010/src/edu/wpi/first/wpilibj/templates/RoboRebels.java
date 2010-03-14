@@ -148,7 +148,10 @@ public class RoboRebels extends IterativeRobot {
                 spinner.rampDown();
         else if ( kickMethod.equals("pneumatics") )
             if ( kicker != null )
+            {
+                kicker.setupCylinders();
                 kicker.shutDown();
+            }
     }
 
     public void autonomousInit()
@@ -185,12 +188,12 @@ public class RoboRebels extends IterativeRobot {
         /*
          * Camera code.  Uncomment when we get a working camera
          */
-         /*
+         
         Timer.delay(5.0);
         cam = AxisCamera.getInstance();
         cam.writeResolution(AxisCamera.ResolutionT.k160x120);
         cam.writeBrightness(0);
-         */
+         
     }
 
     /**
@@ -224,9 +227,9 @@ public class RoboRebels extends IterativeRobot {
         //System.out.println( "telopPeriodic()" );
         Watchdog.getInstance().feed();
         checkButtons();
-        drive.drive(false);
+        drive.drive(true);
         updateDSLCD();
-        //processCamera();
+        processCamera();
         processGrabber();
 
         
@@ -283,9 +286,9 @@ public class RoboRebels extends IterativeRobot {
 
         if ( kickMethod.equals("spin") )
         {
-            if ( lastZValue != m_leftStick.getZ() && spinner.isSpinning() )
+            if ( lastZValue != m_rightStick.getZ() && spinner.isSpinning() )
             {
-                lastZValue = m_leftStick.getZ();
+                lastZValue = m_rightStick.getZ();
                 spinner.setSpeedAndUpdateFromJoystick(lastZValue);
             }
         }
@@ -301,7 +304,8 @@ public class RoboRebels extends IterativeRobot {
         // ------ joystick kicking code begin
         // ------ comment out if you use threads
         
-        if(m_leftStick.getTrigger() && triggerPressed == false)
+        
+        if(m_rightStick.getTrigger() && triggerPressed == false)
         {
             //System.out.println("checkButtons() - Trigger pressed | triggerPressed = " + triggerPressed);
             triggerPressed = true;
@@ -309,15 +313,15 @@ public class RoboRebels extends IterativeRobot {
 
             if ( kickMethod.equals( "spin" ) )
             {
-                if ( m_leftStick.getTrigger() && spinner.isSpinning() )
+                if ( m_rightStick.getTrigger() && spinner.isSpinning() )
                 {
                     //System.out.println( "rampDown()");
                     spinner.rampDown();
                 }
-                else if ( m_leftStick.getTrigger() && ! spinner.isSpinning() )
+                else if ( m_rightStick.getTrigger() && ! spinner.isSpinning() )
                 {
                     //System.out.println( "rampUp()" );
-                    spinner.setSpeedFromJoystick(m_leftStick.getZ());
+                    spinner.setSpeedFromJoystick(m_rightStick.getZ());
                     spinner.rampUp();
                 }
             }
@@ -333,14 +337,14 @@ public class RoboRebels extends IterativeRobot {
                 }
             }
         }
-        else if ( m_leftStick.getTrigger() == false )       // check to see if the trigger has been depressed
+        else if ( m_rightStick.getTrigger() == false )       // check to see if the trigger has been depressed
         {
             
             triggerPressed = false;
         }
 
         // loads up the kicker (ie. gets it ready to kick)
-        if ( m_leftStick.getRawButton(3) && kickerLoadedPressed == false )
+        if ( m_rightStick.getRawButton(3) && kickerLoadedPressed == false )
         {
             if ( kickMethod.equals( "pneumatics" ) )
             {
@@ -350,14 +354,14 @@ public class RoboRebels extends IterativeRobot {
                 }
             }
         }
-        else if ( m_leftStick.getRawButton(3) == false )
+        else if ( m_rightStick.getRawButton(3) == false )
         {
             kickerLoadedPressed = false;
         }
 
 
         //  safely unloads the kicker, without actually kicking
-        if ( m_leftStick.getRawButton(4) && kickerUnloadPressed == false )
+        if ( m_rightStick.getRawButton(4) && kickerUnloadPressed == false )
         {
             kicker.unloadKicker();
             kickerUnloadPressed = true;
@@ -367,6 +371,7 @@ public class RoboRebels extends IterativeRobot {
             kickerUnloadPressed = false;
         }
 
+        
         // ------ comment out if you use threads
         // ------ joystick kicking code end
         // --------------------------------------
@@ -374,19 +379,19 @@ public class RoboRebels extends IterativeRobot {
 
 
         // Arm extending code
-        if (m_leftStick.getRawButton(6))
+        if (m_rightStick.getRawButton(6))
         {
             //System.out.println("***** Extending arm start");
             pullUP.extendArmStart();
         }
 
-        if (m_leftStick.getRawButton(7))
+        if (m_rightStick.getRawButton(7))
         {
             //System.out.println("***** Retract arm start");
             pullUP.retractArmStart();
         }
 
-        if ( !m_leftStick.getRawButton(7) && !m_leftStick.getRawButton(6) )
+        if ( !m_rightStick.getRawButton(7) && !m_rightStick.getRawButton(6) )
         {
             //System.out.println("***** Extend or retract arm stop");
             pullUP.extendArmStop();
@@ -394,19 +399,19 @@ public class RoboRebels extends IterativeRobot {
 
         
         // Wench handling
-        if (m_leftStick.getRawButton(8))
+        if (m_rightStick.getRawButton(8))
         {
             //System.out.println("***** Winch wind start");
             pullUP.windWinchStart();
         }
 
-        if (m_leftStick.getRawButton(9))
+        if (m_rightStick.getRawButton(9))
         {
             //System.out.println("***** Winch unwind start");
             pullUP.unwindWinchStart();
         }
 
-        if ( !m_leftStick.getRawButton(8) && !m_leftStick.getRawButton(9) )
+        if ( !m_rightStick.getRawButton(8) && !m_rightStick.getRawButton(9) )
         {
             //System.out.println("***** Wind or unwind wench stop");
             pullUP.windWinchStop();
@@ -419,7 +424,7 @@ public class RoboRebels extends IterativeRobot {
          */
 
         // enable grabber
-        if (m_leftStick.getRawButton(11) && grabberEnabledPressed == false)
+        if (m_rightStick.getRawButton(11) && grabberEnabledPressed == false)
         {
             if ( grabberEnabled )
                 grabberEnabled = false;
@@ -430,13 +435,13 @@ public class RoboRebels extends IterativeRobot {
 
             System.out.println( "grabber enable : " + grabberEnabled );
         }
-        else if ( !m_leftStick.getRawButton(11))
+        else if ( !m_rightStick.getRawButton(11))
         {
             grabberEnabledPressed = false;
         }
 
         // switch between clockwise or counter clockwise rotation
-        if (m_leftStick.getRawButton(10) && grabberDirectionPressed == false)
+        if (m_rightStick.getRawButton(10) && grabberDirectionPressed == false)
         {
             if ( grabberClockwise )
                 grabberClockwise = false;
@@ -447,7 +452,7 @@ public class RoboRebels extends IterativeRobot {
 
             System.out.println( "grabber clockwise : " + grabberClockwise );
         }
-        else if (!m_leftStick.getRawButton(10))
+        else if (!m_rightStick.getRawButton(10))
         {
             grabberDirectionPressed = false;
         }
@@ -486,6 +491,8 @@ public class RoboRebels extends IterativeRobot {
             kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
         else
             kicker.startUp();
+
+        kicker.enable();
     }
 
 
@@ -494,7 +501,7 @@ public class RoboRebels extends IterativeRobot {
      * get a camera instance in the init function
      * the camera works automatcally.
      */
-    /*
+    
     public void processCamera()
     {
         //System.out.println("processCamera()");
@@ -513,7 +520,7 @@ public class RoboRebels extends IterativeRobot {
         }
         
     }
-     */
+    
     
     /*
      * Sends useful information to the LCD on the DriverStation
