@@ -57,6 +57,8 @@ public class RoboRebels extends IterativeRobot {
     RRDrive             drive;                  // robot drive device
     RRGrabber           grabber;                // grabber device
 
+    TrackerDashboard    trackerDashboard = new TrackerDashboard();
+
     // Declare a variable to use to access the driver station object
     DriverStation       m_ds;                   // driver station object
     DriverStationLCD    m_dsLCD;                // driver station LCD object
@@ -74,12 +76,26 @@ public class RoboRebels extends IterativeRobot {
 
 
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
+    static boolean      disabledStateBroadcasted = false;
+    static boolean      teleopStateBroadcasted = false;
+    static boolean      autonomousStateBroadcasted = false;
+
+    double              kScoreThreshold = .01;      // used in circle tracking code; default = 0.01
+    double              targetTolerance = 1.0;      // used for target tracking
+
+    double              autoDriveSpeed = 0.25,      // 0.0 - 1.0
+                        autoTurnAngle = 0.3,
+                        autoTurnDirection = 0.0;    // 1.0 for right, -1.0 for left
+    
 
     boolean             triggerPressed = false,             // has the trigger been pressed?
                         kickerLoadedPressed = false,        // has the load kicker button been pressed?
                         kickerUnloadPressed = false,        // has the kicker unload button been pressed?
                         grabberEnabledPressed = false,      // has the enable grabber button been pressed?
                         grabberDirectionPressed = false;    // has the grabber direction change button been pressed?
+
+    boolean             foundTarget = false,                // have we found the target yet?
+                        autoDrive = false;                  // are we in autonomous drive mode?
 
     double              lastZValue;                         // last Z value for the dial on the joystick
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
@@ -108,7 +124,14 @@ public class RoboRebels extends IterativeRobot {
         System.out.println( "robotInit()" );
 
 
+        Watchdog.getInstance().setExpiration(0.75);
+
         kickMethod = "pneumatics";
+
+
+        // Camera init code
+        Timer.delay(5.0);
+        cam = AxisCamera.getInstance();
 
 
         // front left, rear left, front right, rear right
@@ -147,23 +170,34 @@ public class RoboRebels extends IterativeRobot {
             if ( spinner != null )
                 spinner.rampDown();
         else if ( kickMethod.equals("pneumatics") )
+        {
             if ( kicker != null )
             {
+//                System.out.println( "disabledInit() - Setting up kicker into a safe state" );
                 kicker.setupCylinders();
                 kicker.shutDown();
             }
+        }
+
+        teleopStateBroadcasted = false;
+        autonomousStateBroadcasted = false;
     }
 
     public void autonomousInit()
     {
         System.out.println( "autonomousInit()" );
-        //drive = new RRDrive(m_robotDrive);
-        //autonomousStartTime = Timer.getUsClock();
+
+        disabledStateBroadcasted = false;
+        teleopStateBroadcasted = false;
     }
 
     public void teleopInit()
     {
         System.out.println( "teleopInit()" );
+
+        disabledStateBroadcasted = false;
+        autonomousStateBroadcasted = false;
+
         m_rightStick = new Joystick(2);
         m_leftStick = new Joystick(1);
         drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
@@ -188,12 +222,12 @@ public class RoboRebels extends IterativeRobot {
         /*
          * Camera code.  Uncomment when we get a working camera
          */
-         
+        /*  Moved to robotInit
         Timer.delay(5.0);
         cam = AxisCamera.getInstance();
         cam.writeResolution(AxisCamera.ResolutionT.k160x120);
         cam.writeBrightness(0);
-         
+        */
     }
 
     /**
@@ -212,7 +246,14 @@ public class RoboRebels extends IterativeRobot {
          * Negative direction moves left
          */
         Watchdog.getInstance().feed();
-        //drive.drive(0.25, -0.2);
+
+        processCamera();
+
+        if ( autonomousStateBroadcasted == true )
+        {
+            System.out.println( "Autonomous State" );
+            autonomousStateBroadcasted = false;
+        }
     }
 
     /**
@@ -226,14 +267,18 @@ public class RoboRebels extends IterativeRobot {
     {
         //System.out.println( "telopPeriodic()" );
         Watchdog.getInstance().feed();
+
+        if ( teleopStateBroadcasted == true )
+        {
+            System.out.println( "Teleop State" );
+            teleopStateBroadcasted = false;
+        }
+
         checkButtons();
         drive.drive(true);
         updateDSLCD();
         processCamera();
         processGrabber();
-
-        
-        
     }
 
     /**
@@ -245,10 +290,16 @@ public class RoboRebels extends IterativeRobot {
      */
     public void disabledPeriodic()
     {
+
         Watchdog.getInstance().feed();
         if ( kicker != null )
             kicker.disable();
-        //System.out.println("Disabled State");
+        
+        if ( disabledStateBroadcasted == true )
+        {
+            System.out.println( "Disabled State" );
+            disabledStateBroadcasted = false;
+        }
     }
 
     /**
@@ -257,7 +308,10 @@ public class RoboRebels extends IterativeRobot {
      */
     public void autonomousContinuous()
     {
-
+        if ( autoDrive )
+            m_robotDrive.drive(-1.0 * autoDriveSpeed, autoTurnDirection * autoTurnAngle);
+        else
+            m_robotDrive.drive(0.0, 0.0);
     }
 
     /**
@@ -463,7 +517,6 @@ public class RoboRebels extends IterativeRobot {
      */
     public void processGrabber()
     {
-        
         if ( grabberEnabled )
         {
             //System.out.println("Setting grabber speed");
@@ -504,20 +557,78 @@ public class RoboRebels extends IterativeRobot {
     
     public void processCamera()
     {
-        //System.out.println("processCamera()");
+        System.out.println("processCamera()");
         
-        try
-        {
-                if (cam.freshImage()) {
-                    //System.out.println("    - got a fresh image!");
+        try {
+                if (cam.freshImage()) {// && turnController.onTarget()) {
+                    System.out.println("processCamera() - Got a fresh image");
+                    //double gyroAngle = gyro.pidGet();
                     ColorImage image = cam.getImage();
+                    Thread.yield();
+                    Target[] targets = Target.findCircularTargets(image);
+                    Watchdog.getInstance().feed();
+                    Thread.yield();
                     image.free();
+                    if (targets.length == 0 || targets[0].m_score < kScoreThreshold)
+                    {
+                        System.out.println("No target found");
+                        Target[] newTargets = new Target[targets.length + 1];
+                        newTargets[0] = new Target();
+                        newTargets[0].m_majorRadius = 0;
+                        newTargets[0].m_minorRadius = 0;
+                        newTargets[0].m_score = 0;
+
+                        for (int i = 0; i < targets.length; i++)
+                        {
+                            newTargets[i + 1] = targets[i];
+                        }
+
+                        autoDrive = true;
+                        autoTurnDirection = 1.0;  // turn right
+                        foundTarget = false;
+
+                        trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, 0.0, newTargets);
+                    } 
+                    else
+                    {
+                        Watchdog.getInstance().feed();
+                        //System.out.println(targets[0]);
+                        System.out.println("Target Angle: " + targets[0].getHorizontalAngle());
+                        System.out.println("Target tolerance difference: " + (targets[0].getHorizontalAngle() - targetTolerance));
+                        //turnController.setSetpoint(gyroAngle + targets[0].getHorizontalAngle());
+                        /*
+                         * Use getHorizontalAngle() to determine if the robot is lined up with
+                         * the target or not.  When it gets close to 0.0 it is lined up.  Use
+                         * a tolerance!!!!
+                         */
+
+                        if ( targets[0].getHorizontalAngle() < targetTolerance && targets[0].getHorizontalAngle() > (-1.0 * targetTolerance) )
+                        {
+                            // if it is inside the target tolerance then stop
+                            System.out.println("processCamera() - Found target.  IT IS CENTERED" );
+                            autoDrive = false;
+                            foundTarget = true;
+
+                        }
+                        else
+                        {
+                            // if it is outside the target tolerance then move it
+                            System.out.println("processCamera() - Found target, but it is not centered");
+                            autoDrive = true;
+                            if ( targets[0].getHorizontalAngle() > 0.0 )
+                                autoTurnDirection = 1.0;
+                            else if ( targets[0].getHorizontalAngle() < 0.0 )
+                                autoTurnDirection = -1.0;
+                        }
+
+                        trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, targets[0].m_xPos / targets[0].m_xMax, targets);
+                    }
                 }
             } catch (NIVisionException ex) {
                 ex.printStackTrace();
             } catch (AxisCameraException ex) {
                 ex.printStackTrace();
-        }
+            }
         
     }
     
