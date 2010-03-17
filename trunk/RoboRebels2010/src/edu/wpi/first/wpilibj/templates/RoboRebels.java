@@ -179,6 +179,8 @@ public class RoboRebels extends IterativeRobot {
             }
         }
 
+        grabberEnabled = false;
+
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
     }
@@ -189,6 +191,12 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         teleopStateBroadcasted = false;
+
+        grabberEnabled = true;
+        
+        initKicker();
+
+        autonomousStartTime = Timer.getUsClock();
     }
 
     public void teleopInit()
@@ -200,7 +208,8 @@ public class RoboRebels extends IterativeRobot {
 
         m_rightStick = new Joystick(2);
         m_leftStick = new Joystick(1);
-        drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
+        if ( drive == null )
+            drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -214,20 +223,6 @@ public class RoboRebels extends IterativeRobot {
         {
             initKicker();
         }
-
-
-        
-
-
-        /*
-         * Camera code.  Uncomment when we get a working camera
-         */
-        /*  Moved to robotInit
-        Timer.delay(5.0);
-        cam = AxisCamera.getInstance();
-        cam.writeResolution(AxisCamera.ResolutionT.k160x120);
-        cam.writeBrightness(0);
-        */
     }
 
     /**
@@ -242,12 +237,85 @@ public class RoboRebels extends IterativeRobot {
     
     public void autonomousPeriodic()
     {
-        /*
-         * Negative direction moves left
-         */
+        long autoElapsedTime = Timer.getUsClock() - autonomousStartTime;
+        boolean hasKicked = false;
+
         Watchdog.getInstance().feed();
 
         processCamera();
+
+        processGrabber();
+
+        // drive for 1s, load the kicker
+        if ( autoElapsedTime >= 0 && autoElapsedTime <= 1000000 )
+        {
+            m_robotDrive.drive(autoDriveSpeed, 0.0);
+            if ( kicker.isKickerLoaded() == false )
+                kicker.loadKicker();
+        }
+
+        // stop the robot from driving after 1s
+        if ( autoElapsedTime > 1000000 && autoElapsedTime <= 1250000 )
+        {
+            m_robotDrive.drive( 0.0, 0.0 );
+        }
+
+        // after the kicker has finished loading (after about 4s) kick
+        if ( autoElapsedTime > 4000000 && autoElapsedTime <= 4500000 )
+        {
+            if ( hasKicked == false )
+            {
+                kicker.kick();
+                hasKicked = true;
+            }
+        }
+
+        // after the kicker has kicked, load the kicker and drive forward again
+        if ( autoElapsedTime > 4500000 && autoElapsedTime <= 5500000 )
+        {
+            hasKicked = false;
+            if ( kicker.isKickerLoaded() )
+                kicker.loadKicker();
+            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+        }
+
+        // stop robot from driving after 1s
+        if ( autoElapsedTime > 5500000 && autoElapsedTime <= 5750000 )
+        {
+            m_robotDrive.drive( 0.0, 0.0 );
+        }
+
+        // kick again
+        if ( autoElapsedTime > 5750000 && autoElapsedTime <= 6250000 )
+        {
+            if ( hasKicked == false )
+            {
+                kicker.kick();
+                hasKicked = true;
+            }
+        }
+
+        if ( autoElapsedTime > 6250000 && autoElapsedTime <= 7250000 )
+        {
+            hasKicked = false;
+            if ( kicker.isKickerLoaded() )
+                kicker.loadKicker();
+            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+        }
+
+        if ( autoElapsedTime > 7250000 && autoElapsedTime <= 7500000 )
+        {
+            m_robotDrive.drive( 0.0, 0.0 );
+        }
+
+        if ( autoElapsedTime > 7500000 && autoElapsedTime <= 6750000 )
+        {
+            if ( hasKicked == false )
+            {
+                kicker.kick();
+                hasKicked = true;
+            }
+        }
 
         if ( autonomousStateBroadcasted == true )
         {
@@ -558,7 +626,26 @@ public class RoboRebels extends IterativeRobot {
     public void processCamera()
     {
         System.out.println("processCamera()");
-        
+
+        try
+        {
+            if ( cam.freshImage() )
+            {
+                ColorImage image = cam.getImage();
+                image.free();
+            }
+        }
+        catch (NIVisionException ex)
+        {
+                ex.printStackTrace();
+        }
+        catch (AxisCameraException ex)
+        {
+                ex.printStackTrace();
+        }
+    }
+
+        /*
         try {
                 if (cam.freshImage()) {// && turnController.onTarget()) {
                     System.out.println("processCamera() - Got a fresh image");
@@ -596,11 +683,11 @@ public class RoboRebels extends IterativeRobot {
                         System.out.println("Target Angle: " + targets[0].getHorizontalAngle());
                         System.out.println("Target tolerance difference: " + (targets[0].getHorizontalAngle() - targetTolerance));
                         //turnController.setSetpoint(gyroAngle + targets[0].getHorizontalAngle());
-                        /*
-                         * Use getHorizontalAngle() to determine if the robot is lined up with
-                         * the target or not.  When it gets close to 0.0 it is lined up.  Use
-                         * a tolerance!!!!
-                         */
+                        //
+                        // Use getHorizontalAngle() to determine if the robot is lined up with
+                        // the target or not.  When it gets close to 0.0 it is lined up.  Use
+                        // a tolerance!!!!
+                        //
 
                         if ( targets[0].getHorizontalAngle() < targetTolerance && targets[0].getHorizontalAngle() > (-1.0 * targetTolerance) )
                         {
@@ -629,8 +716,7 @@ public class RoboRebels extends IterativeRobot {
             } catch (AxisCameraException ex) {
                 ex.printStackTrace();
             }
-        
-    }
+        */
     
     
     /*
