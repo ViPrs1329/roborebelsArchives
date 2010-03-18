@@ -50,7 +50,7 @@ public class RRDrive
         if ( tankDrive )
             m_robotDrive.tankDrive(m_leftStick, m_rightStick);
         else
-            m_robotDrive.arcadeDrive(m_leftStick);
+            m_robotDrive.arcadeDrive(m_rightStick);
     }
 
     public void drive(double speed, double curve)

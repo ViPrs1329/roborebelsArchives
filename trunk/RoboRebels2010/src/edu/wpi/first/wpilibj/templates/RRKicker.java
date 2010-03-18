@@ -168,6 +168,12 @@ public class RRKicker
         }
     }
 
+    public void partialLoadKicker()
+    {
+        lockCylinder(lockCylinderTail, lockCylinderPiston);
+        isLoaded = true;
+    }
+
     /**
      * Puts the kicker into a ready loaded state; ready to
      * be kicked.
@@ -222,7 +228,11 @@ public class RRKicker
         }
     }
 
-//    private void
+    private void lockCylinder(Solenoid s1, Solenoid s2)
+    {
+        s1.set(false);
+        s2.set(false);
+    }
 
     /*
      * This method compresses a cylinder with a relay.

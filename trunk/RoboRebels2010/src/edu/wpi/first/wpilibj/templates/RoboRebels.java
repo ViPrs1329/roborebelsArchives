@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
@@ -64,7 +65,7 @@ public class RoboRebels extends IterativeRobot {
     DriverStationLCD    m_dsLCD;                // driver station LCD object
     AxisCamera          cam;                    // camera object
 
-
+    DigitalInput        partialLoadSensor;
 
 
     long                autonomousStartTime;    // holds the start time for autonomous mode
@@ -90,12 +91,17 @@ public class RoboRebels extends IterativeRobot {
 
     boolean             triggerPressed = false,             // has the trigger been pressed?
                         kickerLoadedPressed = false,        // has the load kicker button been pressed?
+                        kickerLoadPartialPressed = false,   // has the partial load kicker button been pressed?
                         kickerUnloadPressed = false,        // has the kicker unload button been pressed?
                         grabberEnabledPressed = false,      // has the enable grabber button been pressed?
                         grabberDirectionPressed = false;    // has the grabber direction change button been pressed?
 
+    boolean             partialLoad = false;                // should we process a partial kicker load?
+
     boolean             foundTarget = false,                // have we found the target yet?
                         autoDrive = false;                  // are we in autonomous drive mode?
+
+    boolean             tankDrive = false;
 
     double              lastZValue;                         // last Z value for the dial on the joystick
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
@@ -162,6 +168,8 @@ public class RoboRebels extends IterativeRobot {
         pullUP = new RRPullup(6, 7, 5.0, 0.54, 0.75);
 
         grabber = new RRGrabber( 8 );
+
+        partialLoadSensor = new DigitalInput(2);
     }
 
     public void disabledInit()
@@ -360,10 +368,14 @@ public class RoboRebels extends IterativeRobot {
         }
 
         checkButtons();
-        drive.drive(true);
+        if ( tankDrive == true )
+            drive.drive(true);
+        else
+            drive.drive(false);
         updateDSLCD();
         processCamera();
         processGrabber();
+        processSpecialKickerCommands();
     }
 
     /**
@@ -508,11 +520,31 @@ public class RoboRebels extends IterativeRobot {
             kickerUnloadPressed = false;
         }
 
+
+        if ( m_rightStick.getRawButton(5) && kickerLoadPartialPressed == false )
+        {
+            if ( kicker.isKickerLoaded() == false )
+            {
+                kickerLoadPartialPressed = true;
+            }
+        }
+
         
         // ------ comment out if you use threads
         // ------ joystick kicking code end
         // --------------------------------------
 
+
+        if (m_rightStick.getZ() <= 0)
+        {    // Logitech Attack3 has z-polarity reversed; up is negative
+            // arcade mode
+            tankDrive = false;
+        }
+        else
+        {
+            // tank drive
+            tankDrive = true;
+        }
 
 
         // Arm extending code
@@ -608,6 +640,18 @@ public class RoboRebels extends IterativeRobot {
         else
         {
             grabber.stop();
+        }
+    }
+
+    public void processSpecialKickerCommands()
+    {
+        if ( partialLoad == true )
+        {
+            if ( partialLoadSensor.get() )
+            {
+                kicker.partialLoadKicker();
+                partialLoad = false;
+            }
         }
     }
 
@@ -739,10 +783,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        if ( kickMethod.equals("spin") )
-        {
-            m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Spnr spd: " + Double.toString(spinner.getSpinnerSpeed()).substring(0, 3));
-        }
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Kkr loaded: ");
         m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
         m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
         m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
