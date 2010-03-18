@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Joystick;
 
 
 public class RRKicker
@@ -42,7 +41,6 @@ public class RRKicker
     Solenoid        shootingCylinderTail;
     Solenoid        shootingCylinderPiston;
     DigitalInput    lockCylinderSensor;
-    Joystick        controllingJoystick;
 
     //private RRKickerThread m_task;
     private long lastKickTime = 0;
@@ -59,7 +57,7 @@ public class RRKicker
      * @param lockChannel Locking cylinder relay channel
      * @param shootingChannel Shooting cylinder relay channel
      */
-    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel, Joystick j)
+    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel, int lockCylinderSensorChannel)
     {
         System.out.println("RRKicker()");
         compressor = new Compressor(compChannel_1, compChannel_2);
@@ -67,90 +65,13 @@ public class RRKicker
         lockCylinderPiston = new Solenoid(lockCompressChannel);
         shootingCylinderTail = new Solenoid(shootingExpandChannel);
         shootingCylinderPiston = new Solenoid(shootingCompressChannel);
-        controllingJoystick = j;
+        lockCylinderSensor = new DigitalInput(lockCylinderSensorChannel);
 
         // Start up all systems associated with the kicking mechanism
         startUp();
     }
 
-    /*
-    private class RRKickerThread extends Thread
-    {
-        RRKicker    kicker;
 
-        boolean     kickBall = false;
-        boolean     triggerPressed = false,
-                    kickerLoadedPressed = false,
-                    kickerUnloadPressed = false;
-        
-
-        RRKickerThread(RRKicker k)
-        {
-            kicker = k;
-        }
-
-        public void run()
-        {
-            while (kickerRun) 
-            {
-                System.out.println( "RRKickerThread.run()");
-                Watchdog.getInstance().feed();
-
-                if ( kickBall )
-                {
-                    kicker.kick();
-                    kickerRun = false;
-                }
-
-
-                
-                if(controllingJoystick.getTrigger() && triggerPressed == false)
-                {
-                    triggerPressed = true;
-                    if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
-                        {
-                            System.out.println( "kicker.kick() [thread]" );
-                            kicker.kick();
-                        }
-                }
-                else if ( controllingJoystick.getTrigger() == false )       // check to see if the trigger has been depressed
-                {
-                    // If so, the state is false
-                    triggerPressed = false;
-                }
-
-                // loads up the kicker (ie. gets it ready to kick)
-                if ( controllingJoystick.getRawButton(3) && kickerLoadedPressed == false )
-                {
-                    if ( kicker.isKickerLoaded() == false )
-                    {
-                        System.out.println( "kicker.loadKicker() [thread]" );
-                        kicker.loadKicker();
-                    }
-                }
-                else if ( controllingJoystick.getRawButton(3) == false )
-                {
-                    kickerLoadedPressed = false;
-                }
-
-
-                //  safely unloads the kicker, without actually kicking
-                if ( controllingJoystick.getRawButton(4) && kickerUnloadPressed == false )
-                {
-                    System.out.println( "kicker.unloadKicker() [thread]" );
-                    kicker.unloadKicker();
-                    kickerUnloadPressed = true;
-                }
-                else
-                {
-                    kickerUnloadPressed = false;
-                }
-                Watchdog.getInstance().feed();
-                
-            }
-        }
-    }
-    */
 
     /**
      * Startup the kicker.  This method will start the
@@ -163,9 +84,6 @@ public class RRKicker
             setupCylinders();
         }
 
-        // uncomment if you use the kicker thread
-//        m_task = new RRKickerThread(this);
-//        m_task.start();
     }
 
     /**
@@ -177,25 +95,8 @@ public class RRKicker
             compressor.stop();
         }
 
-        // uncomment if you use the kicker thread
-//        m_task.interrupt();
     }
 
-    /**
-     *
-     */
-    public void enable()
-    {
-        kickerRun = true;
-    }
-
-    /**
-     *
-     */
-    public void disable()
-    {
-        kickerRun = false;
-    }
 
 
     public void enableShortKick()
@@ -306,7 +207,7 @@ public class RRKicker
      */
     public void setupCylinders()
     {
-        System.out.println( "setupCylinders()" );
+//        System.out.println( "setupCylinders()" );
 
         try
         {
@@ -321,7 +222,9 @@ public class RRKicker
         }
     }
 
-        /*
+//    private void
+
+    /*
      * This method compresses a cylinder with a relay.
      */
     private void compress(Solenoid s1, Solenoid s2)

@@ -83,7 +83,7 @@ public class RoboRebels extends IterativeRobot {
     double              kScoreThreshold = .01;      // used in circle tracking code; default = 0.01
     double              targetTolerance = 1.0;      // used for target tracking
 
-    double              autoDriveSpeed = 0.25,      // 0.0 - 1.0
+    double              autoDriveSpeed = 0.5,      // 0.0 - 1.0
                         autoTurnAngle = 0.3,
                         autoTurnDirection = 0.0;    // 1.0 for right, -1.0 for left
     
@@ -103,7 +103,7 @@ public class RoboRebels extends IterativeRobot {
     boolean             grabberEnabled = false,             // is the grabber enabled?
                         grabberClockwise = true;            // what direction should it go?
 
-
+    boolean             hasKicked = false;
     
 
     /**
@@ -193,6 +193,7 @@ public class RoboRebels extends IterativeRobot {
         teleopStateBroadcasted = false;
 
         grabberEnabled = true;
+        hasKicked = false;
         
         initKicker();
 
@@ -238,7 +239,7 @@ public class RoboRebels extends IterativeRobot {
     public void autonomousPeriodic()
     {
         long autoElapsedTime = Timer.getUsClock() - autonomousStartTime;
-        boolean hasKicked = false;
+        
 
         Watchdog.getInstance().feed();
 
@@ -246,23 +247,28 @@ public class RoboRebels extends IterativeRobot {
 
         processGrabber();
 
-        // drive for 1s, load the kicker
-        if ( autoElapsedTime >= 0 && autoElapsedTime <= 1000000 )
+        // drive for 1.5s, load the kicker
+        if ( autoElapsedTime >= 0 && autoElapsedTime <= 1500000 )
         {
-            m_robotDrive.drive(autoDriveSpeed, 0.0);
+            System.out.println( "First pass" );
+            //m_robotDrive.drive(autoDriveSpeed, 0.0);
+            autoDrive = true;
             if ( kicker.isKickerLoaded() == false )
                 kicker.loadKicker();
         }
 
-        // stop the robot from driving after 1s
-        if ( autoElapsedTime > 1000000 && autoElapsedTime <= 1250000 )
+        // stop the robot from driving after 1.5s
+        if ( autoElapsedTime > 1500000 && autoElapsedTime <= 1750000 )
         {
-            m_robotDrive.drive( 0.0, 0.0 );
+            System.out.println( "Second pass" );
+//            m_robotDrive.drive( 0.0, 0.0 );
+            autoDrive = false;
         }
 
-        // after the kicker has finished loading (after about 4s) kick
-        if ( autoElapsedTime > 4000000 && autoElapsedTime <= 4500000 )
+        // after the kicker has finished loading (after about 3.5s) kick
+        if ( autoElapsedTime > 3500000 && autoElapsedTime <= 4000000 )
         {
+            System.out.println( "Third pass" );
             if ( hasKicked == false )
             {
                 kicker.kick();
@@ -273,21 +279,26 @@ public class RoboRebels extends IterativeRobot {
         // after the kicker has kicked, load the kicker and drive forward again
         if ( autoElapsedTime > 4500000 && autoElapsedTime <= 5500000 )
         {
+            System.out.println( "Fourth pass" );
             hasKicked = false;
-            if ( kicker.isKickerLoaded() )
+            if ( kicker.isKickerLoaded() == false )
                 kicker.loadKicker();
-            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+//            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+            autoDrive = true;
         }
 
         // stop robot from driving after 1s
         if ( autoElapsedTime > 5500000 && autoElapsedTime <= 5750000 )
         {
-            m_robotDrive.drive( 0.0, 0.0 );
+            System.out.println( "Fifth pass" );
+//            m_robotDrive.drive( 0.0, 0.0 );
+            autoDrive = false;
         }
 
         // kick again
-        if ( autoElapsedTime > 5750000 && autoElapsedTime <= 6250000 )
+        if ( autoElapsedTime > 8250000 && autoElapsedTime <= 9250000 )
         {
+            System.out.println( "Sixth pass" );
             if ( hasKicked == false )
             {
                 kicker.kick();
@@ -295,21 +306,27 @@ public class RoboRebels extends IterativeRobot {
             }
         }
 
-        if ( autoElapsedTime > 6250000 && autoElapsedTime <= 7250000 )
+        if ( autoElapsedTime > 9500000 && autoElapsedTime <= 10250000 )
         {
+            System.out.println( "Seventh pass" );
             hasKicked = false;
-            if ( kicker.isKickerLoaded() )
+            if ( kicker.isKickerLoaded() == false )
                 kicker.loadKicker();
-            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+//            m_robotDrive.drive( autoDriveSpeed, 0.0 );
+            autoDrive = true;
         }
 
-        if ( autoElapsedTime > 7250000 && autoElapsedTime <= 7500000 )
+        if ( autoElapsedTime > 10250000 && autoElapsedTime <= 10500000 )
         {
-            m_robotDrive.drive( 0.0, 0.0 );
+            System.out.println( "Eighth pass" );
+//            m_robotDrive.drive( 0.0, 0.0 );
+            autoDrive = false;
+
         }
 
-        if ( autoElapsedTime > 7500000 && autoElapsedTime <= 6750000 )
+        if ( autoElapsedTime > 12500000 && autoElapsedTime <= 110000000 )
         {
+            System.out.println( "Ninth pass" );
             if ( hasKicked == false )
             {
                 kicker.kick();
@@ -361,7 +378,7 @@ public class RoboRebels extends IterativeRobot {
 
         Watchdog.getInstance().feed();
         if ( kicker != null )
-            kicker.disable();
+            kicker.setupCylinders();
         
         if ( disabledStateBroadcasted == true )
         {
@@ -451,10 +468,8 @@ public class RoboRebels extends IterativeRobot {
             {
                 if ( kicker.isKickerReady() && kicker.isKickerLoaded() )
                 {
-                    // ------ Test
                     grabber.stop();
                     kicker.kick();
-                    // ------ Test
                     grabber.spin( grabberClockwise );
                 }
             }
@@ -609,11 +624,10 @@ public class RoboRebels extends IterativeRobot {
         //locking cylinder relay channel, and shooting cylinder relay channel.
         System.out.println("Making kicker");
         if ( kicker == null )
-            kicker = new RRKicker(1, 1, 1, 2, 3, 4, m_leftStick);
+            kicker = new RRKicker(1, 1, 1, 2, 3, 4, 2);
         else
             kicker.startUp();
 
-        kicker.enable();
     }
 
 
@@ -625,7 +639,7 @@ public class RoboRebels extends IterativeRobot {
     
     public void processCamera()
     {
-        System.out.println("processCamera()");
+//        System.out.println("processCamera()");
 
         try
         {
