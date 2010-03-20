@@ -107,7 +107,7 @@ public class RoboRebels extends IterativeRobot {
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
 
     boolean             grabberEnabled = false,             // is the grabber enabled?
-                        grabberClockwise = true;            // what direction should it go?
+                        grabberClockwise = false;            // what direction should it go?
 
     boolean             hasKicked = false;
     
@@ -375,7 +375,6 @@ public class RoboRebels extends IterativeRobot {
         updateDSLCD();
         processCamera();
         processGrabber();
-        processSpecialKickerCommands();
     }
 
     /**
@@ -521,13 +520,6 @@ public class RoboRebels extends IterativeRobot {
         }
 
 
-        if ( m_rightStick.getRawButton(5) && kickerLoadPartialPressed == false )
-        {
-            if ( kicker.isKickerLoaded() == false )
-            {
-                kickerLoadPartialPressed = true;
-            }
-        }
 
         
         // ------ comment out if you use threads
@@ -643,17 +635,7 @@ public class RoboRebels extends IterativeRobot {
         }
     }
 
-    public void processSpecialKickerCommands()
-    {
-        if ( partialLoad == true )
-        {
-            if ( partialLoadSensor.get() )
-            {
-                kicker.partialLoadKicker();
-                partialLoad = false;
-            }
-        }
-    }
+    
 
     public void initSpinner()
     {
@@ -668,7 +650,7 @@ public class RoboRebels extends IterativeRobot {
         //locking cylinder relay channel, and shooting cylinder relay channel.
         System.out.println("Making kicker");
         if ( kicker == null )
-            kicker = new RRKicker(1, 1, 1, 2, 3, 4, 2);
+            kicker = new RRKicker(1, 1, 1, 2, 3, 4);
         else
             kicker.startUp();
 

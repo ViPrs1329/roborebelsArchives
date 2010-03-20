@@ -57,7 +57,7 @@ public class RRKicker
      * @param lockChannel Locking cylinder relay channel
      * @param shootingChannel Shooting cylinder relay channel
      */
-    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel, int lockCylinderSensorChannel)
+    public RRKicker(int compChannel_1, int compChannel_2, int lockExpandChannel, int lockCompressChannel, int shootingExpandChannel, int shootingCompressChannel)
     {
         System.out.println("RRKicker()");
         compressor = new Compressor(compChannel_1, compChannel_2);
@@ -65,7 +65,6 @@ public class RRKicker
         lockCylinderPiston = new Solenoid(lockCompressChannel);
         shootingCylinderTail = new Solenoid(shootingExpandChannel);
         shootingCylinderPiston = new Solenoid(shootingCompressChannel);
-        lockCylinderSensor = new DigitalInput(lockCylinderSensorChannel);
 
         // Start up all systems associated with the kicking mechanism
         startUp();
@@ -168,11 +167,6 @@ public class RRKicker
         }
     }
 
-    public void partialLoadKicker()
-    {
-        lockCylinder(lockCylinderTail, lockCylinderPiston);
-        isLoaded = true;
-    }
 
     /**
      * Puts the kicker into a ready loaded state; ready to
