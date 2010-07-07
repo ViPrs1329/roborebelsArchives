@@ -212,7 +212,7 @@ public class RRKicker
         try
         {
             compress(lockCylinderTail, lockCylinderPiston);
-            Thread.sleep(250); // TODO: Check
+            Thread.sleep(250); // TODO: Check UPDATE: 7/7/10 - does this still need to be here, Derek?  It's awkwardly in my IDE. lol.
             compress(shootingCylinderTail, shootingCylinderPiston);
             isLoaded = false;
         }
