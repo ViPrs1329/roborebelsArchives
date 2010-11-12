@@ -153,7 +153,7 @@ public class RRKicker
                 Thread.sleep(250);
                 Watchdog.getInstance().feed();
                 compress(lockCylinderTail, lockCylinderPiston);
-                Thread.sleep(350);
+                Thread.sleep(550);
                 compress(shootingCylinderTail, shootingCylinderPiston);
                 isLoaded = false;
                 Watchdog.getInstance().feed();
