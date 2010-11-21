@@ -40,7 +40,7 @@ import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
-//comment
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -770,6 +770,7 @@ public class RoboRebels extends IterativeRobot {
         m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
         m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
         m_dsLCD.updateLCD();
+
     }
 
 }
