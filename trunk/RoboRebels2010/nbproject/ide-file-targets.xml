@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir=".." name="RoboRebels2010-IDE">
+<project basedir=".." name="RoboRebels2011-IDE">
     <property file="${user.home}/.sunspotfrc.properties"/>
     <property file="build.properties"/>
     <property file="${sunspot.home}/default.properties"/>
