@@ -118,7 +118,7 @@ public class RoboRebels extends IterativeRobot {
     public void RoboRebels()
     {
         System.out.println( "RoboRebels()" );
-        
+      
     }
 
     /**
