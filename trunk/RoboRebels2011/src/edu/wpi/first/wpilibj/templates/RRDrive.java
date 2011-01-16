@@ -5,9 +5,12 @@
  * This class implements the robot drive object which is
  * in charge of encapsulating all driving functionality.
  *
- * Maintainer:  David Sescleifer
+ * Maintainer:  
  *
- * ;;;
+ * NOTE:
+ *
+ *  - There is code within RobotDrive which can control
+ *    Mecanum wheels!  Look at the javadoc.
  */
 
 package edu.wpi.first.wpilibj.templates;
