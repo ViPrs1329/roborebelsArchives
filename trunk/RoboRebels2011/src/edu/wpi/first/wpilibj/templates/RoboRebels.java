@@ -158,7 +158,7 @@ public class RoboRebels extends IterativeRobot {
          *
          */
 
-        m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
+        m_robotDrive = new RobotDrive(4, 3, 2, 1);
 
         // This was moved here because we were getting exceptions
         // whenever the robot was enabled, then disabled and then
