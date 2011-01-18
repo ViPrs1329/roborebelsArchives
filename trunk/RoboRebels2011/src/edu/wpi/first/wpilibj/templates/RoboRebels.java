@@ -69,6 +69,7 @@ public class RoboRebels extends IterativeRobot {
 
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
+    Joystick            m_xboxStick;
 
 
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
@@ -170,8 +171,10 @@ public class RoboRebels extends IterativeRobot {
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
 
-        m_rightStick = new Joystick(2);
-        m_leftStick = new Joystick(1);
+//        m_rightStick = new Joystick(2);
+//        m_leftStick = new Joystick(1);
+        m_xboxStick = new Joystick(1);
+
         if ( drive == null )
             drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
 
@@ -275,7 +278,16 @@ public class RoboRebels extends IterativeRobot {
      */
     public void checkButtons()
     {
-        //System.out.println( "checkButtons()" );
+        System.out.println( "checkButtons()" );
+
+        System.out.println( "LX: " + m_xboxStick.getRawAxis(1));
+        System.out.flush();
+        System.out.println( "LY: " + m_xboxStick.getRawAxis(2));
+        System.out.flush();
+        System.out.println( "RX: " + m_xboxStick.getRawAxis(4));
+        System.out.flush();
+        System.out.println( "RY: " + m_xboxStick.getRawAxis(5));
+        System.out.flush();
 
 
     }
