@@ -10,6 +10,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Jaguar;
+import java.lang.Math;
 
 /**
  *
@@ -64,6 +65,38 @@ public class RRMecanumDrive {
           frontRightMotor.set(magnitude* Math.sin(Math.toRadians(angle+45)));
           backLeftMotor.set(magnitude*Math.sin(Math.toRadians(angle+45)));
           backRightMotor.set(magnitude*Math.cos(Math.toRadians(angle+45)));
+
+      }
+
+
+       /*
+        * Note: will probably require debugging
+        *requires a magnitude between -1 and 1 inclusive:
+        * assumes that the angle is in degrees
+        * calculates and sets the motor speeds for a given polar vector
+        * allows for rotation while driving [-1,1]
+        */
+      public void drivePolar(double angle, double magnitude, double rotation){
+          //make sure angle is in the expected range
+          angle%=360;
+
+          if (angle < 0){
+              angle = 360+angle;
+          }
+
+          //make sure magnitude is in range
+          if (magnitude < -1)
+              magnitude = -1;
+
+          if(magnitude > 1)
+              magnitude = 1;
+
+
+          //convert the angle into speeds and set each motor's speed
+          frontLeftMotor.set(rotation*magnitude*Math.cos(Math.toRadians((angle+45))));
+          frontRightMotor.set(rotation*magnitude* Math.sin(Math.toRadians(angle+45)));
+          backLeftMotor.set(rotation*magnitude*Math.sin(Math.toRadians(angle+45)));
+          backRightMotor.set(rotation*magnitude*Math.cos(Math.toRadians(angle+45)));
 
       }
 
