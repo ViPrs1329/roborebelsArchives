@@ -12,4 +12,15 @@
             <classpath path="${wpilibj.home}/classes.jar"/>
         </javac>
     </target>
+    <!-- TODO: edit the following target according to your needs -->
+    <!-- (more info: http://www.netbeans.org/kb/articles/freeform-config.html#runsingle) -->
+    <target name="run-selected-file-in-src">
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <java classname="${run.class}" failonerror="true" fork="true">
+            <classpath>
+                <pathelement path="${wpilibj.home}/classes.jar"/>
+                <pathelement location="build"/>
+            </classpath>
+        </java>
+    </target>
 </project>

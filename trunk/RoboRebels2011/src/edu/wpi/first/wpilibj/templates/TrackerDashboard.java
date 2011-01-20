@@ -101,7 +101,9 @@ public class TrackerDashboard {
             }
             lowDashData.finalizeCluster();
 
-            lowDashData.addByte(Solenoid.getAll());
+            //causes an error on my computer
+          // lowDashData.addByte(Solenoid.getAll());
+
         }
         lowDashData.finalizeCluster();
         lowDashData.commit();
