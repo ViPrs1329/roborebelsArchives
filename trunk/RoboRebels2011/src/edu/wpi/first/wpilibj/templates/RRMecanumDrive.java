@@ -59,13 +59,13 @@ public class RRMecanumDrive {
           if(magnitude > 1)
               magnitude = 1;
 
-
+        
           //convert the angle into speeds and set each motor's speed
-          frontLeftMotor.set(magnitude*Math.cos(Math.toRadians((angle+45))));
-          frontRightMotor.set(magnitude* Math.sin(Math.toRadians(angle+45)));
-          backLeftMotor.set(magnitude*Math.sin(Math.toRadians(angle+45)));
-          backRightMotor.set(magnitude*Math.cos(Math.toRadians(angle+45)));
-
+          frontLeftMotor.set(-(magnitude)*Math.cos(Math.toRadians((angle+45))));
+          frontRightMotor.set((magnitude)* Math.sin(Math.toRadians(angle+45)));
+          backLeftMotor.set(-(magnitude)*Math.sin(Math.toRadians(angle+45)));
+          backRightMotor.set((magnitude)*Math.cos(Math.toRadians(angle+45)));
+          System.out.println("front Left Speed: "+frontLeftMotor.getSpeed());
       }
 
 
@@ -76,7 +76,7 @@ public class RRMecanumDrive {
         * calculates and sets the motor speeds for a given polar vector
         * allows for rotation while driving [-1,1]
         */
-      public void drivePolar(double angle, double magnitude, double rotation){
+       public void drivePolar(double angle, double magnitude, double rotation){
           //make sure angle is in the expected range
           angle%=360;
 
@@ -93,28 +93,20 @@ public class RRMecanumDrive {
 
 
           //convert the angle into speeds and set each motor's speed
-          frontLeftMotor.set(rotation*magnitude*Math.cos(Math.toRadians((angle+45))));
-          frontRightMotor.set(rotation*magnitude* Math.sin(Math.toRadians(angle+45)));
-          backLeftMotor.set(rotation*magnitude*Math.sin(Math.toRadians(angle+45)));
-          backRightMotor.set(rotation*magnitude*Math.cos(Math.toRadians(angle+45)));
-
+          frontLeftMotor.set(-(magnitude+rotation)*Math.cos(Math.toRadians((angle+45))));
+          frontRightMotor.set((magnitude-rotation)* Math.sin(Math.toRadians(angle+45)));
+          backLeftMotor.set(-(magnitude+rotation)*Math.sin(Math.toRadians(angle+45)));
+          backRightMotor.set((magnitude-rotation)*Math.cos(Math.toRadians(angle+45)));
+          System.out.println("front Left Speed: "+frontLeftMotor.getSpeed());
       }
 
 
-      /*
-       *requires a speed between -1 and 1 inclusive
-       *a positive speed rotates clockwise, negative counterclockwise
-       * set speed to 0 while driving
-       *if the speed is 0, it does nothing
-       */
-      public void rotate(double speed){
-            if (speed != 0){
-             frontLeftMotor.set(speed);
-             frontRightMotor.set(-speed);
-             backLeftMotor.set(speed);
-             backRightMotor.set(-speed);
-          }
 
+      public void stop(){
+          frontLeftMotor.set(0);
+          frontRightMotor.set(0);
+          backLeftMotor.set(0);
+          backRightMotor.set(0);
       }
 
 

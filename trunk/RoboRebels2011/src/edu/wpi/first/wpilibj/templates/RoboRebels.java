@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
+import com.sun.squawk.util.MathUtils;
 
 
 /**
@@ -51,8 +52,7 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
 public class RoboRebels extends IterativeRobot {
 
     // Declare custom object vars
-    RobotDrive          m_robotDrive;		// robot will use PWM 1-4 for drive motors
-    RRDrive             drive;                  // robot drive device
+    RRMecanumDrive      mecanumDrive;
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -136,11 +136,9 @@ public class RoboRebels extends IterativeRobot {
          *
          */
 
-        m_robotDrive = new RobotDrive(4, 3, 2, 1);
-
-      
-
-
+  
+        mecanumDrive = new RRMecanumDrive(3, 4,1,2);
+    
         partialLoadSensor = new DigitalInput(2);
     }
 
@@ -175,8 +173,8 @@ public class RoboRebels extends IterativeRobot {
 //        m_leftStick = new Joystick(1);
         m_xboxStick = new Joystick(1);
 
-        if ( drive == null )
-            drive = new RRDrive( m_robotDrive, m_rightStick, m_leftStick );
+
+       
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -219,6 +217,11 @@ public class RoboRebels extends IterativeRobot {
             teleopStateBroadcasted = false;
         }
 
+
+
+       mecanumDrive.drivePolar(Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2))),Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2))),-
+              m_xboxStick.getRawAxis(3));
+       
         checkButtons();
         updateDSLCD();
         processCamera();
@@ -252,7 +255,8 @@ public class RoboRebels extends IterativeRobot {
         else
         {
             // otherwise stop the robot
-            m_robotDrive.drive(0.0, 0.0);
+            mecanumDrive.stop();
+
         }
     }
 

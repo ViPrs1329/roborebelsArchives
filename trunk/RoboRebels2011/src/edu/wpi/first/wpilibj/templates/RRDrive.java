@@ -22,43 +22,16 @@ import edu.wpi.first.wpilibj.Timer;
 public class RRDrive
 {
     RobotDrive m_robotDrive;
-    Joystick m_rightStick;
-    Joystick m_leftStick;
+    Joystick m_xboxStick;
 
-    public RRDrive(RobotDrive robotDrive, Joystick rightStick, Joystick leftStick)
-    {
-        m_robotDrive = robotDrive;
-        m_rightStick = rightStick;
-        m_leftStick = leftStick;
+    public RRDrive(RobotDrive d, Joystick j){
+        m_robotDrive = d;
+        m_xboxStick = j;
     }
 
-    public RRDrive(RobotDrive robotDrive)
-    {
-        m_robotDrive = robotDrive;
-        m_rightStick = m_leftStick = null;
-    }
+    public void drive(){// 1: , 2: rotation, 3: y, 4;
+        //m_robotDrive.mecanumDrive_Cartesian(0.2, 0.0, 0.0, 0.0);
 
-    public RRDrive(RobotDrive robotDrive, Joystick j)
-    {
-        m_robotDrive = robotDrive;
-        m_leftStick = j;
-        m_rightStick = null;
-    }
-
-    public void drive( boolean tankDrive )
-    {
-        if ( m_rightStick == null || m_leftStick == null )
-            return;
-
-        if ( tankDrive )
-            m_robotDrive.tankDrive(m_leftStick, m_rightStick);
-        else
-            m_robotDrive.arcadeDrive(m_rightStick);
-    }
-
-    public void drive(double speed, double curve)
-    {
-        m_robotDrive.drive(speed, curve);
     }
 
     
