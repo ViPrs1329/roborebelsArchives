@@ -206,6 +206,7 @@ public class RoboRebels extends IterativeRobot {
      * This is the most important method in this class
      * ---------------------
      */
+
     public void teleopPeriodic()
     {
         //System.out.println( "telopPeriodic()" );
@@ -231,6 +232,7 @@ public class RoboRebels extends IterativeRobot {
      *
      * What it needs to do:
      *
+     *
      */
     public void disabledPeriodic()
     {
@@ -245,6 +247,7 @@ public class RoboRebels extends IterativeRobot {
      * The VM will try to call this function as often as possible during the autonomous state
      *
      */
+
     public void autonomousContinuous()
     {
         if ( autoDrive )
@@ -263,6 +266,7 @@ public class RoboRebels extends IterativeRobot {
      * The VM will try to call this function as often as possible during the teleop state
      *
      */
+
     public void teleopContinuous()
     {
 
@@ -271,6 +275,7 @@ public class RoboRebels extends IterativeRobot {
     /**
      * The VM will try to call this function as often as possible during the disbabled state
      */
+
     public void disabledContinuous()
     {
         
@@ -279,6 +284,7 @@ public class RoboRebels extends IterativeRobot {
     /*
      * This method checks buttons and sets states accordingly
      */
+
     public void checkButtons()
     {
         System.out.println( "checkButtons()" );
