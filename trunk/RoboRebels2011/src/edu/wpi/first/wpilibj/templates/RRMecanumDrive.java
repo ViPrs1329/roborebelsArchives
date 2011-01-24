@@ -48,18 +48,20 @@ public class RRMecanumDrive {
     boolean                 fdone = false;      // ? access modifier ?
 
     // TODO why wont enum work?
-    // Enums were introduced to Java in version 5.0, our CRIO and Java
-    // programming environment is restricted to version 1.3 (I'm assuming
-    // because it is more light-weight.
-    //
-    // What we may need to do is something like the following:
-    //
-    // public static final int SEASON_WINTER = 0;
-    // public static final int SEASON_SPRING = 1;
-    // public static final int SEASON_SUMMER = 2;
-    // public static final int SEASON_FALL   = 3
-    //
-    // - Mr. Ward
+    /*
+         Enums were introduced to Java in version 5.0, our CRIO and Java
+         programming environment is restricted to version 1.3 (I'm assuming
+         because it is more light-weight.
+
+         What we may need to do is something like the following:
+
+         public static final int SEASON_WINTER = 0;
+         public static final int SEASON_SPRING = 1;
+         public static final int SEASON_SUMMER = 2;
+         public static final int SEASON_FALL   = 3
+
+         - Mr. Ward
+     */
 
     int                     controlMode = 0;    // ? access modifier ?
 
@@ -78,8 +80,10 @@ public class RRMecanumDrive {
           backLeftMotor = new Jaguar(backLeftMotorChannel);
           backRightMotor = new Jaguar(backRightMotorChannel);
 
-          m_xboxStick = s;          // TODO do we need to accept a joystick here
-                                    // if we accept it again in the drive method
+          m_xboxStick = s;          /* TODO do we need to accept a joystick here
+                                     * if we accept it again in the drive method
+                                     *
+                                     */
       }
 
 
@@ -92,7 +96,8 @@ public class RRMecanumDrive {
           r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4)*m_xboxStick.getRawAxis(4))+(m_xboxStick.getRawAxis(5)*m_xboxStick.getRawAxis(5)));
 
           rotation = m_xboxStick.getRawAxis(3);
-          //TODO fix trigger input - test actual output values
+          // TODO fix trigger input - test actual output values
+          // What kind of trouble are you having with the triggers? - Mr. Ward
 
            //make sure angle is in the expected range
           l_angle %= 360;
@@ -139,20 +144,55 @@ public class RRMecanumDrive {
                 }
           }
 
+          
+          /*
+           * NOTE: If you are looking to perform some sort of toggle switching
+           * with the same button you can do it in the following fashion:
+           *
+                // enable grabber
+                // if the "grabber button" is pressed and the state change
+                // process hasn't already started...
+                if (m_rightStick.getRawButton(11) && grabberEnabledPressed == false)
+                {
+                    // change the state of the grabber function (ie. enable it
+                    // or disable it
 
-          if (m_xboxStick.getRawButton(8)){
-              if (!m_xboxStick.getRawButton(8)){
+                    if ( grabberEnabled )
+                        grabberEnabled = false;
+                    else
+                        grabberEnabled = true;
+
+                    // set the state change process to true (ie. the button has
+                    // been pressed so don't change the state again until it
+                    // has been let go
+                    
+                    grabberEnabledPressed = true;
+
+                    System.out.println( "grabber enable : " + grabberEnabled );
+                }
+                else if ( !m_rightStick.getRawButton(11))
+                {
+                    // If the "grabber button" is not pressed, reset the
+                    // state change process
+                    grabberEnabledPressed = false;
+                }
+
+           */
+          // - Mr. Ward
+
+          // If button the Start button has been pressed (8)
+          // change controlMode to Tank Drive
+          if (m_xboxStick.getRawButton(8)) {
+              if (!m_xboxStick.getRawButton(8)) {
                 controlMode = 1;
               }
           }
 
 
-          if (controlMode == 0){
-              
-          
-          driveMecanum();
+          if (controlMode == 0) {
+              driveMecanum();
           }
-          else if (controlMode == 1){
+          else if (controlMode == 1) {
               driveTank();
           }
           //driveTank();
@@ -165,7 +205,7 @@ public class RRMecanumDrive {
       
        /*
         * Note: will probably require debugging
-        *requires a magnitude between -1 and 1 inclusive:
+        * requires a magnitude between -1 and 1 inclusive:
         * assumes that the angle is in degrees
         * calculates and sets the motor speeds for a given polar vector
         * allows for rotation while driving [-1,1]
@@ -188,11 +228,11 @@ public class RRMecanumDrive {
        }
 
        private void driveArcade() {
-           double forwardSpeed;
-           double rotationSpeed;
+          double forwardSpeed;
+          double rotationSpeed;
 
-           //TODO add ability to strafe left and right with triggers
-           frontLeftMotor.set((l_magnitude+(Math.cos(Math.toRadians(l_angle)))));
+          //TODO add ability to strafe left and right with triggers
+          frontLeftMotor.set((l_magnitude+(Math.cos(Math.toRadians(l_angle)))));
           frontRightMotor.set((l_magnitude-(Math.cos(Math.toRadians(l_angle)))));
           backLeftMotor.set((l_magnitude+(Math.cos(Math.toRadians(l_angle)))));
           backRightMotor.set((l_magnitude-(Math.cos(Math.toRadians(l_angle)))));
@@ -212,7 +252,7 @@ public class RRMecanumDrive {
 
 
       /*
-       *requires a magnitude between -1 and 1 inclusive:
+       * requires a magnitude between -1 and 1 inclusive:
        * assumes that the angle is in degrees
        * calculates and sets the motor speeds for a given polar vector
        */
