@@ -21,6 +21,9 @@
  *
  * - There is code within the RobotDrive class which can handle
  *   Mecanum wheels!  This will help us out a lot.
+ *
+ * - Just for the sake of cleanliness, I think that we should
+ *   delete the following modules:  RRKicker, RRGRabber, RRPullup and RRSpinner
  */
 
 package edu.wpi.first.wpilibj.templates;
