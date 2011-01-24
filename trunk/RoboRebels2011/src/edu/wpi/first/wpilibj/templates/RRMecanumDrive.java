@@ -47,8 +47,22 @@ public class RRMecanumDrive {
     boolean                 bdone = false;      // ? access modifier ?
     boolean                 fdone = false;      // ? access modifier ?
 
-    //TODO why wont enum work?
-    int                     controlMode = 0;
+    // TODO why wont enum work?
+    // Enums were introduced to Java in version 5.0, our CRIO and Java
+    // programming environment is restricted to version 1.3 (I'm assuming
+    // because it is more light-weight.
+    //
+    // What we may need to do is something like the following:
+    //
+    // public static final int SEASON_WINTER = 0;
+    // public static final int SEASON_SPRING = 1;
+    // public static final int SEASON_SUMMER = 2;
+    // public static final int SEASON_FALL   = 3
+    //
+    // - Mr. Ward
+
+    int                     controlMode = 0;    // ? access modifier ?
+
 
 
 
