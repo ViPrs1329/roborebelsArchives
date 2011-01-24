@@ -137,7 +137,7 @@ public class RoboRebels extends IterativeRobot {
          */
 
   
-        mecanumDrive = new RRMecanumDrive(3, 4,1,2);
+        mecanumDrive = new RRMecanumDrive(3, 4,1,2, m_xboxStick);
     
         partialLoadSensor = new DigitalInput(2);
     }
@@ -219,8 +219,7 @@ public class RoboRebels extends IterativeRobot {
 
 
 
-       mecanumDrive.drivePolar(Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2))),Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2))),-
-              m_xboxStick.getRawAxis(3));
+       mecanumDrive.drive(m_xboxStick);
        
         checkButtons();
         updateDSLCD();
@@ -403,15 +402,31 @@ public class RoboRebels extends IterativeRobot {
      */
 
     public void updateDSLCD()
-    {
-        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Kkr loaded: ");
+    {//TODO when enum is resolved, print the control configuration
+       
+       
         m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
-        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
-        m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
-        m_dsLCD.updateLCD();
+       // m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
+        //m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
+         m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Control Mode: "+ mecanumDrive.getControlMode());
+          m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Xbox Trigger Value: "+(double)m_xboxStick.getRawAxis(3));
+
+          m_dsLCD.updateLCD();
 
     }
-
+/*
+ * xbox buttons
+ * 0
+ * 1 A
+ * 2 B
+ * 3 X
+ * 4 Y
+ * 5 L Bumper
+ * 6 R Bumper
+ * 7 Back
+ * 8 Start
+ * 9 L Click
+ */
  
 
 }
