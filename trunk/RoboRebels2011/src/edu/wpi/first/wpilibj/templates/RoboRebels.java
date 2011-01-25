@@ -7,11 +7,18 @@
 /*----------------------------------------------------------------------------*/
 
 /*
-    Joystick button map
-
-
-
-*/
+ * Joystick (xbox) button map
+ * 0
+ * 1 A
+ * 2 B
+ * 3 X
+ * 4 Y
+ * 5 L Bumper
+ * 6 R Bumper
+ * 7 Back
+ * 8 Start
+ * 9 L Stick Click
+ */
 
 /*
  * NOTES:
@@ -25,6 +32,8 @@
  * - Just for the sake of cleanliness, I think that we should
  *   delete the following modules:  RRKicker, RRGRabber, RRPullup and RRSpinner
  */
+
+
 
 package edu.wpi.first.wpilibj.templates;
 
@@ -42,7 +51,6 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import com.sun.squawk.util.MathUtils;
 
 
 /**
@@ -139,8 +147,7 @@ public class RoboRebels extends IterativeRobot {
          *
          */
 
-  
-        mecanumDrive = new RRMecanumDrive(3, 4,1,2, m_xboxStick);
+        mecanumDrive = new RRMecanumDrive(3, 4,1,2);
     
         partialLoadSensor = new DigitalInput(2);
     }
@@ -174,7 +181,10 @@ public class RoboRebels extends IterativeRobot {
 
 //        m_rightStick = new Joystick(2);
 //        m_leftStick = new Joystick(1);
-        m_xboxStick = new Joystick(1);
+
+        //Construct Joystick object and pass to mecanumDrive
+        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        mecanumDrive.assignJoystick(m_xboxStick);
 
 
        
@@ -223,7 +233,7 @@ public class RoboRebels extends IterativeRobot {
 
 
 
-       mecanumDrive.drive(m_xboxStick);
+       mecanumDrive.drive();
        
         checkButtons();
         updateDSLCD();
@@ -411,31 +421,11 @@ public class RoboRebels extends IterativeRobot {
      */
 
     public void updateDSLCD()
-    {//TODO when enum is resolved, print the control configuration
-       
-       
-        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Pn Kr St: ");
-       // m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Rbt spd : ");
-        //m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Rbt slip: ");
-         m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Control Mode: "+ mecanumDrive.getControlMode());
-          m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Xbox Trigger Value: "+(double)m_xboxStick.getRawAxis(3));
-
-          m_dsLCD.updateLCD();
+    {
+       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Drive Control Mode: "+
+               mecanumDrive.getControlModeName());
+       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "");
+       m_dsLCD.updateLCD();
 
     }
-/*
- * xbox buttons
- * 0
- * 1 A
- * 2 B
- * 3 X
- * 4 Y
- * 5 L Bumper
- * 6 R Bumper
- * 7 Back
- * 8 Start
- * 9 L Click
- */
- 
-
 }

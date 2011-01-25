@@ -44,62 +44,44 @@ public class RRMecanumDrive {
     double                  l_angle, l_magnitude, rotation;
     double                  r_angle, r_magnitude;
 
-    boolean                 bdone = false;      // ? access modifier ?
-    boolean                 fdone = false;      // ? access modifier ?
 
-    // TODO why wont enum work?
-    /*
-         Enums were introduced to Java in version 5.0, our CRIO and Java
-         programming environment is restricted to version 1.3 (I'm assuming
-         because it is more light-weight.
+    private     boolean     controlModeSwitched = false;
 
-         What we may need to do is something like the following:
+    public static final int DRIVE_MECANUM = 0;
+    public static final int DRIVE_TANK = 1;
+    public static final int DRIVE_CARTESIAN_TEST = 2;
 
-         public static final int SEASON_WINTER = 0;
-         public static final int SEASON_SPRING = 1;
-         public static final int SEASON_SUMMER = 2;
-         public static final int SEASON_FALL   = 3
-
-         - Mr. Ward
-     */
-
-    int                     controlMode = 0;    // ? access modifier ?
+    private     int         controlMode = DRIVE_MECANUM;
 
 
 
 
-      public RRMecanumDrive( int frontLeftMotorChannel,
+    public RRMecanumDrive( int frontLeftMotorChannel,
                              int frontRightMotorChannel,
                              int backLeftMotorChannel,
-                             int backRightMotorChannel, 
-                             Joystick s)
-      {
+                             int backRightMotorChannel)
+    {
 
           frontLeftMotor = new Jaguar(frontLeftMotorChannel);
           frontRightMotor = new Jaguar(frontRightMotorChannel);
           backLeftMotor = new Jaguar(backLeftMotorChannel);
-          backRightMotor = new Jaguar(backRightMotorChannel);
+          backRightMotor = new Jaguar(backRightMotorChannel);        
+    }
 
-          m_xboxStick = s;          /* TODO do we need to accept a joystick here
-                                     * if we accept it again in the drive method
-                                     *
-                                     */
-      }
+    public void assignJoystick(Joystick s) {
+          m_xboxStick = s;
+    }
 
 
-      public void drive(Joystick n) {
-          m_xboxStick = n;
-          
+    public void drive() {
           l_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2)));
           l_magnitude = Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2)));
           r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
           r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4)*m_xboxStick.getRawAxis(4))+(m_xboxStick.getRawAxis(5)*m_xboxStick.getRawAxis(5)));
 
           rotation = m_xboxStick.getRawAxis(3);
-          // TODO fix trigger input - test actual output values
-          // What kind of trouble are you having with the triggers? - Mr. Ward
 
-           //make sure angle is in the expected range
+          //make sure angles are in the expected range
           l_angle %= 360;
           r_angle %= 360;
 
@@ -111,15 +93,13 @@ public class RRMecanumDrive {
               r_angle = 360+r_angle;
           }
 
-          //make sure magnitude is in range
+          //make sure magnitudes are in range
           if (l_magnitude < -1)
               l_magnitude = -1;
 
           if(l_magnitude > 1)
               l_magnitude = 1;
 
-
-          //make sure magnitude is in range
           if (r_magnitude < -1)
               r_magnitude = -1;
 
@@ -127,12 +107,9 @@ public class RRMecanumDrive {
               r_magnitude = 1;
 
 
-
-
-
           //decrease magnitude for precise mode
-          if (m_xboxStick.getRawButton(5)){//TODO change to raw button of left bumper
-              if (m_xboxStick.getRawButton(6)){//TODO change to raw button of right bumper
+          if (m_xboxStick.getRawButton(5)){
+              if (m_xboxStick.getRawButton(6)){
                   l_magnitude*=.4;
                   r_magnitude*=.4;
                   rotation*=.4;
@@ -144,147 +121,105 @@ public class RRMecanumDrive {
                 }
           }
 
-          
           /*
-           * NOTE: If you are looking to perform some sort of toggle switching
-           * with the same button you can do it in the following fashion:
-           *
-                // enable grabber
-                // if the "grabber button" is pressed and the state change
-                // process hasn't already started...
-                if (m_rightStick.getRawButton(11) && grabberEnabledPressed == false)
-                {
-                    // change the state of the grabber function (ie. enable it
-                    // or disable it
-
-                    if ( grabberEnabled )
-                        grabberEnabled = false;
-                    else
-                        grabberEnabled = true;
-
-                    // set the state change process to true (ie. the button has
-                    // been pressed so don't change the state again until it
-                    // has been let go
-                    
-                    grabberEnabledPressed = true;
-
-                    System.out.println( "grabber enable : " + grabberEnabled );
-                }
-                else if ( !m_rightStick.getRawButton(11))
-                {
-                    // If the "grabber button" is not pressed, reset the
-                    // state change process
-                    grabberEnabledPressed = false;
-                }
-
+           * Thanks -Matt
            */
-          // - Mr. Ward
-
-          // If button the Start button has been pressed (8)
-          // change controlMode to Tank Drive
-          if (m_xboxStick.getRawButton(8)) {
-              if (!m_xboxStick.getRawButton(8)) {
-                controlMode = 1;
+          
+          // Toggle Through Drive Modes with Start Button
+          if (m_xboxStick.getRawButton(8) && !controlModeSwitched) {
+              switch (controlMode){
+                  case DRIVE_MECANUM:
+                      controlMode = DRIVE_TANK;
+                      break;
+                  case DRIVE_TANK:
+                      controlMode = DRIVE_CARTESIAN_TEST;
+                      break;
+                  case DRIVE_CARTESIAN_TEST:
+                      controlMode = DRIVE_MECANUM;
+                      break;
               }
+
+              controlModeSwitched = true;
+          }
+          else if (!m_xboxStick.getRawButton(8)){
+              controlModeSwitched = false;
           }
 
 
-          if (controlMode == 0) {
-              driveMecanum();
+          switch (controlMode){
+              case DRIVE_MECANUM:
+                  driveMecanum();
+                  break;
+              case DRIVE_TANK:
+                  driveTank();
+                  break;
+              case DRIVE_CARTESIAN_TEST:
+                  driveCartesianTest();
           }
-          else if (controlMode == 1) {
-              driveTank();
-          }
-          //driveTank();
-
-
-
-
-      }
+    }
 
       
-       /*
-        * Note: will probably require debugging
-        * requires a magnitude between -1 and 1 inclusive:
-        * assumes that the angle is in degrees
-        * calculates and sets the motor speeds for a given polar vector
-        * allows for rotation while driving [-1,1]
-        */
+    /*
+     * requires a magnitude between -1 and 1 inclusive:
+     * assumes that the angle is in degrees
+     * calculates and sets the motor speeds for a given polar vector
+     * allows for rotation while driving [-1,1]
+     */
 
-       private void driveMecanum() {
-           
+    private void driveMecanum() {
           //convert the angle into speeds and set each motor's speed
           frontLeftMotor.set(-(l_magnitude+rotation)*Math.cos(Math.toRadians((l_angle+45))));
           frontRightMotor.set((l_magnitude-rotation)* Math.sin(Math.toRadians(l_angle+45)));
           backLeftMotor.set(-(l_magnitude+rotation)*Math.sin(Math.toRadians(l_angle+45)));
           backRightMotor.set((l_magnitude-rotation)*Math.cos(Math.toRadians(l_angle+45)));
-        }
+    }
 
-       private void driveTank() {
+    /*
+     * Drives the left and right wheels separately, with its repsective xbox stick
+     * Allows for more precise rotation
+     */
+
+    private void driveTank() {
           frontLeftMotor.set(-(l_magnitude+rotation)*Math.cos(Math.toRadians((l_angle+45))));
           frontRightMotor.set((r_magnitude-rotation)* Math.sin(Math.toRadians(r_angle+45)));
           backLeftMotor.set(-(l_magnitude+rotation)*Math.sin(Math.toRadians(l_angle+45)));
           backRightMotor.set((r_magnitude-rotation)*Math.cos(Math.toRadians(r_angle+45)));
-       }
+    }
 
-       private void driveArcade() {
-          double forwardSpeed;
-          double rotationSpeed;
+    /*
+     * Uses a different or modified computation to resolve motor speeds
+     * without trigonometric functions
+     * Hopefully this will provide increased efficiency as well as
+     * more precise driving
+     */
 
-          //TODO add ability to strafe left and right with triggers
-          frontLeftMotor.set((l_magnitude+(Math.cos(Math.toRadians(l_angle)))));
-          frontRightMotor.set((l_magnitude-(Math.cos(Math.toRadians(l_angle)))));
-          backLeftMotor.set((l_magnitude+(Math.cos(Math.toRadians(l_angle)))));
-          backRightMotor.set((l_magnitude-(Math.cos(Math.toRadians(l_angle)))));
+    private void driveCartesianTest(){
+        //TODO implementation
 
-       }
+    }
 
-
-
-      public void stop() {
+    public void stop() {
           frontLeftMotor.set(0);
           frontRightMotor.set(0);
           backLeftMotor.set(0);
           backRightMotor.set(0);
-      }
+    }
 
-
-
-
-      /*
-       * requires a magnitude between -1 and 1 inclusive:
-       * assumes that the angle is in degrees
-       * calculates and sets the motor speeds for a given polar vector
-       */
-
-      public void drivePolar(double angle, double magnitude) {
-          //make sure angle is in the expected range
-          angle%=360;
-
-          if (angle < 0){
-              angle = 360+angle;
-          }
-
-          //make sure magnitude is in range
-          if (magnitude < -1)
-              magnitude = -1;
-
-          if(magnitude > 1)
-              magnitude = 1;
-
-
-          //convert the angle into speeds and set each motor's speed
-          frontLeftMotor.set(-(magnitude)*Math.cos(Math.toRadians((angle+45))));
-          frontRightMotor.set((magnitude)* Math.sin(Math.toRadians(angle+45)));
-          backLeftMotor.set(-(magnitude)*Math.sin(Math.toRadians(angle+45)));
-          backRightMotor.set((magnitude)*Math.cos(Math.toRadians(angle+45)));
-          System.out.println("front Left Speed: "+frontLeftMotor.getSpeed());
-      }
-
-
-      public int getControlMode() {
-          return controlMode;
-      }
+    public String getControlModeName() {
+        String controlOut = new String();
+       switch (controlMode){
+           case DRIVE_MECANUM:
+               controlOut = "Mecanum";
+               break;
+           case DRIVE_TANK:
+               controlOut = "Tank";
+               break;
+           case DRIVE_CARTESIAN_TEST:
+               controlOut = "Cartesian Test";
+               break;
+       }
+          return controlOut;
+    }
 
 
 }
