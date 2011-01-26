@@ -74,6 +74,165 @@ public class RRMecanumDrive {
 
 
     public void drive() {
+
+          /*
+           * Matt, I found some incredibly simple code to drive a mecanum drive
+           * system with two joysticks (one for x, y cartesian coordinates and
+           * one for rotation here: http://www.chiefdelphi.com/forums/showthread.php?t=89205&highlight=mecanum+normalize
+           * I have a suspicion that your code implements this in a roundabout
+           * way by calculating angles, etc.  I am not sure if this works with
+           * a tank drive control scheme, but I can imagine that it can be
+           * adopted if it works out.
+           *
+           *
+                // 3-axis joystick interface to a mecanum or omni drive
+
+
+                // first define your driver interface,
+                // in this case a 3-axis joystick:
+
+
+                forward = -Y;   // push joystick forward to go forward
+                right = X;      // push joystick to the right to strafe right
+                clockwise = Z;  // twist joystick clockwise turn clockwise
+
+
+                // here is where you would put any special shaping of the joystick
+                // response curve, such as deadband or gain adjustment
+
+
+                // now apply the inverse kinematic tranformation
+                // to convert your vehicle motion command
+                // to 4 wheel speed commands:
+
+                // NOTE: you can introduce some tuning parameters for forward,
+                // rotate and strafing to dial in the correct feel.  See example
+                // below.
+
+                front_left = forward + clockwise + right;
+                front_right = forward - clockwise - right;
+                rear_left = forward + clockwise - right;
+                rear_right = forward - clockwise + right;
+
+
+                // finally, normalize the wheel speed commands
+                // so that no wheel speed command exceeds magnitude of 1:
+
+                max = abs(front_left);
+                if (abs(front_right)>max) max = abs(front_right);
+                if (abs(rear_left)>max) max=abs(rear_left);
+                if (abs(rear_right)>max) max=abs(rear_right);
+
+                if (max>1)
+                  {front_left/=max; front_right/=max; rear_left/=max; rear_right/=max;}
+
+
+                // you're done. send these four wheel commands to their respective wheels
+           *
+           *
+           *
+           * 
+           * Found some tank drive psuedo code which is similar:
+           *
+                Here's a way to program TANK DRIVE on a mecanum bot so that you 
+                can tune the joystick sensitivity to all three motions (fwd/rev,
+                turn, stafe) independently:
+
+                Let Kf, Kt, and Ks be the tuning parameters (0 to +1) for the
+                forward/reverse, turn, and strafe motions, respectively.
+
+                Let X1 and Y1 represent the joystick outputs for the driver's
+                left-hand joystick (-1 to +1);
+
+                Let Y2 represent the joystick outputs for the driver's
+                right-hand joystick (-1 to +1).
+
+                When each joystick is pushed forward, its Y output should be
+                positive. When the joystick is pushed to the right, its X output
+                should be positive. If not, add code to invert the sign if
+                necessary.
+
+                Let W1, W2, W3, and W4 be the front left, front right, rear 
+                left, and rear right wheels, respectively. ("left" and "right"
+                in this context means "port" and "starboard", respectively)
+
+
+
+                Calculate the following:
+
+                Yf = (Y1 + Y2)/2
+
+                Yt = (Y1 - Y2)/2
+
+
+                Now calculate the four wheel speed commands:
+
+                W1 = Kf*Yf + Kt*Yt + Ks*X1
+
+                W2 = Kf*Yf - Kt*Yt - Ks*X1
+
+                W3 = Kf*Yf + Kt*Yt - Ks*X1
+
+                W4 = Kf*Yf - Kt*Yt + Ks*X1
+
+
+
+                Now normalize the wheel speed commands:
+
+                Let Wmax be the maximum absolute value of the four wheel speed 
+                commands. If Wmax is greater than 1, then divide each of the four
+                wheel speed commands by Wmax.
+
+
+                Finally, send each of the four normalized wheel speed commands
+                to the respective wheels (-1 means 100% reverse, +1 means 100% forward).
+
+                The Y1 and Y2 axes act like tank drive.  The X1 axis commands
+                strafe left and right.  The X2 axis is not used.
+
+                Tune Kf, Kt, and Ks (from 0 to +1) to get the desired joystick
+                sensitivity to each of the three motions.
+
+
+           *
+           * Could you try this out in your simulation?  Thanks.
+           *
+           * - Mr. Ward
+           */
+
+
+          /*
+           * NOTE: To those of you who don't understand what is happening here
+           * allow me to explain:
+           *
+           * We are computing the angle and maginitude of each joystick position
+           * by utilizing trigonometric properties, specifically this one:
+           *
+           *       /|
+           *      / |
+           *hyp  /  |
+           *    /   | opposite, y or axis 1
+           *   /    |
+           *  / i   |
+           * /______|
+           *   adjacent, x or axis 2
+           *
+           * SOA CAH TOA
+           *
+           * sin(i) = opposite / hypotenous
+           * cos(i) = adjacent / hypotenous
+           * tan(i) = opposite / adjacent
+           *
+           * i = arctan( opposite / adacent )
+           *
+           * With the magnitude we are simply calculating the hypotenous via the
+           * formula:
+           *
+           * hyp^2 = x^2 + y^2
+           * hyp = sqrt( x^2 + y^2 )
+           * 
+           */
+
           l_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2)));
           l_magnitude = Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2)));
           r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
@@ -167,6 +326,14 @@ public class RRMecanumDrive {
      */
 
     private void driveMecanum() {
+
+          /*
+           * Does the computation of each motor speed value ever exceed the
+           * range of -1.0, 1.0?  Just curious.
+           *
+           * - Mr. Ward
+           */
+
           //convert the angle into speeds and set each motor's speed
           frontLeftMotor.set(-(l_magnitude+rotation)*Math.cos(Math.toRadians((l_angle+45))));
           frontRightMotor.set((l_magnitude-rotation)* Math.sin(Math.toRadians(l_angle+45)));
