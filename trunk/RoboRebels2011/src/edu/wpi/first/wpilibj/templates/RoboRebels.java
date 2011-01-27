@@ -65,6 +65,8 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive      mecanumDrive;
 
+    RRElevator          elevator;
+
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
     // Declare a variable to use to access the driver station object
@@ -148,6 +150,8 @@ public class RoboRebels extends IterativeRobot {
          */
 
         mecanumDrive = new RRMecanumDrive(3, 4,1,2);
+
+        elevator = new RRElevator(5);
     
         partialLoadSensor = new DigitalInput(2);
     }
@@ -186,7 +190,8 @@ public class RoboRebels extends IterativeRobot {
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         mecanumDrive.assignJoystick(m_xboxStick);
 
-
+        m_leftStick = new Joystick(2);
+        elevator.assignJoystick(m_leftStick);
        
 
         /* Drive station code */
@@ -234,6 +239,7 @@ public class RoboRebels extends IterativeRobot {
 
 
        mecanumDrive.drive();
+       elevator.lift();
        
         checkButtons();
         updateDSLCD();
