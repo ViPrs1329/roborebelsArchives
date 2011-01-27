@@ -13,6 +13,25 @@
  * braces, etc.)?  Thanks.  - Mr. Ward
  */
 
+/*
+ * THINGS TO TEST:
+ *
+ * Functionality of switching drive mode
+ *      drivestation mode indicator
+ *
+ * Is the joystick object being passed properly to RRMecanumDrive?
+ *
+ * New Cartesian Mode
+ *
+ * New Cartesian Tank Mode
+ *
+ * Adding global sensitivity variable to control sensitivity and precise mode
+ *      in cart Tank
+ *      in all modes (still need to do once tank test passes)
+ *
+ *
+ */
+
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Jaguar;
 import java.lang.Math;
@@ -41,8 +60,13 @@ public class RRMecanumDrive {
 
     private     Joystick    m_xboxStick;
 
-    double                  l_angle, l_magnitude, rotation;
-    double                  r_angle, r_magnitude;
+    private     double      l_angle, l_magnitude, rotation;
+    private     double      r_angle, r_magnitude;
+
+    private     double      forward, right, clockwise;
+    private     double      right_forward, right_right;
+
+    private     double      sensitivity = 1;
 
 
     private     boolean     controlModeSwitched = false;
@@ -50,6 +74,7 @@ public class RRMecanumDrive {
     public static final int DRIVE_MECANUM = 0;
     public static final int DRIVE_TANK = 1;
     public static final int DRIVE_CARTESIAN_TEST = 2;
+    public static final int DRIVE_CARTESIAN_TANK = 3;
 
     private     int         controlMode = DRIVE_MECANUM;
 
@@ -240,6 +265,14 @@ public class RRMecanumDrive {
 
           rotation = m_xboxStick.getRawAxis(3);
 
+
+          forward = -m_xboxStick.getRawAxis(2);
+          right = m_xboxStick.getRawAxis(1);
+          clockwise = m_xboxStick.getRawAxis(3);
+
+          right_forward = -m_xboxStick.getRawAxis(5);
+          right_right = m_xboxStick.getRawAxis(4);
+
           //make sure angles are in the expected range
           l_angle %= 360;
           r_angle %= 360;
@@ -271,18 +304,37 @@ public class RRMecanumDrive {
               if (m_xboxStick.getRawButton(6)){
                   l_magnitude*=.4;
                   r_magnitude*=.4;
-                  rotation*=.4;
+                  rotation *= .4;
+
+                  forward *= .4;
+                  right *= .4;
+                  clockwise *= .4;
+
+                  right_forward *= .4;
+                  right_right *= .4;
+
+                  sensitivity = .4;
+
               }
                 else {
                   l_magnitude*=.7;
                   r_magnitude*=.7;
                   rotation*=.7;
+
+                  forward *= .7;
+                  right *= .7;
+                  clockwise *= .7;
+
+                  right_forward *= .7;
+                  right_right *= .7;
+
+                  sensitivity = .7;
                 }
           }
 
-          /*
-           * Thanks -Matt
-           */
+
+
+
           
           // Toggle Through Drive Modes with Start Button
           if (m_xboxStick.getRawButton(8) && !controlModeSwitched) {
@@ -294,6 +346,9 @@ public class RRMecanumDrive {
                       controlMode = DRIVE_CARTESIAN_TEST;
                       break;
                   case DRIVE_CARTESIAN_TEST:
+                      controlMode = DRIVE_CARTESIAN_TANK;
+                      break;
+                  case DRIVE_CARTESIAN_TANK:
                       controlMode = DRIVE_MECANUM;
                       break;
               }
@@ -305,6 +360,7 @@ public class RRMecanumDrive {
           }
 
 
+          //drive in correct mode
           switch (controlMode){
               case DRIVE_MECANUM:
                   driveMecanum();
@@ -314,6 +370,10 @@ public class RRMecanumDrive {
                   break;
               case DRIVE_CARTESIAN_TEST:
                   driveCartesianTest();
+                  break;
+              case DRIVE_CARTESIAN_TANK:
+                  driveCartesianTank();
+                  break;
           }
     }
 
@@ -360,10 +420,73 @@ public class RRMecanumDrive {
      * more precise driving
      */
 
-    private void driveCartesianTest(){
-        //TODO implementation
+    private void driveCartesianTest() {
+            double front_left = forward + clockwise + right;
+            double front_right = forward - clockwise - right;
+            double rear_left = forward + clockwise - right;
+            double rear_right = forward - clockwise + right;
 
+            double max = Math.abs(front_left);
+
+            if (Math.abs(front_right) > max) max = Math.abs(front_right);
+            if (Math.abs(rear_left) > max) max = Math.abs(rear_left);
+            if (Math.abs(rear_right) > max) max = Math.abs(rear_right);
+
+            if (max > 1) {
+                front_left /= max;
+                front_right /= max;
+                rear_left /= max;
+                rear_right /= max;
+            }
+            
+            frontLeftMotor.set(front_left);
+            frontRightMotor.set(front_right);
+            backLeftMotor.set(rear_left);
+            backRightMotor.set(rear_right);
     }
+
+
+
+    private void driveCartesianTank() {
+        //sensitivity
+        double tuneForward = 1*sensitivity;
+        double tuneRight = 1*sensitivity;
+        double tuneClockwise = 1*sensitivity;
+
+
+
+        double Yf = (-forward + -right_forward)/2;
+        double Yt = (-forward - -right_forward)/2;
+
+        //can change this to also use the average of X sticks
+        //currently does not use right x value
+        double front_left = tuneForward * Yf + tuneClockwise * Yt + tuneRight * right;
+        double front_right = tuneForward * Yf - tuneClockwise * Yt - tuneRight * right;
+        double rear_left = tuneForward * Yf + tuneClockwise * Yt - tuneRight * right;
+        double rear_right = tuneForward * Yf - tuneClockwise * Yt + tuneRight * right;
+
+
+        //Normalize
+        double max = Math.abs(front_left);
+
+            if (Math.abs(front_right) > max) max = Math.abs(front_right);
+            if (Math.abs(rear_left) > max) max = Math.abs(rear_left);
+            if (Math.abs(rear_right) > max) max = Math.abs(rear_right);
+
+            if (max > 1) {
+                front_left /= max;
+                front_right /= max;
+                rear_left /= max;
+                rear_right /= max;
+            }
+
+        frontLeftMotor.set(front_left);
+        frontRightMotor.set(front_right);
+        backLeftMotor.set(rear_left);
+        backRightMotor.set(rear_right);
+    }
+
+
 
     public void stop() {
           frontLeftMotor.set(0);
@@ -371,6 +494,9 @@ public class RRMecanumDrive {
           backLeftMotor.set(0);
           backRightMotor.set(0);
     }
+
+
+
 
     public String getControlModeName() {
         String controlOut = new String();
@@ -382,7 +508,10 @@ public class RRMecanumDrive {
                controlOut = "Tank";
                break;
            case DRIVE_CARTESIAN_TEST:
-               controlOut = "Cartesian Test";
+               controlOut = "Cartesian Mecanum";
+               break;
+           case DRIVE_CARTESIAN_TANK:
+               controlOut = "Cartesian Tank";
                break;
        }
           return controlOut;
