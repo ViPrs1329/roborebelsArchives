@@ -438,7 +438,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Drive Control Mode: "+
+       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+
                mecanumDrive.getControlModeName());
        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "");
        m_dsLCD.updateLCD();

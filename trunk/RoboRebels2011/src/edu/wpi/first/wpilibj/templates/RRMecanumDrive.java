@@ -263,15 +263,15 @@ public class RRMecanumDrive {
           r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
           r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4)*m_xboxStick.getRawAxis(4))+(m_xboxStick.getRawAxis(5)*m_xboxStick.getRawAxis(5)));
 
-          rotation = m_xboxStick.getRawAxis(3);
+          rotation = -m_xboxStick.getRawAxis(3);
 
 
-          forward = -m_xboxStick.getRawAxis(2);
-          right = m_xboxStick.getRawAxis(1);
+          forward = m_xboxStick.getRawAxis(2);
+          right = -m_xboxStick.getRawAxis(1);
           clockwise = m_xboxStick.getRawAxis(3);
 
-          right_forward = -m_xboxStick.getRawAxis(5);
-          right_right = m_xboxStick.getRawAxis(4);
+          right_forward = m_xboxStick.getRawAxis(5);
+          right_right = -m_xboxStick.getRawAxis(4);
 
           //make sure angles are in the expected range
           l_angle %= 360;
@@ -394,11 +394,13 @@ public class RRMecanumDrive {
            * - Mr. Ward
            */
 
-          //convert the angle into speeds and set each motor's speed
+
+
           frontLeftMotor.set(-(l_magnitude+rotation)*Math.cos(Math.toRadians((l_angle+45))));
           frontRightMotor.set((l_magnitude-rotation)* Math.sin(Math.toRadians(l_angle+45)));
           backLeftMotor.set(-(l_magnitude+rotation)*Math.sin(Math.toRadians(l_angle+45)));
           backRightMotor.set((l_magnitude-rotation)*Math.cos(Math.toRadians(l_angle+45)));
+
     }
 
     /*
@@ -440,9 +442,9 @@ public class RRMecanumDrive {
             }
             
             frontLeftMotor.set(front_left);
-            frontRightMotor.set(front_right);
+            frontRightMotor.set(-front_right);
             backLeftMotor.set(rear_left);
-            backRightMotor.set(rear_right);
+            backRightMotor.set(-rear_right);
     }
 
 
@@ -451,12 +453,12 @@ public class RRMecanumDrive {
         //sensitivity
         double tuneForward = 1*sensitivity;
         double tuneRight = 1*sensitivity;
-        double tuneClockwise = 1*sensitivity;
+        double tuneClockwise = .75*sensitivity;
 
 
 
-        double Yf = (-forward + -right_forward)/2;
-        double Yt = (-forward - -right_forward)/2;
+        double Yf = (forward + right_forward)/2;
+        double Yt = (forward - right_forward)/2;
 
         //can change this to also use the average of X sticks
         //currently does not use right x value
@@ -481,9 +483,9 @@ public class RRMecanumDrive {
             }
 
         frontLeftMotor.set(front_left);
-        frontRightMotor.set(front_right);
+        frontRightMotor.set(-front_right);
         backLeftMotor.set(rear_left);
-        backRightMotor.set(rear_right);
+        backRightMotor.set(-rear_right);
     }
 
 
@@ -502,16 +504,16 @@ public class RRMecanumDrive {
         String controlOut = new String();
        switch (controlMode){
            case DRIVE_MECANUM:
-               controlOut = "Mecanum";
+               controlOut = "Mecanum       ";
                break;
            case DRIVE_TANK:
-               controlOut = "Tank";
+               controlOut = "Tank         ";
                break;
            case DRIVE_CARTESIAN_TEST:
-               controlOut = "Cartesian Mecanum";
+               controlOut = "Cart Mec        ";
                break;
            case DRIVE_CARTESIAN_TANK:
-               controlOut = "Cartesian Tank";
+               controlOut = "Cart Tank        ";
                break;
        }
           return controlOut;
