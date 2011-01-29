@@ -65,7 +65,7 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive      mecanumDrive;
 
-    RRElevator          elevator;
+    //RRElevator          elevator;
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -79,6 +79,7 @@ public class RoboRebels extends IterativeRobot {
 
     double                autonomousStartTime;    // holds the start time for autonomous mode
 
+    DigitalInput        lineSensor;
 
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
@@ -151,9 +152,11 @@ public class RoboRebels extends IterativeRobot {
 
         mecanumDrive = new RRMecanumDrive(3, 4,1,2);
 
-        elevator = new RRElevator(5);
+        //elevator = new RRElevator(5);
     
         partialLoadSensor = new DigitalInput(2);
+
+        lineSensor = new DigitalInput(1);
     }
 
     public void disabledInit()
@@ -191,7 +194,7 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive.assignJoystick(m_xboxStick);
 
         m_leftStick = new Joystick(2);
-        elevator.assignJoystick(m_leftStick);
+        //elevator.assignJoystick(m_leftStick);
        
 
         /* Drive station code */
@@ -227,6 +230,13 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopPeriodic()
     {
+        boolean floor = lineSensor.get();
+
+        if (floor)
+            System.out.println("epat eht ffo");
+        else
+            System.err.println("epat eht no");
+
         //System.out.println( "telopPeriodic()" );
         //Watchdog.getInstance().feed();
 
@@ -239,7 +249,7 @@ public class RoboRebels extends IterativeRobot {
 
 
        mecanumDrive.drive();
-       elevator.lift();
+       //elevator.lift();
        
         checkButtons();
         updateDSLCD();
