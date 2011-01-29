@@ -65,7 +65,7 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive      mecanumDrive;
 
-    //RRElevator          elevator;
+    //RRElevator          elevator;  //JRH: non-functional change
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
