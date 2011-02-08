@@ -150,6 +150,7 @@ public class RoboRebels extends IterativeRobot {
          *
          */
 
+        //                              FL, FR, BL, BR
         mecanumDrive = new RRMecanumDrive(3, 4,1,2);
 
         //elevator = new RRElevator(5);
@@ -233,9 +234,9 @@ public class RoboRebels extends IterativeRobot {
         boolean floor = lineSensor.get();
 
         if (floor)
-            System.out.println("epat eht ffo");
+            System.out.println("off the tape");
         else
-            System.err.println("epat eht no");
+            System.err.println("on the tape");
 
         //System.out.println( "telopPeriodic()" );
         //Watchdog.getInstance().feed();
