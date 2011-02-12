@@ -33,11 +33,11 @@ public class RRLineTracker
     private DigitalInput middle;
     private DigitalInput right;
 
-    public RRLineTracker()
+    public RRLineTracker(int l, int m, int r)
     {
-        left   = new DigitalInput(1);
-        middle = new DigitalInput(2);
-        right  = new DigitalInput(3);
+        left   = new DigitalInput(l);
+        middle = new DigitalInput(m);
+        right  = new DigitalInput(r);
     }
 
    /*

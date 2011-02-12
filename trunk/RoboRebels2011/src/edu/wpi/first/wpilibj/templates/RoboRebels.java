@@ -68,6 +68,8 @@ public class RoboRebels extends IterativeRobot {
 
     RRElevator          elevator;  //JRH: non-functional change
 
+    RRLineTracker       lineTracker;
+
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
     // Declare a variable to use to access the driver station object
@@ -159,6 +161,8 @@ public class RoboRebels extends IterativeRobot {
 
         // arm motor is 7
         elevator = new RRElevator(7);
+
+        lineTracker = new RRLineTracker(4, 5, 6);
 
         // arm release servo is on port 9
         m_armReleaseServo = new Servo(4,9);
@@ -254,10 +258,13 @@ public class RoboRebels extends IterativeRobot {
     {
         boolean floor = lineSensor.get();
 
+        /*
         if (floor)
             System.out.println("off the tape");
         else
             System.err.println("on the tape");
+         
+         */
 
         //System.out.println( "telopPeriodic()" );
         //Watchdog.getInstance().feed();
@@ -272,6 +279,8 @@ public class RoboRebels extends IterativeRobot {
 
        mecanumDrive.drive();
        elevator.lift();
+
+       System.out.println( lineTracker.activeSensor() );
        
         checkButtons();
         updateDSLCD();
@@ -338,8 +347,9 @@ public class RoboRebels extends IterativeRobot {
 
     public void checkButtons()
     {
-        System.out.println( "checkButtons()" );
+        //System.out.println( "checkButtons()" );
 
+        /*
         System.out.println( "LX: " + m_xboxStick.getRawAxis(1));
         System.out.flush();
         System.out.println( "LY: " + m_xboxStick.getRawAxis(2));
@@ -348,7 +358,7 @@ public class RoboRebels extends IterativeRobot {
         System.out.flush();
         System.out.println( "RY: " + m_xboxStick.getRawAxis(5));
         System.out.flush();
-
+        */
 
     }
 

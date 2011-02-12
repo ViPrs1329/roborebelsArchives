@@ -394,7 +394,7 @@ public class RRMecanumDrive {
            * - Mr. Ward
            */
 
-           System.out.println( "driveMecanum()" );
+           //System.out.println( "driveMecanum()" );
 
           frontLeftMotor.set(-(l_magnitude+rotation)*Math.cos(Math.toRadians((l_angle+45))));
           frontRightMotor.set((l_magnitude-rotation)* Math.sin(Math.toRadians(l_angle+45)));
