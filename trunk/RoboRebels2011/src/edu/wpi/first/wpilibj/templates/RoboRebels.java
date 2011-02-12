@@ -105,6 +105,8 @@ public class RoboRebels extends IterativeRobot {
     double              lastZValue;                         // last Z value for the dial on the joystick
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
 
+    boolean             releasedPin = false;
+
     
 
     /**
@@ -224,7 +226,17 @@ public class RoboRebels extends IterativeRobot {
     
     public void autonomousPeriodic()
     {
-       m_armReleaseServo.set(0.5);
+       // releases the pin that holds the arm in its initial position
+       // this if statement is run on the first pass
+       if (!releasedPin)
+       {
+           m_armReleaseServo.set(1.0);
+           releasedPin = true;
+       }
+       else if(m_armReleaseServo.getAngle() == 1.0)
+       {
+           m_armReleaseServo.set(0.0);
+       }
 
         processCamera();
 
