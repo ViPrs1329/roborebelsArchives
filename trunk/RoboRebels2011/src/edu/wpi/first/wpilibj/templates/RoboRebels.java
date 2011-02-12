@@ -51,6 +51,7 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.Servo;
 
 
 /**
@@ -65,7 +66,7 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive      mecanumDrive;
 
-    //RRElevator          elevator;  //JRH: non-functional change
+    RRElevator          elevator;  //JRH: non-functional change
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -85,6 +86,7 @@ public class RoboRebels extends IterativeRobot {
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
     Joystick            m_xboxStick;
 
+    Servo               m_armReleaseServo;
 
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
@@ -153,8 +155,12 @@ public class RoboRebels extends IterativeRobot {
         //                              FL, FR, BL, BR
         mecanumDrive = new RRMecanumDrive(3, 4,1,2);
 
-        //elevator = new RRElevator(5);
-    
+        // arm motor is 7
+        elevator = new RRElevator(7);
+
+        // arm release servo is on port 9
+        m_armReleaseServo = new Servo(4,9);
+
         partialLoadSensor = new DigitalInput(2);
 
         lineSensor = new DigitalInput(1);
@@ -178,6 +184,8 @@ public class RoboRebels extends IterativeRobot {
         // Get the time that the autonomous mode starts
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
+
+        
     }
 
     public void teleopInit()
@@ -193,6 +201,7 @@ public class RoboRebels extends IterativeRobot {
         //Construct Joystick object and pass to mecanumDrive
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         mecanumDrive.assignJoystick(m_xboxStick);
+        elevator.assignJoystick(m_xboxStick);
 
         m_leftStick = new Joystick(2);
         //elevator.assignJoystick(m_leftStick);
@@ -215,7 +224,7 @@ public class RoboRebels extends IterativeRobot {
     
     public void autonomousPeriodic()
     {
-       
+       m_armReleaseServo.set(0.5);
 
         processCamera();
 
@@ -250,7 +259,7 @@ public class RoboRebels extends IterativeRobot {
 
 
        mecanumDrive.drive();
-       //elevator.lift();
+       elevator.lift();
        
         checkButtons();
         updateDSLCD();

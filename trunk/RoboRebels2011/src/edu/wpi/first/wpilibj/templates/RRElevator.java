@@ -6,13 +6,13 @@
  */
 
 package edu.wpi.first.wpilibj.templates;
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Encoder;
 
 
 public class RRElevator {
-    private     Jaguar      liftMotor;
+    private     Victor      liftMotor;
 
     private     Joystick    liftStick;
 
@@ -26,7 +26,7 @@ public class RRElevator {
 
 
     public RRElevator(int motorChannel) {
-        liftMotor = new Jaguar(motorChannel);
+        liftMotor = new Victor(motorChannel);
         //liftEncoder = new Encoder();
     }
     
@@ -39,7 +39,22 @@ public class RRElevator {
 
         }
         else {
-            liftMotor.set(liftStick.getRawAxis(2));//Note: currently no protection against strain at top and bottom
+            //liftMotor.set(liftStick.getRawAxis(2));//Note: currently no protection against strain at top and bottom
         }
+
+        if ( liftStick.getRawButton(4) )
+        {
+            liftMotor.set(1.0);
+        }
+        else if ( liftStick.getRawButton(2) )
+        {
+            liftMotor.set(-1.0);
+        }
+        else
+        {
+            liftMotor.set(0.0);
+        }
+
+
     }
 }
