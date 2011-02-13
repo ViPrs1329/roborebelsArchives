@@ -64,6 +64,8 @@ import edu.wpi.first.wpilibj.Servo;
 public class RoboRebels extends IterativeRobot {
 
     // Declare custom object vars
+    RRAutonomous        autonomous;
+
     RRMecanumDrive      mecanumDrive;
 
     RRElevator          elevator;  //JRH: non-functional change
@@ -80,7 +82,7 @@ public class RoboRebels extends IterativeRobot {
     DigitalInput        partialLoadSensor;
 
 
-    double                autonomousStartTime;    // holds the start time for autonomous mode
+    double              autonomousStartTime;    // holds the start time for autonomous mode
 
     DigitalInput        lineSensor;
 
@@ -157,7 +159,7 @@ public class RoboRebels extends IterativeRobot {
          */
 
         //                              FL, FR, BL, BR
-        mecanumDrive = new RRMecanumDrive(3, 4,1,2);
+        mecanumDrive = new RRMecanumDrive(4, 1,2,3);
 
         // arm motor is 7
         elevator = new RRElevator(7);
@@ -191,6 +193,7 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
+        autonomous = new RRAutonomous();
         
     }
 
@@ -241,6 +244,8 @@ public class RoboRebels extends IterativeRobot {
        {
            m_armReleaseServo.set(0.0);
        }
+       
+        autonomous.printGyro();
 
         processCamera();
 
@@ -282,7 +287,7 @@ public class RoboRebels extends IterativeRobot {
 
        System.out.println( lineTracker.activeSensor() );
        
-        checkButtons();
+        //checkButtons();
         updateDSLCD();
         processCamera();
     }

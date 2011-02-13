@@ -48,11 +48,11 @@ public class RRLineTracker
     */
     public String activeSensor()
     {
-        if (left.get())
+        if (!left.get())
             return "left";
-        if (middle.get())
+        if (!middle.get())
             return "middle";
-        if (right.get())
+        if (!right.get())
             return "right";
         
         return "none";
