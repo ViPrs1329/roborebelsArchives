@@ -159,7 +159,7 @@ public class RoboRebels extends IterativeRobot {
          */
 
         //                              FL, FR, BL, BR
-        mecanumDrive = new RRMecanumDrive(4, 1,2,3);
+        mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
 
         // arm motor is 7
         elevator = new RRElevator(7);
@@ -245,7 +245,7 @@ public class RoboRebels extends IterativeRobot {
            m_armReleaseServo.set(0.0);
        }
        
-        autonomous.printGyro();
+//        autonomous.printGyro();
 
         processCamera();
 
