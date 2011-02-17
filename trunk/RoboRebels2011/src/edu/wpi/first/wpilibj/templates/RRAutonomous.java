@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  *
@@ -18,35 +19,44 @@ public class RRAutonomous {
 
 
     RRMecanumDrive mecanumDrive;
-
     RRLineTracker lineTracker;
+    Timer timer;
+    int seconds;
 
 
 
     public RRAutonomous(){
-    gyro = new Gyro(1);
-    gyro.setSensitivity(.007);
-    mecanumDrive = new RRMecanumDrive(4, 1,2,3);
-    lineTracker = new RRLineTracker(4,5,6);
-    
+        gyro = new Gyro(1);
+        gyro.setSensitivity(.007);
+        mecanumDrive = new RRMecanumDrive(4, 1,2,3);
+        lineTracker = new RRLineTracker(4,5,6);
+        timer = new Timer();
+        seconds = 1000;
     }
 
     public void drive(){
-        double xmov = 0;
-        double ymov = 0;
+        timer.start();
+        if(timer.get() < 2 * seconds) {
+            double xmov = .5;
+            double ymov = .5;
 
-        //use the gyro to line up the robot with the field
+            //use the gyro to line up the robot with the field
 
-        //detect line, and adjust strafing movement appropriately
+            //detect line, and adjust strafing movement appropriately
 
-        //drive forward until robot is in front of wall
+            //drive forward until robot is in front of wall
 
-        //stop driving and start arm movement
+            //stop driving and start arm movement
 
-        mecanumDrive.drive(xmov, ymov);
+            mecanumDrive.drive(xmov, ymov);
+        }
+        else
+        {
+            mecanumDrive.drive(0, 0);
+        }
     }
 
-    public void printGyro(){
+/*    public void printGyro(){
 
         if (lineTracker.activeSensor().equals("none")){
             mecanumDrive.drive(0,.04);
@@ -60,5 +70,5 @@ public class RRAutonomous {
             angle = gyro.pidGet();
             System.out.println(angle%(360));
 
-    }
+    }*/
 }
