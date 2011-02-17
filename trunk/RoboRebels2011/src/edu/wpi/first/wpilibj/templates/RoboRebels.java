@@ -70,7 +70,6 @@ public class RoboRebels extends IterativeRobot {
 
     RRElevator          elevator;  //JRH: non-functional change
 
-    RRLineTracker       lineTracker;
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -164,7 +163,7 @@ public class RoboRebels extends IterativeRobot {
         // arm motor is 7
         elevator = new RRElevator(7);
 
-        lineTracker = new RRLineTracker(4, 5, 6);
+
 
         // arm release servo is on port 9
         m_armReleaseServo = new Servo(4,9);
@@ -193,7 +192,7 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
-        autonomous = new RRAutonomous();
+        autonomous = new RRAutonomous(mecanumDrive);
         
     }
 
@@ -246,7 +245,7 @@ public class RoboRebels extends IterativeRobot {
        }
        
 //        autonomous.printGyro();
-
+       autonomous.drive();
         processCamera();
 
     }
@@ -285,7 +284,6 @@ public class RoboRebels extends IterativeRobot {
        mecanumDrive.drive();
        elevator.lift();
 
-       System.out.println( lineTracker.activeSensor() );
        
         //checkButtons();
         updateDSLCD();

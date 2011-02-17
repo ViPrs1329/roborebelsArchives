@@ -25,10 +25,10 @@ public class RRAutonomous {
 
 
 
-    public RRAutonomous(){
+    public RRAutonomous(RRMecanumDrive m_drive){
         gyro = new Gyro(1);
         gyro.setSensitivity(.007);
-        mecanumDrive = new RRMecanumDrive(4, 1,2,3);
+        mecanumDrive = m_drive;
         lineTracker = new RRLineTracker(4,5,6);
         timer = new Timer();
         seconds = 1000;
@@ -37,8 +37,8 @@ public class RRAutonomous {
     public void drive(){
         timer.start();
         if(timer.get() < 2 * seconds) {
-            double xmov = .5;
-            double ymov = .5;
+            double xmov = 1;
+            double ymov = 1;
 
             //use the gyro to line up the robot with the field
 
