@@ -302,18 +302,10 @@ public class RRMecanumDrive {
           }
 
           //make sure magnitudes are in range
-          if (l_magnitude < -1)
-              l_magnitude = -1;
-
-          if(l_magnitude > 1)
-              l_magnitude = 1;
-
-          if (r_magnitude < -1)
-              r_magnitude = -1;
-
-          if(r_magnitude > 1)
-              r_magnitude = 1;
-
+          l_magnitude = Math.max(-1, l_magnitude);
+          l_magnitude = Math.min(1, l_magnitude);
+          r_magnitude = Math.max(-1, r_magnitude);
+          r_magnitude = Math.min(1, r_magnitude);
 
           //decrease magnitude for precise mode
           if (m_xboxStick.getRawButton(5)){
@@ -403,179 +395,12 @@ public class RRMecanumDrive {
 
  
  public void drive(double x, double y) {
-
-          /*
-           * Matt, I found some incredibly simple code to drive a mecanum drive
-           * system with two joysticks (one for x, y cartesian coordinates and
-           * one for rotation here: http://www.chiefdelphi.com/forums/showthread.php?t=89205&highlight=mecanum+normalize
-           * I have a suspicion that your code implements this in a roundabout
-           * way by calculating angles, etc.  I am not sure if this works with
-           * a tank drive control scheme, but I can imagine that it can be
-           * adopted if it works out.
-           *
-           *
-                // 3-axis joystick interface to a mecanum or omni drive
-
-
-                // first define your driver interface,
-                // in this case a 3-axis joystick:
-
-
-                forward = -Y;   // push joystick forward to go forward
-                right = X;      // push joystick to the right to strafe right
-                clockwise = Z;  // twist joystick clockwise turn clockwise
-
-
-                // here is where you would put any special shaping of the joystick
-                // response curve, such as deadband or gain adjustment
-
-
-                // now apply the inverse kinematic tranformation
-                // to convert your vehicle motion command
-                // to 4 wheel speed commands:
-
-                // NOTE: you can introduce some tuning parameters for forward,
-                // rotate and strafing to dial in the correct feel.  See example
-                // below.
-
-                front_left = forward + clockwise + right;
-                front_right = forward - clockwise - right;
-                rear_left = forward + clockwise - right;
-                rear_right = forward - clockwise + right;
-
-
-                // finally, normalize the wheel speed commands
-                // so that no wheel speed command exceeds magnitude of 1:
-
-                max = abs(front_left);
-                if (abs(front_right)>max) max = abs(front_right);
-                if (abs(rear_left)>max) max=abs(rear_left);
-                if (abs(rear_right)>max) max=abs(rear_right);
-
-                if (max>1)
-                  {front_left/=max; front_right/=max; rear_left/=max; rear_right/=max;}
-
-
-                // you're done. send these four wheel commands to their respective wheels
-           *
-           *
-           *
-           *
-           * Found some tank drive psuedo code which is similar:
-           *
-                Here's a way to program TANK DRIVE on a mecanum bot so that you
-                can tune the joystick sensitivity to all three motions (fwd/rev,
-                turn, stafe) independently:
-
-                Let Kf, Kt, and Ks be the tuning parameters (0 to +1) for the
-                forward/reverse, turn, and strafe motions, respectively.
-
-                Let X1 and Y1 represent the joystick outputs for the driver's
-                left-hand joystick (-1 to +1);
-
-                Let Y2 represent the joystick outputs for the driver's
-                right-hand joystick (-1 to +1).
-
-                When each joystick is pushed forward, its Y output should be
-                positive. When the joystick is pushed to the right, its X output
-                should be positive. If not, add code to invert the sign if
-                necessary.
-
-                Let W1, W2, W3, and W4 be the front left, front right, rear
-                left, and rear right wheels, respectively. ("left" and "right"
-                in this context means "port" and "starboard", respectively)
-
-
-
-                Calculate the following:
-
-                Yf = (Y1 + Y2)/2
-
-                Yt = (Y1 - Y2)/2
-
-
-                Now calculate the four wheel speed commands:
-
-                W1 = Kf*Yf + Kt*Yt + Ks*X1
-
-                W2 = Kf*Yf - Kt*Yt - Ks*X1
-
-                W3 = Kf*Yf + Kt*Yt - Ks*X1
-
-                W4 = Kf*Yf - Kt*Yt + Ks*X1
-
-
-
-                Now normalize the wheel speed commands:
-
-                Let Wmax be the maximum absolute value of the four wheel speed
-                commands. If Wmax is greater than 1, then divide each of the four
-                wheel speed commands by Wmax.
-
-
-                Finally, send each of the four normalized wheel speed commands
-                to the respective wheels (-1 means 100% reverse, +1 means 100% forward).
-
-                The Y1 and Y2 axes act like tank drive.  The X1 axis commands
-                strafe left and right.  The X2 axis is not used.
-
-                Tune Kf, Kt, and Ks (from 0 to +1) to get the desired joystick
-                sensitivity to each of the three motions.
-
-
-           *
-           * Could you try this out in your simulation?  Thanks.
-           *
-           * - Mr. Ward
-           */
-
-
-          /*
-           * NOTE: To those of you who don't understand what is happening here
-           * allow me to explain:
-           *
-           * We are computing the angle and maginitude of each joystick position
-           * by utilizing trigonometric properties, specifically this one:
-           *
-           *       /|
-           *      / |
-           *hyp  /  |
-           *    /   | opposite, y or axis 1
-           *   /    |
-           *  / i   |
-           * /______|
-           *   adjacent, x or axis 2
-           *
-           * SOA CAH TOA
-           *
-           * sin(i) = opposite / hypotenous
-           * cos(i) = adjacent / hypotenous
-           * tan(i) = opposite / adjacent
-           *
-           * i = arctan( opposite / adacent )
-           *
-           * With the magnitude we are simply calculating the hypotenous via the
-           * formula:
-           *
-           * hyp^2 = x^2 + y^2
-           * hyp = sqrt( x^2 + y^2 )
-           *
-           */
-
           l_angle = Math.toDegrees(MathUtils.atan2(-x,-y));
           l_magnitude = Math.sqrt((x*x)+(y*y));
-         // r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
-         // r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4)*m_xboxStick.getRawAxis(4))+(m_xboxStick.getRawAxis(5)*m_xboxStick.getRawAxis(5)));
-
-         // rotation = -m_xboxStick.getRawAxis(3);
-
 
           forward = y;
           right = -x;
-          //clockwise = m_xboxStick.getRawAxis(3);
-
-         // right_forward = m_xboxStick.getRawAxis(5);
-          //right_right = -m_xboxStick.getRawAxis(4);
+          clockwise = 0;
 
           //make sure angles are in the expected range
           l_angle %= 360;
@@ -590,103 +415,12 @@ public class RRMecanumDrive {
           }
 
           //make sure magnitudes are in range
-          if (l_magnitude < -1)
-              l_magnitude = -1;
+          l_magnitude = Math.max(-1, l_magnitude);
+          l_magnitude = Math.min(1, l_magnitude);
+          r_magnitude = Math.max(-1, r_magnitude);
+          r_magnitude = Math.min(1, r_magnitude);
 
-          if(l_magnitude > 1)
-              l_magnitude = 1;
-
-          if (r_magnitude < -1)
-              r_magnitude = -1;
-
-          if(r_magnitude > 1)
-              r_magnitude = 1;
-
-
-          //decrease magnitude for precise mode
-          if (m_xboxStick.getRawButton(5)){
-              if (m_xboxStick.getRawButton(6)){
-                  l_magnitude*=.4;
-                  r_magnitude*=.4;
-                  rotation *= .4;
-
-                  forward *= .4;
-                  right *= .4;
-                  clockwise *= .4;
-
-                  right_forward *= .4;
-                  right_right *= .4;
-
-                  sensitivity = .4;
-
-              }
-                else {
-                  l_magnitude*=.7;
-                  r_magnitude*=.7;
-                  rotation*=.7;
-
-                  forward *= .7;
-                  right *= .7;
-                  clockwise *= .7;
-
-                  right_forward *= .7;
-                  right_right *= .7;
-
-                  sensitivity = .7;
-                }
-
-          }
-
-
-
-
-
-          // Toggle Through Drive Modes with Start Button
-          if (m_xboxStick.getRawButton(8) && !controlModeSwitched) {
-              switch (controlMode){
-                  case DRIVE_MECANUM:
-                      controlMode = DRIVE_TANK;
-                      break;
-                  case DRIVE_TANK:
-                      controlMode = DRIVE_CARTESIAN_TEST;
-                      break;
-                  case DRIVE_CARTESIAN_TEST:
-                      controlMode = DRIVE_CARTESIAN_TANK;
-                      break;
-                  case DRIVE_CARTESIAN_TANK:
-                      controlMode = DRIVE_MECANUM;
-                      break;
-              }
-
-              controlModeSwitched = true;
-          }
-          else if (!m_xboxStick.getRawButton(8)){
-              controlModeSwitched = false;
-          }
-
-          controlMode = DRIVE_CARTESIAN_TEST;
-          //drive in correct mode
-          switch (controlMode){
-              case DRIVE_MECANUM:
-                  driveMecanum();
-                  break;
-              case DRIVE_TANK:
-                  driveTank();
-                  break;
-              case DRIVE_CARTESIAN_TEST:
-                  driveCartesianTest();
-                  break;
-              case DRIVE_CARTESIAN_TANK:
-                  driveCartesianTank();
-                  break;
-          }
-
-/*
-          System.out.println("FLE Distance: "+ fl_Encoder.get());
-          System.out.println("FRE Distance: "+ fr_Encoder.get());
-          System.out.println("BLE Distance: "+ bl_Encoder.get());
-          System.out.println("BRE Distance: "+ br_Encoder.get());
- */
+          driveCartesianTest();
  }
       
     /*
@@ -741,9 +475,9 @@ public class RRMecanumDrive {
 
             double max = Math.abs(front_left);
 
-            if (Math.abs(front_right) > max) max = Math.abs(front_right);
-            if (Math.abs(rear_left) > max) max = Math.abs(rear_left);
-            if (Math.abs(rear_right) > max) max = Math.abs(rear_right);
+            max = Math.max(Math.abs(front_right), max);
+            max = Math.max(Math.abs(rear_left), max);
+            max = Math.max(Math.abs(rear_right), max);
 
             if (max > 1) {
                 front_left /= max;
