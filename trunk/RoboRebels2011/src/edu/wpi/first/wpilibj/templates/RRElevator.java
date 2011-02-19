@@ -52,11 +52,11 @@ public class RRElevator {
 
         if ( liftStick.getRawButton(3) )
         {
-            if(shift==true){
-                shift=false;
+            if(shift==false){
+                shift=!shift;
             }
             else{
-                shift=false;
+                shift=!shift;
             }
         }
         else if ( liftStick.getRawButton(4) )
