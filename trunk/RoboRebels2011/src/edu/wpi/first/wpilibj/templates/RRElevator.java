@@ -52,16 +52,11 @@ public class RRElevator {
 
         if ( liftStick.getRawButton(3) )
         {
-            if(shift==false){
-                shift=!shift;
-            }
-            else{
-                shift=!shift;
-            }
+            shift = !shift;
         }
         else if ( liftStick.getRawButton(4) )
         {
-            if(shift==true){
+            if(shift){
                 liftMotor.set(0.4);
             }
             else{
@@ -70,7 +65,7 @@ public class RRElevator {
         }
         else if(liftStick.getRawButton(1))
         {
-            if(shift==true){
+            if(shift){
                 flipUpMotor.set(0.4);
             }
             else{
@@ -79,7 +74,7 @@ public class RRElevator {
         }
         else if (liftStick.getRawButton(2))
         {
-            if(shift==true){
+            if(shift){
                 pincherMotor.set(0.4);
             }
             else{
