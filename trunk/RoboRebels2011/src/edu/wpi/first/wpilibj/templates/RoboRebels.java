@@ -245,7 +245,7 @@ public class RoboRebels extends IterativeRobot {
        }
        
 //        autonomous.printGyro();
-       autonomous.drive();
+       //autonomous.drive();
         processCamera();
 
     }
@@ -313,16 +313,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void autonomousContinuous()
     {
-        if ( autoDrive )
-        {
-            // drive the robot
-        }
-        else
-        {
-            // otherwise stop the robot
-            mecanumDrive.stop();
-
-        }
+        autonomous.drive();
     }
 
     /**

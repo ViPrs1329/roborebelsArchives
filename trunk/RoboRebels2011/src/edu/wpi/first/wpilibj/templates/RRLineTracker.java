@@ -6,6 +6,7 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
+
 public class RRLineTracker
 {
    /*
@@ -57,4 +58,15 @@ public class RRLineTracker
         
         return "none";
     }
+    //returns the values of the line sensors
+    public boolean getL() {
+        return left.get();
+    }
+    public boolean getM() {
+        return middle.get();
+    }
+    public boolean getR() {
+        return right.get();
+    }
+
 }
