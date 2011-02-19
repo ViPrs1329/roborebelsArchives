@@ -213,11 +213,14 @@ public class RoboRebels extends IterativeRobot {
         //Construct Joystick object and pass to mecanumDrive
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         mecanumDrive.assignJoystick(m_xboxStick);
-        elevator.assignJoystick(m_xboxStick);
+        
 
         m_leftStick = new Joystick(2);
-        //elevator.assignJoystick(m_leftStick);
-       
+        m_rightStick = new Joystick(3);
+
+        elevator.assignLiftJoystick(m_leftStick);
+        elevator.assignArmJoystick(m_rightStick);
+        
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();

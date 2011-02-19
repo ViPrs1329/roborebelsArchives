@@ -18,7 +18,11 @@ public class RRElevator {
 
     private     Victor      flipUpMotor;
 
+    private     Joystick    xboxStick;
+
     private     Joystick    liftStick;
+
+    private     Joystick    armStick;
 
     private     Encoder     liftEncoder;
 
@@ -38,8 +42,14 @@ public class RRElevator {
         //liftEncoder = new Encoder();
     }
     
-    public void assignJoystick(Joystick s) {
+    public void assignXboxJoystick(Joystick s) {
+        xboxStick = s;
+    }
+    public void assignLiftJoystick(Joystick s) {
         liftStick = s;
+    }
+    public void assignArmJoystick(Joystick s) {
+        armStick = s;
     }
 
     public void lift() {
@@ -50,37 +60,51 @@ public class RRElevator {
             //liftMotor.set(liftStick.getRawAxis(2));//Note: currently no protection against strain at top and bottom
         }
 
-        if ( liftStick.getRawButton(3) )
+        if ( xboxStick.getRawButton(3) )
         {
             shift = !shift;
         }
-        else if ( liftStick.getRawButton(4) )
+        else if ( xboxStick.getRawButton(4) )
         {
             if(shift){
-                liftMotor.set(0.4);
+                liftMotor.set(0.1);
             }
             else{
-                liftMotor.set(-0.4);
+                liftMotor.set(-0.1);
             }
         }
-        else if(liftStick.getRawButton(1))
+        else if(xboxStick.getRawButton(1))
         {
             if(shift){
-                flipUpMotor.set(0.4);
+                flipUpMotor.set(0.1);
             }
             else{
-                flipUpMotor.set(0.4);
+                flipUpMotor.set(0.1);
             }
         }
-        else if (liftStick.getRawButton(2))
+        else if (xboxStick.getRawButton(2))
         {
             if(shift){
-                pincherMotor.set(0.4);
+                pincherMotor.set(0.1);
             }
             else{
-                pincherMotor.set(-0.4);
+                pincherMotor.set(-0.1);
             }
         }
+
+
+        if (armStick.getRawButton(0)){
+            pincherMotor.set(.01);
+        }
+        else if (armStick.getRawButton(3)){
+            pincherMotor.set(-.01);
+        }
+        else {
+            pincherMotor.set(0);
+        }
+
+
+        pincherMotor.set(armStick.getRawAxis(2));
 
 
 
