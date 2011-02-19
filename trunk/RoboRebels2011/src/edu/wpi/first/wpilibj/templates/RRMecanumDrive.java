@@ -394,13 +394,13 @@ public class RRMecanumDrive {
  }
 
  
- public void drive(double x, double y) {
+ public void drive(double x, double y, double rot) {
           l_angle = Math.toDegrees(MathUtils.atan2(-x,-y));
           l_magnitude = Math.sqrt((x*x)+(y*y));
 
           forward = y;
           right = -x;
-          clockwise = 0;
+          clockwise = rot;
 
           //make sure angles are in the expected range
           l_angle %= 360;

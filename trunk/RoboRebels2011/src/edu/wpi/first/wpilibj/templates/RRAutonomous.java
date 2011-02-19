@@ -17,7 +17,16 @@ public class RRAutonomous {
     Gyro gyro;
     double angle;
 
+    double xmov = 0;
+    double ymov = 0;
+    double rot = 0;
+    double speed = -.3;
+    double large_correction = .1;
+    double small_correction = .05;
+    double lost_line_timer = 100;
+    double hunt_time = .2/speed;
     boolean     isDriving;
+
 
 
     RRMecanumDrive mecanumDrive;
@@ -38,18 +47,70 @@ public class RRAutonomous {
 
         timer.start();
     }
-    double xmov = 0;
-    double ymov = 0;
-    public void lineAuton(boolean righter, boolean midler, boolean lefter) {
+    
+    public void lineAuton(boolean right, boolean mid, boolean left) {
         //Sees if the sensors are over the tape and moves if they are, stops if they aren't
-        if (( !lefter) ||(!midler) || (!righter)) {
-           ymov = -0.2;
+        if ((left) && (mid) && (right)) {       // off the line
+             
+            if (lost_line_timer == 100){
+                lost_line_timer = timer.get();
+                System.out.println("Lost_Line_Timer = " + lost_line_timer );
+            }
+            if(timer.get() < lost_line_timer + hunt_time) {
+                                                //keeps the program going for 20 seconds
+                //System.out.println("Still going Lost_Line_Timer = " + lost_line_timer );
+                ymov = speed;
+                xmov = 0;                            //look for the line for 1 second then stop
+                rot = 0;
+            }
+             else{
+                System.out.println("Stopping Lost_Line_Timer = " + lost_line_timer );
+                 ymov = 0;
+                 xmov = 0;
+                 rot = 0;
+             }
         }
-        else {
-            xmov = 0;
-            ymov = 0;
+        else if((left) && (mid) && (!right)) {  // right sensor on the line
+           ymov = speed;
+           xmov = 0;                            // move right
+           rot = - large_correction;
+           lost_line_timer = 100;
         }
+        else if((left) && (!mid) && (right)) {  // middle sensor on the line
+           ymov = speed;
+           xmov = 0;                            // move forward
+           rot = 0;
+           lost_line_timer = 100;
+        }
+        else if((left) && (!mid) && (!right)) { // middle and right sensors on the line
+           ymov = speed;
+           xmov = 0;                            // move forward and slightly right
+           rot = - small_correction;
+           lost_line_timer = 100;
+        }
+        else if((!left) && (mid) && (right)) {  // left sensor on the line
 
+           ymov = speed;
+           xmov = 0;                            // move left
+           rot = large_correction;
+           lost_line_timer = 100;
+        }
+        else if ((!left) && (mid) && (!right)) {// right and left sensors on the line (split)
+           ymov = 0;
+           xmov = 0;                            //stop (temporary)
+           rot = 0;
+        }
+        else if ((!left) && (!mid) && (right)) {// left and right sensors on the line
+           ymov = speed;
+           xmov = 0;                            // move forward and slightly left
+           rot = small_correction;
+           lost_line_timer = 100;
+        }
+        else if((!left) && (!mid) && (!right)) {   // end of line
+           ymov = 0;
+           xmov = 0;                            // stop
+           rot = 0;
+        }
     }
 
     public void drive(){
@@ -63,15 +124,15 @@ public class RRAutonomous {
         if(timer.get() < 20) {
             //keeps the program going for 20 seconds
 
-            System.out.println("Timer = " + timer.get() );
+            //System.out.println("Timer = " + timer.get() );
 
             // negative is forward!
-            mecanumDrive.drive(xmov, ymov);
+            mecanumDrive.drive(xmov, ymov, rot);
         
         }
         else
         {
-            mecanumDrive.drive(0, 0);
+            mecanumDrive.drive(0, 0, 0);
         }
     }
 
