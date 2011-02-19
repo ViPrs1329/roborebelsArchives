@@ -19,8 +19,12 @@
  * 8 Start
  * 9 L Stick Click
  */
-
 /*
+   y4
+ x3  b2
+   a1
+
+
  * NOTES:
  *
  * - Watchdog is no longer required, however, we may want to use it
@@ -161,7 +165,7 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
 
         // arm motor is 7
-        elevator = new RRElevator(7);
+        elevator = new RRElevator(7,5,6);
 
 
 

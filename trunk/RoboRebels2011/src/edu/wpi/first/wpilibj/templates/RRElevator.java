@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.Encoder;
 public class RRElevator {
     private     Victor      liftMotor;
 
+    private     Victor      pincherMotor;
+
+    private     Victor      flipUpMotor;
+
     private     Joystick    liftStick;
 
     private     Encoder     liftEncoder;
@@ -24,9 +28,13 @@ public class RRElevator {
 
     private     double      currentHeight;
 
+    private     boolean     shift= false;
 
-    public RRElevator(int motorChannel) {
+
+    public RRElevator(int motorChannel,int motorChannel2, int motorChannel3) {
         liftMotor = new Victor(motorChannel);
+        flipUpMotor = new Victor(motorChannel2);
+        pincherMotor = new Victor(motorChannel3);
         //liftEncoder = new Encoder();
     }
     
@@ -42,18 +50,43 @@ public class RRElevator {
             //liftMotor.set(liftStick.getRawAxis(2));//Note: currently no protection against strain at top and bottom
         }
 
-        if ( liftStick.getRawButton(4) )
+        if ( liftStick.getRawButton(3) )
         {
-            liftMotor.set(1.0);
+            if(shift==true){
+                shift=false;
+            }
+            else{
+                shift=false;
+            }
         }
-        else if ( liftStick.getRawButton(2) )
+        else if ( liftStick.getRawButton(4) )
         {
-            liftMotor.set(-1.0);
+            if(shift==true){
+                liftMotor.set(0.4);
+            }
+            else{
+                liftMotor.set(-0.4);
+            }
         }
-        else
+        else if(liftStick.getRawButton(1))
         {
-            liftMotor.set(0.0);
+            if(shift==true){
+                flipUpMotor.set(0.4);
+            }
+            else{
+                flipUpMotor.set(0.4);
+            }
         }
+        else if (liftStick.getRawButton(2))
+        {
+            if(shift==true){
+                pincherMotor.set(0.4);
+            }
+            else{
+                pincherMotor.set(-0.4);
+            }
+        }
+
 
 
     }
