@@ -30,6 +30,8 @@ public class RRAutonomous {
     double hunt_time = .2/speed;
     boolean     isDriving;
     boolean     yIsDetected = false;
+    boolean     stopCondition = false;
+    boolean     strafeToTheEnd = false;
 
 
     RRMecanumDrive mecanumDrive;
@@ -57,7 +59,16 @@ public class RRAutonomous {
 
         timer.start();
     }
-    
+
+    /*
+     *
+     * One idea for dealing with "Y" line is that if we are traveling at a
+     * constant speed then if we don't encounter all three line sensors
+     * activating after a certain amount of time then we must be on a straight
+     * line.
+     *
+     */
+
     public void lineAuton(boolean right, boolean mid, boolean left) {
         //Sees if the sensors are over the tape and moves if they are, stops if they aren't
         if ((left) && (mid) && (right)) {       // off the line
@@ -74,76 +85,150 @@ public class RRAutonomous {
                 rot = 0;
             }
              else{
+                
                 System.out.println("Stopping Lost_Line_Timer = " + lost_line_timer );
                  ymov = 0;
                  xmov = 0;
                  rot = 0;
+                 
              }
         }
         else if((left) && (mid) && (!right)) {  // right sensor on the line
-           ymov = speed;
-           xmov = 0;                            // move right
-           rot = - large_correction;
-           lost_line_timer = 100;
+            System.out.println("Moving right");
+            if ( strafeToTheEnd )
+            {
+                ymov = speed * 0.5;
+                xmov = speed * 0.5;
+                rot = 0;
+                lost_line_timer = 100;              // strafe to the forward/right
+            }
+            else
+            {
+               ymov = speed;
+               xmov = 0;                            // move right
+               rot = - large_correction;
+               lost_line_timer = 100;
+            }
         }
         else if((left) && (!mid) && (right)) {  // middle sensor on the line
+            System.out.println("Moving forward");
            ymov = speed;
            xmov = 0;                            // move forward
            rot = 0;
            lost_line_timer = 100;
         }
         else if((left) && (!mid) && (!right)) { // middle and right sensors on the line
-           ymov = speed;
-           xmov = 0;                            // move forward and slightly right
-           rot = - small_correction;
-           lost_line_timer = 100;
+            System.out.println("Moving slightly to the right");
+
+            if ( strafeToTheEnd )
+            {
+                ymov = speed * 0.5;
+                xmov = speed * 0.25;
+                rot = 0;
+                lost_line_timer = 100;
+            }
+            else
+            {
+               ymov = speed;
+               xmov = 0;                            // move forward and slightly right
+               rot = - small_correction;
+               lost_line_timer = 100;
+            }
         }
         else if((!left) && (mid) && (right)) {  // left sensor on the line
-
-           ymov = speed;
-           xmov = 0;                            // move left
-           rot = large_correction;
-           lost_line_timer = 100;
+            System.out.println("Moving to the left");
+            if ( strafeToTheEnd )
+            {
+                ymov = speed * 0.5;
+                xmov = speed * 0.5;
+                rot = 0;
+                lost_line_timer = 100;
+            }
+            else
+            {
+               ymov = speed;
+               xmov = 0;                            // move left
+               rot = large_correction;
+               lost_line_timer = 100;
+            }
         }
         else if ((!left) && (mid) && (!right)) {// right and left sensors on the line (split)
+          System.out.println("Found a split before a Y, ?!?!?");
           if (all3){
+               System.out.println("Found a split");
               yIsDetected = true;
           }
-
-          
-
-
         }
         else if ((!left) && (!mid) && (right)) {// left and right sensors on the line
-           ymov = speed;
-           xmov = 0;                            // move forward and slightly left
-           rot = small_correction;
-           lost_line_timer = 100;
-        }
-        else if((!left) && (!mid) && (!right)) {   // end of line
-        if (!all3){
-            all3 = true;
-        }
-        else{
-            if (!yIsDetected){
-                ymov = 0;
-                xmov = 0;                            // stop
+            System.out.println("Moving slightly to the left");
+            if ( strafeToTheEnd )
+            {
+                ymov = speed * 0.5;
+                xmov = speed * 0.25;
                 rot = 0;
+                lost_line_timer = 100;
+            }
+            else
+            {
+               ymov = speed;
+               xmov = 0;                            // move forward and slightly left
+               rot = small_correction;
+               lost_line_timer = 100;
+            }
+        }
+        else if((!left) && (!mid) && (!right)) {   // end of line (all three tripped)
+            System.out.println("End of line detected, could be split though");
+            if (!all3){
+                all3 = true;
+            }
+            else{
+                /*
+                if (stopCondition){
+                    System.out.println("Stopping!");
+                    ymov = 0;
+                    xmov = 0;                            // stop
+                    rot = 0;
+                }
+                 *
+                 */
+                if (yIsDetected)
+                {
+                    System.out.println("Stopping!");
+                    ymov = 0;
+                    xmov = 0;                            // stop
+                    rot = 0;
+                }
             }
         }
 
-            
-           
-        }
-
         if (yIsDetected){
-            ymov = 0;
+            /*
+            ymov = speed * 0.4;
             xmov = 0;
-            rot = small_correction;
+            rot = 0.3;
 
-           if((left) && (!mid) && (right)) {  // middle sensor on the line
-           yIsDetected = false;
-        }
+
+            System.out.println("Y detected, hunting!");
+            */
+
+            System.out.println("Y detected, enabling strafe mode");
+
+            strafeToTheEnd = true;
+            yIsDetected = false;
+
+            ymov = speed * 0.5;
+            xmov = speed * 0.25;
+            rot = 0;
+            
+
+            /*
+            if((left) && (!mid) && (right)) {  // middle sensor on the line
+                System.out.println("Found a line!  Going back to normal");
+                stopCondition = true;
+                yIsDetected = false;
+            }
+             *
+             */
         }
     }
 

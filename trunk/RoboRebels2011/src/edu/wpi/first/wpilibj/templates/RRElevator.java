@@ -98,20 +98,20 @@ public class RRElevator {
 */
 
          //don't move the arm if joystick is being used for deployment
-if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
+        if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
 
-        if (armStick.getRawButton(1)){
-            pincherMotor.set(.45);
-        }
-        else if (armStick.getRawButton(3)){
-            pincherMotor.set(-.45);
-        }
-        else {
-            pincherMotor.set(0);
-        }
+            if (armStick.getRawButton(1)){
+                pincherMotor.set(.45);
+            }
+            else if (armStick.getRawButton(3)){
+                pincherMotor.set(-.45);
+            }
+            else {
+                pincherMotor.set(0);
+            }
 
 
-        flipUpMotor.set(armStick.getRawAxis(2));
+            flipUpMotor.set(armStick.getRawAxis(2));
 
         }
 
@@ -123,9 +123,14 @@ if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
         else {
             double liftSpeed = -liftStick.getRawAxis(2);
 
+            /*
             if (encoderDist >= 0 && encoderDist < 200 && liftStick.getRawAxis(2) > 0){
                 liftSpeed *= encoderDist/200;
             }
+            */
+             
+            System.out.println("Lift Speed: " + liftSpeed);
+            
              liftMotor.set(liftSpeed);
         }
 
@@ -174,7 +179,7 @@ if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
 
 
         
-            pincherMotor.set(.25*grip);
+        pincherMotor.set(.25*grip);
        
 
 
@@ -184,13 +189,13 @@ if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
 
     }
 
-        public void stop(){
-            pincherMotor.set(0);
-            flipUpMotor.set(0);
-            liftMotor.set(0);
-        }
+    public void stop(){
+        pincherMotor.set(0);
+        flipUpMotor.set(0);
+        liftMotor.set(0);
+    }
 
-        public void liftTo(double dest_height){
+    public void liftTo(double dest_height){
         double speed = 0;
         double height = -liftEncoder.getDistance();
 
@@ -198,11 +203,12 @@ if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
         speed = (dest_height-height)/1000;
 
         lift(speed, 0, 0);
+
     }
 
-        public double getHeight(){
-            return -liftEncoder.getDistance();
-        }
+    public double getHeight(){
+        return -liftEncoder.getDistance();
+    }
 
 
 }
