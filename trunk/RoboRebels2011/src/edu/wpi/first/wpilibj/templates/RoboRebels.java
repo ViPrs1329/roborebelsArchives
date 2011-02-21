@@ -74,6 +74,8 @@ public class RoboRebels extends IterativeRobot {
 
     RRElevator          elevator;  //JRH: non-functional change
 
+    RRDeployer          deployer;
+
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -167,10 +169,9 @@ public class RoboRebels extends IterativeRobot {
         // arm motor is 7
         elevator = new RRElevator(7,5,6);
 
+         deployer = new RRDeployer(9);
 
-
-        // arm release servo is on port 9
-        m_armReleaseServo = new Servo(4,9);
+        autonomous = new RRAutonomous(mecanumDrive, elevator );
 
         partialLoadSensor = new DigitalInput(2);
 
@@ -196,7 +197,7 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
-        autonomous = new RRAutonomous(mecanumDrive);
+        
         
     }
 
@@ -213,14 +214,21 @@ public class RoboRebels extends IterativeRobot {
         //Construct Joystick object and pass to mecanumDrive
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         mecanumDrive.assignJoystick(m_xboxStick);
-        
+
+
+        elevator.assignLiftJoystick(m_rightStick);
+        elevator.assignArmJoystick(m_rightStick);
+        elevator.assignXboxJoystick(m_xboxStick);
 
         m_leftStick = new Joystick(2);
         m_rightStick = new Joystick(3);
 
         elevator.assignLiftJoystick(m_leftStick);
         elevator.assignArmJoystick(m_rightStick);
+
         
+         deployer.assignJoystick(m_xboxStick);
+         deployer.assignRightJoystick(m_rightStick);
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -241,16 +249,7 @@ public class RoboRebels extends IterativeRobot {
     {
        // releases the pin that holds the arm in its initial position
        // this if statement is run on the first pass
-       if (!releasedPin)
-       {
-           m_armReleaseServo.set(1.0);
-           releasedPin = true;
-       }
-       else if(m_armReleaseServo.getAngle() == 1.0)
-       {
-           m_armReleaseServo.set(0.0);
-       }
-       
+      
 //        autonomous.printGyro();
        //autonomous.drive();
         processCamera();
@@ -290,6 +289,8 @@ public class RoboRebels extends IterativeRobot {
 
        mecanumDrive.drive();
        elevator.lift();
+
+       deployer.deploy();
 
        
         //checkButtons();

@@ -82,7 +82,7 @@ public class RRMecanumDrive {
     private     Encoder     fl_Encoder;
     private     Encoder     fr_Encoder;
     private     Encoder     bl_Encoder;
-    private     Encoder     br_Encoder;
+   // private     Encoder     br_Encoder;
 
 
 
@@ -100,12 +100,12 @@ public class RRMecanumDrive {
           fl_Encoder = new Encoder(4,7,4,8,false);
           fr_Encoder = new Encoder(4,9,4,10,false);
           bl_Encoder = new Encoder(4,11,4,12,false);
-          br_Encoder = new Encoder(4,13,4,14,false);
+          //br_Encoder = new Encoder(4,13,4,14,false);
 
           fl_Encoder.start();
           fr_Encoder.start();
           bl_Encoder.start();
-          br_Encoder.start();
+         // br_Encoder.start();
 
     }
 
@@ -274,20 +274,53 @@ public class RRMecanumDrive {
            * 
            */
 
+           double l_xVal  = m_xboxStick.getRawAxis(1);
+           double l_yVal  = m_xboxStick.getRawAxis(2);
+
+           double r_xVal  = m_xboxStick.getRawAxis(4);
+           double r_yVal  = m_xboxStick.getRawAxis(5);
+
+           if (Math.abs(l_xVal) < .13){
+               l_xVal = 0;
+           }
+
+           if (Math.abs(l_yVal)< .13){
+               l_yVal = 0;
+           }
+
+           if (Math.abs(r_xVal) < .13){
+               r_xVal = 0;
+           }
+
+           if (Math.abs(r_yVal)< .13){
+               r_yVal = 0;
+           }
+
           l_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2)));
           l_magnitude = Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2)));
           r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
           r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4)*m_xboxStick.getRawAxis(4))+(m_xboxStick.getRawAxis(5)*m_xboxStick.getRawAxis(5)));
 
+
+
+
+          if (l_magnitude < .28){
+              l_magnitude = 0;
+          }
+
+          if (r_magnitude <.28){
+              r_magnitude = 0;
+          }
+
           rotation = -m_xboxStick.getRawAxis(3);
 
 
-          forward = m_xboxStick.getRawAxis(2);
-          right = -m_xboxStick.getRawAxis(1);
+          forward = l_yVal;
+          right = -l_xVal;
           clockwise = m_xboxStick.getRawAxis(3);
 
-          right_forward = m_xboxStick.getRawAxis(5);
-          right_right = -m_xboxStick.getRawAxis(4);
+          right_forward = r_yVal;
+          right_right = -r_xVal;
 
           //make sure angles are in the expected range
           l_angle %= 360;

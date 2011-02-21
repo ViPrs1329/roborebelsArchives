@@ -34,12 +34,16 @@ public class RRElevator {
 
     private     boolean     shift= false;
 
+    double      INITIAL_ENCODER = 0;
 
     public RRElevator(int motorChannel,int motorChannel2, int motorChannel3) {
         liftMotor = new Victor(motorChannel);
         flipUpMotor = new Victor(motorChannel2);
         pincherMotor = new Victor(motorChannel3);
-        //liftEncoder = new Encoder();
+        liftEncoder = new Encoder(4,13,4,14,false);
+        liftEncoder.start();
+        INITIAL_ENCODER = liftEncoder.getDistance();
+
     }
     
     public void assignXboxJoystick(Joystick s) {
@@ -53,6 +57,82 @@ public class RRElevator {
     }
 
     public void lift() {
+        if (snap_to){
+
+        }
+        else {
+            //liftMotor.set(liftStick.getRawAxis(2));//Note: currently no protection against strain at top and bottom
+        }
+/*
+        if ( xboxStick.getRawButton(3) )
+        {
+            shift = !shift;
+        }
+        else if ( xboxStick.getRawButton(4) )
+        {
+            if(shift){
+                liftMotor.set(0.1);
+            }
+            else{
+                liftMotor.set(-0.1);
+            }
+        }
+        else if(xboxStick.getRawButton(2))
+        {
+            if(shift){
+                flipUpMotor.set(0.1);
+            }
+            else{
+                flipUpMotor.set(0.1);
+            }
+        }
+        else if (xboxStick.getRawButton(2))
+        {
+            if(shift){
+                pincherMotor.set(0.1);
+            }
+            else{
+                pincherMotor.set(-0.1);
+            }
+        }
+*/
+
+         //don't move the arm if joystick is being used for deployment
+if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
+
+        if (armStick.getRawButton(1)){
+            pincherMotor.set(.45);
+        }
+        else if (armStick.getRawButton(3)){
+            pincherMotor.set(-.45);
+        }
+        else {
+            pincherMotor.set(0);
+        }
+
+
+        flipUpMotor.set(armStick.getRawAxis(2));
+
+        }
+
+        double encoderDist = -(liftEncoder.getDistance()-INITIAL_ENCODER);
+
+        if (liftStick.getRawButton(2)){
+            liftTo(500);
+        }
+        else {
+            double liftSpeed = -liftStick.getRawAxis(2);
+
+            if (encoderDist >= 0 && encoderDist < 200 && liftStick.getRawAxis(2) > 0){
+                liftSpeed *= encoderDist/200;
+            }
+             liftMotor.set(liftSpeed);
+        }
+
+        System.out.println("Lift Encoder: "+encoderDist);
+    }
+        //for autonomous
+        public void lift(double lift, double winch, double grip) {
         if (snap_to){
 
         }
@@ -93,20 +173,36 @@ public class RRElevator {
         }
 
 
-        if (armStick.getRawButton(0)){
-            pincherMotor.set(.01);
-        }
-        else if (armStick.getRawButton(3)){
-            pincherMotor.set(-.01);
-        }
-        else {
-            pincherMotor.set(0);
-        }
+        
+            pincherMotor.set(.25*grip);
+       
 
 
-        pincherMotor.set(armStick.getRawAxis(2));
+        flipUpMotor.set(winch);
 
-
+        liftMotor.set(lift);
 
     }
+
+        public void stop(){
+            pincherMotor.set(0);
+            flipUpMotor.set(0);
+            liftMotor.set(0);
+        }
+
+        public void liftTo(double dest_height){
+        double speed = 0;
+        double height = -liftEncoder.getDistance();
+
+
+        speed = (dest_height-height)/1000;
+
+        lift(speed, 0, 0);
+    }
+
+        public double getHeight(){
+            return -liftEncoder.getDistance();
+        }
+
+
 }
