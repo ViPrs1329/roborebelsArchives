@@ -97,9 +97,9 @@ public class RRMecanumDrive {
           backLeftMotor = new Jaguar(backLeftMotorChannel);
           backRightMotor = new Jaguar(backRightMotorChannel);
 
-          fl_Encoder = new Encoder(4,7,4,8,false);
-          fr_Encoder = new Encoder(4,9,4,10,false);
-          bl_Encoder = new Encoder(4,11,4,12,false);
+          //fl_Encoder = new Encoder(4,7,4,8,false);
+          //fr_Encoder = new Encoder(4,9,4,10,false);
+          //bl_Encoder = new Encoder(4,11,4,12,false);
           //br_Encoder = new Encoder(4,13,4,14,false);
 
           fl_Encoder.start();
