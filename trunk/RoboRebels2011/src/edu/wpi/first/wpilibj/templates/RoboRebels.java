@@ -55,7 +55,6 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.Servo;
 
 
 /**
@@ -84,18 +83,16 @@ public class RoboRebels extends IterativeRobot {
     DriverStationLCD    m_dsLCD;                // driver station LCD object
     AxisCamera          cam;                    // camera object
 
-    DigitalInput        partialLoadSensor;
 
 
     double              autonomousStartTime;    // holds the start time for autonomous mode
 
-    DigitalInput        lineSensor;
+    DigitalInput        m_switch1;
 
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
     Joystick            m_xboxStick;
 
-    Servo               m_armReleaseServo;
 
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
@@ -173,9 +170,7 @@ public class RoboRebels extends IterativeRobot {
 
         autonomous = new RRAutonomous(mecanumDrive, elevator );
 
-        partialLoadSensor = new DigitalInput(2);
-
-        lineSensor = new DigitalInput(1);
+        m_switch1 = new DigitalInput(2);
     }
 
     public void disabledInit()
@@ -250,10 +245,10 @@ public class RoboRebels extends IterativeRobot {
        // releases the pin that holds the arm in its initial position
        // this if statement is run on the first pass
       
-//        autonomous.printGyro();
+       //autonomous.printGyro();
        //autonomous.drive();
         processCamera();
-
+        System.out.println("--- m_switch1 :: " + m_switch1.get());
     }
 
     /**
@@ -266,18 +261,6 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopPeriodic()
     {
-        boolean floor = lineSensor.get();
-
-        /*
-        if (floor)
-            System.out.println("off the tape");
-        else
-            System.err.println("on the tape");
-         
-         */
-
-        //System.out.println( "telopPeriodic()" );
-        //Watchdog.getInstance().feed();
 
         if ( teleopStateBroadcasted == true )
         {
