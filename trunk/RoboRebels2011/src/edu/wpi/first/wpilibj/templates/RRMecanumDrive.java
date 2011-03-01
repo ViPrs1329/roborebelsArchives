@@ -102,9 +102,9 @@ public class RRMecanumDrive {
           //bl_Encoder = new Encoder(4,11,4,12,false);
           //br_Encoder = new Encoder(4,13,4,14,false);
 
-          fl_Encoder.start();
-          fr_Encoder.start();
-          bl_Encoder.start();
+          //fl_Encoder.start();
+          //fr_Encoder.start();
+          //bl_Encoder.start();
          // br_Encoder.start();
 
     }

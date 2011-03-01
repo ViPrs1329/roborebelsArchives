@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class RRAutonomous {
+    RRDipSwitch         dipSwitch;
     Gyro gyro;
     RRElevator elevator;
     double angle;
@@ -32,6 +33,9 @@ public class RRAutonomous {
     boolean     yIsDetected = false;
     boolean     stopCondition = false;
     boolean     strafeToTheEnd = false;
+    boolean     goingDownCenter = false;
+    boolean     highPeg = false;
+    boolean     goFast = false;
 
 
     RRMecanumDrive mecanumDrive;
@@ -46,6 +50,7 @@ public class RRAutonomous {
 
 
     public RRAutonomous(RRMecanumDrive m_drive, RRElevator elevator){
+        dipSwitch = new RRDipSwitch(7, 10);
         gyro = new Gyro(1);
         gyro.setSensitivity(.007);
         mecanumDrive = m_drive;
@@ -59,6 +64,23 @@ public class RRAutonomous {
         isDriving = false;
 
         timer.start();
+    }
+
+    /*
+     * Get state of switch array.
+     *
+     * Bit #    T           F
+     *
+     * 1      Center    Outside
+     * 2      Peg (M)   Peg (H)
+     * 3     Speed (M)  Speed (F)
+     * 4     Unused     Unused
+     *
+     */
+
+    void getSwitchState()
+    {
+        
     }
 
     /*
@@ -254,6 +276,10 @@ public class RRAutonomous {
         {
             mecanumDrive.drive(0, 0, 0);
         }
+
+
+       System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
+
     }
 
 /*    public void printGyro(){

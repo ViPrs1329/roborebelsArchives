@@ -75,6 +75,8 @@ public class RoboRebels extends IterativeRobot {
 
     RRDeployer          deployer;
 
+    
+
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
@@ -86,8 +88,6 @@ public class RoboRebels extends IterativeRobot {
 
 
     double              autonomousStartTime;    // holds the start time for autonomous mode
-
-    DigitalInput        m_switch1;
 
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
@@ -170,7 +170,7 @@ public class RoboRebels extends IterativeRobot {
 
         autonomous = new RRAutonomous(mecanumDrive, elevator );
 
-        m_switch1 = new DigitalInput(2);
+        
     }
 
     public void disabledInit()
@@ -248,7 +248,6 @@ public class RoboRebels extends IterativeRobot {
        //autonomous.printGyro();
        //autonomous.drive();
         processCamera();
-        System.out.println("--- m_switch1 :: " + m_switch1.get());
     }
 
     /**
