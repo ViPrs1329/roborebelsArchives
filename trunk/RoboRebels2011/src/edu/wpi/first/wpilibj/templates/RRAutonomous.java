@@ -37,6 +37,8 @@ public class RRAutonomous {
     boolean     highPeg = false;
     boolean     goFast = false;
 
+    boolean lift;
+
 
     RRMecanumDrive mecanumDrive;
     RRLineTracker lineTracker;
@@ -46,6 +48,7 @@ public class RRAutonomous {
     boolean all3;
     boolean YLINE;
     int seconds;
+    boolean inPosition;
 
 
 
@@ -62,6 +65,8 @@ public class RRAutonomous {
         all3 = false;
         //seconds = 1000;
         isDriving = false;
+
+
 
         timer.start();
     }
@@ -92,8 +97,23 @@ public class RRAutonomous {
      *
      */
 
+    boolean doneOpening = false;
+    boolean open = false;
+    boolean winchBegun = false;
+    Timer winchTimer = new Timer();
+
+    boolean backUpBegin = false;
+    
+    Timer backUpTimer = new Timer();
+
+    Timer clawTimer = new Timer();
     public void lineAuton(boolean right, boolean mid, boolean left) {
         //Sees if the sensors are over the tape and moves if they are, stops if they aren't
+
+        if (inPosition){
+               
+            }
+ else {
         if ((left) && (mid) && (right)) {       // off the line
              
             if (lost_line_timer == 100){
@@ -121,7 +141,7 @@ public class RRAutonomous {
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov = speed * 0.5;
+                xmov =- speed * 0.5;
                 rot = 0;
                 lost_line_timer = 100;              // strafe to the forward/right
             }
@@ -146,7 +166,7 @@ public class RRAutonomous {
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov = speed * 0.25;
+                xmov = -speed * 0.25;
                 rot = 0;
                 lost_line_timer = 100;
             }
@@ -201,27 +221,21 @@ public class RRAutonomous {
         }
         else if((!left) && (!mid) && (!right)) {   // end of line (all three tripped)
             System.out.println("End of line detected, could be split though");
-            if (!all3){
-                all3 = true;
-            }
-            else{
-                /*
-                if (stopCondition){
+           // if (!all3){
+           //     all3 = true;
+           // }
+           // else{
+                
+                inPosition = true;
                     System.out.println("Stopping!");
                     ymov = 0;
                     xmov = 0;                            // stop
                     rot = 0;
-                }
-                 *
-                 */
-                if (yIsDetected)
-                {
-                    System.out.println("Stopping!");
-                    ymov = 0;
-                    xmov = 0;                            // stop
-                    rot = 0;
-                }
-            }
+                
+                 
+                 
+              
+            //}
         }
 
         if (yIsDetected){
@@ -252,6 +266,11 @@ public class RRAutonomous {
             }
              *
              */
+
+
+
+            
+        }
         }
     }
 
@@ -263,13 +282,62 @@ public class RRAutonomous {
         //sets the value of ymov and xmov
         lineAuton(testR,testM,testL);
 
+        
+             
+        
+
         if(timer.get() < 20) {
             //keeps the program going for 20 seconds
 
             //System.out.println("Timer = " + timer.get() );
 
+            elevator.liftTo(1000);
             // negative is forward!
             mecanumDrive.drive(xmov, ymov, rot);
+
+            if (inPosition){
+                 double clawSpeed = 0;
+                double winchSpeed = 0;
+                double driveSpeed = 0;
+                System.out.println("in Position");
+              // lift = true;
+
+                //if within 10 units from 875, begin releasing
+                if (Math.abs(elevator.getHeight()) > 900){
+
+                        if (winchBegun == false){
+                            winchTimer.start();
+                            winchBegun = true;
+                        }
+                        if ( winchTimer.get() < 2){
+                            winchSpeed = 1;
+                        }
+
+                        if (open == false && winchTimer.get() > 2){
+                            clawTimer.start();
+                            open = true;
+                        }
+                       if (clawTimer.get() < 1){
+                            clawSpeed = -.45;
+                        }
+                        else {
+
+                            if (backUpBegin == false){
+                                backUpTimer.start();
+                                backUpBegin = true;
+                            }
+
+                            if (backUpTimer.get() < 1){
+                                driveSpeed = .3;
+                            }
+
+                            mecanumDrive.drive(0, driveSpeed, 0);
+                        }
+
+                }
+
+                elevator.lift(0, winchSpeed, clawSpeed);
+            }
         
         }
         else

@@ -75,7 +75,7 @@ public class RoboRebels extends IterativeRobot {
 
     RRDeployer          deployer;
 
-    
+
 
 
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
@@ -161,16 +161,35 @@ public class RoboRebels extends IterativeRobot {
          */
 
         //                              FL, FR, BL, BR
+
+        m_leftStick = new Joystick(2);
+        m_rightStick = new Joystick(3);
+        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
+        mecanumDrive.assignJoystick(m_xboxStick);
+
+
 
         // arm motor is 7
         elevator = new RRElevator(7,5,6);
 
-         deployer = new RRDeployer(9);
 
-        autonomous = new RRAutonomous(mecanumDrive, elevator );
+        elevator.assignLiftJoystick(m_leftStick);
+        elevator.assignArmJoystick(m_rightStick);
+        elevator.assignXboxJoystick(m_xboxStick);
 
+
+        deployer = new RRDeployer(9);
+
+        deployer.assignJoystick(m_xboxStick);
+        deployer.assignRightJoystick(m_rightStick);
         
+        autonomous = new RRAutonomous(mecanumDrive, elevator);
+
+
+       // lineSensor = new DigitalInput(1);
+
     }
 
     public void disabledInit()
@@ -207,23 +226,7 @@ public class RoboRebels extends IterativeRobot {
 //        m_leftStick = new Joystick(1);
 
         //Construct Joystick object and pass to mecanumDrive
-        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
-        mecanumDrive.assignJoystick(m_xboxStick);
-
-
-        elevator.assignLiftJoystick(m_rightStick);
-        elevator.assignArmJoystick(m_rightStick);
-        elevator.assignXboxJoystick(m_xboxStick);
-
-        m_leftStick = new Joystick(2);
-        m_rightStick = new Joystick(3);
-
-        elevator.assignLiftJoystick(m_leftStick);
-        elevator.assignArmJoystick(m_rightStick);
-
-        
-         deployer.assignJoystick(m_xboxStick);
-         deployer.assignRightJoystick(m_rightStick);
+       
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -304,6 +307,7 @@ public class RoboRebels extends IterativeRobot {
     public void autonomousContinuous()
     {
         autonomous.drive();
+       
     }
 
     /**
