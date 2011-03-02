@@ -43,6 +43,9 @@ public class RRDeployer {
         if (xboxStick.getRawButton(7)&&xboxStick.getRawButton(1)){
             deployMotor.set(-rightStick.getRawAxis(2)*.8);
         }
+        else {
+            deployMotor.set(0);
+        }
 
       
 
