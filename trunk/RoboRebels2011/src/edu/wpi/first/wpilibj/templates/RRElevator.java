@@ -40,7 +40,7 @@ public class RRElevator {
         liftMotor = new Victor(motorChannel);
         flipUpMotor = new Victor(motorChannel2);
         pincherMotor = new Victor(motorChannel3);
-        liftEncoder = new Encoder(4,13,4,14,false);
+        liftEncoder = new Encoder(13,14);
         liftEncoder.start();
         INITIAL_ENCODER = liftEncoder.getDistance();
 
@@ -57,6 +57,8 @@ public class RRElevator {
     }
 
     public void lift() {
+        System.out.println("Raw encoder value: "+liftEncoder.getDistance());
+
         if (snap_to){
 
         }
@@ -110,31 +112,36 @@ public class RRElevator {
                 pincherMotor.set(0);
             }
 
+           
 
             flipUpMotor.set(armStick.getRawAxis(2));
 
         }
 
-        double encoderDist = -(liftEncoder.getDistance()-INITIAL_ENCODER);
+        double encoderDist = -(liftEncoder.getDistance());//-INITIAL_ENCODER
 
         if (liftStick.getRawButton(2)){
-            liftTo(500);
+            liftTo(875);
         }
         else {
             double liftSpeed = -liftStick.getRawAxis(2);
 
-            /*
-            if (encoderDist >= 0 && encoderDist < 200 && liftStick.getRawAxis(2) > 0){
-                liftSpeed *= encoderDist/200;
+            
+            if (encoderDist < 300 && liftStick.getRawAxis(2) > 0){
+
+               if (liftSpeed > .4){
+                   System.out.println("Breaking");
+                    liftSpeed = .4;
+                }
             }
-            */
-             
-            System.out.println("Lift Speed: " + liftSpeed);
+            
+            
+            //System.out.println("Lift Speed: " + liftSpeed);
             
              liftMotor.set(liftSpeed);
         }
 
-        System.out.println("Lift Encoder: "+encoderDist);
+        //System.out.println("Lift Encoder: "+encoderDist);
     }
         //for autonomous
         public void lift(double lift, double winch, double grip) {
@@ -178,8 +185,9 @@ public class RRElevator {
         }
 
 
+
         
-        pincherMotor.set(.25*grip);
+        pincherMotor.set(grip);
        
 
 
@@ -194,14 +202,14 @@ public class RRElevator {
         flipUpMotor.set(0);
         liftMotor.set(0);
     }
-
+    //2nd peg - 871.5
     public void liftTo(double dest_height){
         double speed = 0;
         double height = -liftEncoder.getDistance();
-
-
-        speed = (dest_height-height)/1000;
-
+        System.out.println("encoder height: "+height);
+        if (Math.abs(dest_height-height) > 50){
+            speed = .8*(Math.abs(dest_height-height)/(dest_height-height));
+        }
         lift(speed, 0, 0);
 
     }
@@ -209,6 +217,8 @@ public class RRElevator {
     public double getHeight(){
         return -liftEncoder.getDistance();
     }
+
+
 
 
 }
