@@ -24,7 +24,7 @@ public class RRAutonomous {
     double xmov = 0;
     double ymov = 0;
     double rot = 0;
-    double speed = -.3;
+    double speed = -.2;//-.45 is good, at least for straight
     double large_correction = .1;
     double small_correction = .05;
     double lost_line_timer = 100;
@@ -39,6 +39,13 @@ public class RRAutonomous {
 
     boolean lift;
 
+    public  final   int     LEFT_STRAIGHT = 1;
+    public  final   int     LEFT_FORK = 2;
+    public  final   int     RIGHT_FORK = 3;
+    public  final   int     RIGHT_STRAIGHT = 4;
+
+    public          int     dipMode;
+
 
     RRMecanumDrive mecanumDrive;
     RRLineTracker lineTracker;
@@ -52,13 +59,13 @@ public class RRAutonomous {
 
 
 
-    public RRAutonomous(RRMecanumDrive m_drive, RRElevator elevator){
-        dipSwitch = new RRDipSwitch(7, 10);
-        gyro = new Gyro(1);
+    public RRAutonomous(RRMecanumDrive m_drive, RRElevator elevator, RRDipSwitch dSwitch, RRLineTracker lineT, Gyro n_gyro){
+        dipSwitch = dSwitch;
+        gyro = n_gyro;
         gyro.setSensitivity(.007);
         mecanumDrive = m_drive;
         this.elevator = elevator;
-        lineTracker = new RRLineTracker(4,5,6);
+        lineTracker = lineT;
         timer = new Timer();
         YLINE = true;
         yCounter = new Timer();
@@ -67,6 +74,8 @@ public class RRAutonomous {
         isDriving = false;
 
 
+        //Set the dipswitch enumeration value once at the beginning
+       // if (dipSwitch.)
 
         timer.start();
     }
@@ -82,6 +91,10 @@ public class RRAutonomous {
      * 4     Unused     Unused
      *
      */
+
+    public void reset(){
+
+    }
 
     void getSwitchState()
     {
@@ -225,9 +238,14 @@ public class RRAutonomous {
            //     all3 = true;
            // }
            // else{
-                
+
+            //TODO here change what the robot does based on dipSwitch
+            //if a straight line, just do inPosition stuff
+            //if expecting a Y, strafe
+
                 inPosition = true;
                     System.out.println("Stopping!");
+                    mecanumDrive.stop();//TODO UNTESTED, ideally will stop the robot faster when it hits the end
                     ymov = 0;
                     xmov = 0;                            // stop
                     rot = 0;

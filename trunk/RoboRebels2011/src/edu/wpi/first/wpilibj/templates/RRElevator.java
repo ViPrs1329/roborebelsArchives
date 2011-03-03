@@ -57,7 +57,7 @@ public class RRElevator {
     }
 
     public void lift() {
-        System.out.println("Raw encoder value: "+liftEncoder.getDistance());
+        //System.out.println("Raw encoder value: "+liftEncoder.getDistance());
 
         if (snap_to){
 

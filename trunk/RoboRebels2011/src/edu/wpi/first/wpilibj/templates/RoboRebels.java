@@ -55,6 +55,7 @@ import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.Gyro;
 
 
 /**
@@ -75,6 +76,11 @@ public class RoboRebels extends IterativeRobot {
 
     RRDeployer          deployer;
 
+    RRDipSwitch         dipSwitch;
+
+    RRLineTracker       lineTracker;
+
+    Gyro                gyro;
 
 
 
@@ -185,11 +191,17 @@ public class RoboRebels extends IterativeRobot {
         deployer.assignJoystick(m_xboxStick);
         deployer.assignRightJoystick(m_rightStick);
         
-        autonomous = new RRAutonomous(mecanumDrive, elevator);
 
-
+        dipSwitch = new RRDipSwitch(7, 10);
        // lineSensor = new DigitalInput(1);
 
+        lineTracker = new RRLineTracker(4,5,6);
+
+        gyro = new Gyro(1);
+
+
+
+        System.out.println( "robotInit Complete" );
     }
 
     public void disabledInit()
@@ -211,7 +223,7 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
-        
+        autonomous = new RRAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
         
     }
 
@@ -270,12 +282,16 @@ public class RoboRebels extends IterativeRobot {
             teleopStateBroadcasted = false;
         }
 
-
+       System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
 
        mecanumDrive.drive();
        elevator.lift();
 
        deployer.deploy();
+
+
+
+      
 
        
         //checkButtons();

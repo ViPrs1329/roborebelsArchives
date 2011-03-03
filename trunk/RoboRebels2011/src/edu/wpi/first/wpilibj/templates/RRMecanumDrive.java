@@ -79,9 +79,9 @@ public class RRMecanumDrive {
 
     private     int         controlMode = DRIVE_CARTESIAN_TEST;
 
-    private     Encoder     fl_Encoder;
-    private     Encoder     fr_Encoder;
-    private     Encoder     bl_Encoder;
+   // private     Encoder     fl_Encoder;
+    //private     Encoder     fr_Encoder;
+    //private     Encoder     bl_Encoder;
    // private     Encoder     br_Encoder;
 
 

@@ -26,12 +26,15 @@ public class RRDipSwitch {
         {
             m_dipSwitches[i] = new DigitalInput(chan);
         }
+        
     }
 
     public boolean getState( int switchChannel )
     {
-        if ( switchChannel < m_numberOfDipSwitches && switchChannel >= 0 )
+        if ( switchChannel < m_numberOfDipSwitches && switchChannel >= 0 ){
             return m_dipSwitches[switchChannel].get();
+         
+        }
         else
         {
             System.out.println("RRDipSwitch::getState() - Passed switchChannel out of range!");
