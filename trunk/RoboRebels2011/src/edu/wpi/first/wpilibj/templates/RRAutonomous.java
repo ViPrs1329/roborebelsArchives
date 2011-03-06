@@ -24,7 +24,10 @@ public class RRAutonomous {
     double xmov = 0;
     double ymov = 0;
     double rot = 0;
-    double speed = -.2;//-.45 is good, at least for straight
+    double speed = -.2;//-.45 is good, at least for straight\\
+    double strafeSpeed = 0;
+    double smallStrafeCorrection = 0;
+    double largeStrafeCorrection = 0;
     double large_correction = .1;
     double small_correction = .05;
     double lost_line_timer = 100;
@@ -47,12 +50,13 @@ public class RRAutonomous {
     public          int     dipMode;
 
 
+
     RRMecanumDrive mecanumDrive;
     RRLineTracker lineTracker;
 
     Timer timer;
     Timer yCounter;
-    boolean all3;
+    boolean expectY;
     boolean YLINE;
     int seconds;
     boolean inPosition;
@@ -61,6 +65,52 @@ public class RRAutonomous {
 
     public RRAutonomous(RRMecanumDrive m_drive, RRElevator elevator, RRDipSwitch dSwitch, RRLineTracker lineT, Gyro n_gyro){
         dipSwitch = dSwitch;
+
+        if (dipSwitch.getState(0)){
+          dipMode = LEFT_FORK;
+        }
+        else if(dipSwitch.getState(1))
+        {
+          dipMode = LEFT_STRAIGHT;
+        }
+        else if(dipSwitch.getState(2))
+        {
+          dipMode = RIGHT_STRAIGHT;
+        }
+        else if(dipSwitch.getState(3))
+        {
+          dipMode = RIGHT_FORK;
+        }
+
+
+
+
+
+        String output = new String();
+        switch (dipMode){
+            case LEFT_STRAIGHT:
+                output = ("LEFT_STRAIGHT");
+                break;
+            case LEFT_FORK:
+                output = ("LEFT_FORK");
+                strafeSpeed = .2;
+                smallStrafeCorrection = +.1;
+                largeStrafeCorrection = +.2;
+                break;
+            case RIGHT_FORK:
+                output = ("RIGHT_FORK");
+                strafeSpeed = -.2;
+                smallStrafeCorrection = -.1;
+                largeStrafeCorrection = -.2;
+                break;
+            case RIGHT_STRAIGHT:
+                output = ("RIGHT_STRAIGHT");
+                break;
+        }
+       System.out.println("Dip Mode: "+output + ", Number: " + dipMode);
+
+
+
         gyro = n_gyro;
         gyro.setSensitivity(.007);
         mecanumDrive = m_drive;
@@ -69,7 +119,7 @@ public class RRAutonomous {
         timer = new Timer();
         YLINE = true;
         yCounter = new Timer();
-        all3 = false;
+        expectY = false;
         //seconds = 1000;
         isDriving = false;
 
@@ -154,7 +204,7 @@ public class RRAutonomous {
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov =- speed * 0.5;
+                xmov =strafeSpeed+largeStrafeCorrection;
                 rot = 0;
                 lost_line_timer = 100;              // strafe to the forward/right
             }
@@ -168,10 +218,17 @@ public class RRAutonomous {
         }
         else if((left) && (!mid) && (right)) {  // middle sensor on the line
             System.out.println("Moving forward");
+            if (strafeToTheEnd){
+                ymov = speed*.25;
+                xmov = strafeSpeed;
+                rot = 0;
+            }
+            else {
            ymov = speed;
            xmov = 0;                            // move forward
            rot = 0;
            lost_line_timer = 100;
+            }
         }
         else if((left) && (!mid) && (!right)) { // middle and right sensors on the line
             System.out.println("Moving slightly to the right");
@@ -179,7 +236,7 @@ public class RRAutonomous {
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov = -speed * 0.25;
+                xmov = strafeSpeed+smallStrafeCorrection;
                 rot = 0;
                 lost_line_timer = 100;
             }
@@ -196,7 +253,7 @@ public class RRAutonomous {
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov = speed * 0.5;
+                xmov = strafeSpeed-largeStrafeCorrection;
                 rot = 0;
                 lost_line_timer = 100;
             }
@@ -209,18 +266,21 @@ public class RRAutonomous {
             }
         }
         else if ((!left) && (mid) && (!right)) {// right and left sensors on the line (split)
-          System.out.println("Found a split before a Y, ?!?!?");
-          if (all3){
+          System.out.println("Found a split");
+          if (expectY){
                System.out.println("Found a split");
               yIsDetected = true;
           }
+ else {
+              System.out.println("Found a split before a Y, ?!?!?");
+ }
         }
         else if ((!left) && (!mid) && (right)) {// left and right sensors on the line
             System.out.println("Moving slightly to the left");
             if ( strafeToTheEnd )
             {
                 ymov = speed * 0.5;
-                xmov = speed * 0.25;
+                xmov = strafeSpeed-smallStrafeCorrection;
                 rot = 0;
                 lost_line_timer = 100;
             }
@@ -243,6 +303,8 @@ public class RRAutonomous {
             //if a straight line, just do inPosition stuff
             //if expecting a Y, strafe
 
+            if (dipMode == RIGHT_STRAIGHT || dipMode == LEFT_STRAIGHT){
+
                 inPosition = true;
                     System.out.println("Stopping!");
                     mecanumDrive.stop();//TODO UNTESTED, ideally will stop the robot faster when it hits the end
@@ -250,7 +312,23 @@ public class RRAutonomous {
                     xmov = 0;                            // stop
                     rot = 0;
                 
-                 
+            }
+            else{
+
+
+                if (yIsDetected){
+                   inPosition = true;
+                    System.out.println("Stopping!");
+                    mecanumDrive.stop();//TODO UNTESTED, ideally will stop the robot faster when it hits the end
+                    ymov = 0;
+                    xmov = 0;                            // stop
+                    rot = 0;
+                }
+                else {
+                   expectY = true;
+                }
+
+            }
                  
               
             //}
@@ -269,10 +347,12 @@ public class RRAutonomous {
             System.out.println("Y detected, enabling strafe mode");
 
             strafeToTheEnd = true;
-            yIsDetected = false;
+            //yIsDetected = false;
 
-            ymov = speed * 0.5;
-            xmov = speed * 0.25;
+
+
+           // ymov = speed * 0.5;
+            
             rot = 0;
             
 
@@ -293,6 +373,8 @@ public class RRAutonomous {
     }
 
     public void drive(){
+
+        
         //gets the values of the line sensors
         boolean testL = lineTracker.getL();
         boolean testM = lineTracker.getM();
@@ -302,17 +384,17 @@ public class RRAutonomous {
 
         
              
-        
+       
 
         if(timer.get() < 20) {
             //keeps the program going for 20 seconds
 
             //System.out.println("Timer = " + timer.get() );
 
-            elevator.liftTo(1000);
+           // elevator.liftTo(1000);
             // negative is forward!
             mecanumDrive.drive(xmov, ymov, rot);
-
+/*
             if (inPosition){
                  double clawSpeed = 0;
                 double winchSpeed = 0;
@@ -356,7 +438,7 @@ public class RRAutonomous {
 
                 elevator.lift(0, winchSpeed, clawSpeed);
             }
-        
+        */
         }
         else
         {
@@ -364,7 +446,9 @@ public class RRAutonomous {
         }
 
 
-       System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
+
+       
+        
 
     }
 

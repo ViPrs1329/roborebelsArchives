@@ -80,6 +80,8 @@ public class RoboRebels extends IterativeRobot {
 
     RRLineTracker       lineTracker;
 
+
+
     Gyro                gyro;
 
 
@@ -119,7 +121,9 @@ public class RoboRebels extends IterativeRobot {
 
     boolean             releasedPin = false;
 
-    
+
+
+
 
     /**
      * Constructor
@@ -192,7 +196,7 @@ public class RoboRebels extends IterativeRobot {
         deployer.assignRightJoystick(m_rightStick);
         
 
-        dipSwitch = new RRDipSwitch(7, 10);
+        dipSwitch = new RRDipSwitch(8, 11);
        // lineSensor = new DigitalInput(1);
 
         lineTracker = new RRLineTracker(4,5,6);
@@ -222,6 +226,7 @@ public class RoboRebels extends IterativeRobot {
         // Get the time that the autonomous mode starts
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
+
 
         autonomous = new RRAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
         
