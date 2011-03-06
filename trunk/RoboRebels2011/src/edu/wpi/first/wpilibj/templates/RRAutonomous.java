@@ -93,15 +93,16 @@ public class RRAutonomous {
                 break;
             case LEFT_FORK:
                 output = ("LEFT_FORK");
-                strafeSpeed = .2;
-                smallStrafeCorrection = +.1;
-                largeStrafeCorrection = +.2;
+                strafeSpeed = .4;
+                smallStrafeCorrection = +.5;
+                largeStrafeCorrection = +.6;
                 break;
             case RIGHT_FORK:
                 output = ("RIGHT_FORK");
-                strafeSpeed = -.2;
-                smallStrafeCorrection = -.1;
-                largeStrafeCorrection = -.2;
+                System.out.println("CHOOSING RIGHT FORK");
+                strafeSpeed = -.4;
+                smallStrafeCorrection = -.5;
+                largeStrafeCorrection = -.6;
                 break;
             case RIGHT_STRAIGHT:
                 output = ("RIGHT_STRAIGHT");
