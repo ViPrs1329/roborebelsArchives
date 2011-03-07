@@ -316,8 +316,11 @@ public class RRAutonomous {
             }
             else{
 
+                if (!strafeToTheEnd){
+                    yIsDetected = true;
+                }
 
-                if (yIsDetected){
+                if (yIsDetected && strafeToTheEnd){
                    inPosition = true;
                     System.out.println("Stopping!");
                     mecanumDrive.stop();//TODO UNTESTED, ideally will stop the robot faster when it hits the end
@@ -348,7 +351,7 @@ public class RRAutonomous {
             System.out.println("Y detected, enabling strafe mode");
 
             strafeToTheEnd = true;
-            //yIsDetected = false;
+            yIsDetected = false;
 
 
 

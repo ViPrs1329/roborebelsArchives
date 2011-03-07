@@ -35,10 +35,28 @@ public class RRSimplifiedAutonomous {
         double rot = 0;
 
         //Variables for Line Tracking
+        boolean isFork;
+
         boolean driveStraight;
 
+        double speed = -.4;
+        double speed2 = -.4;
+        double strafe_speed2 = .4;
 
+        double small_correction = .05;
+        double large_correction = .1;
 
+        double smallStrafeCorrection = .2;
+        double largeStrafeCorrection = .4;
+
+        int direction = 1;//one or negative one, to specify the fork direction
+
+        Timer yPeriod;
+
+        //TODO
+        /*
+         * Link up direction to fork dir
+         */
 
 
 
@@ -57,21 +75,29 @@ public class RRSimplifiedAutonomous {
             switch (switchMode){
             case LEFT_STRAIGHT:
                 output = ("LEFT_STRAIGHT");
+                isFork = false;
                 break;
             case LEFT_FORK:
                 output = ("LEFT_FORK");
+                isFork = true;
+                direction = -1;//TODO change one to -1, selects direction
+                strafe_speed2 = -.5;
                 //strafeSpeed = .2;
                // smallStrafeCorrection = +.1;
                // largeStrafeCorrection = +.2;
                 break;
             case RIGHT_FORK:
                 output = ("RIGHT_FORK");
+                isFork = true;
+                direction = 1;//TODO change one to -1, selects direction
+                strafe_speed2 = .4;
                // strafeSpeed = -.2;
                // smallStrafeCorrection = -.1;
                // largeStrafeCorrection = -.2;
                 break;
             case RIGHT_STRAIGHT:
                 output = ("RIGHT_STRAIGHT");
+                isFork = false;
                 break;
             }
             System.out.println("Dip Mode: "+output);
@@ -80,10 +106,14 @@ public class RRSimplifiedAutonomous {
             //Set up line following
             timer = new Timer();
 
+            yPeriod = new Timer();
+            yPeriod.start();
 
+            driveStraight = true;
 
-
-
+           // strafe_speed2 *= direction;
+            //smallStrafeCorrection *= direction;
+            //largeStrafeCorrection *= direction;
 
 
             timer.start();
@@ -94,28 +124,134 @@ public class RRSimplifiedAutonomous {
             //NOTE: A true value means the sensor sees the line
             
             if ((!left) && (!mid) && (!right)){//None Detect Line
-                
+                if (driveStraight){
+                    ymov = 0;
+                    xmov = 0;
+                    rot = 0;
+                }
+                else {
+                    if (yPeriod.get()>.9){
+                        System.out.println("Stopping");
+                        ymov = 0;
+                        xmov = 0;
+                        rot = 0;
+                    }
+                    else {
+                        System.out.println("ATTEMPTING TO STRAFE WITH STRAFE VALUE: " +strafe_speed2);
+                        ymov = 0;
+                        xmov = strafe_speed2;
+                        rot = 0;
+                    }
+                }
             }
             else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+                System.out.println("ALL 3 Detected");
+                if (driveStraight){
+                    System.out.println("isFork: "+isFork);
+                    if (isFork){
+                        System.out.println("Timer Counting, Switched to Strafe");
+                        driveStraight = false;
+                        yPeriod.reset();
+                    }
+                    else{
+                    ymov = 0;
+                    xmov = 0;
+                    rot = 0;
+                    }
+
+
+
+                    //Begin winch and claw stuff
+                }
+                else {
+                    //Begin Strafing to specified side (treat as middle detection
+                    //ymov = speed2;
+                   if (yPeriod.get()<.8){
+                    ymov = 0;
+                    xmov = strafe_speed2;
+                    rot = 0;
+                    }
+                    else {
+                       ymov = 0;
+                       xmov = 0;
+                       rot = 0;
+                     }
+                }
             }
             else if ((left) && (!mid) && (right)){//Outside Detect Line (Y)
-                
+                if (driveStraight){
+                    System.out.println("Detected Split In Straight Mode, Error.");
+                     if (isFork){
+                        System.out.println("Timer Counting, Switched to Strafe");
+                        driveStraight = false;
+                        yPeriod.reset();
+                    }
+                }
+                else {
+                    ymov = 0;
+                    xmov = strafe_speed2;
+                    rot = 0;
+                }
             }
-            else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+            else if ((!left) && (mid) && (!right)){//Only Middle Detects Line (ideal)
+                if (driveStraight){
+                    ymov = speed;
+                    xmov = 0;
+                    rot = 0;
+                }
+                else {
+                    ymov = speed2;
+                    xmov = strafe_speed2;
+                    rot = 0;
+                }
             }
-            else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+            else if ((left) && (mid) && (!right)){//Off Slightly, needs to correct Right
+                if (driveStraight){
+                    ymov = speed;
+                    xmov = 0;
+                    rot = small_correction;
+                }
+                else {
+                    ymov = speed2;
+                    xmov = strafe_speed2-smallStrafeCorrection;//May need to invert sign
+                    rot = 0;
+                }
             }
-            else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+            else if ((left) && (!mid) && (!right)){//Off a lot, needs to correct a lot Right
+                if (driveStraight){
+                    ymov = speed;
+                    xmov = 0;
+                    rot = large_correction;
+                }
+                else {
+                    ymov = speed2;
+                    xmov = strafe_speed2-largeStrafeCorrection;//May need to invert sign
+                    rot = 0;
+                }
             }
-            else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+            else if ((!left) && (mid) && (right)){//Off Slightly, needs to correct Left
+                if (driveStraight){
+                     ymov = speed;
+                    xmov = 0;
+                    rot = - small_correction;
+                }
+                else {
+                    ymov = speed2;
+                    xmov = strafe_speed2+smallStrafeCorrection;//May need to invert sign
+                    rot = 0;
+                }
             }
-            else if ((left) && (mid) && (right)){//All Three Detect Line
-                
+            else if ((!left) && (!mid) && (right)){//Off a lot, needs to correct a lot Left
+                if (driveStraight){
+                     ymov = speed;
+                    xmov = 0;
+                    rot = -large_correction;
+                }
+                else {
+                    ymov = speed2;
+                    xmov = strafe_speed2+largeStrafeCorrection;//May need to invert sign
+                    rot = 0;
+                }
             }
         }
 

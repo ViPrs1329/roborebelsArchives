@@ -68,7 +68,7 @@ import edu.wpi.first.wpilibj.Gyro;
 public class RoboRebels extends IterativeRobot {
 
     // Declare custom object vars
-    RRAutonomous        autonomous;
+    RRSimplifiedAutonomous        autonomous;
 
     RRMecanumDrive      mecanumDrive;
 
@@ -205,7 +205,7 @@ public class RoboRebels extends IterativeRobot {
 
 
 
-        System.out.println( "robotInit Complete" );
+        System.out.println( "Robot Ready" );
     }
 
     public void disabledInit()
@@ -228,7 +228,7 @@ public class RoboRebels extends IterativeRobot {
         autonomousStartTime = Timer.getFPGATimestamp();
 
 
-        autonomous = new RRAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
+        autonomous = new RRSimplifiedAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
         
     }
 
