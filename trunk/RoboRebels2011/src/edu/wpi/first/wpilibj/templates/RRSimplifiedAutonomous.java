@@ -53,6 +53,9 @@ public class RRSimplifiedAutonomous {
 
         Timer yPeriod;
 
+        //Tube Placement Variables
+
+
         //TODO
         /*
          * Link up direction to fork dir
@@ -154,13 +157,14 @@ public class RRSimplifiedAutonomous {
                         yPeriod.reset();
                     }
                     else{
+
                     ymov = 0;
                     xmov = 0;
                     rot = 0;
                     }
 
 
-
+                    inPosition = true;
                     //Begin winch and claw stuff
                 }
                 else {
@@ -172,6 +176,7 @@ public class RRSimplifiedAutonomous {
                     rot = 0;
                     }
                     else {
+                       inPosition = true;
                        ymov = 0;
                        xmov = 0;
                        rot = 0;
@@ -255,6 +260,18 @@ public class RRSimplifiedAutonomous {
             }
         }
 
+        boolean inPosition;
+
+        boolean doneOpening = false;
+    boolean open = false;
+    boolean winchBegun = false;
+    Timer winchTimer = new Timer();
+
+    boolean backUpBegin = false;
+
+    Timer backUpTimer = new Timer();
+
+    Timer clawTimer = new Timer();
 
         public void drive(){
 
@@ -275,10 +292,10 @@ public class RRSimplifiedAutonomous {
 
             //System.out.println("Timer = " + timer.get() );
 
-           // elevator.liftTo(1000);
+            elevator.liftTo(1000);
             // negative is forward!
             mecanumDrive.drive(xmov, ymov, rot);
-/*
+
             if (inPosition){
                  double clawSpeed = 0;
                 double winchSpeed = 0;
@@ -322,7 +339,7 @@ public class RRSimplifiedAutonomous {
 
                 elevator.lift(0, winchSpeed, clawSpeed);
             }
-        */
+        
         }
         else
         {

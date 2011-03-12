@@ -100,7 +100,7 @@ public class RRElevator {
 */
 
          //don't move the arm if joystick is being used for deployment
-        if (!(xboxStick.getRawButton(7) && xboxStick.getRawButton(1))){
+        if (!(armStick.getRawButton(6))){
 
 //JRH: NOTE: COMPETITION BOT WAS SET TO .45 (larger motor)
             //Pincher OPEN

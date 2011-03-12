@@ -296,6 +296,36 @@ public class RRMecanumDrive {
                r_yVal = 0;
            }
 
+           //Change the range of the joystick values to account for the dead zone
+           if (l_xVal > 0){
+               l_xVal = (l_xVal-.13)/(1-.13);
+           }
+            else if (l_xVal < 0){
+               l_xVal = (l_xVal+.13)/(1-.13);
+            }
+
+            if (l_yVal > 0){
+               l_yVal = (l_yVal-.13)/(1-.13);
+           }
+            else if (l_yVal < 0){
+               l_yVal = (l_yVal+.13)/(1-.13);
+            }
+
+            if (r_xVal > 0){
+               r_xVal = (r_xVal-.13)/(1-.13);
+           }
+            else if (r_xVal < 0){
+               r_xVal = (r_xVal+.13)/(1-.13);
+            }
+
+            if (r_yVal > 0){
+               r_yVal = (r_yVal-.13)/(1-.13);
+           }
+            else if (r_yVal < 0){
+               r_yVal = (r_yVal+.13)/(1-.13);
+            }
+           
+
           l_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1),-m_xboxStick.getRawAxis(2)));
           l_magnitude = Math.sqrt((m_xboxStick.getRawAxis(1)*m_xboxStick.getRawAxis(1))+(m_xboxStick.getRawAxis(2)*m_xboxStick.getRawAxis(2)));
           r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4),-m_xboxStick.getRawAxis(5)));
