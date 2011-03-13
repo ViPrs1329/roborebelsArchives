@@ -41,7 +41,7 @@ public class RRDeployer {
     public void deploy(){
         //use right stick for minibot deployment
         if (rightStick.getRawButton(6)){
-            deployMotor.set(-rightStick.getRawAxis(2)*1);
+            deployMotor.set(-rightStick.getRawAxis(2)*.75);
         }
         else {
             deployMotor.set(0);

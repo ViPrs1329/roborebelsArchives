@@ -56,6 +56,7 @@ import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Encoder;
 
 
 /**
@@ -80,7 +81,7 @@ public class RoboRebels extends IterativeRobot {
 
     RRLineTracker       lineTracker;
 
-
+    Encoder             encoder;
 
     Gyro                gyro;
 
@@ -179,10 +180,10 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
 
-
+        encoder = new Encoder(14,13);
 
         // arm motor is 7
-        elevator = new RRElevator(7,5,6);
+        elevator = new RRElevator(7,5,6,encoder);
 
 
         elevator.assignLiftJoystick(m_leftStick);
@@ -202,6 +203,8 @@ public class RoboRebels extends IterativeRobot {
         lineTracker = new RRLineTracker(4,5,6);
 
         gyro = new Gyro(1);
+
+
 
 
 
@@ -227,7 +230,7 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
-
+        encoder.reset();
         autonomous = new RRSimplifiedAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
         
     }
@@ -242,8 +245,8 @@ public class RoboRebels extends IterativeRobot {
 //        m_rightStick = new Joystick(2);
 //        m_leftStick = new Joystick(1);
 
-        //Construct Joystick object and pass to mecanumDrive
        
+       encoder.reset();
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -287,7 +290,7 @@ public class RoboRebels extends IterativeRobot {
             teleopStateBroadcasted = false;
         }
 
-       System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
+      // System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
 
        mecanumDrive.drive();
        elevator.lift();

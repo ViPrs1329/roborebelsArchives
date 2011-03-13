@@ -39,7 +39,7 @@ public class RRSimplifiedAutonomous {
 
         boolean driveStraight;
 
-        double speed = -.4;
+        double speed = -.3;
         double speed2 = -.4;
         double strafe_speed2 = .4;
 
@@ -304,7 +304,7 @@ public class RRSimplifiedAutonomous {
               // lift = true;
 
                 //if within 10 units from 875, begin releasing
-                if (Math.abs(elevator.getHeight()) > 900){
+                if (Math.abs(elevator.getHeight()) > 800){
 
                         if (winchBegun == false){
                             winchTimer.start();

@@ -36,12 +36,13 @@ public class RRElevator {
 
     double      INITIAL_ENCODER = 0;
 
-    public RRElevator(int motorChannel,int motorChannel2, int motorChannel3) {
+    public RRElevator(int motorChannel,int motorChannel2, int motorChannel3, Encoder nencoder) {
         liftMotor = new Victor(motorChannel);
         flipUpMotor = new Victor(motorChannel2);
         pincherMotor = new Victor(motorChannel3);
-        liftEncoder = new Encoder(13,14);
+        liftEncoder = nencoder;
         liftEncoder.start();
+
         INITIAL_ENCODER = liftEncoder.getDistance();
 
     }
@@ -129,16 +130,18 @@ public class RRElevator {
         else {
             double liftSpeed = -liftStick.getRawAxis(2);
 
-            
-            if (encoderDist < 300 && liftStick.getRawAxis(2) > 0){
+            //manual override of cushion
+            if (!liftStick.getRawButton(6)){
+            if (encoderDist < 30 && liftSpeed < 0){
 
-               if (liftSpeed > .4){
+               if (Math.abs(liftSpeed) > .1){
                    System.out.println("Breaking");
-                    liftSpeed = .4;
+                    liftSpeed = -.15;//TODO needs to be tested
                 }
             }
+            }
             
-            
+            System.out.println("Encoder: "+encoderDist);
             //System.out.println("Lift Speed: " + liftSpeed);
             
              liftMotor.set(liftSpeed);
