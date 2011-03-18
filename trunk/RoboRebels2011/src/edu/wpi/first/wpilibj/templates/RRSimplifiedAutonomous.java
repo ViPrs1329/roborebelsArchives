@@ -43,8 +43,8 @@ public class RRSimplifiedAutonomous {
         double speed2 = -.4;
         double strafe_speed2 = .4;
 
-        double small_correction = .05;
-        double large_correction = .1;
+        double small_correction = .08;
+        double large_correction = .17;
 
         double smallStrafeCorrection = .2;
         double largeStrafeCorrection = .4;
@@ -142,7 +142,8 @@ public class RRSimplifiedAutonomous {
                         resetTimer = true;
                     }
                     else{
-                        if (lostLineTimer.get() <= .2){
+                        if (lostLineTimer.get() <= .4){
+
                              if (driveStraight){
                                 ymov = speed;
                                 xmov = 0;
@@ -154,6 +155,7 @@ public class RRSimplifiedAutonomous {
                                 rot = 0;
                             }
                         }else {
+
                             ymov = 0;
                             xmov = 0;
                             rot = 0;
@@ -233,6 +235,7 @@ public class RRSimplifiedAutonomous {
             }
             else if ((!left) && (mid) && (!right)){//Only Middle Detects Line (ideal)
                 if (driveStraight){
+                    resetTimer = false;
                     ymov = speed;
                     xmov = 0;
                     rot = 0;
