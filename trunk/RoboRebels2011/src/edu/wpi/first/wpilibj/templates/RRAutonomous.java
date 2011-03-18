@@ -24,14 +24,14 @@ public class RRAutonomous {
     double xmov = 0;
     double ymov = 0;
     double rot = 0;
-    double speed = -.2;//-.45 is good, at least for straight\\
+    double speed = -0.2;//-.45 is good, at least for straight\\
     double strafeSpeed = 0;
     double smallStrafeCorrection = 0;
     double largeStrafeCorrection = 0;
-    double large_correction = .1;
-    double small_correction = .05;
+    double large_correction = 0.1;
+    double small_correction = 0.05;
     double lost_line_timer = 100;
-    double hunt_time = .2/speed;
+    double hunt_time = -0.2/speed;
     boolean     isDriving;
     boolean     yIsDetected = false;
     boolean     stopCondition = false;
