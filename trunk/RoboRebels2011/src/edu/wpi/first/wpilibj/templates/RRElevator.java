@@ -43,6 +43,7 @@ public class RRElevator {
         liftEncoder = nencoder;
         liftEncoder.start();
 
+
         INITIAL_ENCODER = liftEncoder.getDistance();
 
     }
@@ -122,10 +123,10 @@ public class RRElevator {
 
         }
 
-        double encoderDist = -(liftEncoder.getDistance());//-INITIAL_ENCODER
+        double encoderDist = (liftEncoder.getDistance());//-INITIAL_ENCODER
 
         if (liftStick.getRawButton(2)){
-            liftTo(875);
+            liftTo(2400);
         }
         else {
             double liftSpeed = -liftStick.getRawAxis(2);
@@ -211,7 +212,7 @@ public class RRElevator {
     //2nd peg - 871.5
     public void liftTo(double dest_height){
         double speed = 0;
-        double height = -liftEncoder.getDistance();
+        double height = liftEncoder.getDistance();
         System.out.println("encoder height: "+height);
         if (Math.abs(dest_height-height) > 50){
             speed = .8*(Math.abs(dest_height-height)/(dest_height-height));
@@ -220,8 +221,10 @@ public class RRElevator {
 
     }
 
+  
+
     public double getHeight(){
-        return -liftEncoder.getDistance();
+        return liftEncoder.getDistance();
     }
 
 

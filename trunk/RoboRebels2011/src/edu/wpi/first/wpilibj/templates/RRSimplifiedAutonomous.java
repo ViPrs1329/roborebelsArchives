@@ -346,7 +346,7 @@ public class RRSimplifiedAutonomous {
                 }
  }
 
-            //elevator.liftTo(1000);
+            elevator.liftTo(1771);//Height Value
 
             // negative is forward!
             mecanumDrive.drive(xmov, ymov, rot);
@@ -359,7 +359,7 @@ public class RRSimplifiedAutonomous {
               // lift = true;
 
                 //if within 10 units from 875, begin releasing
-             //   if (Math.abs(elevator.getHeight()) > 800){
+                if (Math.abs(elevator.getHeight()) > 1670){
 
                         if (winchBegun == false){
                             winchTimer.start();
@@ -373,8 +373,8 @@ public class RRSimplifiedAutonomous {
                             clawTimer.start();
                             open = true;
                         }
-                       if (clawTimer.get() < .55){
-                            clawSpeed = -.45;
+                       if (clawTimer.get() < .9){
+                            clawSpeed = -.85;
                         }
                         else {
 
@@ -390,7 +390,7 @@ public class RRSimplifiedAutonomous {
                             mecanumDrive.drive(0, driveSpeed, 0);
                         }
 
-               // }
+                }
 
                 elevator.lift(0, winchSpeed, clawSpeed);
             }

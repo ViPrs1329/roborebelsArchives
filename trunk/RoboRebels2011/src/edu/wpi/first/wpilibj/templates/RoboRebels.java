@@ -303,7 +303,7 @@ public class RoboRebels extends IterativeRobot {
 
        
         //checkButtons();
-        updateDSLCD();
+       // updateDSLCD();
         processCamera();
     }
 
@@ -341,7 +341,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopContinuous()
     {
-
+         updateDSLCD();
     }
 
     /**
@@ -484,7 +484,7 @@ public class RoboRebels extends IterativeRobot {
     {
        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+
                mecanumDrive.getControlModeName());
-       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "");
+       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ":" + elevator.getHeight());
        m_dsLCD.updateLCD();
 
     }
