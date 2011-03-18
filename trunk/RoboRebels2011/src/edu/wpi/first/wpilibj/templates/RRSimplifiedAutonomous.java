@@ -53,6 +53,10 @@ public class RRSimplifiedAutonomous {
 
         Timer yPeriod;
 
+        Timer lostLineTimer;
+
+        int lost_line_Timer = 0;
+
         //Tube Placement Variables
 
 
@@ -109,6 +113,8 @@ public class RRSimplifiedAutonomous {
             //Set up line following
             timer = new Timer();
 
+            lostLineTimer = new Timer();
+
             yPeriod = new Timer();
             yPeriod.start();
 
@@ -120,17 +126,39 @@ public class RRSimplifiedAutonomous {
 
 
             timer.start();
+            lostLineTimer.start();
 
         }
         
+        boolean resetTimer = false;
+
         public void lineAuton(boolean right, boolean mid, boolean left) {
             //NOTE: A true value means the sensor sees the line
             
             if ((!left) && (!mid) && (!right)){//None Detect Line
                 if (driveStraight){
-                    ymov = 0;
-                    xmov = 0;
-                    rot = 0;
+                    if (resetTimer == false){
+                        lostLineTimer.reset();
+                        resetTimer = true;
+                    }
+                    else{
+                        if (lostLineTimer.get() <= .2){
+                             if (driveStraight){
+                                ymov = speed;
+                                xmov = 0;
+                                rot = 0;
+                            }
+                            else {
+                                ymov = speed2;
+                                xmov = strafe_speed2;
+                                rot = 0;
+                            }
+                        }else {
+                            ymov = 0;
+                            xmov = 0;
+                            rot = 0;
+                        }
+                    }
                 }
                 else {
                     if (yPeriod.get()>.9){
@@ -185,12 +213,17 @@ public class RRSimplifiedAutonomous {
             }
             else if ((left) && (!mid) && (right)){//Outside Detect Line (Y)
                 if (driveStraight){
+
+
+
                     System.out.println("Detected Split In Straight Mode, Error.");
                      if (isFork){
                         System.out.println("Timer Counting, Switched to Strafe");
                         driveStraight = false;
                         yPeriod.reset();
                     }
+
+
                 }
                 else {
                     ymov = 0;
@@ -273,6 +306,11 @@ public class RRSimplifiedAutonomous {
 
     Timer clawTimer = new Timer();
 
+    Timer winchTimer2 = new Timer();
+
+    double winchSpeed = 0;
+
+    boolean firstRun = false;
         public void drive(){
 
 
@@ -280,9 +318,9 @@ public class RRSimplifiedAutonomous {
         boolean testL = !lineTracker.getL();
         boolean testM = !lineTracker.getM();
         boolean testR = !lineTracker.getR();
+        
         //sets the value of ymov and xmov
         lineAuton(testR,testM,testL);
-
 
 
 
@@ -292,33 +330,47 @@ public class RRSimplifiedAutonomous {
 
             //System.out.println("Timer = " + timer.get() );
 
-            elevator.liftTo(1000);
+
+            if (!firstRun){
+                winchTimer2.reset();
+
+                firstRun = true;
+            }
+ else {
+                if (winchTimer2.get() < 2){
+                    //winchSpeed = .4;
+                    elevator.lift(0, .45, 0);
+                }
+ }
+
+            //elevator.liftTo(1000);
+
             // negative is forward!
             mecanumDrive.drive(xmov, ymov, rot);
 
             if (inPosition){
                  double clawSpeed = 0;
-                double winchSpeed = 0;
+                
                 double driveSpeed = 0;
                 System.out.println("in Position");
               // lift = true;
 
                 //if within 10 units from 875, begin releasing
-                if (Math.abs(elevator.getHeight()) > 800){
+             //   if (Math.abs(elevator.getHeight()) > 800){
 
                         if (winchBegun == false){
                             winchTimer.start();
                             winchBegun = true;
                         }
                         if ( winchTimer.get() < 2){
-                            winchSpeed = 1;
+                           // winchSpeed = 1;
                         }
 
                         if (open == false && winchTimer.get() > 2){
                             clawTimer.start();
                             open = true;
                         }
-                       if (clawTimer.get() < 1){
+                       if (clawTimer.get() < .55){
                             clawSpeed = -.45;
                         }
                         else {
@@ -335,7 +387,7 @@ public class RRSimplifiedAutonomous {
                             mecanumDrive.drive(0, driveSpeed, 0);
                         }
 
-                }
+               // }
 
                 elevator.lift(0, winchSpeed, clawSpeed);
             }

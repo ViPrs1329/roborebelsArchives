@@ -131,7 +131,7 @@ public class RRElevator {
             double liftSpeed = -liftStick.getRawAxis(2);
 
             //manual override of cushion
-            if (!liftStick.getRawButton(6)){
+            if (false && ( !liftStick.getRawButton(6))){
             if (encoderDist < 30 && liftSpeed < 0){
 
                if (Math.abs(liftSpeed) > .1){
