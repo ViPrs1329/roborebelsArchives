@@ -87,9 +87,9 @@ public class RRMecanumDrive {
 
 
     public RRMecanumDrive( int frontLeftMotorChannel,
-                             int frontRightMotorChannel,
-                             int backLeftMotorChannel,
-                             int backRightMotorChannel)
+                           int frontRightMotorChannel,
+                           int backLeftMotorChannel,
+                           int backRightMotorChannel )
     {
 
           frontLeftMotor = new Jaguar(frontLeftMotorChannel);

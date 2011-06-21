@@ -25,16 +25,6 @@
    a1
 
 
- * NOTES:
- *
- * - Watchdog is no longer required, however, we may want to use it
- *   if we feel that need for a that bit of safety.
- *
- * - There is code within the RobotDrive class which can handle
- *   Mecanum wheels!  This will help us out a lot.
- *
- * - Just for the sake of cleanliness, I think that we should
- *   delete the following modules:  RRKicker, RRGRabber, RRPullup and RRSpinner
  */
 
 
@@ -69,66 +59,29 @@ import edu.wpi.first.wpilibj.Encoder;
 public class RoboRebels extends IterativeRobot {
 
     // Declare custom object vars
-    RRSimplifiedAutonomous        autonomous;
+    RRMecanumDrive                  mecanumDrive;
+    RRLineTracker                   lineTracker;
 
-    RRMecanumDrive      mecanumDrive;
-
-    RRElevator          elevator;  //JRH: non-functional change
-
-    RRDeployer          deployer;
-
-    RRDipSwitch         dipSwitch;
-
-    RRLineTracker       lineTracker;
-
-    Encoder             encoder;
-
-    Gyro                gyro;
-
-
-
-    TrackerDashboard    trackerDashboard = new TrackerDashboard();
+    TrackerDashboard                trackerDashboard = new TrackerDashboard();
+    Joystick                        m_rightStick;		// joystick 1 (arcade stick or right tank stick)
+    Joystick                        m_leftStick;		// joystick 2 (tank left stick)
+    Joystick                        m_xboxStick;
 
     // Declare a variable to use to access the driver station object
     DriverStation       m_ds;                   // driver station object
     DriverStationLCD    m_dsLCD;                // driver station LCD object
     AxisCamera          cam;                    // camera object
 
-
-
-    double              autonomousStartTime;    // holds the start time for autonomous mode
-
-    Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
-    Joystick            m_leftStick;		// joystick 2 (tank left stick)
-    Joystick            m_xboxStick;
-
-
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
     static boolean      teleopStateBroadcasted = false;
     static boolean      autonomousStateBroadcasted = false;
 
-    double              kScoreThreshold = .01;      // used in circle tracking code; default = 0.01
-    double              targetTolerance = 1.0;      // used for target tracking
-    
-
-
-    boolean             foundTarget = false,                // have we found the target yet?
-                        autoDrive = false;                  // are we in autonomous drive mode?
-
-
-    double              lastZValue;                         // last Z value for the dial on the joystick
-    double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
-
-    boolean             releasedPin = false;
-
-
-
-
 
     /**
      * Constructor
      */
+    
     public void RoboRebels()
     {
         System.out.println( "RoboRebels()" );
@@ -139,12 +92,11 @@ public class RoboRebels extends IterativeRobot {
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
+    
     public void robotInit()
     {
         System.out.println( "robotInit()" );
 
-
-        //Watchdog.getInstance().setExpiration(0.75);
 
 
 
@@ -173,80 +125,50 @@ public class RoboRebels extends IterativeRobot {
 
         //                              FL, FR, BL, BR
 
+        
+        // Initialize tangible objects here
         m_leftStick = new Joystick(2);
         m_rightStick = new Joystick(3);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
-
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
-
-        encoder = new Encoder(14,13);
-
-        // arm motor is 7
-        elevator = new RRElevator(7,5,6,encoder);
-
-
-        elevator.assignLiftJoystick(m_leftStick);
-        elevator.assignArmJoystick(m_rightStick);
-        elevator.assignXboxJoystick(m_xboxStick);
-
-
-        deployer = new RRDeployer(9);
-
-        deployer.assignJoystick(m_xboxStick);
-        deployer.assignRightJoystick(m_rightStick);
-        
-
-        dipSwitch = new RRDipSwitch(8, 11);
-       // lineSensor = new DigitalInput(1);
-
         lineTracker = new RRLineTracker(4,5,6);
-
-        gyro = new Gyro(1);
-
-
-
-
 
         System.out.println( "Robot Ready" );
     }
 
+    /**
+     * Put initialization code for the disabled state in this method.
+     */
+    
     public void disabledInit()
     {
-       
-
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
     }
 
+    /**
+     * Put initialization code for the autonomous state in this method.
+     */
+    
     public void autonomousInit()
     {
         System.out.println( "autonomousInit()" );
 
         disabledStateBroadcasted = false;
         teleopStateBroadcasted = false;
-
-        // Get the time that the autonomous mode starts
-        //autonomousStartTime = Timer.getUsClock();
-        autonomousStartTime = Timer.getFPGATimestamp();
-
-        encoder.reset();
-        autonomous = new RRSimplifiedAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
-        
     }
 
+    /**
+     * Put initialization code for the teleop state in this method.
+     */
+    
     public void teleopInit()
     {
         System.out.println( "teleopInit()" );
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
-
-//        m_rightStick = new Joystick(2);
-//        m_leftStick = new Joystick(1);
-
-       
-       encoder.reset();
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -259,17 +181,21 @@ public class RoboRebels extends IterativeRobot {
      *
      * Notes:
      *
-     *  
+     *  - This class is used for processing code which does not
+     *    need to be fast, but predictable.  
      *
      */
     
     public void autonomousPeriodic()
     {
-       // releases the pin that holds the arm in its initial position
-       // this if statement is run on the first pass
-      
-       //autonomous.printGyro();
-       //autonomous.drive();
+        // The code below prevents a spam of "Autonomous State" messages on the console
+        if ( autonomousStateBroadcasted == true )
+        {
+            System.out.println( "Teleop State" );
+            autonomousStateBroadcasted = false;
+        }
+
+        
         processCamera();
     }
 
@@ -283,28 +209,16 @@ public class RoboRebels extends IterativeRobot {
 
     public void teleopPeriodic()
     {
-
+        // The code below prevents a spam of "Teleop State" messages on the console
         if ( teleopStateBroadcasted == true )
         {
             System.out.println( "Teleop State" );
             teleopStateBroadcasted = false;
         }
 
-      // System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
-
        mecanumDrive.drive();
-       elevator.lift();
 
-       deployer.deploy();
-
-
-
-      
-
-       
-        //checkButtons();
-       // updateDSLCD();
-        processCamera();
+       processCamera();
     }
 
     /**
@@ -314,8 +228,10 @@ public class RoboRebels extends IterativeRobot {
      *
      *
      */
+    
     public void disabledPeriodic()
     {
+        // The code below prevents a spam of "Disabled State" messages on the console
         if ( disabledStateBroadcasted == true )
         {
             System.out.println( "Disabled State" );
@@ -326,11 +242,12 @@ public class RoboRebels extends IterativeRobot {
     /**
      * The VM will try to call this function as often as possible during the autonomous state
      *
+     * NOTE:  Autonomous drive code works very well in this method.
      */
 
     public void autonomousContinuous()
     {
-        autonomous.drive();
+        
        
     }
 
@@ -345,7 +262,7 @@ public class RoboRebels extends IterativeRobot {
     }
 
     /**
-     * The VM will try to call this function as often as possible during the disbabled state
+     * The VM will try to call this function as often as possible during the disabled state
      */
 
     public void disabledContinuous()
@@ -353,36 +270,14 @@ public class RoboRebels extends IterativeRobot {
         
     }
 
-    /*
-     * This method checks buttons and sets states accordingly
+
+   /**
+     * Processes camera input.
      */
-
-    public void checkButtons()
-    {
-        //System.out.println( "checkButtons()" );
-
-        /*
-        System.out.println( "LX: " + m_xboxStick.getRawAxis(1));
-        System.out.flush();
-        System.out.println( "LY: " + m_xboxStick.getRawAxis(2));
-        System.out.flush();
-        System.out.println( "RX: " + m_xboxStick.getRawAxis(4));
-        System.out.flush();
-        System.out.println( "RY: " + m_xboxStick.getRawAxis(5));
-        System.out.flush();
-        */
-
-    }
-
- 
-
-
-
-   
     
     public void processCamera()
     {
-    //        System.out.println("processCamera()");
+        System.out.println("processCamera()");
 
         try
         {
@@ -401,79 +296,6 @@ public class RoboRebels extends IterativeRobot {
                 ex.printStackTrace();
         }
     }
-
-        /*
-        try {
-                if (cam.freshImage()) {// && turnController.onTarget()) {
-                    System.out.println("processCamera() - Got a fresh image");
-                    //double gyroAngle = gyro.pidGet();
-                    ColorImage image = cam.getImage();
-                    Thread.yield();
-                    Target[] targets = Target.findCircularTargets(image);
-                    Watchdog.getInstance().feed();
-                    Thread.yield();
-                    image.free();
-                    if (targets.length == 0 || targets[0].m_score < kScoreThreshold)
-                    {
-                        System.out.println("No target found");
-                        Target[] newTargets = new Target[targets.length + 1];
-                        newTargets[0] = new Target();
-                        newTargets[0].m_majorRadius = 0;
-                        newTargets[0].m_minorRadius = 0;
-                        newTargets[0].m_score = 0;
-
-                        for (int i = 0; i < targets.length; i++)
-                        {
-                            newTargets[i + 1] = targets[i];
-                        }
-
-                        autoDrive = true;
-                        autoTurnDirection = 1.0;  // turn right
-                        foundTarget = false;
-
-                        trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, 0.0, newTargets);
-                    } 
-                    else
-                    {
-                        Watchdog.getInstance().feed();
-                        //System.out.println(targets[0]);
-                        System.out.println("Target Angle: " + targets[0].getHorizontalAngle());
-                        System.out.println("Target tolerance difference: " + (targets[0].getHorizontalAngle() - targetTolerance));
-                        //turnController.setSetpoint(gyroAngle + targets[0].getHorizontalAngle());
-                        //
-                        // Use getHorizontalAngle() to determine if the robot is lined up with
-                        // the target or not.  When it gets close to 0.0 it is lined up.  Use
-                        // a tolerance!!!!
-                        //
-
-                        if ( targets[0].getHorizontalAngle() < targetTolerance && targets[0].getHorizontalAngle() > (-1.0 * targetTolerance) )
-                        {
-                            // if it is inside the target tolerance then stop
-                            System.out.println("processCamera() - Found target.  IT IS CENTERED" );
-                            autoDrive = false;
-                            foundTarget = true;
-
-                        }
-                        else
-                        {
-                            // if it is outside the target tolerance then move it
-                            System.out.println("processCamera() - Found target, but it is not centered");
-                            autoDrive = true;
-                            if ( targets[0].getHorizontalAngle() > 0.0 )
-                                autoTurnDirection = 1.0;
-                            else if ( targets[0].getHorizontalAngle() < 0.0 )
-                                autoTurnDirection = -1.0;
-                        }
-
-                        trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, targets[0].m_xPos / targets[0].m_xMax, targets);
-                    }
-                }
-            } catch (NIVisionException ex) {
-                ex.printStackTrace();
-            } catch (AxisCameraException ex) {
-                ex.printStackTrace();
-            }
-        */
     
     
     /*
@@ -484,7 +306,7 @@ public class RoboRebels extends IterativeRobot {
     {
        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+
                mecanumDrive.getControlModeName());
-       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ":" + elevator.getHeight());
+       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ": Nums can go here");
        m_dsLCD.updateLCD();
 
     }

@@ -18,6 +18,25 @@ public class RRSimplifiedAutonomous {
         RRLineTracker lineTracker;
         RRDipSwitch dipSwitch;
         Gyro gyro;//Unused
+        
+        boolean inPosition;
+
+        boolean doneOpening = false;
+        boolean open = false;
+        boolean winchBegun = false;
+        Timer winchTimer = new Timer();
+
+        boolean backUpBegin = false;
+
+        Timer backUpTimer = new Timer();
+
+        Timer clawTimer = new Timer();
+
+        Timer winchTimer2 = new Timer();
+
+        double winchSpeed = 0;
+
+        boolean firstRun = false;
 
         //Enumeration for dipSwitch
         public  final   int     LEFT_STRAIGHT = 1;
@@ -296,134 +315,112 @@ public class RRSimplifiedAutonomous {
             }
         }
 
-        boolean inPosition;
 
-        boolean doneOpening = false;
-    boolean open = false;
-    boolean winchBegun = false;
-    Timer winchTimer = new Timer();
-
-    boolean backUpBegin = false;
-
-    Timer backUpTimer = new Timer();
-
-    Timer clawTimer = new Timer();
-
-    Timer winchTimer2 = new Timer();
-
-    double winchSpeed = 0;
-
-    boolean firstRun = false;
         public void drive(){
 
 
-        //gets the values of the line sensors NOTE: Inverted so true is now on line
-        boolean testL = !lineTracker.getL();
-        boolean testM = !lineTracker.getM();
-        boolean testR = !lineTracker.getR();
-        
-        //sets the value of ymov and xmov
-        lineAuton(testR,testM,testL);
+            //gets the values of the line sensors NOTE: Inverted so true is now on line
+            boolean testL = !lineTracker.getL();
+            boolean testM = !lineTracker.getM();
+            boolean testR = !lineTracker.getR();
+
+            //sets the value of ymov and xmov
+            lineAuton(testR,testM,testL);
 
 
 
 
-        if(timer.get() < 20) {
-            //keeps the program going for 20 seconds
+            if(timer.get() < 20) {
+                //keeps the program going for 20 seconds
 
-            //System.out.println("Timer = " + timer.get() );
+                //System.out.println("Timer = " + timer.get() );
 
 
-            if (!firstRun){
-                winchTimer2.reset();
+                if (!firstRun){
+                    winchTimer2.reset();
 
-                firstRun = true;
-            }
- else {
-                if (winchTimer2.get() < 2){
-                    //winchSpeed = .4;
-                    elevator.lift(0, .45, 0);
+                    firstRun = true;
                 }
- }
-
-            elevator.liftTo(1771);//Height Value
-
-            // negative is forward!
-            mecanumDrive.drive(xmov, ymov, rot);
-
-            if (inPosition){
-                 double clawSpeed = 0;
-                
-                double driveSpeed = 0;
-                System.out.println("in Position");
-              // lift = true;
-
-                //if within 10 units from 875, begin releasing
-                if (Math.abs(elevator.getHeight()) > 1670){
-
-                        if (winchBegun == false){
-                            winchTimer.start();
-                            winchBegun = true;
-                        }
-                        if ( winchTimer.get() < 2){
-                           // winchSpeed = 1;
-                        }
-
-                        if (open == false && winchTimer.get() > 2){
-                            clawTimer.start();
-                            open = true;
-                        }
-                       if (clawTimer.get() < .9){
-                            clawSpeed = -.85;
-                        }
-                        else {
-
-                            if (backUpBegin == false){
-                                backUpTimer.start();
-                                backUpBegin = true;
-                            }
-
-                            if (backUpTimer.get() < 1){
-                                driveSpeed = .3;
-                            }
-
-                            mecanumDrive.drive(0, driveSpeed, 0);
-                        }
-
+                else {
+                    if (winchTimer2.get() < 2){
+                        //winchSpeed = .4;
+                        elevator.lift(0, .45, 0);
+                    }
                 }
 
-                elevator.lift(0, winchSpeed, clawSpeed);
+                elevator.liftTo(1771);//Height Value
+
+                // negative is forward!
+                mecanumDrive.drive(xmov, ymov, rot);
+
+                if (inPosition){
+                     double clawSpeed = 0;
+
+                    double driveSpeed = 0;
+                    System.out.println("in Position");
+                  // lift = true;
+
+                    //if within 10 units from 875, begin releasing
+                    if (Math.abs(elevator.getHeight()) > 1670){
+
+                            if (winchBegun == false){
+                                winchTimer.start();
+                                winchBegun = true;
+                            }
+                            if ( winchTimer.get() < 2){
+                               // winchSpeed = 1;
+                            }
+
+                            if (open == false && winchTimer.get() > 2){
+                                clawTimer.start();
+                                open = true;
+                            }
+                           if (clawTimer.get() < .9){
+                                clawSpeed = -.85;
+                            }
+                            else {
+
+                                if (backUpBegin == false){
+                                    backUpTimer.start();
+                                    backUpBegin = true;
+                                }
+
+                                if (backUpTimer.get() < 1){
+                                    driveSpeed = .3;
+                                }
+
+                                mecanumDrive.drive(0, driveSpeed, 0);
+                            }
+
+                    }
+
+                    elevator.lift(0, winchSpeed, clawSpeed);
+                }
+
             }
-        
-        }
-        else
-        {
-            mecanumDrive.drive(0, 0, 0);
-        }
-
-
-
-
-
-
+            else
+            {
+                mecanumDrive.drive(0, 0, 0);
+            }
         }
 
 
         private void setSwitchMode(){
-             if (dipSwitch.getState(0)){
-          switchMode = LEFT_FORK;
-        }
-        else if(dipSwitch.getState(1))
-        {
-          switchMode = LEFT_STRAIGHT;
-        }
-        else if(dipSwitch.getState(2))
-        {
-          switchMode = RIGHT_STRAIGHT;
-        }
-        else if(dipSwitch.getState(3))
-        {
-          switchMode = RIGHT_FORK;
-        }
+            
+            if (dipSwitch.getState(0)){
+              switchMode = LEFT_FORK;
+            }
+            else if(dipSwitch.getState(1))
+            {
+              switchMode = LEFT_STRAIGHT;
+            }
+            else if(dipSwitch.getState(2))
+            {
+              switchMode = RIGHT_STRAIGHT;
+            }
+            else if(dipSwitch.getState(3))
+            {
+              switchMode = RIGHT_FORK;
+            }
         }
 }
