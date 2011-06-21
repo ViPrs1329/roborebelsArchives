@@ -62,7 +62,6 @@ public class RoboRebels extends IterativeRobot {
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
 
-    TrackerDashboard                trackerDashboard = new TrackerDashboard();
     Joystick                        m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick                        m_leftStick;		// joystick 2 (tank left stick)
     Joystick                        m_xboxStick;
