@@ -41,10 +41,6 @@ import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.camera.AxisCamera;
-import edu.wpi.first.wpilibj.camera.AxisCameraException;
-import edu.wpi.first.wpilibj.image.ColorImage;
-import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -62,15 +58,16 @@ public class RoboRebels extends IterativeRobot {
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
 
-    Joystick                        m_rightStick;		// joystick 1 (arcade stick or right tank stick)
-    Joystick                        m_leftStick;		// joystick 2 (tank left stick)
+    // Declare objects needed for the robot that might be used
+    // in more than one location
+    
     Joystick                        m_xboxStick;
 
     // Declare a variable to use to access the driver station object
     DriverStation       m_ds;                   // driver station object
     DriverStationLCD    m_dsLCD;                // driver station LCD object
-    AxisCamera          cam;                    // camera object
 
+    // Misc variable declarations 
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
     static boolean      teleopStateBroadcasted = false;
@@ -96,14 +93,6 @@ public class RoboRebels extends IterativeRobot {
     {
         System.out.println( "robotInit()" );
 
-
-
-
-        // Camera init code
-        Timer.delay(5.0);
-        cam = AxisCamera.getInstance();
-
-
         // front left, rear left, front right, rear right
 
         /*
@@ -126,9 +115,7 @@ public class RoboRebels extends IterativeRobot {
 
         
         // Initialize tangible objects here
-        m_leftStick = new Joystick(2);
-        m_rightStick = new Joystick(3);
-        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        m_xboxStick = new Joystick(1);
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
@@ -193,17 +180,14 @@ public class RoboRebels extends IterativeRobot {
             System.out.println( "Teleop State" );
             autonomousStateBroadcasted = false;
         }
-
-        
-        processCamera();
     }
 
     /**
      * This function is called periodically during operator control
      *
-     * ---------------------
+     * ---
      * This is the most important method in this class
-     * ---------------------
+     * ---
      */
 
     public void teleopPeriodic()
@@ -215,9 +199,9 @@ public class RoboRebels extends IterativeRobot {
             teleopStateBroadcasted = false;
         }
 
-       mecanumDrive.drive();
-
-       processCamera();
+        // This method needs to be called often to grab input from the 
+        // joystick and drive the mecanum system
+        mecanumDrive.drive();
     }
 
     /**
@@ -269,33 +253,6 @@ public class RoboRebels extends IterativeRobot {
         
     }
 
-
-   /**
-     * Processes camera input.
-     */
-    
-    public void processCamera()
-    {
-        System.out.println("processCamera()");
-
-        try
-        {
-            if ( cam.freshImage() )
-            {
-                ColorImage image = cam.getImage();
-                image.free();
-            }
-        }
-        catch (NIVisionException ex)
-        {
-                ex.printStackTrace();
-        }
-        catch (AxisCameraException ex)
-        {
-                ex.printStackTrace();
-        }
-    }
-    
     
     /*
      * Sends useful information to the LCD on the DriverStation
@@ -303,8 +260,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+
-               mecanumDrive.getControlModeName());
+       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ": Nums can go here");
        m_dsLCD.updateLCD();
 

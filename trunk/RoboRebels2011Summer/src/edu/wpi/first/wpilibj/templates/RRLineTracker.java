@@ -17,23 +17,17 @@ public class RRLineTracker
     * http://www.chiefdelphi.com/forums/showpost.php?p=1020007&postcount=7
     */
 
-   /*
-    * Notes
-    * -----
-    *
-    * If we want to keep the driving logic in RoboRebels.java, then we might
-    * want to have this class only return a suggestion on what the motors
-    * should be set to.
-    *
-    * Is it worth designing for a scenario where the robot is perpendicular
-    * to the line?  This probably won't happen in autonomous, and would require
-    * a decent amount of extra effort.
-    */
-
     private DigitalInput left;
     private DigitalInput middle;
     private DigitalInput right;
 
+    /**
+     * Constructor
+     * 
+     * @param l Left digital input port number
+     * @param m Middle digital input port number
+     * @param r Right digital input port number
+     */
     public RRLineTracker(int l, int m, int r)
     {
         left   = new DigitalInput(l);
@@ -41,14 +35,24 @@ public class RRLineTracker
         right  = new DigitalInput(r);
     }
 
-   /*
+   /**
     * Returns "left", "middle", or "right".
     * Assumes that only one can be active at any given time.
     * (If the line trackers are only going to be used for the autonomous
     * period, then this probably isn't a harmful assumption.)
+    * 
+    * @return Returns a string representation of the 
     */
     public String activeSensor()
     {
+        if (!left.get() && !middle.get() && !right.get())
+            return "left-middle-right";
+        if (!left.get() && !middle.get())
+            return "left-middle";
+        if (!right.get() && !middle.get())
+            return "right-middle";
+        if (!left.get() && !right.get())
+            return "split";
         if (!left.get())
             return "left";
         if (!middle.get())
@@ -58,13 +62,32 @@ public class RRLineTracker
         
         return "none";
     }
-    //returns the values of the line sensors
+    
+    /**
+     * Returns the value of the left line sensor
+     * 
+     * @return Returns a boolean of the left line sensor state
+     */
+    
     public boolean getL() {
         return left.get();
     }
+    
+    /**
+     * Returns the value of the middle line sensor
+     * 
+     * @return Returns a boolean of the middle line sensor state
+     */
     public boolean getM() {
         return middle.get();
     }
+    
+    /**
+     * Returns the value of the right line sensor
+     * 
+     * @return Returns a boolean of the right line sensor state
+     */
+    
     public boolean getR() {
         return right.get();
     }

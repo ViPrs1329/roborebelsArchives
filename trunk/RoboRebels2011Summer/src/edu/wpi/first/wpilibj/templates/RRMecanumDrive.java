@@ -33,6 +33,7 @@
  */
 
 package edu.wpi.first.wpilibj.templates;
+
 import edu.wpi.first.wpilibj.Jaguar;
 import java.lang.Math;
 import edu.wpi.first.wpilibj.Joystick;
@@ -85,6 +86,14 @@ public class RRMecanumDrive {
    // private     Encoder     br_Encoder;
 
 
+    /**
+     * Constructor for RRMecanumDrive
+     * 
+     * @param frontLeftMotorChannel Front-left channel port number
+     * @param frontRightMotorChannel Front-right channel port number
+     * @param backLeftMotorChannel Back-left channel port number
+     * @param backRightMotorChannel Back-right channel port number
+     */
 
     public RRMecanumDrive( int frontLeftMotorChannel,
                            int frontRightMotorChannel,
@@ -109,11 +118,24 @@ public class RRMecanumDrive {
 
     }
 
-    public void assignJoystick(Joystick s) {
-          m_xboxStick = s;
+    /**
+     * Assign a joystick that this object will grab input from
+     * 
+     * @param j Passed in joystick object.  Should already be instantiated
+     */
+    
+    public void assignJoystick(Joystick j) {
+          m_xboxStick = j;
     }
 
-
+    /**
+     * This method should be the only method that needs to be called
+     * to actually drive a mecanum system.  This should be called 
+     * from the TeleopPeriodic function.
+     * 
+     * TODO:  Have we tried this call from the TeloepContinuous method?
+     */
+    
     public void drive() {
 
           /*
@@ -448,16 +470,25 @@ public class RRMecanumDrive {
                   break;
           }
 
-/*
+          /*
           System.out.println("FLE Distance: "+ fl_Encoder.get());
           System.out.println("FRE Distance: "+ fr_Encoder.get());
           System.out.println("BLE Distance: "+ bl_Encoder.get());
           System.out.println("BRE Distance: "+ br_Encoder.get());
- */
- }
+          */
+    }
 
- 
- public void drive(double x, double y, double rot) {
+    
+    /**
+     * Drive method used for autonomous motion.  Range of all variables
+     * is from -1.0 - 1.0
+     * 
+     * @param x X component of the direction vector
+     * @param y Y component of the direction vector
+     * @param rot Speed of rotation 
+     */
+    
+    public void drive(double x, double y, double rot) {
           l_angle = Math.toDegrees(MathUtils.atan2(-x,-y));
           l_magnitude = Math.sqrt((x*x)+(y*y));
 
@@ -556,6 +587,11 @@ public class RRMecanumDrive {
     }
 
 
+    /**
+     * Cartesian tank drive method.  (ie. no trig functions present 
+     * in this code)
+     * 
+     */
 
     private void driveCartesianTank() {
         //sensitivity
@@ -597,6 +633,9 @@ public class RRMecanumDrive {
     }
 
 
+    /**
+     * Sets all motor speeds to zero, stopping the drive system.
+     */
 
     public void stop() {
           frontLeftMotor.set(0);
@@ -606,7 +645,11 @@ public class RRMecanumDrive {
     }
 
 
-
+    /**
+     * Returns a string value of the current drive system that we're in.
+     * 
+     * @return Returns a string representation of the drive mode.
+     */
 
     public String getControlModeName() {
         String controlOut = new String();
