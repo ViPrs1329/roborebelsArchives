@@ -54,11 +54,6 @@ public class RRMecanumDrive {
                             backLeftMotor,
                             backRightMotor;
 
-    private     double      frontLeftSpeed,
-                            frontRightSpeed,
-                            backLeftSpeed,
-                            backRightSpeed;
-
 
     private     Joystick    m_xboxStick;
 

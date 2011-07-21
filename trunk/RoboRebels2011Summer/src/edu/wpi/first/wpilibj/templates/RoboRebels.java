@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 
@@ -57,6 +58,7 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
+    RRAccel                         accel;
 
     // Declare objects needed for the robot that might be used
     // in more than one location
@@ -119,6 +121,7 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
+        accel = new RRAccel();
 
         System.out.println( "Robot Ready" );
     }
@@ -260,9 +263,12 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
-       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ": Nums can go here");
-       m_dsLCD.updateLCD();
+        ADXL345_I2C.AllAxes aa = accel.getAll();
+        
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
+        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "");
+        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Ac: " + aa.XAxis + " " + aa.YAxis + " " + aa.ZAxis);
+        m_dsLCD.updateLCD();
 
     }
 }
