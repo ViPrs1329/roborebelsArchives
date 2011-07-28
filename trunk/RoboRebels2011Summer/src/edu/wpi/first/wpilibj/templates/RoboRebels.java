@@ -59,6 +59,7 @@ public class RoboRebels extends IterativeRobot {
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
     RRAccel                         accel;
+    RRGyro                          gyro;
 
     // Declare objects needed for the robot that might be used
     // in more than one location
@@ -122,6 +123,7 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
         accel = new RRAccel();
+        gyro = new RRGyro();
 
         System.out.println( "Robot Ready" );
     }
@@ -134,6 +136,9 @@ public class RoboRebels extends IterativeRobot {
     {
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
+
+        // reset gyro heading!
+        gyro.reset();
     }
 
     /**
@@ -266,7 +271,7 @@ public class RoboRebels extends IterativeRobot {
         ADXL345_I2C.AllAxes aa = accel.getAll();
         
         m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
-        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "");
+        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Gy: " + gyro.getAngle());
         m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Ac: " + aa.XAxis + " " + aa.YAxis + " " + aa.ZAxis);
         m_dsLCD.updateLCD();
 
