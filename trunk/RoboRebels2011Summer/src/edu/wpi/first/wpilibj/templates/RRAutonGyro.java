@@ -134,13 +134,15 @@ public class RRAutonGyro
                 break;
 
             case STEP_1:
-
+                
+                // collect the drive start time
                 collectDriveStartTime();
                 DriveState = STEP_2;
                 break;
 
             case STEP_2:
 
+                // drive for for about 3 seconds at 0.25 full throttle
                 if ( driveFor(0.25, 3.0) == true )
                 {
                     m_drive.stop();
@@ -151,22 +153,34 @@ public class RRAutonGyro
 
             case STEP_3:
 
+                // rotate 180 degrees, within a range of 5 degrees at 0.20
+                // turning speed in a clockwise direction
                 if ( rotate(180, 5, 0.20, true) == true )
                 {
                     //System.out.println("Stopping");
                     m_drive.stop();
-                    DriveState = STOP;
+                    DriveState = STEP_4;
                 }
 
                 break;
                 
             case STEP_4:
                 
+                if ( driveFor(0.25, 3.0) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STEP_5;
+                }
                 
                 break;
                 
             case STEP_5:
                 
+                if ( rotate(180, 5, 0.20, true) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 
                 break;
              
