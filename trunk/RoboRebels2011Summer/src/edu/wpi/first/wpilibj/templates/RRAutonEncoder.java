@@ -5,10 +5,27 @@
 
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  *
- * @author Robot-1
+ * @author Derek Ward
  */
-public class RRAutonEncoder {
+public class RRAutonEncoder
+{
+    private     RRMecanumDrive      m_drive;
+    private     Encoder             m_encoder;
+    private     Timer               m_timer;
+
+    public RRAutonEncoder(RRMecanumDrive d)
+    {
+
+    }
+
+    private void Setup()
+    {
+
+    }
 
 }

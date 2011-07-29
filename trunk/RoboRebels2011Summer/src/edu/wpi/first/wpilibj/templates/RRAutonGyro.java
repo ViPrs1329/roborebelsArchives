@@ -218,7 +218,7 @@ public class RRAutonGyro
      * @param clockwise True = clockwise, False = counter-clockwise
      * @return True = criteria met, False = criteria not met
      */
-    private boolean rotate( double degrees, double range, double rotateSpeed, boolean clockwise )
+    public boolean rotate( double degrees, double range, double rotateSpeed, boolean clockwise )
     {
         double  currentAngle = m_gyro.getAngle();
 
@@ -253,7 +253,7 @@ public class RRAutonGyro
      * @param duration How long in seconds do you want the robot to drive for?
      * @return True = criteria met, False = criteria not met
      */
-    private boolean driveFor( double forwardSpeed, double duration )
+    public boolean driveFor( double forwardSpeed, double duration )
     {
         double  currentTime = m_timer.get();
 
@@ -270,7 +270,7 @@ public class RRAutonGyro
      * Collects the current time into the variable m_startDriveTime.  Call this
      * before you use the driveFor method!
      */
-    private void collectDriveStartTime()
+    public void collectDriveStartTime()
     {
         m_startDriveTime = m_timer.get();
     }
