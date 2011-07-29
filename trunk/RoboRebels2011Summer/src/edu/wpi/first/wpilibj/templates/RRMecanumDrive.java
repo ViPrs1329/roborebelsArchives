@@ -487,9 +487,9 @@ public class RRMecanumDrive {
           l_angle = Math.toDegrees(MathUtils.atan2(-x,-y));
           l_magnitude = Math.sqrt((x*x)+(y*y));
 
-          forward = y;
+          forward = -y;
           right = -x;
-          clockwise = rot;
+          clockwise = -rot;
 
           //make sure angles are in the expected range
           l_angle %= 360;

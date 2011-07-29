@@ -40,10 +40,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.ButtonType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Watchdog;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Encoder;
 
 
 /**
@@ -59,7 +55,7 @@ public class RoboRebels extends IterativeRobot {
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
     RRAccel                         accel;
-    RRGyro                          gyro;
+    RRAutonGyro                     autonGyro;
 
     // Declare objects needed for the robot that might be used
     // in more than one location
@@ -123,7 +119,11 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
         accel = new RRAccel();
-        gyro = new RRGyro();
+        autonGyro = new RRAutonGyro(mecanumDrive);
+
+        /* Drive station code */
+        m_ds = DriverStation.getInstance();
+        m_dsLCD = DriverStationLCD.getInstance();
 
         System.out.println( "Robot Ready" );
     }
@@ -137,8 +137,6 @@ public class RoboRebels extends IterativeRobot {
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
 
-        // reset gyro heading!
-        gyro.reset();
     }
 
     /**
@@ -151,6 +149,12 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         teleopStateBroadcasted = false;
+
+        // reset the autonomous code
+        autonGyro.reset();
+
+        // Initialize the autonomous code
+        autonGyro.init();
     }
 
     /**
@@ -164,9 +168,7 @@ public class RoboRebels extends IterativeRobot {
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
 
-        /* Drive station code */
-        m_ds = DriverStation.getInstance();
-        m_dsLCD = DriverStationLCD.getInstance();
+        
 
     }
 
@@ -188,6 +190,8 @@ public class RoboRebels extends IterativeRobot {
             System.out.println( "Teleop State" );
             autonomousStateBroadcasted = false;
         }
+
+        
     }
 
     /**
@@ -238,8 +242,10 @@ public class RoboRebels extends IterativeRobot {
 
     public void autonomousContinuous()
     {
-        
-       
+        // Continuously run the autonomous code
+        autonGyro.run();
+
+        updateDSLCD();
     }
 
     /**
@@ -268,11 +274,9 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        ADXL345_I2C.AllAxes aa = accel.getAll();
-        
         m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
-        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Gy: " + gyro.getAngle());
-        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Ac: " + aa.XAxis + " " + aa.YAxis + " " + aa.ZAxis);
+        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Gy: " + autonGyro.getAngle());
+        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Tm: " + autonGyro.getTime());
         m_dsLCD.updateLCD();
 
     }
