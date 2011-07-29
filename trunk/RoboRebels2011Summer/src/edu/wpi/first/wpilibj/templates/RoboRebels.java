@@ -54,7 +54,6 @@ public class RoboRebels extends IterativeRobot {
     // Declare custom object vars
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
-    RRAccel                         accel;
     RRAutonGyro                     autonGyro;
 
     // Declare objects needed for the robot that might be used
@@ -118,7 +117,6 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
-        accel = new RRAccel();
         autonGyro = new RRAutonGyro(mecanumDrive);
 
         /* Drive station code */
