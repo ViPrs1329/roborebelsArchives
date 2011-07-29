@@ -119,7 +119,7 @@ public class RRAutonGyro
      * autonomous logic should be placed into.
      *
      * You should keep the START and STOP case states, however,
-     * to add usefull logic make your states additional number
+     * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
      */
@@ -278,7 +278,7 @@ public class RRAutonGyro
      * criteria is met, otherwise it returns false.
      * @param degrees The degree in which the rotation will stop
      * @param range What is a good range to stop within (+/-)
-     * @param rotateSpeed What rotation speed should we roate in (0.0 - 1.0)
+     * @param rotateSpeed What rotation speed should we rotate in (0.0 - 1.0)
      * @param clockwise True = clockwise, False = counter-clockwise
      * @return True = criteria met, False = criteria not met
      */

@@ -25,13 +25,13 @@ public class RRAutonLineSensor
     private     RRLineTracker       m_lineTracker;
     private     Timer               m_timer;
     
-    private     int                 m_ltChannel1,
-                                    m_ltChannel2,
-                                    m_ltChannel3;
+    private     int                 m_leftLineChannel,
+                                    m_middleLineChannel,
+                                    m_rightLineChannel;
     
     private     int                 DriveState;
     
-    private     int                 m_startDriveTime = 0;
+    private     double              m_startDriveTime = 0;
     
     private     final int           START = 0,
                                     STOP = 1,
@@ -57,9 +57,9 @@ public class RRAutonLineSensor
     public RRAutonLineSensor(RRMecanumDrive d)
     {
         // default ports for the line tracker is 4, 5, 6
-        m_ltChannel1 = 4;
-        m_ltChannel2 = 5;
-        m_ltChannel3 = 6;
+        m_leftLineChannel = 4;
+        m_middleLineChannel = 5;
+        m_rightLineChannel = 6;
         
         // Only collect the MecanumDrive object
         // if it's not null
@@ -75,15 +75,15 @@ public class RRAutonLineSensor
      * channels to those that are passed in.  Also, retrieves the
      * passed RRMecanumDrive object.
      * @param d A previously created RRMecanumObject.
-     * @param l1 Left channel
-     * @param l2 Middle channel
-     * @param l3 Right channel
+     * @param l Left channel
+     * @param m Middle channel
+     * @param r Right channel
      */
-    public RRAutonLineSensor(RRMecanumDrive d, int l1, int l2, int l3)
+    public RRAutonLineSensor(RRMecanumDrive d, int l, int m, int r)
     {
-        m_ltChannel1 = l1;
-        m_ltChannel2 = l2;
-        m_ltChannel3 = l3;
+        m_leftLineChannel = l;
+        m_middleLineChannel = m;
+        m_rightLineChannel = r;
         
         // Only collect the MecanumDrive object
         // if it's not null
@@ -117,7 +117,7 @@ public class RRAutonLineSensor
      */
     private void SetupLineTracker()
     {
-        m_lineTracker = new RRLineTracker(m_ltChannel1, m_ltChannel1, m_ltChannel1);
+        m_lineTracker = new RRLineTracker(m_leftLineChannel, m_middleLineChannel, m_rightLineChannel);
     }
 
     /**
@@ -135,7 +135,7 @@ public class RRAutonLineSensor
      * autonomous logic should be placed into.
      *
      * You should keep the START and STOP case states, however,
-     * to add usefull logic make your states additional number
+     * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
      */
@@ -224,5 +224,15 @@ public class RRAutonLineSensor
         
         // reset drive variables
         m_startDriveTime = 0;
+    }
+    
+    
+    /**
+     * Collects the current time into the variable m_startDriveTime.  Call this
+     * before you use the driveFor method!
+     */
+    public void collectDriveStartTime()
+    {
+        m_startDriveTime = m_timer.get();
     }
 }

@@ -55,6 +55,7 @@ public class RoboRebels extends IterativeRobot {
     RRMecanumDrive                  mecanumDrive;
     RRLineTracker                   lineTracker;
     RRAutonGyro                     autonGyro;
+    RRAutonEncoder                  autonEncoder;
 
     // Declare objects needed for the robot that might be used
     // in more than one location
@@ -117,7 +118,8 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
         lineTracker = new RRLineTracker(4,5,6);
-        autonGyro = new RRAutonGyro(mecanumDrive);
+        //autonGyro = new RRAutonGyro(mecanumDrive);
+        autonEncoder = new RRAutonEncoder(mecanumDrive);
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -149,10 +151,10 @@ public class RoboRebels extends IterativeRobot {
         teleopStateBroadcasted = false;
 
         // reset the autonomous code
-        autonGyro.reset();
+        autonEncoder.reset();
 
         // Initialize the autonomous code
-        autonGyro.init();
+        autonEncoder.init();
     }
 
     /**
@@ -241,7 +243,7 @@ public class RoboRebels extends IterativeRobot {
     public void autonomousContinuous()
     {
         // Continuously run the autonomous code
-        autonGyro.run();
+        autonEncoder.run();
 
         updateDSLCD();
     }
@@ -272,9 +274,9 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName());
-        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "Gy: " + autonGyro.getAngle());
-        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Tm: " + autonGyro.getTime());
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+ mecanumDrive.getControlModeName() + "      ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "En: " + autonEncoder.getCount() + "      ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Tm: " + autonEncoder.getTime() + "      ");
         m_dsLCD.updateLCD();
 
     }
