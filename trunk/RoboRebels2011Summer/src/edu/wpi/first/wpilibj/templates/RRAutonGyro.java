@@ -155,7 +155,7 @@ public class RRAutonGyro
 
                 // rotate 180 degrees, within a range of 5 degrees at 0.20
                 // turning speed in a clockwise direction
-                if ( rotate(180, 5, 0.20, true) == true )
+                if ( rotate(180, 5, 0.30, true) == true )
                 {
                     //System.out.println("Stopping");
                     m_drive.stop();
@@ -166,26 +166,29 @@ public class RRAutonGyro
                 
             case STEP_4:
                 
-                if ( driveFor(0.25, 3.0) == true )
-                {
-                    m_drive.stop();
-                    DriveState = STEP_5;
-                }
+                reset();
+                
+                DriveState = STEP_5;
                 
                 break;
                 
             case STEP_5:
                 
-                if ( rotate(180, 5, 0.20, true) == true )
+                if ( driveFor(0.25, 3.0) == true )
                 {
                     m_drive.stop();
-                    DriveState = STOP;
+                    DriveState = STEP_6;
                 }
                 
                 break;
              
             case STEP_6:
                 
+                if ( rotate(180, 5, 0.30, true) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 
                 break;
                 

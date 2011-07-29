@@ -9,7 +9,15 @@ import edu.wpi.first.wpilibj.Timer;
 
 /**
  *
- * @author Robot-1
+ * !!!!!!!!!!!!!!!!!!!!!!!
+ * !!! NOTE !!!  The middle line sensor is defective!  So, the only
+ * output that you will be receiving from RRLineTracker will be:
+ * 
+ * "left-middle", "right-middle" or "middle"
+ * 
+ * !!!!!!!!!!!!!!!!!!!!!!!
+ * 
+ * @author 
  */
 public class RRAutonLineSensor 
 {
