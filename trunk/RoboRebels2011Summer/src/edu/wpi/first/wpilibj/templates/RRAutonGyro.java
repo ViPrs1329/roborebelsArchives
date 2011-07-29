@@ -142,7 +142,7 @@ public class RRAutonGyro
 
                 if ( rotate(180, 5, 0.20, true) == true )
                 {
-                    System.out.println("Stopping");
+                    //System.out.println("Stopping");
                     m_drive.stop();
                     DriveState = STOP;
                 }
@@ -222,11 +222,11 @@ public class RRAutonGyro
     {
         double  currentAngle = m_gyro.getAngle();
 
-        System.out.println("cA: " + currentAngle + " | d: " + degrees + " | r: " + range);
+        //System.out.println("cA: " + currentAngle + " | d: " + degrees + " | r: " + range);
 
         if ( currentAngle <= (degrees + range) && currentAngle >= (degrees - range) )
         {
-            System.out.println("rotate criteria met!");
+            //System.out.println("rotate criteria met!");
             return true;
         }
         else
