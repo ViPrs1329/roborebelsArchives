@@ -23,7 +23,18 @@ public class RRAutonGyro
     private     RRMecanumDrive      m_drive;
 
     private     final int           START = 0,
-                                    STOP = 1;
+                                    STOP = 1,
+                                    STEP_1 = 2,
+                                    STEP_2 = 3,
+                                    STEP_3 = 4,
+                                    STEP_4 = 5,
+                                    STEP_5 = 6,
+                                    STEP_6 = 7,
+                                    STEP_7 = 8,
+                                    STEP_8 = 9,
+                                    STEP_9 = 10,
+                                    STEP_10 = 11;
+                                    
 
     private     int                 DriveState;
 
@@ -119,26 +130,26 @@ public class RRAutonGyro
             case START:
 
                 reset();
-                DriveState = 2;
+                DriveState = STEP_1;
                 break;
 
-            case 2:
+            case STEP_1:
 
                 collectDriveStartTime();
-                DriveState = 3;
+                DriveState = STEP_2;
                 break;
 
-            case 3:
+            case STEP_2:
 
                 if ( driveFor(0.25, 3.0) == true )
                 {
                     m_drive.stop();
-                    DriveState = 4;
+                    DriveState = STEP_3;
                 }
 
                 break;
 
-            case 4:
+            case STEP_3:
 
                 if ( rotate(180, 5, 0.20, true) == true )
                 {
@@ -148,6 +159,42 @@ public class RRAutonGyro
                 }
 
                 break;
+                
+            case STEP_4:
+                
+                
+                break;
+                
+            case STEP_5:
+                
+                
+                break;
+             
+            case STEP_6:
+                
+                
+                break;
+                
+            case STEP_7:
+                
+                
+                break;
+                
+            case STEP_8:
+                
+                
+                break;
+                
+            case STEP_9:
+                
+                
+                break;
+                
+            case STEP_10:
+                
+                
+                break;
+                
 
             case STOP:
 

@@ -26,7 +26,18 @@ public class RRAutonEncoder
     private     int                 m_startDriveTime = 0;
     
     private     final int           START = 0,
-                                    STOP = 1;
+                                    STOP = 1,
+                                    STEP_1 = 2,
+                                    STEP_2 = 3,
+                                    STEP_3 = 4,
+                                    STEP_4 = 5,
+                                    STEP_5 = 6,
+                                    STEP_6 = 7,
+                                    STEP_7 = 8,
+                                    STEP_8 = 9,
+                                    STEP_9 = 10,
+                                    STEP_10 = 11;
+                                    
 
     /**
      * A constructor which takes a RRMecanumDrive object
@@ -122,6 +133,56 @@ public class RRAutonEncoder
         switch ( DriveState )
         {
             case START:
+                
+                
+                break;
+                
+            case STEP_1:
+
+                
+                break;
+
+            case STEP_2:
+
+
+                break;
+
+            case STEP_3:
+
+                
+                break;
+                
+            case STEP_4:
+                
+                
+                break;
+                
+            case STEP_5:
+                
+                
+                break;
+             
+            case STEP_6:
+                
+                
+                break;
+                
+            case STEP_7:
+                
+                
+                break;
+                
+            case STEP_8:
+                
+                
+                break;
+                
+            case STEP_9:
+                
+                
+                break;
+                
+            case STEP_10:
                 
                 
                 break;
