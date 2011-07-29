@@ -31,7 +31,7 @@ public class RRAutonGyro
 
     /**
      * A constructor which takes a RRMecanumDrive object
-     * and uses the default gyro channel.
+     * and uses the default gyro channel, 1.
      * @param d The already created RRMecanumDrive object
      */
     public RRAutonGyro(RRMecanumDrive d)
