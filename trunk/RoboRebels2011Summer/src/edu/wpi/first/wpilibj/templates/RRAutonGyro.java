@@ -178,7 +178,7 @@ public class RRAutonGyro
         // reset timer!
         m_timer.reset();
 
-        // rest drive variables
+        // reset drive variables
         m_startDriveTime = 0;
     }
 
