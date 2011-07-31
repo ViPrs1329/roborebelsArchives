@@ -49,93 +49,6 @@ public class RRAutonLineSensor implements RRAuton
     
     
     /**
-     * Constructor for RRAutonLineSensor.  Sets the default 
-     * line sensor channels to 4, 5, 6.  Also, retrieves the
-     * passed RRMecanumDrive object.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d A previously created RRMecanumObject.
-     */
-    public RRAutonLineSensor(RRMecanumDrive d)
-    {
-        // default ports for the line tracker is 4, 5, 6
-        m_leftLineChannel = 4;
-        m_middleLineChannel = 5;
-        m_rightLineChannel = 6;
-        
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-    
-    /**
-     * Constructor for RRAutonLineSensor.  Sets the line sensor
-     * channels to those that are passed in.  Also, retrieves the
-     * passed RRMecanumDrive object.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d A previously created RRMecanumObject.
-     * @param l Left channel
-     * @param m Middle channel
-     * @param r Right channel
-     */
-    public RRAutonLineSensor(RRMecanumDrive d, int l, int m, int r)
-    {
-        m_leftLineChannel = l;
-        m_middleLineChannel = m;
-        m_rightLineChannel = r;
-        
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-    
-    /**
-     * Calls various other internal Setup methods.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void Setup()
-    {
-        SetupTimer();
-        SetupLineTracker();
-        reset();
-    }
-    
-    /**
-     * Creates a new Timer object.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void SetupTimer()
-    {
-        m_timer = new Timer();
-    }
-    
-    /**
-     * Creates a new RRLineTracker object.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void SetupLineTracker()
-    {
-        m_lineTracker = new RRLineTracker(m_leftLineChannel, m_middleLineChannel, m_rightLineChannel);
-    }
-
-    /**
      * Initializes the object.  Right now it just starts the 
      * built in timer.
      * 
@@ -236,6 +149,130 @@ public class RRAutonLineSensor implements RRAuton
     }
     
     /**
+     * Collects the current time into the variable m_startDriveTime.  Call this
+     * before you use the driveFor method!
+     * 
+     * NOTE: This should be modified!
+     * 
+     */
+    public void collectDriveStartTime()
+    {
+        m_startDriveTime = m_timer.get();
+    }
+    
+    
+    // ====================================================
+    // D O   N O T  E D I T  B E L O W  T H I S  L I N E
+    // ====================================================
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Constructor for RRAutonLineSensor.  Sets the default 
+     * line sensor channels to 4, 5, 6.  Also, retrieves the
+     * passed RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d A previously created RRMecanumObject.
+     */
+    public RRAutonLineSensor(RRMecanumDrive d)
+    {
+        // default ports for the line tracker is 4, 5, 6
+        m_leftLineChannel = 4;
+        m_middleLineChannel = 5;
+        m_rightLineChannel = 6;
+        
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+    
+    /**
+     * Constructor for RRAutonLineSensor.  Sets the line sensor
+     * channels to those that are passed in.  Also, retrieves the
+     * passed RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d A previously created RRMecanumObject.
+     * @param l Left channel
+     * @param m Middle channel
+     * @param r Right channel
+     */
+    public RRAutonLineSensor(RRMecanumDrive d, int l, int m, int r)
+    {
+        m_leftLineChannel = l;
+        m_middleLineChannel = m;
+        m_rightLineChannel = r;
+        
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+    
+    /**
+     * Calls various other internal Setup methods.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void Setup()
+    {
+        SetupTimer();
+        SetupLineTracker();
+        reset();
+    }
+    
+    /**
+     * Creates a new Timer object.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void SetupTimer()
+    {
+        m_timer = new Timer();
+    }
+    
+    /**
+     * Creates a new RRLineTracker object.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void SetupLineTracker()
+    {
+        m_lineTracker = new RRLineTracker(m_leftLineChannel, m_middleLineChannel, m_rightLineChannel);
+    }
+
+    
+    
+    /**
      * This method resets the state of the autonomous
      * class.  Sets the DriveState to START and resets the 
      * timer and startDriveTime variable.
@@ -251,19 +288,6 @@ public class RRAutonLineSensor implements RRAuton
         
         // reset drive variables
         m_startDriveTime = 0;
-    }
-    
-    
-    /**
-     * Collects the current time into the variable m_startDriveTime.  Call this
-     * before you use the driveFor method!
-     * 
-     * NOTE: This should be modified!
-     * 
-     */
-    public void collectDriveStartTime()
-    {
-        m_startDriveTime = m_timer.get();
     }
     
     /**

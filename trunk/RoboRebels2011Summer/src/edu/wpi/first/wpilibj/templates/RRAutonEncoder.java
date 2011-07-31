@@ -57,85 +57,6 @@ public class RRAutonEncoder implements RRAuton
                                     
 
     /**
-     * A constructor which takes a RRMecanumDrive object
-     * and uses the default encoder channels of 1 and 2.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d The already created RRMecanumDrive object
-     */
-    public RRAutonEncoder(RRMecanumDrive d)
-    {
-        m_encoderChannel1 = 1;
-        m_encoderChannel2 = 2;
-        
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-    
-    /**
-     * A constructor which takes a RRMecanumDrive object
-     * and uses the default encoder channels that are passed
-     * in.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d The already created RRMecanumDrive object
-     * @param encChannel1 Channel 1 of encoder
-     * @param encChannel2 Channel 2 of encoder
-     */
-    public RRAutonEncoder(RRMecanumDrive d, int encChannel1, int encChannel2)
-    {
-        m_encoderChannel1 = encChannel1;
-        m_encoderChannel2 = encChannel2;
-        
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-
-    /**
-     * Calls other setup methods and reset()
-     * 
-     * NOTE: This should not be modified!
-     */
-    private void Setup()
-    {
-        SetupTimer();
-        SetupEncoder();
-        reset();
-    }
-    
-    /**
-     * Creates a new Timer object for our class
-     * 
-     * NOTE: This should not be modified!
-     */
-    private void SetupTimer()
-    {
-        m_timer = new Timer();
-    }
-    
-    /**
-     * Creates a new Encoder object for our class
-     * 
-     * NOTE: This should not be modified!
-     */
-    private void SetupEncoder()
-    {
-        m_encoder = new Encoder(m_encoderChannel1, m_encoderChannel2, false);
-    }
-
-    /**
      * Initializes necessary objects.
      * 
      * NOTE: This may modified!
@@ -261,69 +182,6 @@ public class RRAutonEncoder implements RRAuton
     }
     
     /**
-     * This method resets the state of the autonomous
-     * class.  Sets the DriveState to START, resets
-     * the encoder and resets the timer and startDriveTime
-     * variable.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    public void reset()
-    {
-        // reset encoder
-        m_encoder.reset();
-        
-        // reset timer
-        m_timer.reset();
-        
-        // reset drive variables
-        m_startDriveTime = 0;
-        m_startDriveCount = 0;
-    }
-    
-    /**
-     * This returns the current count of the encoder.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @return Returns the count of the encoder
-     */
-    public int getCount()
-    {
-        if ( m_encoder != null )
-            return m_encoder.get();
-        
-        return -1;
-    }
-    
-    /**
-     * Returns the current time of this objects Timer
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @return Returns the current time of the Timer
-     */
-    public double getTime()
-    {
-        if ( m_timer != null )
-            return m_timer.get();
-        
-        return -1.0;
-    }
-    
-    
-    /**
-     * UNUSED in this class!
-     */
-    
-    public double getAngle()
-    {
-        return -1.0;
-    }
-    
-    
-    /**
      * Drives the robot in a certain speed, in the direction
      * that is specified, and counting
      * from the start time for the passed duration.  Returns true
@@ -446,5 +304,172 @@ public class RRAutonEncoder implements RRAuton
     public void collectDriveStartTime()
     {
         m_startDriveTime = m_timer.get();
+    }
+    
+    
+    
+    // ====================================================
+    // D O   N O T  E D I T  B E L O W  T H I S  L I N E
+    // ====================================================
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * A constructor which takes a RRMecanumDrive object
+     * and uses the default encoder channels of 1 and 2.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d The already created RRMecanumDrive object
+     */
+    public RRAutonEncoder(RRMecanumDrive d)
+    {
+        m_encoderChannel1 = 1;
+        m_encoderChannel2 = 2;
+        
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+    
+    /**
+     * A constructor which takes a RRMecanumDrive object
+     * and uses the default encoder channels that are passed
+     * in.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d The already created RRMecanumDrive object
+     * @param encChannel1 Channel 1 of encoder
+     * @param encChannel2 Channel 2 of encoder
+     */
+    public RRAutonEncoder(RRMecanumDrive d, int encChannel1, int encChannel2)
+    {
+        m_encoderChannel1 = encChannel1;
+        m_encoderChannel2 = encChannel2;
+        
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+
+    /**
+     * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
+     */
+    private void Setup()
+    {
+        SetupTimer();
+        SetupEncoder();
+        reset();
+    }
+    
+    /**
+     * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
+     */
+    private void SetupTimer()
+    {
+        m_timer = new Timer();
+    }
+    
+    /**
+     * Creates a new Encoder object for our class
+     * 
+     * NOTE: This should not be modified!
+     */
+    private void SetupEncoder()
+    {
+        m_encoder = new Encoder(m_encoderChannel1, m_encoderChannel2, false);
+    }
+    
+    
+    /**
+     * This method resets the state of the autonomous
+     * class.  Sets the DriveState to START, resets
+     * the encoder and resets the timer and startDriveTime
+     * variable.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    public void reset()
+    {
+        // reset encoder
+        m_encoder.reset();
+        
+        // reset timer
+        m_timer.reset();
+        
+        // reset drive variables
+        m_startDriveTime = 0;
+        m_startDriveCount = 0;
+    }
+    
+    /**
+     * This returns the current count of the encoder.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the count of the encoder
+     */
+    public int getCount()
+    {
+        if ( m_encoder != null )
+            return m_encoder.get();
+        
+        return -1;
+    }
+    
+    /**
+     * Returns the current time of this objects Timer
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the current time of the Timer
+     */
+    public double getTime()
+    {
+        if ( m_timer != null )
+            return m_timer.get();
+        
+        return -1.0;
+    }
+    
+    
+    /**
+     * UNUSED in this class!
+     */
+    
+    public double getAngle()
+    {
+        return -1.0;
     }
 }

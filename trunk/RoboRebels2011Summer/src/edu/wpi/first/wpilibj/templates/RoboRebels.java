@@ -123,7 +123,7 @@ public class RoboRebels extends IterativeRobot {
         // Only edit the line below with the RRAuton class 
         // that you will be testing
         
-        auton = new RRAutonGyro(mecanumDrive);
+        auton = new RRAutonSimple(mecanumDrive);
         
         // --------------------------
 

@@ -40,85 +40,9 @@ public class RRAutonGyro implements RRAuton
 
     private     double              m_startDriveTime = 0;
 
-    /**
-     * A constructor which takes a RRMecanumDrive object
-     * and uses the default gyro channel, 1.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d The already created RRMecanumDrive object
-     */
-    public RRAutonGyro(RRMecanumDrive d)
-    {
-        // Default Gyro channel is 1
-        m_gyroChannel = 1;
-
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-
-    /**
-     * Same as the constructor above, except you may pass in your
-     * own gyro channel.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d Already created RRMecanumDrive object
-     * @param channel Gyro channel
-     */
-    public RRAutonGyro( RRMecanumDrive d, int channel )
-    {
-        if ( channel <= 0 )
-            m_gyroChannel = 1;
-        else
-            m_gyroChannel = channel;
-
-        if ( d != null )
-            m_drive = d;
-
-        Setup();
-    }
-
-    /**
-     * Calls other setup methods and reset()
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void Setup()
-    {
-        SetupTimer();
-        SetupGyro();
-        reset();
-    }
-
-    /**
-     * Creates a new Timer object for our class
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void SetupTimer()
-    {
-        m_timer = new Timer();
-    }
-
-    /**
-     * Creates a new Gyro object for our class
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void SetupGyro()
-    {
-        m_gyro = new Gyro( m_gyroChannel );
-    }
-
+    
+    
+    
     /**
      * Initializes necessary objects.
      * 
@@ -249,68 +173,8 @@ public class RRAutonGyro implements RRAuton
                 break;
         }
     }
-
-    /**
-     * This method resets the state of the autonomous
-     * class.  Sets the DriveState to START, resets
-     * the gyro and resets the timer and startDriveTime
-     * variable.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    public void reset()
-    {
-
-        // reset gyro heading!
-        m_gyro.reset();
-
-        // reset timer!
-        m_timer.reset();
-
-        // reset drive variables
-        m_startDriveTime = 0;
-    }
-
-    /**
-     * Returns the current angle of the gyro
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @return Returns the angle of the gyro in degrees
-     */
-    public double getAngle()
-    {
-        if ( m_gyro != null )
-            return m_gyro.getAngle();
-        else
-            return 0.0;
-    }
-
-    /**
-     * Returns the current time of the timer
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @return Returns the current timer time in seconds
-     */
-    public double getTime()
-    {
-        if ( m_timer != null )
-            return m_timer.get();
-        else
-            return 0.0;
-    }
     
-    /**
-     * UNUSED IN THIS CLASS!!!!
-     */
     
-    public int getCount()
-    {
-        return -1;
-    }
-
     /**
      * Called periodically, this method rotates the robot
      * until it hits the passed angle (degrees) within the
@@ -402,4 +266,172 @@ public class RRAutonGyro implements RRAuton
     {
         m_startDriveTime = m_timer.get();
     }
+    
+    // ====================================================
+    // D O   N O T  E D I T  B E L O W  T H I S  L I N E
+    // ====================================================
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * A constructor which takes a RRMecanumDrive object
+     * and uses the default gyro channel, 1.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d The already created RRMecanumDrive object
+     */
+    public RRAutonGyro(RRMecanumDrive d)
+    {
+        // Default Gyro channel is 1
+        m_gyroChannel = 1;
+
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+
+    /**
+     * Same as the constructor above, except you may pass in your
+     * own gyro channel.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d Already created RRMecanumDrive object
+     * @param channel Gyro channel
+     */
+    public RRAutonGyro( RRMecanumDrive d, int channel )
+    {
+        if ( channel <= 0 )
+            m_gyroChannel = 1;
+        else
+            m_gyroChannel = channel;
+
+        if ( d != null )
+            m_drive = d;
+
+        Setup();
+    }
+
+    /**
+     * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void Setup()
+    {
+        SetupTimer();
+        SetupGyro();
+        reset();
+    }
+
+    /**
+     * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void SetupTimer()
+    {
+        m_timer = new Timer();
+    }
+
+    /**
+     * Creates a new Gyro object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void SetupGyro()
+    {
+        m_gyro = new Gyro( m_gyroChannel );
+    }
+
+    
+
+    /**
+     * This method resets the state of the autonomous
+     * class.  Sets the DriveState to START, resets
+     * the gyro and resets the timer and startDriveTime
+     * variable.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    public void reset()
+    {
+
+        // reset gyro heading!
+        m_gyro.reset();
+
+        // reset timer!
+        m_timer.reset();
+
+        // reset drive variables
+        m_startDriveTime = 0;
+    }
+
+    /**
+     * Returns the current angle of the gyro
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the angle of the gyro in degrees
+     */
+    public double getAngle()
+    {
+        if ( m_gyro != null )
+            return m_gyro.getAngle();
+        else
+            return 0.0;
+    }
+
+    /**
+     * Returns the current time of the timer
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the current timer time in seconds
+     */
+    public double getTime()
+    {
+        if ( m_timer != null )
+            return m_timer.get();
+        else
+            return 0.0;
+    }
+    
+    /**
+     * UNUSED IN THIS CLASS!!!!
+     */
+    
+    public int getCount()
+    {
+        return -1;
+    }
+
+    
 }

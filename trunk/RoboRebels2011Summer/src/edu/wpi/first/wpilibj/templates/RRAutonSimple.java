@@ -38,77 +38,6 @@ public class RRAutonSimple implements RRAuton
                                     STEP_9 = 10,
                                     STEP_10 = 11;
     
-    /**
-     * This simple RRAuton class only uses a passed in
-     * RRMecanumDrive object.
-     * 
-     * NOTE: This should not be modified!
-     * 
-     * @param d Previously created RRMecanumDrive object.
-     */
-    public RRAutonSimple(RRMecanumDrive d)
-    {
-        // Only collect the MecanumDrive object
-        // if it's not null
-        if ( d != null )
-            m_drive = d;
-
-        // Set up necessary objects and vars
-        Setup();
-    }
-    
-    /**
-     * Calls other setup methods and reset()
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void Setup()
-    {
-        SetupTimer();
-        reset();
-    }
-    
-    /**
-     * Creates a new Timer object for our class
-     * 
-     * NOTE: This should not be modified!
-     * 
-     */
-    private void SetupTimer()
-    {
-        m_timer = new Timer();
-    }
-    
-    /**
-     * Returns the current time of this object's Timer
-     * @return 
-     */
-    public double getTime()
-    {
-        if ( m_timer != null )
-            return m_timer.get();
-        
-        return -1.0;
-    }
-    
-    /**
-     * UNUSED!
-     * @return 
-     */
-    public double getAngle()
-    {
-        return -1.0;
-    }
-    
-    /**
-     * UNUSED!
-     * @return 
-     */
-    public int getCount()
-    {
-        return -1;
-    }
     
     /**
      * Initializes necessary objects.
@@ -229,20 +158,6 @@ public class RRAutonSimple implements RRAuton
     }
     
     /**
-     * This method resets the state of the autonomous
-     * class.  Sets the DriveState to START and resets 
-     * the timer and startDriveTime variable.
-     */
-    public void reset()
-    {
-        // reset timer
-        m_timer.reset();
-        
-        // reset drive variables
-        m_startDriveTime = 0;
-    }
-    
-    /**
      * Drives the robot in a certain speed, in the direction
      * that is specified, and counting
      * from the start time for the passed duration.  Returns true
@@ -321,4 +236,121 @@ public class RRAutonSimple implements RRAuton
     {
         m_startDriveTime = m_timer.get();
     }
+    
+    
+    // ====================================================
+    // D O   N O T  E D I T  B E L O W  T H I S  L I N E
+    // ====================================================
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * This simple RRAuton class only uses a passed in
+     * RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @param d Previously created RRMecanumDrive object.
+     */
+    public RRAutonSimple(RRMecanumDrive d)
+    {
+        // Only collect the MecanumDrive object
+        // if it's not null
+        if ( d != null )
+            m_drive = d;
+
+        // Set up necessary objects and vars
+        Setup();
+    }
+    
+    /**
+     * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void Setup()
+    {
+        SetupTimer();
+        reset();
+    }
+    
+    /**
+     * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
+     */
+    private void SetupTimer()
+    {
+        m_timer = new Timer();
+    }
+    
+    /**
+     * This method resets the state of the autonomous
+     * class.  Sets the DriveState to START and resets 
+     * the timer and startDriveTime variable.
+     * 
+     * NOTE:  This should not be modified!
+     * 
+     */
+    public void reset()
+    {
+        // reset timer
+        m_timer.reset();
+        
+        // reset drive variables
+        m_startDriveTime = 0;
+    }
+    
+    /**
+     * Returns the current time of this object's Timer
+     * @return 
+     */
+    public double getTime()
+    {
+        if ( m_timer != null )
+            return m_timer.get();
+        
+        return -1.0;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public double getAngle()
+    {
+        return -1.0;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public int getCount()
+    {
+        return -1;
+    }
+    
 }
