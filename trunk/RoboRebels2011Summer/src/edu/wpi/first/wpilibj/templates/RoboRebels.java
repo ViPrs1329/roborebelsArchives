@@ -69,6 +69,9 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * Constructor
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     
     public void RoboRebels()
@@ -80,6 +83,9 @@ public class RoboRebels extends IterativeRobot {
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
+     * 
+     * NOTE:  You should only modify one line code in this method!
+     * 
      */
     
     public void robotInit()
@@ -112,7 +118,14 @@ public class RoboRebels extends IterativeRobot {
         mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
         mecanumDrive.assignJoystick(m_xboxStick);
         
+        
+        // --------------------------
+        // Only edit the line below with the RRAuton class 
+        // that you will be testing
+        
         auton = new RRAutonGyro(mecanumDrive);
+        
+        // --------------------------
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -123,6 +136,9 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * Put initialization code for the disabled state in this method.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     
     public void disabledInit()
@@ -134,6 +150,9 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * Put initialization code for the autonomous state in this method.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     
     public void autonomousInit()
@@ -152,6 +171,9 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * Put initialization code for the teleop state in this method.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     
     public void teleopInit()
@@ -172,6 +194,9 @@ public class RoboRebels extends IterativeRobot {
      *
      *  - This class is used for processing code which does not
      *    need to be fast, but predictable.  
+     * 
+     * 
+     * NOTE: This should not be modified!
      *
      */
     
@@ -193,6 +218,10 @@ public class RoboRebels extends IterativeRobot {
      * ---
      * This is the most important method in this class
      * ---
+     * 
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
 
     public void teleopPeriodic()
@@ -212,8 +241,7 @@ public class RoboRebels extends IterativeRobot {
     /**
      * This function is called periodically during the disabled state
      *
-     * What it needs to do:
-     *
+     * NOTE: This should not be modified!
      *
      */
     
@@ -231,6 +259,8 @@ public class RoboRebels extends IterativeRobot {
      * The VM will try to call this function as often as possible during the autonomous state
      *
      * NOTE:  Autonomous drive code works very well in this method.
+     * 
+     * NOTE: This should not be modified!
      */
 
     public void autonomousContinuous()
@@ -243,6 +273,8 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * The VM will try to call this function as often as possible during the teleop state
+     * 
+     * NOTE: This should not be modified!
      *
      */
 
@@ -253,6 +285,9 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * The VM will try to call this function as often as possible during the disabled state
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
 
     public void disabledContinuous()
@@ -263,6 +298,9 @@ public class RoboRebels extends IterativeRobot {
     
     /*
      * Sends useful information to the LCD on the DriverStation
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
 
     public void updateDSLCD()
