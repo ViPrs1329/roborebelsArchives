@@ -88,22 +88,32 @@ public class RRAutonSimple
                 
             case STEP_1:
 
-                
+                collectDriveStartTime();
+                DriveState = STEP_2;
                 break;
 
             case STEP_2:
 
-                
+                if ( driveFor(0.25, 3.0) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STEP_3;
+                }
                 break;
 
             case STEP_3:
                 
-                
+                collectDriveStartTime();
+                DriveState = STEP_4;
                 break;
                 
             case STEP_4:
                 
-                
+                if ( rotateFor(0.25, true, 3.0) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 break;
                 
             case STEP_5:
@@ -163,5 +173,62 @@ public class RRAutonSimple
         
         // reset drive variables
         m_startDriveTime = 0;
+    }
+    
+    /**
+     * Drives the robot forward in a certain speed, and counting
+     * from the start time for the passed duration.  Returns true
+     * when the criteria is met, false otherwise.  Make sure you call
+     * collectDriveStartTime method before you call this method!!!
+     * @param forwardSpeed What speed do you want to drive at (0.0 - 1.0)
+     * @param duration How long in seconds do you want the robot to drive for?
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean driveFor( double forwardSpeed, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            m_drive.drive(0.0, forwardSpeed, 0.0);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Rotates the robot in the specified direction at the specified
+     * speed for the specified duration.  Returns true when the 
+     * criteria is met, false otherwise.  Make sure you call 
+     * collectDriveStartTime before you start making calls to this method!!!
+     * @param rotateSpeed What speed do you want the robot to spin at.  0.0 - 1.0
+     * @param clockwise True = clockwise, False = counter-clockwise
+     * @param duration Duration of rotation in seconds
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean rotateFor( double rotateSpeed, boolean clockwise, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( clockwise )
+                m_drive.drive(0.0, 0.0, rotateSpeed);
+            else
+                m_drive.drive(0.0, 0.0, -1.0 * rotateSpeed);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Collects the current time into the variable m_startDriveTime.  Call this
+     * before you use the driveFor method!
+     */
+    public void collectDriveStartTime()
+    {
+        m_startDriveTime = m_timer.get();
     }
 }
