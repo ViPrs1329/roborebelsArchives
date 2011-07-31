@@ -5,7 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 /**
- * Abstract class which all other RRAuton classes
+ * An interface which all other RRAuton classes
  * must implement
  * 
  * @author Derek Ward

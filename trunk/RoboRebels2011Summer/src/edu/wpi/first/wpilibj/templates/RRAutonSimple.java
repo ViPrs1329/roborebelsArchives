@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author Derek Ward
  */
-public class RRAutonSimple  implements RRAuton
+public class RRAutonSimple implements RRAuton
 {
     // Objects used to represent physical objects/sensors 
     // on the robot
@@ -39,8 +39,11 @@ public class RRAutonSimple  implements RRAuton
                                     STEP_10 = 11;
     
     /**
-     * This simple Auton class only uses a passed in
+     * This simple RRAuton class only uses a passed in
      * RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d Previously created RRMecanumDrive object.
      */
     public RRAutonSimple(RRMecanumDrive d)
@@ -56,6 +59,9 @@ public class RRAutonSimple  implements RRAuton
     
     /**
      * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void Setup()
     {
@@ -65,6 +71,9 @@ public class RRAutonSimple  implements RRAuton
     
     /**
      * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void SetupTimer()
     {
@@ -81,6 +90,9 @@ public class RRAutonSimple  implements RRAuton
     
     /**
      * Initializes necessary objects.
+     * 
+     * NOTE: This may be modified!
+     * 
      */
     public void init()
     {
@@ -100,6 +112,10 @@ public class RRAutonSimple  implements RRAuton
      * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
+     * 
+     * NOTE: The general skeleton of this method should not be 
+     * modified, however, please, fill in logic calls here!
+     * 
      */
     public void run()
     {
@@ -210,6 +226,9 @@ public class RRAutonSimple  implements RRAuton
      * from the start time for the passed duration.  Returns true
      * when the criteria is met, false otherwise.  Make sure you call
      * collectDriveStartTime method before you call this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param speed What speed do you want to drive at (0.0 - 1.0)
      * @param forward True = forward, False = backward
      * @param duration How long in seconds do you want the robot to drive for?
@@ -245,6 +264,9 @@ public class RRAutonSimple  implements RRAuton
      * speed for the specified duration.  Returns true when the 
      * criteria is met, false otherwise.  Make sure you call 
      * collectDriveStartTime before you start making calls to this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param rotateSpeed What speed do you want the robot to spin at.  0.0 - 1.0
      * @param clockwise True = clockwise, False = counter-clockwise
      * @param duration Duration of rotation in seconds
@@ -269,6 +291,9 @@ public class RRAutonSimple  implements RRAuton
     /**
      * Collects the current time into the variable m_startDriveTime.  Call this
      * before you use the driveFor method!
+     * 
+     * NOTE: This should be modified!
+     * 
      */
     public void collectDriveStartTime()
     {

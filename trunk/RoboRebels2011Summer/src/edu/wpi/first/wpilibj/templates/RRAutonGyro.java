@@ -43,6 +43,9 @@ public class RRAutonGyro implements RRAuton
     /**
      * A constructor which takes a RRMecanumDrive object
      * and uses the default gyro channel, 1.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d The already created RRMecanumDrive object
      */
     public RRAutonGyro(RRMecanumDrive d)
@@ -62,6 +65,9 @@ public class RRAutonGyro implements RRAuton
     /**
      * Same as the constructor above, except you may pass in your
      * own gyro channel.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d Already created RRMecanumDrive object
      * @param channel Gyro channel
      */
@@ -80,6 +86,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void Setup()
     {
@@ -90,6 +99,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void SetupTimer()
     {
@@ -98,6 +110,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Creates a new Gyro object for our class
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void SetupGyro()
     {
@@ -106,6 +121,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Initializes necessary objects.
+     * 
+     * NOTE: This may be modified!
+     * 
      */
     public void init()
     {
@@ -126,6 +144,9 @@ public class RRAutonGyro implements RRAuton
      * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
+     * 
+     * NOTE: The general skeleton of this method should not be 
+     * modified, however, please, fill in logic calls here!
      */
     public void run()
     {
@@ -234,6 +255,9 @@ public class RRAutonGyro implements RRAuton
      * class.  Sets the DriveState to START, resets
      * the gyro and resets the timer and startDriveTime
      * variable.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     public void reset()
     {
@@ -250,6 +274,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Returns the current angle of the gyro
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @return Returns the angle of the gyro in degrees
      */
     public double getAngle()
@@ -262,6 +289,9 @@ public class RRAutonGyro implements RRAuton
 
     /**
      * Returns the current time of the timer
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @return Returns the current timer time in seconds
      */
     public double getTime()
@@ -278,6 +308,9 @@ public class RRAutonGyro implements RRAuton
      * range at the passed rotation speed and in a clockwise
      * or counter-clockwise direction.  Returns true when the
      * criteria is met, otherwise it returns false.
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param degrees The degree in which the rotation will stop
      * @param range What is a good range to stop within (+/-)
      * @param rotateSpeed What rotation speed should we rotate in (0.0 - 1.0)
@@ -316,6 +349,9 @@ public class RRAutonGyro implements RRAuton
      * from the start time for the passed duration.  Returns true
      * when the criteria is met, false otherwise.  Make sure you call
      * collectDriveStartTime method before you call this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param speed What speed do you want to drive at (0.0 - 1.0)
      * @param forward True = forward, False = backward
      * @param duration How long in seconds do you want the robot to drive for?
@@ -349,6 +385,9 @@ public class RRAutonGyro implements RRAuton
     /**
      * Collects the current time into the variable m_startDriveTime.  Call this
      * before you use the driveFor method!
+     * 
+     * NOTE: This should be modified!
+     * 
      */
     public void collectDriveStartTime()
     {

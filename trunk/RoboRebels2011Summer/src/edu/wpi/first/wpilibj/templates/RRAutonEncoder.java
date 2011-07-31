@@ -59,6 +59,9 @@ public class RRAutonEncoder implements RRAuton
     /**
      * A constructor which takes a RRMecanumDrive object
      * and uses the default encoder channels of 1 and 2.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d The already created RRMecanumDrive object
      */
     public RRAutonEncoder(RRMecanumDrive d)
@@ -79,6 +82,9 @@ public class RRAutonEncoder implements RRAuton
      * A constructor which takes a RRMecanumDrive object
      * and uses the default encoder channels that are passed
      * in.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d The already created RRMecanumDrive object
      * @param encChannel1 Channel 1 of encoder
      * @param encChannel2 Channel 2 of encoder
@@ -99,6 +105,8 @@ public class RRAutonEncoder implements RRAuton
 
     /**
      * Calls other setup methods and reset()
+     * 
+     * NOTE: This should not be modified!
      */
     private void Setup()
     {
@@ -109,6 +117,8 @@ public class RRAutonEncoder implements RRAuton
     
     /**
      * Creates a new Timer object for our class
+     * 
+     * NOTE: This should not be modified!
      */
     private void SetupTimer()
     {
@@ -117,6 +127,8 @@ public class RRAutonEncoder implements RRAuton
     
     /**
      * Creates a new Encoder object for our class
+     * 
+     * NOTE: This should not be modified!
      */
     private void SetupEncoder()
     {
@@ -125,6 +137,8 @@ public class RRAutonEncoder implements RRAuton
 
     /**
      * Initializes necessary objects.
+     * 
+     * NOTE: This may modified!
      */
     public void init()
     {
@@ -147,6 +161,10 @@ public class RRAutonEncoder implements RRAuton
      * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
+     * 
+     * NOTE: The general skeleton of this method should not be 
+     * modified, however, please, fill in logic calls here!
+     * 
      */
     public void run()
     {
@@ -247,6 +265,9 @@ public class RRAutonEncoder implements RRAuton
      * class.  Sets the DriveState to START, resets
      * the encoder and resets the timer and startDriveTime
      * variable.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     public void reset()
     {
@@ -261,7 +282,13 @@ public class RRAutonEncoder implements RRAuton
         m_startDriveCount = 0;
     }
     
-    
+    /**
+     * This returns the current count of the encoder.
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the count of the encoder
+     */
     public int getCount()
     {
         if ( m_encoder != null )
@@ -270,7 +297,13 @@ public class RRAutonEncoder implements RRAuton
         return -1;
     }
     
-    
+    /**
+     * Returns the current time of this objects Timer
+     * 
+     * NOTE: This should not be modified!
+     * 
+     * @return Returns the current time of the Timer
+     */
     public double getTime()
     {
         if ( m_timer != null )
@@ -286,6 +319,9 @@ public class RRAutonEncoder implements RRAuton
      * from the start time for the passed duration.  Returns true
      * when the criteria is met, false otherwise.  Make sure you call
      * collectDriveStartTime method before you call this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param speed What speed do you want to drive at (0.0 - 1.0)
      * @param forward True = forward, False = backward
      * @param duration How long in seconds do you want the robot to drive for?
@@ -310,6 +346,9 @@ public class RRAutonEncoder implements RRAuton
     /**
      * Drives the robot forward in a certain speed, and counting from
      * the start encoder count, for the specified count.  
+     * 
+     * NOTE: This should be modified!
+     * 
      * @param speed The speed in which you want to drive (0.0 - 1.0)
      * @param forward Which direction are we driving?
      * @param countEnd The ending count for when the robot should stop
@@ -347,6 +386,9 @@ public class RRAutonEncoder implements RRAuton
     /**
      * Collects the current count of the encoder.  Call this before you
      * call the DriveForByCount method!
+     * 
+     * NOTE: This should be modified!
+     * 
      */
     public void collectDriveStartCount()
     {
@@ -358,6 +400,9 @@ public class RRAutonEncoder implements RRAuton
     /**
      * Collects the current time into the variable m_startDriveTime.  Call this
      * before you use the driveFor method!
+     * 
+     * NOTE: This should be modified!
+     * 
      */
     public void collectDriveStartTime()
     {

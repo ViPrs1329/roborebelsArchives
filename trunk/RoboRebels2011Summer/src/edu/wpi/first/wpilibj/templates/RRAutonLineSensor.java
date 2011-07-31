@@ -52,6 +52,9 @@ public class RRAutonLineSensor implements RRAuton
      * Constructor for RRAutonLineSensor.  Sets the default 
      * line sensor channels to 4, 5, 6.  Also, retrieves the
      * passed RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d A previously created RRMecanumObject.
      */
     public RRAutonLineSensor(RRMecanumDrive d)
@@ -74,6 +77,9 @@ public class RRAutonLineSensor implements RRAuton
      * Constructor for RRAutonLineSensor.  Sets the line sensor
      * channels to those that are passed in.  Also, retrieves the
      * passed RRMecanumDrive object.
+     * 
+     * NOTE: This should not be modified!
+     * 
      * @param d A previously created RRMecanumObject.
      * @param l Left channel
      * @param m Middle channel
@@ -96,6 +102,9 @@ public class RRAutonLineSensor implements RRAuton
     
     /**
      * Calls various other internal Setup methods.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void Setup()
     {
@@ -106,6 +115,9 @@ public class RRAutonLineSensor implements RRAuton
     
     /**
      * Creates a new Timer object.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void SetupTimer()
     {
@@ -114,6 +126,9 @@ public class RRAutonLineSensor implements RRAuton
     
     /**
      * Creates a new RRLineTracker object.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     private void SetupLineTracker()
     {
@@ -123,6 +138,9 @@ public class RRAutonLineSensor implements RRAuton
     /**
      * Initializes the object.  Right now it just starts the 
      * built in timer.
+     * 
+     * NOTE: This may be modified!
+     * 
      */
     public void init()
     {
@@ -142,6 +160,10 @@ public class RRAutonLineSensor implements RRAuton
      * to add useful logic make your states additional number
      * cases.  It is good practice to encapsulate your logic into
      * additional private methods (see driveFor or rotate methods).
+     * 
+     * NOTE: The general skeleton of this method should not be 
+     * modified, however, please, fill in logic calls here!
+     * 
      */
     public void run()
     {
@@ -217,6 +239,9 @@ public class RRAutonLineSensor implements RRAuton
      * This method resets the state of the autonomous
      * class.  Sets the DriveState to START and resets the 
      * timer and startDriveTime variable.
+     * 
+     * NOTE: This should not be modified!
+     * 
      */
     public void reset()
     {
@@ -232,6 +257,9 @@ public class RRAutonLineSensor implements RRAuton
     /**
      * Collects the current time into the variable m_startDriveTime.  Call this
      * before you use the driveFor method!
+     * 
+     * NOTE: This should be modified!
+     * 
      */
     public void collectDriveStartTime()
     {
