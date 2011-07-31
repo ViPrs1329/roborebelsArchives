@@ -314,6 +314,16 @@ public class RRAutonEncoder implements RRAuton
     
     
     /**
+     * UNUSED in this class!
+     */
+    
+    public double getAngle()
+    {
+        return -1.0;
+    }
+    
+    
+    /**
      * Drives the robot in a certain speed, in the direction
      * that is specified, and counting
      * from the start time for the passed duration.  Returns true
@@ -381,6 +391,35 @@ public class RRAutonEncoder implements RRAuton
             //System.out.println("Criteria met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
             return true;
         }
+    }
+    
+    /**
+     * Rotates the robot in the specified direction at the specified
+     * speed for the specified duration.  Returns true when the 
+     * criteria is met, false otherwise.  Make sure you call 
+     * collectDriveStartTime before you start making calls to this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
+     * @param rotateSpeed What speed do you want the robot to spin at.  0.0 - 1.0
+     * @param clockwise True = clockwise, False = counter-clockwise
+     * @param duration Duration of rotation in seconds
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean rotateFor( double rotateSpeed, boolean clockwise, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( clockwise )
+                m_drive.drive(0.0, 0.0, rotateSpeed);
+            else
+                m_drive.drive(0.0, 0.0, -1.0 * rotateSpeed);
+            return false;
+        }
+        else
+            return true;
     }
     
     /**

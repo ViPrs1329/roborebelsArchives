@@ -17,4 +17,10 @@ public interface RRAuton
     public void run();
     
     public void reset();
+    
+    public double getTime();
+    
+    public int getCount();
+    
+    public double getAngle(); 
 }

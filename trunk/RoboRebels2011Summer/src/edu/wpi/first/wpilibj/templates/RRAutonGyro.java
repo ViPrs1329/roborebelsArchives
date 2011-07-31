@@ -203,7 +203,7 @@ public class RRAutonGyro implements RRAuton
                 {
                     m_drive.stop();
                     DriveState = STEP_6;
-                }
+                } 
                 
                 break;
              
@@ -300,6 +300,15 @@ public class RRAutonGyro implements RRAuton
             return m_timer.get();
         else
             return 0.0;
+    }
+    
+    /**
+     * UNUSED IN THIS CLASS!!!!
+     */
+    
+    public int getCount()
+    {
+        return -1;
     }
 
     /**

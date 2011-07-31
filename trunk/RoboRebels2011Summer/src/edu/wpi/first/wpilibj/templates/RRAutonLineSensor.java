@@ -265,4 +265,34 @@ public class RRAutonLineSensor implements RRAuton
     {
         m_startDriveTime = m_timer.get();
     }
+    
+    /**
+     * Returns the current time of the Timer object
+     * @return 
+     */
+    public double getTime()
+    {
+        if ( m_timer != null )
+            return m_timer.get();
+        else
+            return -1.0;
+    }
+    
+    /**
+     * UNUSED
+     * @return 
+     */
+    public double getAngle()
+    {
+        return -1.0;
+    }
+    
+    /**
+     * UNUSED
+     * @return 
+     */
+    public int getCount()
+    {
+        return -1;
+    }
 }

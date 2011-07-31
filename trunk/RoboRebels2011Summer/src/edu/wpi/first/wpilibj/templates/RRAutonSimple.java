@@ -80,12 +80,34 @@ public class RRAutonSimple implements RRAuton
         m_timer = new Timer();
     }
     
+    /**
+     * Returns the current time of this object's Timer
+     * @return 
+     */
     public double getTime()
     {
         if ( m_timer != null )
             return m_timer.get();
         
         return -1.0;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public double getAngle()
+    {
+        return -1.0;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public int getCount()
+    {
+        return -1;
     }
     
     /**
@@ -136,7 +158,7 @@ public class RRAutonSimple implements RRAuton
 
             case STEP_2:
 
-                if ( driveFor(0.25, true, 3.0) == true )
+                if ( driveFor(0.25, true, 1.5) == true )
                 {
                     m_drive.stop();
                     DriveState = STEP_3;
