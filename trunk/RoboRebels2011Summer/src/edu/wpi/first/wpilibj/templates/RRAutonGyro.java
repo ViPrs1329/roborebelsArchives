@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author Derek Ward
  */
-public class RRAutonGyro
+public class RRAutonGyro implements RRAuton
 {
     private     Timer               m_timer;
     private     Gyro                m_gyro;
@@ -111,6 +111,10 @@ public class RRAutonGyro
     {
         // start the timer!
         m_timer.start();
+        
+        
+        // default drive state
+        DriveState = START;
     }
 
     /**
@@ -143,7 +147,7 @@ public class RRAutonGyro
             case STEP_2:
 
                 // drive for for about 3 seconds at 0.25 full throttle
-                if ( driveFor(0.25, 3.0) == true )
+                if ( driveFor(0.25, true, 3.0) == true )
                 {
                     m_drive.stop();
                     DriveState = STEP_3;
@@ -174,7 +178,7 @@ public class RRAutonGyro
                 
             case STEP_5:
                 
-                if ( driveFor(0.25, 3.0) == true )
+                if ( driveFor(0.25, true, 3.0) == true )
                 {
                     m_drive.stop();
                     DriveState = STEP_6;
@@ -233,8 +237,6 @@ public class RRAutonGyro
      */
     public void reset()
     {
-        // default drive state
-        DriveState = START;
 
         // reset gyro heading!
         m_gyro.reset();
@@ -309,21 +311,35 @@ public class RRAutonGyro
     }
 
     /**
-     * Drives the robot forward in a certain speed, and counting
+     * Drives the robot in a certain speed, in the direction
+     * that is specified, and counting
      * from the start time for the passed duration.  Returns true
      * when the criteria is met, false otherwise.  Make sure you call
      * collectDriveStartTime method before you call this method!!!
-     * @param forwardSpeed What speed do you want to drive at (0.0 - 1.0)
+     * @param speed What speed do you want to drive at (0.0 - 1.0)
+     * @param forward True = forward, False = backward
      * @param duration How long in seconds do you want the robot to drive for?
      * @return True = criteria met, False = criteria not met
      */
-    public boolean driveFor( double forwardSpeed, double duration )
+    public boolean driveFor( double speed, boolean forward, double duration )
     {
         double  currentTime = m_timer.get();
+        
+        int     reverseModifier;
+        
+        if ( forward == true )
+        {
+            reverseModifier = 1;
+        }
+        else
+        {
+            reverseModifier = -1;
+        }
 
         if ( currentTime - m_startDriveTime < duration )
         {
-            m_drive.drive(0.0, forwardSpeed, 0.0);
+            m_drive.drive(0.0, reverseModifier * speed, 0.0);
+            
             return false;
         }
         else

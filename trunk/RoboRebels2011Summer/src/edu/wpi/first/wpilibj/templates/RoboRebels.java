@@ -56,6 +56,7 @@ public class RoboRebels extends IterativeRobot {
     RRLineTracker                   lineTracker;
     RRAutonGyro                     autonGyro;
     RRAutonEncoder                  autonEncoder;
+    RRAutonSimple                   autonSimple;
 
     // Declare objects needed for the robot that might be used
     // in more than one location
@@ -120,6 +121,7 @@ public class RoboRebels extends IterativeRobot {
         lineTracker = new RRLineTracker(4,5,6);
         //autonGyro = new RRAutonGyro(mecanumDrive);
         autonEncoder = new RRAutonEncoder(mecanumDrive);
+        //autonSimple = new RRAutonSimple(mecanumDrive);
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();

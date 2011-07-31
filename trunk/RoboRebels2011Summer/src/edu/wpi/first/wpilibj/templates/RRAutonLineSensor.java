@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
  * 
  * @author 
  */
-public class RRAutonLineSensor 
+public class RRAutonLineSensor implements RRAuton
 {
     private     RRMecanumDrive      m_drive;
     private     RRLineTracker       m_lineTracker;
@@ -127,6 +127,10 @@ public class RRAutonLineSensor
     public void init()
     {
         m_timer.start();
+        
+        
+        // reset drive state 
+        DriveState = START;
     }
     
     /**
@@ -219,8 +223,6 @@ public class RRAutonLineSensor
         // reset timer
         m_timer.reset();
         
-        // reset drive state 
-        DriveState = START;
         
         // reset drive variables
         m_startDriveTime = 0;

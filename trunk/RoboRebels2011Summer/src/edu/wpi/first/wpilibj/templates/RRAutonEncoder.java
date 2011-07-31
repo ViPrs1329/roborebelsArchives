@@ -19,8 +19,10 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author Derek Ward
  */
-public class RRAutonEncoder
+public class RRAutonEncoder implements RRAuton
 {
+    // Objects used to represent physical objects/sensors 
+    // on the robot
     private     RRMecanumDrive      m_drive;
     private     Encoder             m_encoder;
     private     Timer               m_timer;
@@ -28,12 +30,18 @@ public class RRAutonEncoder
     private     int                 m_encoderChannel1,
                                     m_encoderChannel2;
     
+    // Used to hold the state of the autonomous logic.  Uses
+    // the constants below
     private     int                 DriveState;
     
+    // Used to contain the start of a drive command based on time
     private     double              m_startDriveTime = 0;
     
+    // Used to contain the start count of a drive command based on
+    // encoder values
     private     int                 m_startDriveCount = 0;
     
+    // Constants used in the autonomous' logic
     private     final int           START = 0,
                                     STOP = 1,
                                     STEP_1 = 2,
@@ -125,6 +133,9 @@ public class RRAutonEncoder
         
         // start timer
         m_timer.start();
+        
+        // reset drive state
+        DriveState = START;
     }
     
     /**
@@ -143,6 +154,7 @@ public class RRAutonEncoder
         {
             case START:
                 
+                //System.out.println("START");
                 reset();
                 DriveState = STEP_1;
                 
@@ -150,6 +162,7 @@ public class RRAutonEncoder
                 
             case STEP_1:
 
+                //System.out.println("Step1");
                 // collect the drive start time
                 collectDriveStartCount();
                 DriveState = STEP_2;
@@ -157,8 +170,9 @@ public class RRAutonEncoder
 
             case STEP_2:
 
+                //System.out.println("Step2");
                 // drive forward for about 1 yard at 0.25 of full throttle
-                if ( driveForByCount(0.25, 350, 5) == true )
+                if ( driveForByCount(0.25, true, 350) == true )
                 {
                     m_drive.stop();
                     DriveState = STEP_3;
@@ -167,6 +181,7 @@ public class RRAutonEncoder
 
             case STEP_3:
                 
+                //System.out.println("Step3");
                 // reset encoder counts, collect encoder start
                 reset();
                 collectDriveStartCount();
@@ -175,8 +190,9 @@ public class RRAutonEncoder
                 
             case STEP_4:
                 
+                //System.out.println("Step4");
                 // drive in reverse for about 1 yard at 0.25 of full throttle
-                if ( driveForByCount(-0.25, -350, 5) == true )
+                if ( driveForByCount(0.25, false, 350) == true )
                 {
                     m_drive.stop();
                     DriveState = STOP;
@@ -215,6 +231,7 @@ public class RRAutonEncoder
                 
             case STOP:
                 
+                //System.out.println("STOP");
                 m_drive.stop();
                 break;
                 
@@ -238,9 +255,6 @@ public class RRAutonEncoder
         
         // reset timer
         m_timer.reset();
-        
-        // reset drive state
-        DriveState = START;
         
         // reset drive variables
         m_startDriveTime = 0;
@@ -267,44 +281,73 @@ public class RRAutonEncoder
     
     
     /**
-     * Drives the robot forward in a certain speed, and counting
+     * Drives the robot in a certain speed, in the direction
+     * that is specified, and counting
      * from the start time for the passed duration.  Returns true
      * when the criteria is met, false otherwise.  Make sure you call
      * collectDriveStartTime method before you call this method!!!
-     * @param forwardSpeed What speed do you want to drive at (0.0 - 1.0)
+     * @param speed What speed do you want to drive at (0.0 - 1.0)
+     * @param forward True = forward, False = backward
      * @param duration How long in seconds do you want the robot to drive for?
      * @return True = criteria met, False = criteria not met
      */
-    public boolean driveFor( double forwardSpeed, double duration )
+    public boolean driveFor( double speed, boolean forward, double duration )
     {
         double  currentTime = m_timer.get();
 
         if ( currentTime - m_startDriveTime < duration )
         {
-            m_drive.drive(0.0, forwardSpeed, 0.0);
+            if ( forward == true )
+                m_drive.drive(0.0, speed, 0.0);
+            else
+                m_drive.drive(0.0, -1.0 * speed, 0.0);
             return false;
         }
         else
             return true;
     }
     
-    
-    public boolean driveForByCount( double forwardSpeed, int countEnd, int range )
+    /**
+     * Drives the robot forward in a certain speed, and counting from
+     * the start encoder count, for the specified count.  
+     * @param speed The speed in which you want to drive (0.0 - 1.0)
+     * @param forward Which direction are we driving?
+     * @param countEnd The ending count for when the robot should stop
+     * @return 
+     */
+    public boolean driveForByCount( double speed, boolean forward, int countEnd )
     {
         int     currentCount = m_encoder.get();
+        int     reverseModifier;
         
-        if ( currentCount <= (countEnd + range) && currentCount >= (countEnd - range) )
+        if ( forward == true )
         {
-            return true;
+            reverseModifier = 1;
         }
         else
         {
-            m_drive.drive(0.0, forwardSpeed, 0.0);
+            reverseModifier = -1;
+        }
+        
+        //System.out.println("Rm: " + reverseModifier + " | " + forward + " CC: " + currentCount + " CS: " + m_startDriveCount + " CE: " + countEnd);
+        
+        if ( (reverseModifier * (currentCount - m_startDriveCount)) < countEnd  )
+        {
+            //System.out.println("Criteria not met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            m_drive.drive(0.0, reverseModifier * speed, 0.0);
             return false;
+        }
+        else
+        {
+            //System.out.println("Criteria met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            return true;
         }
     }
     
-    
+    /**
+     * Collects the current count of the encoder.  Call this before you
+     * call the DriveForByCount method!
+     */
     public void collectDriveStartCount()
     {
         m_startDriveCount = m_encoder.get();
