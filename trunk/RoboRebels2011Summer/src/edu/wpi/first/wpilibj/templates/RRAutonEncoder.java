@@ -30,6 +30,8 @@ public class RRAutonEncoder implements RRAuton
     private     int                 m_encoderChannel1,
                                     m_encoderChannel2;
     
+    private     int                 m_gyroChannel;
+    
     // Used to hold the state of the autonomous logic.  Uses
     // the constants below
     private     int                 DriveState;
@@ -63,6 +65,10 @@ public class RRAutonEncoder implements RRAuton
      */
     public void init()
     {
+        // NOTE: Fill this out
+        // Set distance per pulse for encoder
+        m_encoder.setDistancePerPulse(0.1);
+        
         // start encoder
         m_encoder.start();
         
@@ -131,31 +137,43 @@ public class RRAutonEncoder implements RRAuton
                 
                 //System.out.println("Step4");
                 // drive in reverse for about 1 yard at 0.25 of full throttle
-                if ( driveForByCount(0.25, false, 350) == true )
+                if ( driveForByDistance(0.25, true, 36.0) == true )
                 {
                     m_drive.stop();
-                    DriveState = STOP;
+                    DriveState = STEP_5;
                 }
                 break;
                 
             case STEP_5:
                 
-                
+                reset();
+                collectDriveStartCount();
+                DriveState = STEP_6;
                 break;
              
             case STEP_6:
                 
-                
+                if ( strafeForByCount(0.25, false, 300) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STEP_7;
+                }
                 break;
                 
             case STEP_7:
                 
-                
+                reset();
+                collectDriveStartCount();
+                DriveState = STEP_8;
                 break;
                 
             case STEP_8:
                 
-                
+                if ( strafeForByDistance(0.25, true, 36.0) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 break;
                 
             case STEP_9:
@@ -238,7 +256,7 @@ public class RRAutonEncoder implements RRAuton
         
         //System.out.println("Rm: " + reverseModifier + " | " + forward + " CC: " + currentCount + " CS: " + m_startDriveCount + " CE: " + countEnd);
         
-        if ( (reverseModifier * (currentCount - m_startDriveCount)) < countEnd  )
+        if ( (reverseModifier * (currentCount - m_startDriveCount)) < countEnd )
         {
             //System.out.println("Criteria not met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
             m_drive.drive(0.0, reverseModifier * speed, 0.0);
@@ -250,6 +268,151 @@ public class RRAutonEncoder implements RRAuton
             return true;
         }
     }
+    
+    /**
+     * Drives forward or backward at the specified speed for the passed 
+     * inches.
+     * 
+     * NOTE:  Make sure you calculate and set how many inches per count, or pulse
+     * in the initialization code!
+     * 
+     * @param speed Speed of robot (0.0 - 1.0)
+     * @param forward True = forward, False = backwards
+     * @param inchEnd Number of inches to travel
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean driveForByDistance( double speed, boolean forward, double inchEnd)
+    {
+        double      currentDistance = m_encoder.getDistance();
+        int         reverseModifier;
+        
+        if ( forward == true )
+        {
+            reverseModifier = 1;
+        }
+        else
+        {
+            reverseModifier = -1;
+        }
+        
+        if ( (reverseModifier * (currentDistance - m_startDriveCount)) < inchEnd  )
+        {
+            //System.out.println("Criteria not met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            m_drive.drive(0.0, reverseModifier * speed, 0.0);
+            return false;
+        }
+        else
+        {
+            //System.out.println("Criteria met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            return true;
+        }
+    }
+    
+    
+    /**
+     * Makes the robot strafe at the passed speed, either left or right, 
+     * and for the passed duration.
+     * @param speed Speed of the strafing (0.0 - 1.0)
+     * @param left True = strafe left, False = strafe right
+     * @param duration Duration of strafing in seconds
+     * @return True = criteria met, False criteria not met
+     */
+    public boolean strafeFor( double speed, boolean left, double duration)
+    {
+        double  currentTime = m_timer.get();
+        
+        int     reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Strafes in a particular direction at a certain speed and in the
+     * amount specified
+     * @param speed Speed of strafing (0.0 - 1.0)
+     * @param left True = left, False = right
+     * @param countEnd Count of encoder to stop at
+     * @return True = criteria met, False criteria not met
+     */
+    public boolean strafeForByCount( double speed, boolean left, int countEnd)
+    {
+        int     currentCount = m_encoder.get();
+        
+        int     reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        if ( (reverseModifier * (-currentCount - m_startDriveCount)) < countEnd )
+        {
+            //System.out.println("Criteria not met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            return false;
+        }
+        else
+        {
+            //System.out.println("Criteria met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            return true;
+        }
+    }
+    
+    /**
+     * Strafe robot at a certain speed, left or right, by a certain distance amount
+     * @param speed Speed of strafing (0.0 - 1.0)
+     * @param left True = left, False = right
+     * @param inchEnd Distance in inches
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean strafeForByDistance( double speed, boolean left, double inchEnd)
+    {
+        double      currentDistance = m_encoder.getDistance();
+        int         reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        if ( (reverseModifier * (-currentDistance - m_startDriveCount)) < inchEnd  )
+        {
+            //System.out.println("Criteria not met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            return false;
+        }
+        else
+        {
+            //System.out.println("Criteria met! " + (currentCount - m_startDriveCount) + " | " + (reverseModifier * countEnd));
+            return true;
+        }
+    }
+    
     
     /**
      * Rotates the robot in the specified direction at the specified
@@ -279,6 +442,14 @@ public class RRAutonEncoder implements RRAuton
         else
             return true;
     }
+    
+    
+    /**
+     * CHALLENGE!  Write methods to use encoders for rotation like the ones
+     * used for driving or strafing.
+     */
+    
+    
     
     /**
      * Collects the current count of the encoder.  Call this before you
@@ -471,5 +642,14 @@ public class RRAutonEncoder implements RRAuton
     public double getAngle()
     {
         return -1.0;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public String getLineSensor()
+    {
+        return "";
     }
 }

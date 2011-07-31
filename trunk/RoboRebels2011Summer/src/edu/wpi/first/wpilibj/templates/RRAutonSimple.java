@@ -121,13 +121,17 @@ public class RRAutonSimple implements RRAuton
                 if ( driveFor(0.25, false, 1.5) == true )
                 {
                     m_drive.stop();
-                    DriveState = STOP;
+                    DriveState = STEP_7;
                 }
                 break;
                 
             case STEP_7:
                 
-                
+                if ( strafeFor(0.25, true, 2.0) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 break;
                 
             case STEP_8:
@@ -195,6 +199,42 @@ public class RRAutonSimple implements RRAuton
         else
             return true;
     }
+    
+    
+    /**
+     * Makes the robot strafe at the passed speed, either left or right, 
+     * and for the passed duration.
+     * @param speed Speed of the strafing (0.0 - 1.0)
+     * @param left True = strafe left, False = strafe right
+     * @param duration Duration of strafing in seconds
+     * @return True = criteria met, False criteria not met
+     */
+    public boolean strafeFor( double speed, boolean left, double duration)
+    {
+        double  currentTime = m_timer.get();
+        
+        int     reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            
+            return false;
+        }
+        else
+            return true;
+    }
+    
     
     /**
      * Rotates the robot in the specified direction at the specified
@@ -351,6 +391,15 @@ public class RRAutonSimple implements RRAuton
     public int getCount()
     {
         return -1;
+    }
+    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public String getLineSensor()
+    {
+        return "";
     }
     
 }

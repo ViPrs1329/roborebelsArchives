@@ -19,8 +19,9 @@ public class RRAutonGyro implements RRAuton
 {
     private     Timer               m_timer;
     private     Gyro                m_gyro;
-    private     int                 m_gyroChannel;
     private     RRMecanumDrive      m_drive;
+    
+    private     int                 m_gyroChannel;
 
     private     final int           START = 0,
                                     STOP = 1,
@@ -433,5 +434,12 @@ public class RRAutonGyro implements RRAuton
         return -1;
     }
 
-    
+    /**
+     * UNUSED!
+     * @return 
+     */
+    public String getLineSensor()
+    {
+        return "";
+    }
 }

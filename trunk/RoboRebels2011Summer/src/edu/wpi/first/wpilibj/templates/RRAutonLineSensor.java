@@ -319,4 +319,10 @@ public class RRAutonLineSensor implements RRAuton
     {
         return -1;
     }
+    
+    
+    public String getLineSensor()
+    {
+        return m_lineTracker.activeSensor();
+    }
 }

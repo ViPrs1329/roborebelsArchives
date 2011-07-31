@@ -23,4 +23,6 @@ public interface RRAuton
     public int getCount();
     
     public double getAngle(); 
+    
+    public String getLineSensor();
 }
