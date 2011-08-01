@@ -84,7 +84,8 @@ public class RRAutonLineSensor implements RRAuton
         {
             case START:
                 
-                
+                reset();
+                DriveState = STEP_1;
                 break;
                 
             case STEP_1:
