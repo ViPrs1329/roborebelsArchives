@@ -183,10 +183,19 @@ public class RRAutonGyro implements RRAuton
      * or counter-clockwise direction.  Returns true when the
      * criteria is met, otherwise it returns false.
      * 
+     * HINTS:  
+     * 
+     *   - The object for the gyro is: m_gyro
+     * 
+     *   - The use of the range is used just in case the robot spinns too quickly
+     * 
+     *   - You will probably need to use a logical operator (&& or ||)
+     * 
+     * 
      * NOTE: This should be modified!
      * 
      * @param degrees The degree in which the rotation will stop
-     * @param range What is a good range to stop within (+/-)
+     * @param range What is a good range to stop within (+/- degrees)
      * @param rotateSpeed What rotation speed should we rotate in (0.0 - 1.0)
      * @param clockwise True = clockwise, False = counter-clockwise
      * @return True = criteria met, False = criteria not met
