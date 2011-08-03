@@ -52,7 +52,8 @@ public class RRLineTracker
         if (!right.get() && !middle.get())
             return "right-middle";
         if (!left.get() && !right.get())
-            return "split";
+            //return "split";
+            return "both";
         if (!left.get())
             return "left";
         if (!middle.get())

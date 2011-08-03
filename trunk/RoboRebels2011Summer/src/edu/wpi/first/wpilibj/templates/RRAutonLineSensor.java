@@ -90,12 +90,17 @@ public class RRAutonLineSensor implements RRAuton
                 
             case STEP_1:
 
-                
+                collectDriveStartTime();
+                DriveState = STEP_2;
                 break;
 
             case STEP_2:
 
-
+                if ( driveOnLine(0.25, 0.25, true, 5) == true )
+                {
+                    m_drive.stop();
+                    DriveState = STOP;
+                }
                 break;
 
             case STEP_3:
@@ -148,6 +153,178 @@ public class RRAutonLineSensor implements RRAuton
                 break;
         }
     }
+    
+    /**
+     * Drives the robot in a certain speed, in the direction
+     * that is specified, and counting
+     * from the start time for the passed duration.  Returns true
+     * when the criteria is met, false otherwise.  Make sure you call
+     * collectDriveStartTime method before you call this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
+     * @param speed What speed do you want to drive at (0.0 - 1.0)
+     * @param forward True = forward, False = backward
+     * @param duration How long in seconds do you want the robot to drive for?
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean driveFor( double speed, boolean forward, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( forward == true )
+                m_drive.drive(0.0, speed, 0.0);
+            else
+                m_drive.drive(0.0, -1.0 * speed, 0.0);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Makes the robot strafe at the passed speed, either left or right, 
+     * and for the passed duration.
+     * @param speed Speed of the strafing (0.0 - 1.0)
+     * @param left True = strafe left, False = strafe right
+     * @param duration Duration of strafing in seconds
+     * @return True = criteria met, False criteria not met
+     */
+    public boolean strafeFor( double speed, boolean left, double duration)
+    {
+        double  currentTime = m_timer.get();
+        
+        int     reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Rotates the robot in the specified direction at the specified
+     * speed for the specified duration.  Returns true when the 
+     * criteria is met, false otherwise.  Make sure you call 
+     * collectDriveStartTime before you start making calls to this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
+     * @param rotateSpeed What speed do you want the robot to spin at.  0.0 - 1.0
+     * @param clockwise True = clockwise, False = counter-clockwise
+     * @param duration Duration of rotation in seconds
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean rotateFor( double rotateSpeed, boolean clockwise, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( clockwise )
+                m_drive.drive(0.0, 0.0, rotateSpeed);
+            else
+                m_drive.drive(0.0, 0.0, -1.0 * rotateSpeed);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Drives the robot in the direction specified, at the speed
+     * specified for the duration specified.  It also uses the
+     * specified veerCorrection value to rotate the robot if it
+     * starts to loose the line.
+     * 
+     * NOTE:
+     * 
+     *   - Use the created RRLineTracker object, m_lineTracker, to get the state
+     *     of the two line sensors
+     * 
+     *   - Use the methods in m_lineTracker, activeSensor() [which returns a 
+     *     string: "both", "left", "right" or "none"] or the individual sensor 
+     *     methods: getL(), getR() to get the sensor state.  
+     * 
+     * 
+     * @param speed Speed of the strafing (0.0 - 1.0)
+     * @param veerCorrect The amount of veer (rotation) to introduce to stay on the line (0.0 - 1.0)
+     * @param forward True = forward, False = backward
+     * @param duration How long in seconds do you want the robot to drive for?
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean driveOnLine( double speed, double veerCorrect, boolean forward, double duration )
+    {
+        double      currentTime = m_timer.get();
+        double      spd = 0.0;
+        double      rot = 0.0;
+        String      sensor = m_lineTracker.activeSensor();
+        
+        if ( forward == true )
+            spd = speed;
+        else
+            spd = -speed;
+        
+        
+        if ( sensor.compareTo("both") == 0 )
+        {
+            // left-middle should go straight
+            m_drive.drive(0.0, spd, rot);
+        }
+        else if ( sensor.compareTo("right") == 0 )
+        {
+            // middle should veer to the right
+            m_drive.drive(0.0, spd / 2, veerCorrect);
+        }
+        else if ( sensor.compareTo("left") == 0 )
+        {
+            // left should veer to the left
+            m_drive.drive(0.0, spd / 2, -veerCorrect);
+        }
+        else if ( sensor.compareTo("none") == 0 )
+        {
+            // none should veer opposite of the last known veer direction
+            // for now just stop
+            m_drive.stop();
+        }
+        
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * NOT USED FOR THIS CAMP!
+     * 
+     * @param rotationSpeed
+     * @param clockwise
+     * @param duration
+     * @return 
+     */
+    public boolean rotateUntilTapeIsFound( double rotationSpeed, boolean clockwise, double duration )
+    {
+        return true;
+    }
+    
     
     /**
      * Collects the current time into the variable m_startDriveTime.  Call this

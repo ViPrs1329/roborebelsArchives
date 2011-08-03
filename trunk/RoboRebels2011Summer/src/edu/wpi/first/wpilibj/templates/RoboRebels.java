@@ -305,7 +305,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Ls: " + auton.getLineSensor() + "        ");
+        m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "Ls: " + auton.getLineSensor() + "                 ");
         m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, "En: " + auton.getCount() + "      ");
         m_dsLCD.println(DriverStationLCD.Line.kUser4, 1, "Tm: " + auton.getTime() + "      ");
         m_dsLCD.println(DriverStationLCD.Line.kUser5, 1, "Gy: " + auton.getAngle() + "      ");
