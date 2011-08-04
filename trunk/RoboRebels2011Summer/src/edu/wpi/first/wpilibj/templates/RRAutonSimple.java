@@ -73,7 +73,8 @@ public class RRAutonSimple implements RRAuton
         switch ( DriveState )
         {
             case START:
-                
+
+                // reset the state of the autonomous
                 reset();
                 DriveState = STEP_1;
                 
@@ -81,12 +82,14 @@ public class RRAutonSimple implements RRAuton
                 
             case STEP_1:
 
+                // Collects the current time
                 collectDriveStartTime();
                 DriveState = STEP_2;
                 break;
 
             case STEP_2:
 
+                // Drive forward at 1/4 speed for 1.5 seconds
                 if ( driveFor(0.25, true, 1.5) == true )
                 {
                     m_drive.stop();
@@ -96,12 +99,14 @@ public class RRAutonSimple implements RRAuton
 
             case STEP_3:
                 
+                // Collects the current time
                 collectDriveStartTime();
                 DriveState = STEP_4;
                 break;
                 
             case STEP_4:
                 
+                // Rotate clockwise at 1/4 speed for 3 seconds
                 if ( rotateFor(0.25, true, 3.0) == true )
                 {
                     m_drive.stop();
@@ -111,6 +116,7 @@ public class RRAutonSimple implements RRAuton
                 
             case STEP_5:
                 
+                // Collects the current time
                 collectDriveStartTime();
                 DriveState = STEP_6;
                 break;
@@ -118,6 +124,7 @@ public class RRAutonSimple implements RRAuton
             case STEP_6:
                 
                 
+                // Drive backward at 1/4 speed for 1.5 seconds
                 if ( driveFor(0.25, false, 1.5) == true )
                 {
                     m_drive.stop();
@@ -127,6 +134,7 @@ public class RRAutonSimple implements RRAuton
                 
             case STEP_7:
                 
+                // Make the robot translate left at 1/4 speed for 2 seconds
                 if ( strafeFor(0.25, true, 2.0) == true )
                 {
                     m_drive.stop();
