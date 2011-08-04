@@ -196,7 +196,7 @@ public class RRAutonGyro implements RRAuton
      * 
      * @param degrees The degree in which the rotation will stop
      * @param range What is a good range to stop within (+/- degrees)
-     * @param rotateSpeed What rotation speed should we rotate in (0.0 - 1.0)
+     * @param rotateSpeed What rotation speed should we rotate in (0.0 to 1.0)
      * @param clockwise True = clockwise, False = counter-clockwise
      * @return True = criteria met, False = criteria not met
      */
