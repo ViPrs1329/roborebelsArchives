@@ -95,7 +95,8 @@ public class RRAutonComplex implements RRAuton
         {
             case START:
                 
-                
+                reset();
+                DriveState = STEP_1;
                 
                 break;
                 
@@ -157,6 +158,124 @@ public class RRAutonComplex implements RRAuton
                 m_drive.stop();
                 break;
         }
+    }
+    
+    
+    /**
+     * Drives the robot in a certain speed, in the direction
+     * that is specified, and counting
+     * from the start time for the passed duration.  Returns true
+     * when the criteria is met, false otherwise.  Make sure you call
+     * collectDriveStartTime method before you call this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
+     * @param speed What speed do you want to drive at (0.0 - 1.0)
+     * @param forward True = forward, False = backward
+     * @param duration How long in seconds do you want the robot to drive for?
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean driveFor( double speed, boolean forward, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( forward == true )
+                m_drive.drive(0.0, speed, 0.0);
+            else
+                m_drive.drive(0.0, -1.0 * speed, 0.0);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Makes the robot strafe at the passed speed, either left or right, 
+     * and for the passed duration.
+     * @param speed Speed of the strafing (0.0 - 1.0)
+     * @param left True = strafe left, False = strafe right
+     * @param duration Duration of strafing in seconds
+     * @return True = criteria met, False criteria not met
+     */
+    public boolean strafeFor( double speed, boolean left, double duration)
+    {
+        double  currentTime = m_timer.get();
+        
+        int     reverseModifier;
+        
+        if ( left == true )
+        {
+            reverseModifier = -1;
+        }
+        else
+        {
+            reverseModifier = 1;
+        }
+        
+        
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            m_drive.drive(reverseModifier * speed, 0.0, 0.0);
+            
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * Rotates the robot in the specified direction at the specified
+     * speed for the specified duration.  Returns true when the 
+     * criteria is met, false otherwise.  Make sure you call 
+     * collectDriveStartTime before you start making calls to this method!!!
+     * 
+     * NOTE: This should be modified!
+     * 
+     * @param rotateSpeed What speed do you want the robot to spin at.  0.0 - 1.0
+     * @param clockwise True = clockwise, False = counter-clockwise
+     * @param duration Duration of rotation in seconds
+     * @return True = criteria met, False = criteria not met
+     */
+    public boolean rotateFor( double rotateSpeed, boolean clockwise, double duration )
+    {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( clockwise )
+                m_drive.drive(0.0, 0.0, rotateSpeed);
+            else
+                m_drive.drive(0.0, 0.0, -1.0 * rotateSpeed);
+            return false;
+        }
+        else
+            return true;
+    }
+    
+    /**
+     * 
+     * @param rotateSpeed
+     * @param speed
+     * @param clockwise
+     * @param duration
+     * @return 
+     */
+    public boolean rotateForward( double rotateSpeed, double speed, boolean clockwise, double duration )
+             {
+        double  currentTime = m_timer.get();
+
+        if ( currentTime - m_startDriveTime < duration )
+        {
+            if ( clockwise )
+                m_drive.drive(0.0, speed, rotateSpeed);
+            else
+                m_drive.drive(0.0, speed, -1.0 * rotateSpeed);
+            return false;
+        }
+        else
+            return true;
     }
 
     
