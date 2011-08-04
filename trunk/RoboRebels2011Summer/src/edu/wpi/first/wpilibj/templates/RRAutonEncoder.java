@@ -276,7 +276,7 @@ public class RRAutonEncoder implements RRAuton
      * NOTE:  Make sure you calculate and set how many inches per count, or pulse
      * in the initialization code!
      * 
-     * @param speed Speed of robot (0.0 - 1.0)
+     * @param speed Speed of robot (0.0 to 1.0)
      * @param forward True = forward, False = backwards
      * @param inchEnd Number of inches to travel
      * @return True = criteria met, False = criteria not met
