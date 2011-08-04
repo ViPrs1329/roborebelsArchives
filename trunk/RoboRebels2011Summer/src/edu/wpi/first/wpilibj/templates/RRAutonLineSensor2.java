@@ -195,17 +195,17 @@ public class RRAutonLineSensor2 implements RRAuton
         double scaledForwardSpeed = 0.1*forwardSpeed;
         if (lineOnLeft) {
             // Rotate the robot CCW (counter clockwise) to correct
-            m_drive.drive(scaledForwardSpeed, 0, -0.1);
+            m_drive.drive(0, scaledForwardSpeed, -0.1);
             return true;
 
         } else if (lineOnRight) {
             // Rotate the robot CW (clockwise) to correct
-            m_drive.drive(scaledForwardSpeed, 0, 0.1);
+            m_drive.drive(0, scaledForwardSpeed, 0.1);
             return true;
 
         } else if (lineOnMiddle) {
             // Drive straight
-            m_drive.drive(forwardSpeed, 0, 0);
+            m_drive.drive(0, forwardSpeed, 0);
             return true;
 
         }
