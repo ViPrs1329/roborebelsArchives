@@ -476,7 +476,7 @@ public class RRMecanumDrive {
     
     /**
      * Drive method used for autonomous motion.  Range of all variables
-     * is from -1.0 - 1.0
+     * is from -1.0 to 1.0
      * 
      * @param x X component of the direction vector
      * @param y Y component of the direction vector
