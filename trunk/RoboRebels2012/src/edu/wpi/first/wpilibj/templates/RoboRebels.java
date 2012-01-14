@@ -68,25 +68,6 @@ import edu.wpi.first.wpilibj.Encoder;
  */
 public class RoboRebels extends IterativeRobot {
 
-    // Declare custom object vars
-    RRSimplifiedAutonomous        autonomous;
-
-    RRMecanumDrive      mecanumDrive;
-
-    RRElevator          elevator;  //JRH: non-functional change
-
-    RRDeployer          deployer;
-
-    RRDipSwitch         dipSwitch;
-
-    RRLineTracker       lineTracker;
-
-    Encoder             encoder;
-
-    Gyro                gyro;
-
-
-
     TrackerDashboard    trackerDashboard = new TrackerDashboard();
 
     // Declare a variable to use to access the driver station object
@@ -176,38 +157,7 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(2);
         m_rightStick = new Joystick(3);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
-
-        mecanumDrive = new RRMecanumDrive(3, 4, 1,2);
-        mecanumDrive.assignJoystick(m_xboxStick);
-
-        encoder = new Encoder(14,13);
-
-        // arm motor is 7
-        elevator = new RRElevator(7,5,6,encoder);
-
-
-        elevator.assignLiftJoystick(m_leftStick);
-        elevator.assignArmJoystick(m_rightStick);
-        elevator.assignXboxJoystick(m_xboxStick);
-
-
-        deployer = new RRDeployer(9);
-
-        deployer.assignJoystick(m_xboxStick);
-        deployer.assignRightJoystick(m_rightStick);
-        
-
-        dipSwitch = new RRDipSwitch(8, 11);
-       // lineSensor = new DigitalInput(1);
-
-        lineTracker = new RRLineTracker(4,5,6);
-
-        gyro = new Gyro(1);
-
-
-
-
-
+  
         System.out.println( "Robot Ready" );
     }
 
@@ -230,8 +180,6 @@ public class RoboRebels extends IterativeRobot {
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
 
-        encoder.reset();
-        autonomous = new RRSimplifiedAutonomous(mecanumDrive, elevator, dipSwitch, lineTracker, gyro);
         
     }
 
@@ -246,7 +194,6 @@ public class RoboRebels extends IterativeRobot {
 //        m_leftStick = new Joystick(1);
 
        
-       encoder.reset();
 
         /* Drive station code */
         m_ds = DriverStation.getInstance();
@@ -265,12 +212,7 @@ public class RoboRebels extends IterativeRobot {
     
     public void autonomousPeriodic()
     {
-       // releases the pin that holds the arm in its initial position
-       // this if statement is run on the first pass
-      
-       //autonomous.printGyro();
-       //autonomous.drive();
-        processCamera();
+       //nothing right now
     }
 
     /**
@@ -284,27 +226,7 @@ public class RoboRebels extends IterativeRobot {
     public void teleopPeriodic()
     {
 
-        if ( teleopStateBroadcasted == true )
-        {
-            System.out.println( "Teleop State" );
-            teleopStateBroadcasted = false;
-        }
-
-      // System.out.println("Dip Switches: " + dipSwitch.getState(0) + " | " + dipSwitch.getState(1) + " | " + dipSwitch.getState(2) + " | " + dipSwitch.getState(3));
-
-       mecanumDrive.drive();
-       elevator.lift();
-
-       deployer.deploy();
-
-
-
-      
-
-       
-        //checkButtons();
-       // updateDSLCD();
-        processCamera();
+     //nothing right now   
     }
 
     /**
@@ -316,11 +238,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void disabledPeriodic()
     {
-        if ( disabledStateBroadcasted == true )
-        {
-            System.out.println( "Disabled State" );
-            disabledStateBroadcasted = false;
-        }
+        //nothing right now
     }
 
     /**
@@ -330,8 +248,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void autonomousContinuous()
     {
-        autonomous.drive();
-       
+       //nothing right now
     }
 
     /**
@@ -482,10 +399,6 @@ public class RoboRebels extends IterativeRobot {
 
     public void updateDSLCD()
     {
-       m_dsLCD.println(DriverStationLCD.Line.kUser2, 1, "DCM: "+
-               mecanumDrive.getControlModeName());
-       m_dsLCD.println(DriverStationLCD.Line.kUser3, 1, ":" + elevator.getHeight());
-       m_dsLCD.updateLCD();
-
+       //nothing right now
     }
 }
