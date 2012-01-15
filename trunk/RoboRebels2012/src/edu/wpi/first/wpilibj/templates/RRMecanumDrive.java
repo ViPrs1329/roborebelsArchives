@@ -273,6 +273,8 @@ public class RRMecanumDrive {
            * hyp = sqrt( x^2 + y^2 )
            * 
            */
+        
+            System.out.println("RRMecanumDrive.drive()");
 
            double l_xVal  = m_xboxStick.getRawAxis(1);
            double l_yVal  = m_xboxStick.getRawAxis(2);

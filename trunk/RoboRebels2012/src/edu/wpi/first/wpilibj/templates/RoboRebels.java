@@ -43,20 +43,15 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.ButtonType;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.Gyro;
-import edu.wpi.first.wpilibj.Encoder;
 
 
 /**
@@ -102,6 +97,9 @@ public class RoboRebels extends IterativeRobot {
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
 
     boolean             releasedPin = false;
+    
+    Ultrasonic          ultraSonicSensor;
+    double              distanceInInches = -1;
 
 
 
@@ -157,6 +155,10 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(2);
         m_rightStick = new Joystick(3);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        
+        int pingChannel = 0;
+        int echoChannel = 0;
+        ultraSonicSensor = new Ultrasonic(pingChannel, echoChannel);
   
         System.out.println( "Robot Ready" );
     }
@@ -192,6 +194,9 @@ public class RoboRebels extends IterativeRobot {
 
 //        m_rightStick = new Joystick(2);
 //        m_leftStick = new Joystick(1);
+        
+        ultraSonicSensor.setEnabled(true);
+
 
        
 
@@ -259,6 +264,10 @@ public class RoboRebels extends IterativeRobot {
     public void teleopContinuous()
     {
          updateDSLCD();
+         if (ultraSonicSensor.isEnabled() && ultraSonicSensor.isRangeValid()) {   
+            distanceInInches = ultraSonicSensor.getRangeInches();
+            System.out.println("Ultrasonic sensor:  distance (inches) = "+distanceInInches);
+         }
     }
 
     /**
