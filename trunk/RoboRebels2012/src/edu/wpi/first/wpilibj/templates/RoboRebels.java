@@ -162,8 +162,6 @@ public class RoboRebels extends IterativeRobot {
         // Get the time that the autonomous mode starts
         //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
-
-
     }
 
     public void teleopInit() {
@@ -303,108 +301,5 @@ public class RoboRebels extends IterativeRobot {
         System.out.println( "RY: " + m_xboxStick.getRawAxis(5));
         System.out.flush();
          */
-    }
-
-    public void processCamera() {
-        try {
-            if (cam.freshImage()) {
-                ColorImage image = cam.getImage();
-                findTargets(image);
-                image.free();
-            }
-        } catch (NIVisionException ex) {
-            ex.printStackTrace();
-        } catch (AxisCameraException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void findTargets(ColorImage image) {
-        try {
-            BinaryImage masked = image.thresholdHSL(136, 182, 45, 256, 116, 256);
-            ParticleAnalysisReport[] particles = masked.getOrderedParticleAnalysisReports();
-
-        } catch (NIVisionException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /*
-    try {
-    if (cam.freshImage()) {// && turnController.onTarget()) {
-    System.out.println("processCamera() - Got a fresh image");
-    //double gyroAngle = gyro.pidGet();
-    ColorImage image = cam.getImage();
-    Thread.yield();
-    Target[] targets = Target.findCircularTargets(image);
-    Watchdog.getInstance().feed();
-    Thread.yield();
-    image.free();
-    if (targets.length == 0 || targets[0].m_score < kScoreThreshold)
-    {
-    System.out.println("No target found");
-    Target[] newTargets = new Target[targets.length + 1];
-    newTargets[0] = new Target();
-    newTargets[0].m_majorRadius = 0;
-    newTargets[0].m_minorRadius = 0;
-    newTargets[0].m_score = 0;
-
-    for (int i = 0; i < targets.length; i++)
-    {
-    newTargets[i + 1] = targets[i];
-    }
-
-    autoDrive = true;
-    autoTurnDirection = 1.0;  // turn right
-    foundTarget = false;
-
-    trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, 0.0, newTargets);
-    }
-    else
-    {
-    Watchdog.getInstance().feed();
-    //System.out.println(targets[0]);
-    System.out.println("Target Angle: " + targets[0].getHorizontalAngle());
-    System.out.println("Target tolerance difference: " + (targets[0].getHorizontalAngle() - targetTolerance));
-    //turnController.setSetpoint(gyroAngle + targets[0].getHorizontalAngle());
-    //
-    // Use getHorizontalAngle() to determine if the robot is lined up with
-    // the target or not.  When it gets close to 0.0 it is lined up.  Use
-    // a tolerance!!!!
-    //
-
-    if ( targets[0].getHorizontalAngle() < targetTolerance && targets[0].getHorizontalAngle() > (-1.0 * targetTolerance) )
-    {
-    // if it is inside the target tolerance then stop
-    System.out.println("processCamera() - Found target.  IT IS CENTERED" );
-    autoDrive = false;
-    foundTarget = true;
-
-    }
-    else
-    {
-    // if it is outside the target tolerance then move it
-    System.out.println("processCamera() - Found target, but it is not centered");
-    autoDrive = true;
-    if ( targets[0].getHorizontalAngle() > 0.0 )
-    autoTurnDirection = 1.0;
-    else if ( targets[0].getHorizontalAngle() < 0.0 )
-    autoTurnDirection = -1.0;
-    }
-
-    trackerDashboard.updateVisionDashboard(0.0, 0.0, 0.0, targets[0].m_xPos / targets[0].m_xMax, targets);
-    }
-    }
-    } catch (NIVisionException ex) {
-    ex.printStackTrace();
-    } catch (AxisCameraException ex) {
-    ex.printStackTrace();
-    }
-     */
-    /*
-     * Sends useful information to the LCD on the DriverStation
-     */
-    public void updateDSLCD() {
-        //nothing right now
     }
 }
