@@ -272,7 +272,6 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void teleopContinuous() {
-        updateDSLCD();
         if (ultraSonicSensor.isEnabled() && ultraSonicSensor.isRangeValid()) {
             distanceInInches = ultraSonicSensor.getRangeInches();
             System.out.println("Ultrasonic sensor:  distance (inches) = " + distanceInInches);
