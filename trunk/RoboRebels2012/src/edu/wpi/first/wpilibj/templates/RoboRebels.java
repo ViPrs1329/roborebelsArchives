@@ -38,12 +38,7 @@ a1
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStationLCD;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
@@ -82,6 +77,8 @@ public class RoboRebels extends IterativeRobot {
     boolean releasedPin = false;
     Ultrasonic ultraSonicSensor;
     double distanceInInches = -1;
+    RRDrive drive;
+    RobotDrive          m_robotDrive;
 
     /**
      * Constructor
