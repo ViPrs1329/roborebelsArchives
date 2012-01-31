@@ -87,6 +87,7 @@ public class RoboRebels extends IterativeRobot {
     double distanceInInches = -1;
     RRDrive drive;
     RobotDrive          m_robotDrive;
+    RRTracker tracker = new RRTracker();
 
     /**
      * Constructor
@@ -102,7 +103,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void robotInit() {
         System.out.println("robotInit()");
-
+        
 
         //Watchdog.getInstance().setExpiration(0.75);
 
@@ -198,6 +199,7 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void autonomousPeriodic() {
+        tracker.trackTarget();
        //try {
             /**
              * Do the image capture with the camera and apply the algorithm described above. This
