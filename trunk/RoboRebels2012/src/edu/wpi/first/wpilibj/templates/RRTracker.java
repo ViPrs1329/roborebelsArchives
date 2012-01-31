@@ -35,7 +35,7 @@ public class RRTracker {
              *
   
   */
-           System.out.println("Hi From Aidan");
+            
            System.out.println("Starting Auto mode");
            ColorImage image = cam.getImage();     // comment if using stored images
 //
@@ -48,10 +48,10 @@ public class RRTracker {
 
             //BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
             
-            BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // keep only White objects
+            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 225, 255);   // keep only White objects
             
             try {
-                thresholdImage.write("/after_thresh.jpg");
+                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
             } catch (Exception e) {
                 System.out.println("error saving image");
             }
@@ -61,7 +61,7 @@ public class RRTracker {
             BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
 
             try {
-                filteredImage.write("/processed.jpg");
+                filteredImage.write("/processed.bmp");     // This seems to work well.
             } catch (Exception e) {
                 System.out.println("error saving image");
             }
