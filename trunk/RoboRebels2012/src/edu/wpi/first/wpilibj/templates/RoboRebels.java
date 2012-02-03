@@ -76,15 +76,7 @@ public class RoboRebels extends IterativeRobot {
     static boolean disabledStateBroadcasted = false;
     static boolean teleopStateBroadcasted = false;
     static boolean autonomousStateBroadcasted = false;
-    double kScoreThreshold = .01;      // used in circle tracking code; default = 0.01
-    double targetTolerance = 1.0;      // used for target tracking
-    boolean foundTarget = false, // have we found the target yet?
-            autoDrive = false;                  // are we in autonomous drive mode?
     double lastZValue;                         // last Z value for the dial on the joystick
-    double robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
-    boolean releasedPin = false;
-    Ultrasonic ultraSonicSensor;
-    double distanceInInches = -1;
     RRDrive drive;
     RobotDrive          m_robotDrive;
     RRTracker tracker = new RRTracker();
@@ -138,13 +130,7 @@ public class RoboRebels extends IterativeRobot {
         m_rightStick = new Joystick(3);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
 
-        int pingChannel = 0;
-        int echoChannel = 0;
-        try {
-            ultraSonicSensor = new Ultrasonic(pingChannel, echoChannel);
-        } catch (Exception e) {
-            System.out.println("WARNING: UltraSonic Sensor not connected.");
-        }
+        
 
 //        cam = AxisCamera.getInstance();  // get an instance ofthe camera
 //        cc = new CriteriaCollection();      // create the criteria for the particle filter
@@ -178,8 +164,6 @@ public class RoboRebels extends IterativeRobot {
 
 //        m_rightStick = new Joystick(2);
 //        m_leftStick = new Joystick(1);
-
-        ultraSonicSensor.setEnabled(true);
 
 
 
@@ -299,10 +283,7 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void teleopContinuous() {
-        if (ultraSonicSensor.isEnabled() && ultraSonicSensor.isRangeValid()) {
-            distanceInInches = ultraSonicSensor.getRangeInches();
-            System.out.println("Ultrasonic sensor:  distance (inches) = " + distanceInInches);
-        }
+        
     }
 
     /**

@@ -8,6 +8,12 @@ package edu.wpi.first.wpilibj.templates;
  *
  * @author dmw
  */
-public class RRBridgeArm {
+public class RRBridgeArm 
+{
     
+    
+    public RRBridgeArm()
+    {
+        
+    }
 }
