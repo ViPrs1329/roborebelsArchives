@@ -6,6 +6,8 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.AnalogChannel;
+import com.sun.squawk.util.MathUtils;
 
 /**
  *
@@ -15,9 +17,11 @@ public class RRShooter
 {
     private     int         swj_channel;
     private     int         lwc_channel;
-    
+    private     int         ss_channel;
+            
     private     Jaguar      shootingWheelJaguar;
     private     Victor      loadingWheelVictor;
+    private     AnalogChannel   sonicSensor;
     
     
     /**
@@ -25,13 +29,15 @@ public class RRShooter
      * @param swjc
      * @param lwcc 
      */
-    public RRShooter(int  swjc, int lwcc)
+    public RRShooter(int  swjc, int lwcc, int ssc)
     {
         swj_channel = swjc;
         lwc_channel = lwcc;
+        ss_channel = ssc;
         
         shootingWheelJaguar = new Jaguar(swj_channel);
         loadingWheelVictor = new Victor(lwc_channel);
+        sonicSensor = new AnalogChannel(ss_channel);
     }
     
     
@@ -42,8 +48,23 @@ public class RRShooter
     {
         
     }
-    
-    
+    public void determineTrajectory() 
+    {
+     double muzzleVelocity = 9; //meters per second
+     double theta;
+     double gravity = 9.81;  //meters per (second)^2
+     double yLower = .466953;
+     double yMiddle = 1.30515;
+     double yHigher = 2.24485;
+     double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
+     double shooterHeight = 1.016; // meters off the ground
+     
+     double tempSqrtEquation = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yHigher)-(gravity*gravity*xDistance));
+     double shootAngle = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(tempSqrtEquation))/(gravity*xDistance));
+   
+   
+    }
+   
     /**
      * Shoots a ball
      */
