@@ -98,7 +98,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void robotInit() {
         System.out.println("robotInit()");
-        m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
+        m_robotDrive = new RobotDrive(4, 3, 2, 1);
 
         
 
