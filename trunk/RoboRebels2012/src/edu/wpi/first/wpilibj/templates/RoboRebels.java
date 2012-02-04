@@ -79,6 +79,10 @@ public class RoboRebels extends IterativeRobot {
     RRDrive drive;
     RobotDrive          m_robotDrive;
     RRTracker tracker = new RRTracker();
+    double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
+    boolean             tankDrive = false;
+
+
 
     /**
      * Constructor
@@ -94,6 +98,8 @@ public class RoboRebels extends IterativeRobot {
      */
     public void robotInit() {
         System.out.println("robotInit()");
+        m_robotDrive = new RobotDrive(4, 3, 2, 1, robotDriveSensitivity);
+
         
 
         //Watchdog.getInstance().setExpiration(0.75);
@@ -125,9 +131,9 @@ public class RoboRebels extends IterativeRobot {
 
         //                              FL, FR, BL, BR
 
-        m_leftStick = new Joystick(2);
-        m_rightStick = new Joystick(3);
-        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        m_leftStick = new Joystick(1);
+        m_rightStick = new Joystick(2);
+        m_xboxStick = new Joystick(3);//TODO test, check if problem is solved
 
         
 
@@ -160,7 +166,6 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
-
 //        m_rightStick = new Joystick(2);
 //        m_leftStick = new Joystick(1);
 
@@ -193,7 +198,16 @@ public class RoboRebels extends IterativeRobot {
      * ---------------------
      */
     public void teleopPeriodic() {
-        //nothing right now
+        if ( teleopStateBroadcasted == true )
+        {
+            System.out.println( "Teleop State" );
+            teleopStateBroadcasted = false;
+        }
+        if ( tankDrive == true )
+            drive.drive(true);
+        else
+            drive.drive(false);
+
     }
 
     /**
@@ -234,6 +248,17 @@ public class RoboRebels extends IterativeRobot {
      */
     public void checkButtons() {
         //System.out.println( "checkButtons()" );
+        if (m_rightStick.getZ() <= 0)
+        {    // Logitech Attack3 has z-polarity reversed; up is negative
+            // arcade mode
+            tankDrive = false;
+        }
+        else
+        {
+            // tank drive
+            tankDrive = true;
+        }
+
 
         /*
         System.out.println( "LX: " + m_xboxStick.getRawAxis(1));
