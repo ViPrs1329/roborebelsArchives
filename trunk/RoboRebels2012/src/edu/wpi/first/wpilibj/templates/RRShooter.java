@@ -51,17 +51,24 @@ public class RRShooter
     public void determineTrajectory() 
     {
      double muzzleVelocity = 9; //meters per second
-     double theta;
+     
      double gravity = 9.81;  //meters per (second)^2
      double yLower = .466953;
      double yMiddle = 1.30515;
      double yHigher = 2.24485;
      double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
      double shooterHeight = 1.016; // meters off the ground
+     double y = yMiddle; // define by asking driver "top, middle, or bottom?"
+     /**
+            double tempSqrtEquationHigher = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yHigher)-(gravity*gravity*xDistance));
+            double tempSqrtEquationMiddle = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yMiddle)-(gravity*gravity*xDistance));
+            double tempSqrtEquationLower = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yLower)-(gravity*gravity*xDistance));
+     **/
      
-     double tempSqrtEquation = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yHigher)-(gravity*gravity*xDistance));
-     double shootAngle = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(tempSqrtEquation))/(gravity*xDistance));
-   
+     double tempSqrtEquation = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance));
+     
+     double theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(tempSqrtEquation))/(gravity*xDistance));
+     
    
     }
    
