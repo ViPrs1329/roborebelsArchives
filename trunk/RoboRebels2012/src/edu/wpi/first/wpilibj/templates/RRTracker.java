@@ -53,10 +53,12 @@ public class RRTracker
             System.out.println("WROTE IMAGE2");
 
 
-            BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
-            BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
-            BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
+          //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
+          //BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
+          //BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
+            BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // find filled in rectangles
 
+            
             // TODO: This image write section should be commented out for the production code
             try {
                 filteredImage.write("/processed.bmp");     // This seems to work well.
@@ -83,8 +85,8 @@ public class RRTracker
              */
 
             filteredImage.free();
-            convexHullImage.free();
-            bigObjectsImage.free();
+        //  convexHullImage.free();
+        //  bigObjectsImage.free();
             thresholdImage.free();
             image.free();
 
