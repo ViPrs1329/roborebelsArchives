@@ -1,3 +1,6 @@
+
+
+
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -24,6 +27,8 @@ public class RRTracker
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
         RRTracker.targets = new Target[4];
     }
+    
+    
 
     public void trackTarget()
     {
@@ -55,8 +60,9 @@ public class RRTracker
 
           //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
           //BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
-          //BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
-            BinaryImage filteredImage = thresholdImage.particleFilter(cc);           // find filled in rectangles
+            BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
+            BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
+          // BinaryImage filteredImage = thresholdImage.particleFilter(cc);           
 
             
             // TODO: This image write section should be commented out for the production code
@@ -72,10 +78,9 @@ public class RRTracker
 		RRTracker.targets[i] = new Target(reports[i]);
                 ParticleAnalysisReport r = reports[i];
                 double distance = 18.27 - r.boundingRectWidth/11.0;  // distance to target based on rectangle width
-                System.out.println("Particle: " + i + ":  Center x: " + r.center_mass_x + ":  Center y: " + r.center_mass_y + " Width: " + r.boundingRectWidth+ " Height: "
-                         + r.boundingRectHeight + " Distance: " + distance);
+                System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth+ " Height: " + r.boundingRectHeight + "Aspect: " + r.boundingRectWidth/r.boundingRectHeight + " Distance: " + distance);
             }
-
+            
             System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
 
             /**
@@ -85,7 +90,7 @@ public class RRTracker
              */
 
             filteredImage.free();
-        //  convexHullImage.free();
+            convexHullImage.free();
         //  bigObjectsImage.free();
             thresholdImage.free();
             image.free();
