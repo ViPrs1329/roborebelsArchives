@@ -12,7 +12,7 @@ public class RRTracker
 {
     AxisCamera cam;                    // camera object
     CriteriaCollection cc;             // the criteria for doing the particle filter operation
-    private Target[] targets;
+    private static Target[] targets;
 
     public RRTracker()
     {
@@ -22,7 +22,7 @@ public class RRTracker
         cc = new CriteriaCollection();      // create the criteria for the particle filter
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
-        targets = new Target[4];
+        RRTracker.targets = new Target[4];
     }
 
     public void trackTarget()
@@ -69,7 +69,7 @@ public class RRTracker
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             for (int i = 0; i < Math.min(reports.length, 4); i++) {
-								targets[i] = new Target(reports[i]);
+		RRTracker.targets[i] = new Target(reports[i]);
                 ParticleAnalysisReport r = reports[i];
                 double distance = 18.27 - r.boundingRectWidth/11.0;  // distance to target based on rectangle width
                 System.out.println("Particle: " + i + ":  Center x: " + r.center_mass_x + ":  Center y: " + r.center_mass_y + " Width: " + r.boundingRectWidth+ " Height: "
@@ -96,7 +96,7 @@ public class RRTracker
         }
     }
 
-    public Target highestTarget() {
+    public static Target highestTarget() {
         Target highest = null;
 
         for (int i = 0; i < targets.length; i++) {
@@ -108,9 +108,8 @@ public class RRTracker
         return highest;
     }
 
-    public Target[] targets() {
+    public static Target[] targets() {
         return targets;
     }
 
 }
-
