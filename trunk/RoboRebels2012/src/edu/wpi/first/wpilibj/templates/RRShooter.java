@@ -48,6 +48,7 @@ public class RRShooter
     {
         
     }
+    
     public void determineTrajectory() 
     {
      double muzzleVelocity = 9; //meters per second
