@@ -46,6 +46,8 @@ public class RRDrive
 
     public void drive( boolean tankDrive )
     {
+        
+        System.out.println("RRDrive.drive()");
         if ( m_rightStick == null || m_leftStick == null )
             return;
 

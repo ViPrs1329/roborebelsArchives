@@ -78,7 +78,7 @@ public class RoboRebels extends IterativeRobot {
     double lastZValue;                         // last Z value for the dial on the joystick
     RRDrive drive;
     RobotDrive          m_robotDrive;
-    RRTracker tracker = new RRTracker();
+    //RRTracker tracker = new RRTracker();
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
 
@@ -134,6 +134,9 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(1);
         m_rightStick = new Joystick(2);
         m_xboxStick = new Joystick(3);//TODO test, check if problem is solved
+        
+        m_robotDrive = new RobotDrive(2, 1);
+        drive = new RRDrive(m_robotDrive, m_leftStick, m_rightStick);
 
         
 
@@ -187,7 +190,7 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void autonomousPeriodic() {
-        tracker.trackTarget();
+        //tracker.trackTarget();
     }
 
     /**
