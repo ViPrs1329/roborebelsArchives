@@ -47,8 +47,11 @@ public class RRTracker
             //BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
 
             // TODO:  The white object threshold value needs to be tested to get an optimal number
-            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 225, 255);   // keep only White objects
+            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
 
+            // blue value was adjusted (above) because of ambient sunlight
+           
+            
             // TODO: This image write section should be commented out for the production code
             try {
                 thresholdImage.write("/after_thresh.bmp");    // this seems to work well
@@ -79,6 +82,12 @@ public class RRTracker
                 ParticleAnalysisReport r = reports[i];
                 double distance = 18.27 - r.boundingRectWidth/11.0;  // distance to target based on rectangle width
                 System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth+ " Height: " + r.boundingRectHeight + "Aspect: " + r.boundingRectWidth/r.boundingRectHeight + " Distance: " + distance);
+                
+                int     targetID = 2;
+                
+                double angle = RRShooter.determineAngle(distance,targetID);
+ //               double angle = 1.5;
+                System.out.println("Theta: " + angle);
             }
             
             System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
