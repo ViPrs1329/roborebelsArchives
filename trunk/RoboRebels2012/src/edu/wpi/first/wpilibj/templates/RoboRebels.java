@@ -135,8 +135,8 @@ public class RoboRebels extends IterativeRobot {
         m_rightStick = new Joystick(2);
         m_xboxStick = new Joystick(3);//TODO test, check if problem is solved
         
-        m_robotDrive = new RobotDrive(2, 1);
-        drive = new RRDrive(m_robotDrive, m_leftStick, m_rightStick);
+        //m_robotDrive = new RobotDrive(2, 1);
+        drive = new RRDrive(m_xboxStick, 2, 1);
 
         
 
