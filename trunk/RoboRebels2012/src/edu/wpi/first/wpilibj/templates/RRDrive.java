@@ -93,7 +93,7 @@ public class RRDrive implements MotorSafety
         setupMotorSafety();
     }
     
-    public void drive(boolean arcade)
+    public void drive(boolean tankDrive)
     {
               
            double l_xVal  = m_xboxStick.getRawAxis(1);
@@ -102,7 +102,7 @@ public class RRDrive implements MotorSafety
            double r_xVal  = m_xboxStick.getRawAxis(4);
            double r_yVal  = m_xboxStick.getRawAxis(5);
            
-        if (arcade)
+        if (!tankDrive)
         {
            
            if (Math.abs(l_xVal) < .13)
@@ -166,7 +166,7 @@ public class RRDrive implements MotorSafety
         }
         else
         {
-           System.out.println("Tank mode stuff goes here"); 
+           //tank mode
         }
     }
     public void arcadeDrive(double moveValue, double rotateValue)
@@ -206,12 +206,10 @@ public class RRDrive implements MotorSafety
     
     public void setLeftRightMotorValue(double left, double right)
     {
-        if (leftMotor == null || rightMotor == null) 
-        {
+        if (leftMotor == null || rightMotor == null)
             throw new NullPointerException("Null motor provided");
-        }
         
-        
+        motorSafetyHelper.feed();; 
     }
 
     public void setExpiration(double timeout) {

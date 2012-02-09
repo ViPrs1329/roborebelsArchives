@@ -77,7 +77,7 @@ public class RoboRebels extends IterativeRobot {
     static boolean autonomousStateBroadcasted = false;
     double lastZValue;                         // last Z value for the dial on the joystick
     RRDrive drive;
-    RobotDrive          m_robotDrive;
+    //RobotDrive          m_robotDrive;
     //RRTracker tracker = new RRTracker();
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
