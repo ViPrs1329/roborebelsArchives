@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.PWM;
 //import edu.wpi.first.wpilibj.camera.AxisCamera;
 //import edu.wpi.first.wpilibj.camera.AxisCameraException;
 //import edu.wpi.first.wpilibj.image.*;
@@ -91,6 +92,9 @@ public class RoboRebels extends IterativeRobot {
     Jaguar launcher;
     Jaguar elevation;
     Jaguar lazySusan;
+    int pwmTest = 0;
+    boolean btnPressed = false;
+    PWM currentPWM;
 
 
 
@@ -114,7 +118,7 @@ public class RoboRebels extends IterativeRobot {
 //        elevation = new Jaguar(ELEVATION_CHANNEL);
 //        lazySusan = new Jaguar(LAZY_SUSAN_CHANNEL);
 
-        
+
 
         //Watchdog.getInstance().setExpiration(0.75);
 
@@ -157,7 +161,7 @@ public class RoboRebels extends IterativeRobot {
         drive = new RRDrive(m_xboxStick, 2, 1);
         System.out.println("Drive Set");
 
-        
+
 
 //        cam = AxisCamera.getInstance();  // get an instance ofthe camera
 //        cc = new CriteriaCollection();      // create the criteria for the particle filter
@@ -214,7 +218,7 @@ public class RoboRebels extends IterativeRobot {
         //tracker.trackTarget();
         //System.out.println(getAngle());
     }
-    
+
     //public double getAngle() {
         //ADXL345_I2C.AllAxes axes = accel.getAccelerations();
 //        System.out.println("X Accel: " + axes.XAxis);
@@ -248,7 +252,7 @@ public class RoboRebels extends IterativeRobot {
             //System.out.println("Arcade Drive");
         }
             
-            
+
 
     }
 
@@ -276,7 +280,7 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void teleopContinuous() {
-        
+
     }
 
     /**
@@ -329,7 +333,28 @@ public class RoboRebels extends IterativeRobot {
 //        else {
 //            lazySusan.set(0);
 //        }
-        
+
+
+        if (m_leftStick.getRawButton(6) && btnPressed == false) {
+            btnPressed = true;
+            pwmTest++;
+
+            if (currentPWM != null)
+                currentPWM.setRaw(0);
+
+            if (pwmTest == 9)
+                pwmTest = 1;
+
+            System.out.println("PWM #" + pwmTest);
+            
+            currentPWM = new PWM(pwmTest);
+            currentPWM.setRaw(128);
+        }
+
+        if (!m_leftStick.getRawButton(6) && btnPressed == true) {
+            btnPressed = false;
+        }
+
 
 
         /*
