@@ -80,6 +80,8 @@ public class RRDrive implements MotorSafety
     {
         NullPointerException        ex;
         
+        System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
+        
         if ( xbox != null )
             m_xboxStick = xbox;
         else
@@ -95,7 +97,7 @@ public class RRDrive implements MotorSafety
     
     public void drive(boolean tankDrive)
     {
-              
+        System.out.println("drive()");
            double l_xVal  = m_xboxStick.getRawAxis(1);
            double l_yVal  = m_xboxStick.getRawAxis(2);
 
@@ -162,6 +164,7 @@ public class RRDrive implements MotorSafety
                r_yVal = (r_yVal+.13)/(1-.13);
            }
            
+           System.out.println("x y" + l_yVal + " " + l_xVal);
            arcadeDrive(l_yVal, l_xVal); 
         }
         else
@@ -201,6 +204,7 @@ public class RRDrive implements MotorSafety
             }
         }
         
+        System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
     }
     
@@ -208,8 +212,10 @@ public class RRDrive implements MotorSafety
     {
         if (leftMotor == null || rightMotor == null)
             throw new NullPointerException("Null motor provided");
+        leftMotor.set(left);
+        rightMotor.set(right);
         
-        motorSafetyHelper.feed();; 
+        motorSafetyHelper.feed();
     }
 
     public void setExpiration(double timeout) {
@@ -251,6 +257,6 @@ public class RRDrive implements MotorSafety
     {
         motorSafetyHelper = new MotorSafetyHelper(this);
         motorSafetyHelper.setExpiration(kDefaultExpirationTime);
-        motorSafetyHelper.setSafetyEnabled(true);
+        motorSafetyHelper.setSafetyEnabled(false);
     }
 }

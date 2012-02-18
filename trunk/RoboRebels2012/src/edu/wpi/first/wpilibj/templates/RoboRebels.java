@@ -81,13 +81,13 @@ public class RoboRebels extends IterativeRobot {
     double lastZValue;                         // last Z value for the dial on the joystick
     RRDrive drive;
     ADXL345_I2C accel;
-    //RobotDrive          m_robotDrive;
+    RobotDrive          m_robotDrive;
     RRTracker tracker = new RRTracker();
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
-    final static int LAUNCHER_CHANNEL = 5;//TODO: change
-    final static int ELEVATION_CHANNEL = 6;//TODO: change
-    final static int LAZY_SUSAN_CHANNEL = 7;//TODO: change
+    final static int LAUNCHER_CHANNEL = 3;//TODO: change
+    final static int ELEVATION_CHANNEL = 4;//TODO: change
+    final static int LAZY_SUSAN_CHANNEL = 5;//TODO: change
     Jaguar launcher;
     Jaguar elevation;
     Jaguar lazySusan;
@@ -109,9 +109,10 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit() {
         System.out.println("robotInit()");
         //m_robotDrive = new RobotDrive(4, 3, 2, 1);
-        launcher = new Jaguar(LAUNCHER_CHANNEL);
-        elevation = new Jaguar(ELEVATION_CHANNEL);
-        lazySusan = new Jaguar(LAZY_SUSAN_CHANNEL);
+        //System.out.println("Robot Drive Set");
+//        launcher = new Jaguar(LAUNCHER_CHANNEL);
+//        elevation = new Jaguar(ELEVATION_CHANNEL);
+//        lazySusan = new Jaguar(LAZY_SUSAN_CHANNEL);
 
         
 
@@ -143,15 +144,18 @@ public class RoboRebels extends IterativeRobot {
          */
 
         //                              FL, FR, BL, BR
+        System.out.println("About to setup joysticks");
 
-        m_leftStick = new Joystick(1);
+        m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
-        m_xboxStick = new Joystick(3);//TODO test, check if problem is solved
+        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         
-        accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        //accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         
         //m_robotDrive = new RobotDrive(2, 1);
-        //drive = new RRDrive(m_xboxStick, 2, 1);
+        //System.out.println("Robot Drive Set");
+        drive = new RRDrive(m_xboxStick, 2, 1);
+        System.out.println("Drive Set");
 
         
 
@@ -184,8 +188,10 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
-//        m_rightStick = new Joystick(2);
-//        m_leftStick = new Joystick(1);
+        m_rightStick = new Joystick(2);
+        m_leftStick = new Joystick(1);
+        tankDrive = false;
+        //Teleop Setup
 
 
 
@@ -206,17 +212,17 @@ public class RoboRebels extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         //tracker.trackTarget();
-        System.out.println(getAngle());
+        //System.out.println(getAngle());
     }
     
-    public double getAngle() {
-        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
+    //public double getAngle() {
+        //ADXL345_I2C.AllAxes axes = accel.getAccelerations();
 //        System.out.println("X Accel: " + axes.XAxis);
 //        System.out.println("Y Accel: " + axes.YAxis);
-        double yAxis = Math.min(1, axes.YAxis);
-        yAxis = Math.max(-1, yAxis);
-        return 180.0 * MathUtils.asin(yAxis) / 3.14159;
-    }
+        //double yAxis = Math.min(1, axes.YAxis);
+        //yAxis = Math.max(-1, yAxis);
+        //return 180.0 * MathUtils.asin(yAxis) / 3.14159;
+    //}
 
     /**
      * This function is called periodically during operator control
@@ -227,17 +233,21 @@ public class RoboRebels extends IterativeRobot {
      */
     public void teleopPeriodic() {
         checkButtons();
-        /*
         if ( teleopStateBroadcasted == true )
         {
             System.out.println( "Teleop State" );
             teleopStateBroadcasted = false;
         }
-        if ( tankDrive == true )
+        
+        if ( tankDrive == true ) {
             drive.drive(true);
-        else
+            //System.out.println("Tank Drive");
+        }
+        else{
             drive.drive(false);
-            * */
+            //System.out.println("Arcade Drive");
+        }
+            
             
 
     }
@@ -292,33 +302,33 @@ public class RoboRebels extends IterativeRobot {
             tankDrive = true;
         }
         * */
-        if (m_leftStick.getRawButton(1)) {
-            launcher.set(1.0);
-        }
-        else {
-            launcher.set(0);
-        }
-        
-        if(m_leftStick.getRawButton(3)) {
-            elevation.set(.3);
-        }
-        else if (m_leftStick.getRawButton(2)) {
-            elevation.set(-.3);
-        }
-        else {
-            elevation.set(0);
-        }
-        
-        
-        if (m_leftStick.getRawButton(4)) {
-            lazySusan.set(-.3);
-        }
-        else if (m_leftStick.getRawButton(5)) {
-            lazySusan.set(.3);
-        }
-        else {
-            lazySusan.set(0);
-        }
+//        if (m_leftStick.getRawButton(1)) {
+//            launcher.set(.5);
+//        }
+//        else {
+//            launcher.set(0);
+//        }
+//        
+//        if(m_leftStick.getRawButton(3)) {
+//            elevation.set(.15);
+//        }
+//        else if (m_leftStick.getRawButton(2)) {
+//            elevation.set(-.15);
+//        }
+//        else {
+//            elevation.set(0);
+//        }
+//        
+//        
+//        if (m_leftStick.getRawButton(4)) {
+//            lazySusan.set(-.15);
+//        }
+//        else if (m_leftStick.getRawButton(5)) {
+//            lazySusan.set(.15);
+//        }
+//        else {
+//            lazySusan.set(0);
+//        }
         
 
 
