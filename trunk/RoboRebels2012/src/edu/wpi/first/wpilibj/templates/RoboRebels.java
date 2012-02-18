@@ -95,6 +95,7 @@ public class RoboRebels extends IterativeRobot {
     int pwmTest = 0;
     boolean btnPressed = false;
     PWM currentPWM;
+    //PWM Tester;
 
 
 
@@ -154,7 +155,7 @@ public class RoboRebels extends IterativeRobot {
         m_rightStick = new Joystick(2);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
         
-        //accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         
         //m_robotDrive = new RobotDrive(2, 1);
         //System.out.println("Robot Drive Set");
@@ -192,8 +193,8 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
-        m_rightStick = new Joystick(2);
-        m_leftStick = new Joystick(1);
+        //m_rightStick = new Joystick(2);
+        //m_leftStick = new Joystick(1);
         tankDrive = false;
         //Teleop Setup
 
@@ -215,18 +216,18 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void autonomousPeriodic() {
-        //tracker.trackTarget();
-        //System.out.println(getAngle());
+        tracker.trackTarget();
+        System.out.println(getAngle());
     }
 
-    //public double getAngle() {
-        //ADXL345_I2C.AllAxes axes = accel.getAccelerations();
-//        System.out.println("X Accel: " + axes.XAxis);
-//        System.out.println("Y Accel: " + axes.YAxis);
-        //double yAxis = Math.min(1, axes.YAxis);
-        //yAxis = Math.max(-1, yAxis);
-        //return 180.0 * MathUtils.asin(yAxis) / 3.14159;
-    //}
+    public double getAngle() {
+        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
+        System.out.println("X Accel: " + axes.XAxis);
+        System.out.println("Y Accel: " + axes.YAxis);
+        double yAxis = Math.min(1, axes.YAxis);
+        yAxis = Math.max(-1, yAxis);
+        return 180.0 * MathUtils.asin(yAxis) / 3.14159;
+    }
 
     /**
      * This function is called periodically during operator control
@@ -237,6 +238,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void teleopPeriodic() {
         checkButtons();
+       
         if ( teleopStateBroadcasted == true )
         {
             System.out.println( "Teleop State" );
@@ -251,7 +253,9 @@ public class RoboRebels extends IterativeRobot {
             drive.drive(false);
             //System.out.println("Arcade Drive");
         }
-            
+
+      
+   
 
 
     }
@@ -334,7 +338,7 @@ public class RoboRebels extends IterativeRobot {
 //            lazySusan.set(0);
 //        }
 
-
+/*
         if (m_leftStick.getRawButton(6) && btnPressed == false) {
             btnPressed = true;
             pwmTest++;
@@ -342,18 +346,21 @@ public class RoboRebels extends IterativeRobot {
             if (currentPWM != null)
                 currentPWM.setRaw(0);
 
-            if (pwmTest == 9)
+            if (pwmTest == 8)
                 pwmTest = 1;
 
             System.out.println("PWM #" + pwmTest);
-            
+
             currentPWM = new PWM(pwmTest);
             currentPWM.setRaw(128);
+            System.out.println("Pwm Test done with channel");
         }
 
         if (!m_leftStick.getRawButton(6) && btnPressed == true) {
             btnPressed = false;
         }
+ *
+ */
 
 
 
