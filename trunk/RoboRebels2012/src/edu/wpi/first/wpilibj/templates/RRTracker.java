@@ -6,6 +6,8 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.*;
+import edu.wpi.first.wpilibj.ADXL345_I2C;
+import com.sun.squawk.util.MathUtils;
 
 /**
  *
@@ -16,6 +18,7 @@ public class RRTracker
     AxisCamera cam;                    // camera object
     CriteriaCollection cc;             // the criteria for doing the particle filter operation
     private static Target[] targets;
+    ADXL345_I2C accel;
 
     public RRTracker()
     {
@@ -26,6 +29,8 @@ public class RRTracker
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
         RRTracker.targets = new Target[4];
+        accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+
     }
     
     
@@ -104,6 +109,8 @@ public class RRTracker
             thresholdImage.free();
             image.free();
 
+            System.out.println("accel angle: " + accelAngle());
+
         } catch (Exception ex) {
             System.err.println("There was an error while tracking a target!");
             ex.printStackTrace();
@@ -126,4 +133,20 @@ public class RRTracker
         return targets;
     }
 
-}
+
+    public double accelAngle() {
+        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
+ //       System.out.println("X Accel: " + axes.XAxis);
+ //       System.out.println("Y Accel: " + axes.YAxis);
+        double yAxis = Math.min(1, axes.YAxis);
+        yAxis = Math.max(-1, yAxis);
+
+        // Need to subtract 90 degrees to return correct angle when
+        // accelerometer is mounted on back of shooter
+
+        double angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / 3.14159);
+
+        return angle;
+        
+    }
+  }
