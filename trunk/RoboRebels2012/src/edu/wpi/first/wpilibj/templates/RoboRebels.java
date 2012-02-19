@@ -45,11 +45,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.PWM;
 //import edu.wpi.first.wpilibj.camera.AxisCamera;
 //import edu.wpi.first.wpilibj.camera.AxisCameraException;
@@ -86,17 +86,29 @@ public class RoboRebels extends IterativeRobot {
     RRTracker tracker = new RRTracker();
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
-    final static int LAUNCHER_CHANNEL = 3;//TODO: change
-    final static int ELEVATION_CHANNEL = 4;//TODO: change
-    final static int LAZY_SUSAN_CHANNEL = 5;//TODO: change
+    final static int LAUNCHER_CHANNEL = 3;
+    final static int ELEVATION_CHANNEL = 5;
+    final static int LAZY_SUSAN_CHANNEL = 4;
+    final static int LOADER_CHANNEL = 7;
     Jaguar launcher;
-    Jaguar elevation;
-    Jaguar lazySusan;
+    Victor elevation;
+    Victor lazySusan;
+    Victor loader;
     int pwmTest = 0;
     boolean btnPressed = false;
     PWM currentPWM;
+    double launcher_speed = 0.0;
+    boolean launcher_button_pressed = false;
     //PWM Tester;
 
+    /*
+     *          (\_/)
+     *          (O.0)
+     *           =o=
+     *         (    ) <--- bunny
+     *          (  )
+     *
+     */
 
 
     /**
@@ -115,9 +127,10 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("robotInit()");
         //m_robotDrive = new RobotDrive(4, 3, 2, 1);
         //System.out.println("Robot Drive Set");
-//        launcher = new Jaguar(LAUNCHER_CHANNEL);
-//        elevation = new Jaguar(ELEVATION_CHANNEL);
-//        lazySusan = new Jaguar(LAZY_SUSAN_CHANNEL);
+        launcher = new Jaguar(LAUNCHER_CHANNEL);
+        elevation = new Victor(ELEVATION_CHANNEL);
+        lazySusan = new Victor(LAZY_SUSAN_CHANNEL);
+        loader = new Victor(LOADER_CHANNEL);
 
 
 
@@ -217,7 +230,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         tracker.trackTarget();
-        System.out.println(getAngle());
+        //System.out.println(getAngle());
     }
 
     public double getAngle() {
@@ -310,33 +323,67 @@ public class RoboRebels extends IterativeRobot {
             tankDrive = true;
         }
         * */
-//        if (m_leftStick.getRawButton(1)) {
-//            launcher.set(.5);
-//        }
-//        else {
-//            launcher.set(0);
-//        }
-//        
-//        if(m_leftStick.getRawButton(3)) {
-//            elevation.set(.15);
-//        }
-//        else if (m_leftStick.getRawButton(2)) {
-//            elevation.set(-.15);
-//        }
-//        else {
-//            elevation.set(0);
-//        }
-//        
-//        
-//        if (m_leftStick.getRawButton(4)) {
-//            lazySusan.set(-.15);
-//        }
-//        else if (m_leftStick.getRawButton(5)) {
-//            lazySusan.set(.15);
-//        }
-//        else {
-//            lazySusan.set(0);
-//        }
+        if (m_leftStick.getRawButton(1)) {
+            launcher.set(launcher_speed);
+            if (!launcher_button_pressed)  // if the shooter button is pressed then this adds .2 to its speed
+            
+           {
+                launcher_speed += -0.2;     
+                launcher_button_pressed = true;
+                if (launcher_speed < -1.0)  // once it gets past speed of -1
+                {
+                    launcher_speed  = 0.0; // it turns itself off
+                }
+     
+            System.out.println("Increasing launcher_speed to "+ launcher_speed);
+            }
+        }
+        else
+            launcher_button_pressed = false;
+      // else {
+      //      launcher.set(0);
+      //      System.out.println("Launch cim off");
+      //  }
+        
+        if(m_leftStick.getRawButton(3)) { //when button 3 is presssssssed the up/down aiming increases
+            elevation.set(.3);
+        System.out.println("elevation increase");
+        }
+        else if (m_leftStick.getRawButton(2)) { //when button 2 is pressed the up/down aiming decreases
+            elevation.set(-.3);
+        System.out.println("elevation decrease");
+        }
+        else {
+            elevation.set(0);
+        System.out.println("elevation standstill");//otherwise it stops moving
+        }
+        
+
+        if (m_leftStick.getRawButton(4)) { //when button 4, move susan left
+            lazySusan.set(-.3);
+            System.out.println("Lazysusan Left");
+         }
+       else if (m_leftStick.getRawButton(5)) {// when but 5, move suzie right
+            lazySusan.set(.3);
+           System.out.println("Lazysusan Right");
+          }
+        else { //otherwise dont do anything
+             lazySusan.set(0);
+            System.out.println("Lazysusan STOPPPPP!!!!");
+            }
+
+         if (m_leftStick.getRawButton(6)) { //if 6, suck ball in
+            loader.set(-.75);
+            System.out.println("loader up =D");
+         }
+       else if (m_leftStick.getRawButton(7)) { //if 7, drop (or de-suck) ball
+            loader.set(.75);
+           System.out.println("loader down :?");
+          }
+        else {
+             loader.set(0); //otherwise, dont move(aka stoop) at all
+            System.out.println("loader STOOP");
+            }
 
 /*
         if (m_leftStick.getRawButton(6) && btnPressed == false) {
