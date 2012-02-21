@@ -99,6 +99,8 @@ public class RRGatherer
      */
     private void gatherInputStates()
     {
+        //System.out.println("RRGatherer::gatherInputStates()");
+        
         // Get conveyer button state
         if ( js.getRawButton(2) && !js.getRawButton(3) )
         {
@@ -139,6 +141,8 @@ public class RRGatherer
         {
             spinnerButtonPressed = false;
         }
+        
+        System.out.println("RRGatherer::gatherInputStates - CS: " + conveyerSpeed + " | SS: " + spinnerSpeed);
         
         // Check ball sensors ...
     }

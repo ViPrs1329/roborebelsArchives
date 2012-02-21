@@ -97,14 +97,14 @@ public class RRShooter
     
     static double determineAngle(double distance,int targetID) 
     {            
-        double muzzleVelocity = 9; //meters per second
+        double muzzleVelocity = 7.1; //meters per second
 
         double gravity = 9.81;  //meters per (second)^2
         double yLower = .466953;
         double yMiddle = 1.30515;
         double yHigher = 2.24485;
         double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
-        double shooterHeight = 1.016; // meters off the ground
+        double shooterHeight = .914; // meters off the ground
         double y; // define by asking driver "top, middle, or bottom?" (BELOW)
 
         xDistance = distance /3.28; // converts feet into meters
@@ -204,6 +204,7 @@ public class RRShooter
         // If tilt limit switch is activated stop tilt!!! 
         if ( tiltLimitSwitch.get() )
         {
+            System.out.println("Limit switch pressed!");
             tiltSpeed = 0.0;
         }
     }

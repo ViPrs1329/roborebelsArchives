@@ -91,6 +91,7 @@ public class RoboRebels extends IterativeRobot {
     RRDrive             drive;
     RRShooter           shooter;
     RRGatherer          gatherer;
+    RRBridgeArm         arm;
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
@@ -168,6 +169,8 @@ public class RoboRebels extends IterativeRobot {
         
         gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL, m_rightStick);
 
+        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
+        
         System.out.println("Robot Ready");
     }
 
@@ -238,7 +241,9 @@ public class RoboRebels extends IterativeRobot {
             //System.out.println("Arcade Drive");
         }
 
-      
+      shooter.shoot();
+      //gatherer.gather();
+      //arm.arm();
         
 
 

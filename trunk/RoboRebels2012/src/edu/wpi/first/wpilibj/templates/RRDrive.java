@@ -40,7 +40,7 @@ public class RRDrive implements MotorSafety
      */
     public RRDrive(Joystick js, int leftChannel, int rightChannel)
     {
-        System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
+        //System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         if ( js != null )
             leftJoystick = js;
@@ -64,7 +64,7 @@ public class RRDrive implements MotorSafety
      */
     public RRDrive(Joystick ljs, Joystick rjs, int leftChannel, int rightChannel)
     {
-        System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
+        //System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         if ( ljs != null )
             leftJoystick = ljs;
@@ -220,7 +220,7 @@ public class RRDrive implements MotorSafety
             }
         }
         
-        System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
+        //System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
     }
     
