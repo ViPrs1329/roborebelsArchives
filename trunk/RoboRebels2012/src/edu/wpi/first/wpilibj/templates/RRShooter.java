@@ -4,10 +4,10 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.Joystick;
 import com.sun.squawk.util.MathUtils;
+import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Victor;
 
 /**
  *
@@ -17,6 +17,14 @@ import com.sun.squawk.util.MathUtils;
  * - Getting/setting shooting wheel speed
  * - Tilting mechanism
  * - Lazy Susan
+ * 
+ * Currently, all manual control has been developed for
+ * controlling the various parts of the shooter module.  
+ * 
+ * TODO:
+ * 
+ * - Test!
+ * - Extend public methods for autonomous controll
  * 
  * @author dmw
  */
@@ -28,33 +36,36 @@ public class RRShooter
     private final double        TILT_SPEED = 0.4;
     
     private     int             swj_channel;
-    private     int             lwv_channel;
-    private     int             spwv_channel;
+    private     int             lsv_channel;
+    private     int             tltv_channel;
     
-    private     double          shootingWheelSpeed = DEFAULT_SHOOTING_SPEED;
+    private     double          shootingWheelSpeed = 0.0;
+    private     double          lazySusanSpeed = 0.0;
+    private     double          tiltSpeed = 0.0;
     
     private     boolean         shootingWheelState;
     
     private     boolean         shootingButtonPressed;
             
     private     Jaguar          shootingWheelJaguar;
-    private     Victor          loadingWheelVictor;
-    private     Victor          spinnerWheelVictor;
+    private     Victor          tiltVictor;
+    private     Victor          lsVictor;
+    
     private     Joystick        shootingJoystick;
     
     
     /**
      * Sets up the speed controllers for the shooter
      * @param swjc Shooting Wheel Jaguar Channel
-     * @param lwcc Loading Wheel Victor Channel
-     * @param spwvc Spinner Wheel Victor Channel 
+     * @param lsvc Lazy Susan Victor Channel
+     * @param tltvc Tilter Victor Channel 
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lwvc, int spwvc, Joystick js)
+    public RRShooter(int  swjc, int lsvc, int tltvc, Joystick js)
     {
         swj_channel = swjc;
-        lwv_channel = lwvc;
-        spwv_channel = spwvc;
+        lsv_channel = lsvc;
+        tltv_channel = tltvc;
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
@@ -66,14 +77,18 @@ public class RRShooter
             throw new NullPointerException("RRShooter was passed a null Joystick object!");
         
         shootingWheelJaguar = new Jaguar(swj_channel);
-        loadingWheelVictor = new Victor(lwv_channel);
-        spinnerWheelVictor = new Victor(spwv_channel);
+        tiltVictor = new Victor(tltv_channel);
+        lsVictor = new Victor(lsv_channel);
     }
     
     
+    /**
+     * 
+     * @param distance distance is distance to basket in feet
+     * @param targetID targetID indicates if lower (0), middle (1), or upper (2) is the target
+     * @return Returns the angle for which to move the shooter at
+     */
     
-    // distance is distance to basket in feet
-    // targetID indicates if lower (0), middle (1), or upper (2) is the target
     static double determineAngle(double distance,int targetID) 
     {            
         double muzzleVelocity = 9; //meters per second
@@ -127,59 +142,89 @@ public class RRShooter
     
    
     
-    /*
-     * General action method for this objec.
-     * 
-     * Joystick Buttons/axis	Action	                This button layout is if the auto ball sensing is not functional
-        1	                Shoot on, off           ie. Manual control
-        2                       Loader Up	
-        3	                Loader Down	        Also, this is in right hand config mode
-        4	                Lazy Susan left	
-        5	                Lazy Susan right	
-        6	                Tilt up	
-        7	                Tilt down	
-        8	                Bridge arm down	
-        9	                Bridge arm up	
-        10	                Spinner in	
-        11	                Spinner out	
-        Z	                Shooter speed control	
-        Axis	                Drive (Arcade)	
-     * 
+    /**
+     * This is the general shoot periodic method for shooting functions.
      */
     
     public void shoot()
     {
-        double tempZ;
-        
         // Spin up if trigger is pressed (button 1)
         if ( shootingJoystick.getRawButton(1) && !shootingButtonPressed )
         {
             if ( shootingWheelState )
+            {
+                shootingWheelSpeed = 0.0;
                 shootingWheelState = false;
+            }
             else
+            {
+                shootingWheelSpeed = this.getTransformedZValue();
                 shootingWheelState = true;
+            }
         }
         else if ( !shootingJoystick.getRawButton(1) )
         {
             shootingButtonPressed = false;
         }
         
-        // get Z value from joystick
         
-        tempZ = shootingJoystick.getZ();
-
-        // transform z posititon which is dependant on the
-        // max speed of the shooter.  This will 
-
-        shootingWheelSpeed = MAX_SHOOTING_SPEED * tempZ;
+        // Check for tilting button up, down (button 6, 7)
+        if ( shootingJoystick.getRawButton(6) )
+        {
+            tiltSpeed = TILT_SPEED;
+        }
+        else if ( shootingJoystick.getRawButton(7) )
+        {
+            tiltSpeed = -1.0 * TILT_SPEED;
+        }
+        else if ( !shootingJoystick.getRawButton(6) && !shootingJoystick.getRawButton(7) )
+        {
+            tiltSpeed = 0.0;
+        }
         
-        // Check for tilting button left, right (button 6, 7)
-        if ( )
+        
+        // Check for lazy susan button left, right (button 4, 5)
+        if ( shootingJoystick.getRawButton(4) )
+        {
+            lazySusanSpeed = LS_SPEED;
+        }
+        else if ( shootingJoystick.getRawButton(5) )
+        {
+            lazySusanSpeed = -1.0 * LS_SPEED;
+        }
+        else if ( !shootingJoystick.getRawButton(4) && !shootingJoystick.getRawButton(5) )
+        {
+            lazySusanSpeed = 0.0;
+        }
+        
+        
+        // Process shooter states
+        setShooterSpeeds();
     }
     
     
-    private void processShootingStates()
+    /**
+     * This private method sets the determined speeds for the various
+     * mechanisms used by the shooter module.  
+     */
+    
+    private void setShooterSpeeds()
     {
-        
+        shootingWheelJaguar.set(shootingWheelSpeed);
+        tiltVictor.set(tiltSpeed);
+        lsVictor.set(lazySusanSpeed);
+    }
+    
+    
+    /**
+     * This method gets the value of the Z dial on a joystick and
+     * transforms it to fit within the speed range of the shooter.
+     * 
+     * @return transformed speed from the corresponding Z value
+     */
+    
+    private double getTransformedZValue()
+    {
+        return MAX_SHOOTING_SPEED * shootingJoystick.getZ();
     }
 }
