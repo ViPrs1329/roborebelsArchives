@@ -9,11 +9,23 @@ import edu.wpi.first.wpilibj.Joystick;
 
 /**
  *
+ * This class has the following components:
+ * 
+ * - Bridge arm
+ * 
+ * TODO:  
+ * 
+ * 
+ * 
  * @author dmw
  */
 public class RRBridgeArm 
 {
+    private final double    ARM_SPEED = 0.5;
+    
     private     int         bav_channel;
+    
+    private     double      armSpeed = 0.0;
     
     private     Victor      bridgeArmVictor;
     private     Joystick    js;
@@ -21,9 +33,9 @@ public class RRBridgeArm
     /**
      * Set's up BridgeArm victor
      * 
-     * @param bav The Victor controlling the BridgeArm
+     * @param bavc The Victor controlling the BridgeArm
      */
-    public RRBridgeArm(Joystick js, int bavc)
+    public RRBridgeArm(int bavc, Joystick js)
     {
         bav_channel = bavc;
         
@@ -37,9 +49,43 @@ public class RRBridgeArm
         bridgeArmVictor = new Victor(bav_channel);
     }
     
+    
+    /**
+     * Joystick Buttons/axis	Action	                This button layout is if the auto ball sensing is not functional
+	
+8	                Bridge arm down	
+9	                Bridge arm up	
+     */
+    
+    private void gatherInputStates()
+    {
+        // Get Bridge Arm button states
+        if ( js.getRawButton(8) )
+        {
+            armSpeed = ARM_SPEED;
+        }
+        else if ( js.getRawButton(9) )
+        {
+            armSpeed = -1.0 * ARM_SPEED;
+        }
+        else if ( !js.getRawButton(8) && !js.getRawButton(9) )
+        {
+            armSpeed = 0.0;
+        }
+    }
+    
+    
     public void arm()
     {
+        gatherInputStates();
         
+        setBridgeArmSpeeds();
+    }
+    
+    
+    private void setBridgeArmSpeeds()
+    {
+        bridgeArmVictor.set(armSpeed);
     }
     
     /**
@@ -47,7 +93,7 @@ public class RRBridgeArm
      */
     public void LowerBridgeArm()
     {
-        
+        System.out.println("LowerBridgeArm has not been implemented yet!");
     }
     
     /**
@@ -55,6 +101,6 @@ public class RRBridgeArm
      */
     public void RaiseBridgeArm()
     {
-        
+        System.out.println("RaiseBridgeArm has not been implemented yet!");
     }
 }

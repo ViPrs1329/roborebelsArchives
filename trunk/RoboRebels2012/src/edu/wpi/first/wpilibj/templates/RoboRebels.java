@@ -90,6 +90,7 @@ public class RoboRebels extends IterativeRobot {
     PWM                 currentPWM;
     RRDrive             drive;
     RRShooter           shooter;
+    RRGatherer          gatherer;
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
@@ -100,12 +101,20 @@ public class RoboRebels extends IterativeRobot {
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
     
+    // PWM Channel constants
     final static int    SHOOTER_CHANNEL = 3;
     final static int    TILT_CHANNEL = 7;
     final static int    LAZY_SUSAN_CHANNEL = 8;
     final static int    LOADER_CHANNEL = 5;
     final static int    SPINNER_CHANNEL = ;
     final static int    BRIDGE_ARM_CHANNEL = ;
+    
+    // Digital I/O constants
+    final static int    BOTTOM_BALL_SENSOR_CHANNEL = 1;
+    final static int    MIDDLE_BALL_SENSOR_CHANNEL = 2;
+    final static int    TOP_BALL_SENSOR_CHANNEL = 3;
+    final static int    TILT_LIMIT_SWITCH_CHANNEL = 4;
+    
     
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
@@ -151,9 +160,11 @@ public class RoboRebels extends IterativeRobot {
         
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         
-        drive = new RRDrive(m_xboxStick, 2, 1);
+        drive = new RRDrive(m_rightStick, 2, 1);
         
-        shooter = new RRShooter()
+        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick);
+        
+        gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL, m_rightStick);
 
         System.out.println("Robot Ready");
     }
