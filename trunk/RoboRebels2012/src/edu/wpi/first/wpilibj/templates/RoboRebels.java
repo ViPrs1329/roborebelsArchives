@@ -86,13 +86,10 @@ public class RoboRebels extends IterativeRobot {
     DriverStationLCD    m_dsLCD;                // driver station LCD object
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
-    Joystick            m_xboxStick;
-    Jaguar              launcher;
-    Victor              elevation;
-    Victor              lazySusan;
-    Victor              loader;
+    //Joystick            m_xboxStick;
     PWM                 currentPWM;
     RRDrive             drive;
+    RRShooter           shooter;
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
@@ -102,14 +99,19 @@ public class RoboRebels extends IterativeRobot {
     double              autonomousStartTime;    // holds the start time for autonomous mode
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
-    final static int    LAUNCHER_CHANNEL = 3;
-    final static int    ELEVATION_CHANNEL = 7;
+    
+    final static int    SHOOTER_CHANNEL = 3;
+    final static int    TILT_CHANNEL = 7;
     final static int    LAZY_SUSAN_CHANNEL = 8;
     final static int    LOADER_CHANNEL = 5;
+    final static int    SPINNER_CHANNEL = ;
+    final static int    BRIDGE_ARM_CHANNEL = ;
+    
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
     static boolean      teleopStateBroadcasted = false;
     static boolean      autonomousStateBroadcasted = false;
+    
     int                 pwmTest = 0;
     boolean             btnPressed = false;
     double              launcher_speed = 0.0;
@@ -141,25 +143,17 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit() {
         
         System.out.println("robotInit()");
-        
-        launcher = new Jaguar(LAUNCHER_CHANNEL);
-        elevation = new Victor(ELEVATION_CHANNEL);
-        lazySusan = new Victor(LAZY_SUSAN_CHANNEL);
-        loader = new Victor(LOADER_CHANNEL);
-
-        System.out.println("About to setup joysticks");
 
         m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
-        m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        //m_xboxStick = new Joystick(1);
         
         
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         
-        //m_robotDrive = new RobotDrive(2, 1);
-        //System.out.println("Robot Drive Set");
         drive = new RRDrive(m_xboxStick, 2, 1);
-        System.out.println("Drive Set");
+        
+        shooter = new RRShooter()
 
         System.out.println("Robot Ready");
     }
@@ -212,8 +206,9 @@ public class RoboRebels extends IterativeRobot {
      * This is the most important method in this class
      * ---------------------
      */
-    public void teleopPeriodic() {
-        checkButtons();
+    public void teleopPeriodic() 
+    {
+        
        
         if ( teleopStateBroadcasted == true )
         {
@@ -231,7 +226,7 @@ public class RoboRebels extends IterativeRobot {
         }
 
       
-   
+        
 
 
     }
@@ -271,6 +266,9 @@ public class RoboRebels extends IterativeRobot {
 
     /*
      * This method checks buttons and sets states accordingly
+     * 
+     * NOTE:  Input checking should be put into their respective classes.  For 
+     * reference, see RRShooter.
      */
     public void checkButtons() {
         //System.out.println( "checkButtons()" );
@@ -286,6 +284,7 @@ public class RoboRebels extends IterativeRobot {
             tankDrive = true;
         }
         * */
+        /*
         if (m_leftStick.getRawButton(1)) {
             launcher.set(launcher_speed);
             if (!launcher_button_pressed)  // if the shooter button is pressed then this adds .2 to its speed
@@ -347,6 +346,8 @@ public class RoboRebels extends IterativeRobot {
              loader.set(0); //otherwise, dont move(aka stoop) at all
             System.out.println("loader STOOP");
             }
+            * 
+            */
 
 /*
         if (m_leftStick.getRawButton(6) && btnPressed == false) {

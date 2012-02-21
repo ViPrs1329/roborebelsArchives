@@ -5,6 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import com.sun.squawk.util.MathUtils;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Victor;
@@ -24,20 +25,21 @@ import edu.wpi.first.wpilibj.Victor;
  * TODO:
  * 
  * - Test!
- * - Extend public methods for autonomous controll
+ * - Implement accelerometer code
+ * - Extend public methods for autonomous control
  * 
  * @author dmw
  */
 public class RRShooter 
 {
-    private final double        DEFAULT_SHOOTING_SPEED = 0.6;
     private final double        MAX_SHOOTING_SPEED = 0.8;
     private final double        LS_SPEED = 0.4;
     private final double        TILT_SPEED = 0.4;
     
-    private     int             swj_channel;
-    private     int             lsv_channel;
-    private     int             tltv_channel;
+    private     int             swj_channel;        // Shooter Wheel Jaguar channel
+    private     int             lsv_channel;        // Lazy Susan Victor channel
+    private     int             tltv_channel;       // Tilter Victor channel
+    private     int             tltls_channel;      // Tilter Limit Swith channel
     
     private     double          shootingWheelSpeed = 0.0;
     private     double          lazySusanSpeed = 0.0;
@@ -50,6 +52,7 @@ public class RRShooter
     private     Jaguar          shootingWheelJaguar;
     private     Victor          tiltVictor;
     private     Victor          lsVictor;
+    private     DigitalInput    tiltLimitSwitch;
     
     private     Joystick        shootingJoystick;
     
@@ -59,13 +62,15 @@ public class RRShooter
      * @param swjc Shooting Wheel Jaguar Channel
      * @param lsvc Lazy Susan Victor Channel
      * @param tltvc Tilter Victor Channel 
+     * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, Joystick js)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
         tltv_channel = tltvc;
+        tltls_channel = tltlsc;
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
@@ -79,6 +84,7 @@ public class RRShooter
         shootingWheelJaguar = new Jaguar(swj_channel);
         tiltVictor = new Victor(tltv_channel);
         lsVictor = new Victor(lsv_channel);
+        tiltLimitSwitch = new DigitalInput(tltls_channel);
     }
     
     
@@ -140,13 +146,11 @@ public class RRShooter
         return theta;
     }
     
-   
     
     /**
-     * This is the general shoot periodic method for shooting functions.
+     * Gathers input states and sets up the necessary motor speeds
      */
-    
-    public void shoot()
+    private void gatherInputStates()
     {
         // Spin up if trigger is pressed (button 1)
         if ( shootingJoystick.getRawButton(1) && !shootingButtonPressed )
@@ -197,6 +201,23 @@ public class RRShooter
             lazySusanSpeed = 0.0;
         }
         
+        // If tilt limit switch is activated stop tilt!!! 
+        if ( tiltLimitSwitch.get() )
+        {
+            tiltSpeed = 0.0;
+        }
+    }
+    
+   
+    
+    /**
+     * This is the general shoot periodic method for shooting functions.
+     */
+    
+    public void shoot()
+    {
+        // Process input from joystick and other inputs
+        gatherInputStates();
         
         // Process shooter states
         setShooterSpeeds();
@@ -211,10 +232,9 @@ public class RRShooter
     private void setShooterSpeeds()
     {
         shootingWheelJaguar.set(shootingWheelSpeed);
-        tiltVictor.set(tiltSpeed);
         lsVictor.set(lazySusanSpeed);
+        tiltVictor.set(tiltSpeed);
     }
-    
     
     /**
      * This method gets the value of the Z dial on a joystick and

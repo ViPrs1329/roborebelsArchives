@@ -20,8 +20,8 @@ Joystick Buttons/axis	Action	                This button layout is if the auto b
 7	                Tilt down	
 8	                Bridge arm down	
 9	                Bridge arm up	
-10	                Spinner in	
-11	                Spinner out	
+10	                Spinner in, reverse, stop	
+11	                	
 Z	                Shooter speed control	
 Axis	                Drive (Arcade)	
 		

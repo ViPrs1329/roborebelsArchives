@@ -14,13 +14,9 @@ package edu.wpi.first.wpilibj.templates;
 
 
 import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
-
-import java.lang.NullPointerException;
 
 
 public class RRDrive implements MotorSafety
@@ -28,21 +24,26 @@ public class RRDrive implements MotorSafety
     private     MotorSafetyHelper       motorSafetyHelper;
     
     private     boolean                 arcade;
-    private     Joystick                m_xboxStick,
-                                        l_joystick,
-                                        r_joystick;
+    private     Joystick                leftJoystick,
+                                        rightJoystick;
     private     Jaguar                  leftMotor,
                                         rightMotor;
     
     public static final double          kDefaultExpirationTime = 0.1;
     
 
-    public RRDrive(Joystick xbox, int leftChannel, int rightChannel)
+    /**
+     * 
+     * @param js
+     * @param leftChannel
+     * @param rightChannel 
+     */
+    public RRDrive(Joystick js, int leftChannel, int rightChannel)
     {
         System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
-        if ( xbox != null )
-            m_xboxStick = xbox;
+        if ( js != null )
+            leftJoystick = js;
         else
         {
             throw new NullPointerException("RRDrive was passed a null Joystick object!");
@@ -54,19 +55,26 @@ public class RRDrive implements MotorSafety
     }
     
     
+    /**
+     * 
+     * @param ljs
+     * @param rjs
+     * @param leftChannel
+     * @param rightChannel 
+     */
     public RRDrive(Joystick ljs, Joystick rjs, int leftChannel, int rightChannel)
     {
         System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         if ( ljs != null )
-            l_joystick = ljs;
+            leftJoystick = ljs;
         else
         {
             throw new NullPointerException("RRDrive was passed a null Joystick object (ljs)! ");
         }
         
         if ( rjs != null )
-            r_joystick = rjs;
+            rightJoystick = rjs;
         else
         {
             throw new NullPointerException("RRDrive was passed a null Joystick object (rjs)!");
@@ -78,6 +86,11 @@ public class RRDrive implements MotorSafety
     }
     
     
+    /**
+     * 
+     * @param lc
+     * @param rc 
+     */
     private void setupDrive(int lc, int rc)
     {
         leftMotor = new Jaguar(lc);
@@ -85,84 +98,96 @@ public class RRDrive implements MotorSafety
     }
     
     
-    
+    /**
+     * 
+     * @param tankDrive 
+     */
     public void drive(boolean tankDrive)
     {
-        System.out.println("drive()");
-           double l_xVal  = m_xboxStick.getRawAxis(1);
-           double l_yVal  = m_xboxStick.getRawAxis(2);
+        double l_xVal  = leftJoystick.getRawAxis(1);
+        double l_yVal  = leftJoystick.getRawAxis(2);
 
-           double r_xVal  = m_xboxStick.getRawAxis(4);
-           double r_yVal  = m_xboxStick.getRawAxis(5);
+        double r_xVal  = leftJoystick.getRawAxis(4);
+        double r_yVal  = leftJoystick.getRawAxis(5);
+
+        System.out.println("drive()");
            
+        
+        if (Math.abs(l_xVal) < .13)
+        {
+            l_xVal = 0;
+        }
+
+        if (Math.abs(l_yVal)< .13)
+        {
+            l_yVal = 0;
+        }
+
+        if (Math.abs(r_xVal) < .13)
+        {
+            r_xVal = 0;
+        }
+
+        if (Math.abs(r_yVal)< .13)
+        {
+            r_yVal = 0;
+        }
+
+        //Change the range of the joystick values to account for the dead zone
+        if (l_xVal > 0)
+        {
+            l_xVal = (l_xVal-.13)/(1-.13);
+        }
+        else if (l_xVal < 0)
+        {
+            l_xVal = (l_xVal+.13)/(1-.13);
+        }
+
+        if (l_yVal > 0)
+        {
+            l_yVal = (l_yVal-.13)/(1-.13);
+        }
+        else if (l_yVal < 0)
+        {
+            l_yVal = (l_yVal+.13)/(1-.13);
+        }
+
+        if (r_xVal > 0)
+        {
+            r_xVal = (r_xVal-.13)/(1-.13);
+        }
+        else if (r_xVal < 0)
+        {
+            r_xVal = (r_xVal+.13)/(1-.13);
+        }
+
+        if (r_yVal > 0)
+        {
+            r_yVal = (r_yVal-.13)/(1-.13);
+        }
+        else if (r_yVal < 0)
+        {
+            r_yVal = (r_yVal+.13)/(1-.13);
+        }
+           
+        
         if (!tankDrive)
         {
-           
-           if (Math.abs(l_xVal) < .13)
-           {
-               l_xVal = 0;
-           }
-
-           if (Math.abs(l_yVal)< .13)
-           {
-               l_yVal = 0;
-           }
-
-           if (Math.abs(r_xVal) < .13)
-           {
-               r_xVal = 0;
-           }
-
-           if (Math.abs(r_yVal)< .13)
-           {
-               r_yVal = 0;
-           }
-
-           //Change the range of the joystick values to account for the dead zone
-           if (l_xVal > 0)
-           {
-               l_xVal = (l_xVal-.13)/(1-.13);
-           }
-           else if (l_xVal < 0)
-           {
-            l_xVal = (l_xVal+.13)/(1-.13);
-            }
-
-            if (l_yVal > 0)
-            {
-               l_yVal = (l_yVal-.13)/(1-.13);
-           }
-           else if (l_yVal < 0)
-           {
-               l_yVal = (l_yVal+.13)/(1-.13);
-           }
-
-           if (r_xVal > 0)
-           {
-               r_xVal = (r_xVal-.13)/(1-.13);
-           }
-           else if (r_xVal < 0)
-           {
-               r_xVal = (r_xVal+.13)/(1-.13);
-           }
-
-           if (r_yVal > 0)
-           {
-               r_yVal = (r_yVal-.13)/(1-.13);
-           }
-           else if (r_yVal < 0)
-           {
-               r_yVal = (r_yVal+.13)/(1-.13);
-           }
-           
-           System.out.println("x y" + l_yVal + " " + l_xVal);
            arcadeDrive(l_yVal, l_xVal); 
         }
         else
         {
            //tank mode
+            System.out.println("RRDrive::drive() - Tank drive has not been implimented yet!!!");
         }
     }
+    
+    
+    /**
+     * 
+     * @param moveValue
+     * @param rotateValue 
+     */
     public void arcadeDrive(double moveValue, double rotateValue)
     {
         double rightMotorSpeed;
@@ -199,6 +224,12 @@ public class RRDrive implements MotorSafety
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
     }
     
+    
+    /**
+     * 
+     * @param left
+     * @param right 
+     */
     public void setLeftRightMotorValue(double left, double right)
     {
         if (leftMotor == null || rightMotor == null)
@@ -209,30 +240,57 @@ public class RRDrive implements MotorSafety
         motorSafetyHelper.feed();
     }
 
+    /**
+     * 
+     * @param timeout 
+     */
     public void setExpiration(double timeout) {
         motorSafetyHelper.setExpiration(timeout);
     }
 
+    /**
+     * 
+     * @return 
+     */
     public double getExpiration() {
         return motorSafetyHelper.getExpiration();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isAlive() {
         return motorSafetyHelper.isAlive();
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean isSafetyEnabled() {
         return motorSafetyHelper.isSafetyEnabled();
     }
 
+    /**
+     * 
+     * @param enabled 
+     */
     public void setSafetyEnabled(boolean enabled) {
         motorSafetyHelper.setSafetyEnabled(enabled);
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getDescription() {
         return "RR Robot Drive";
     }
 
+    /**
+     * 
+     */
     public void stopMotor() 
     {
         if (leftMotor != null) {
@@ -244,6 +302,10 @@ public class RRDrive implements MotorSafety
         
     }
     
+    
+    /**
+     * 
+     */
     private void setupMotorSafety() 
     {
         motorSafetyHelper = new MotorSafetyHelper(this);
