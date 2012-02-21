@@ -102,12 +102,14 @@ public class RoboRebels extends IterativeRobot {
     boolean             tankDrive = false;
     
     // PWM Channel constants
+    final static int    LEFT_DRIVE_CHANNEL = 1;
+    final static int    RIGHT_DRIVE_CHANNEL = 2;
     final static int    SHOOTER_CHANNEL = 3;
     final static int    TILT_CHANNEL = 7;
     final static int    LAZY_SUSAN_CHANNEL = 8;
     final static int    LOADER_CHANNEL = 5;
-    final static int    SPINNER_CHANNEL = ;
-    final static int    BRIDGE_ARM_CHANNEL = ;
+    final static int    SPINNER_CHANNEL = 4;
+    final static int    BRIDGE_ARM_CHANNEL = 6;
     
     // Digital I/O constants
     final static int    BOTTOM_BALL_SENSOR_CHANNEL = 1;
