@@ -28,53 +28,14 @@ public class RRDrive implements MotorSafety
     private     MotorSafetyHelper       motorSafetyHelper;
     
     private     boolean                 arcade;
-    private     Joystick                m_xboxStick;
+    private     Joystick                m_xboxStick,
+                                        l_joystick,
+                                        r_joystick;
     private     Jaguar                  leftMotor,
                                         rightMotor;
     
-    public static final double kDefaultExpirationTime = 0.1;
-
-//    RobotDrive m_robotDrive;
-//    Joystick m_rightStick;
-//    Joystick m_leftStick;
-//
-//    public RRDrive(RobotDrive robotDrive, Joystick rightStick, Joystick leftStick)
-//    {
-//        m_robotDrive = robotDrive;
-//        m_rightStick = rightStick;
-//        m_leftStick = leftStick;
-//    }
-//
-//    public RRDrive(RobotDrive robotDrive)
-//    {
-//        m_robotDrive = robotDrive;
-//        m_rightStick = m_leftStick = null;
-//    }
-//
-//    public RRDrive(RobotDrive robotDrive, Joystick j)
-//    {
-//        m_robotDrive = robotDrive;
-//        m_leftStick = j;
-//        m_rightStick = null;
-//    }
-//
-//    public void drive( boolean tankDrive )
-//    {
-//        
-//        System.out.println("RRDrive.drive()");
-//        if ( m_rightStick == null || m_leftStick == null )
-//            return;
-//
-//        if ( tankDrive )
-//            m_robotDrive.tankDrive(m_leftStick, m_rightStick);
-//        else
-//            m_robotDrive.arcadeDrive(m_rightStick);
-//    }
-//
-//    public void drive(double speed, double curve)
-//    {
-//        m_robotDrive.drive(speed, curve);
-//    }
+    public static final double          kDefaultExpirationTime = 0.1;
+    
 
     public RRDrive(Joystick xbox, int leftChannel, int rightChannel)
     {
@@ -89,11 +50,45 @@ public class RRDrive implements MotorSafety
             throw new NullPointerException("RRDrive was passed a null Joystick object!");
         }
         
-        leftMotor = new Jaguar(leftChannel);
-        rightMotor = new Jaguar(rightChannel);
+        setupDrive(leftChannel, rightChannel);
         
         setupMotorSafety();
     }
+    
+    
+    public RRDrive(Joystick ljs, Joystick rjs, int leftChannel, int rightChannel)
+    {
+        NullPointerException        ex;
+        
+        System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
+        
+        if ( ljs != null )
+            l_joystick = ljs;
+        else
+        {
+            throw new NullPointerException("RRDrive was passed a null Joystick object!");
+        }
+        
+        if ( rjs != null )
+            r_joystick = rjs;
+        else
+        {
+            throw new NullPointerException("RRDrive was passed a null Joystick object!");
+        }
+        
+        setupDrive(leftChannel, rightChannel);
+        
+        setupMotorSafety();
+    }
+    
+    
+    private void setupDrive(int lc, int rc)
+    {
+        leftMotor = new Jaguar(lc);
+        rightMotor = new Jaguar(rc);
+    }
+    
+    
     
     public void drive(boolean tankDrive)
     {

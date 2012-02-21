@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.Joystick;
 import com.sun.squawk.util.MathUtils;
 
 /**
@@ -19,21 +20,25 @@ public class RRShooter
     private     int         lwc_channel;
     private     int         ss_channel;
             
-    private     Jaguar      shootingWheelJaguar;
-    private     Victor      loadingWheelVictor;
+    private     Jaguar          shootingWheelJaguar;
+    private     Victor          loadingWheelVictor;
     private     AnalogChannel   sonicSensor;
+    private     Joystick        shootingJoystick;
     
     
     /**
      * Sets up the speed controllers for the shooter
      * @param swjc
      * @param lwcc 
+     * @param ssc 
+     * @param js
      */
-    public RRShooter(int  swjc, int lwcc, int ssc)
+    public RRShooter(int  swjc, int lwcc, int ssc, Joystick js)
     {
         swj_channel = swjc;
         lwc_channel = lwcc;
         ss_channel = ssc;
+        shootingJoystick = js;
         
         shootingWheelJaguar = new Jaguar(swj_channel);
         loadingWheelVictor = new Victor(lwc_channel);

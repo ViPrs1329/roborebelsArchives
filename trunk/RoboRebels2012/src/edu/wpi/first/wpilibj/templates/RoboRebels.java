@@ -18,23 +18,42 @@
  * 7 Back
  * 8 Start
  * 9 L Stick Click
+ * 10 R Stick Click
+ * 
+ * Axis
+ * 
+ *  ¥1: Left Stick X Axis
+        -Left:Negative ; Right: Positive
+    ¥2: Left Stick Y Axis
+        -Up: Negative ; Down: Positive
+    ¥3: Triggers
+        -Left: Positive ; Right: Negative
+    ¥4: Right Stick X Axis
+        -Left: Negative ; Right: Positive
+    ¥5: Right Stick Y Axis
+        -Up: Negative ; Down: Positive
+    ¥6: Directional Pad (Not recommended, buggy)
+
+ * 
  */
+
 /*
-y4
-x3  b2
-a1
+ * 
 
 
  * NOTES:
  *
- * - Watchdog is no longer required, however, we may want to use it
- *   if we feel that need for a that bit of safety.
  *
- * - There is code within the RobotDrive class which can handle
- *   Mecanum wheels!  This will help us out a lot.
- *
- * - Just for the sake of cleanliness, I think that we should
- *   delete the following modules:  RRKicker, RRGRabber, RRPullup and RRSpinner
+ * - I have decided to clean up our code base a bit. - Derek W.
+ * 
+ * 
+ * TODO:
+ * 
+ * - Migrate code out of RoboRebels.java into their respective classes
+ * 
+ * - All classees that depend on a Joystick should be passed joystick object(s)
+ *   and handled within their classes
+ * 
  */
 package edu.wpi.first.wpilibj.templates;
 
@@ -51,10 +70,6 @@ import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.PWM;
-//import edu.wpi.first.wpilibj.camera.AxisCamera;
-//import edu.wpi.first.wpilibj.camera.AxisCameraException;
-//import edu.wpi.first.wpilibj.image.*;
-//import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 
 
 /**
@@ -67,39 +82,39 @@ import edu.wpi.first.wpilibj.PWM;
 public class RoboRebels extends IterativeRobot {
 
     // Declare a variable to use to access the driver station object
-    DriverStation m_ds;                   // driver station object
-    DriverStationLCD m_dsLCD;                // driver station LCD object
-    //AxisCamera cam;                    // camera object
-    //CriteriaCollection cc;      // the criteria for doing the particle filter operation
-    double autonomousStartTime;    // holds the start time for autonomous mode
-    Joystick m_rightStick;		// joystick 1 (arcade stick or right tank stick)
-    Joystick m_leftStick;		// joystick 2 (tank left stick)
-    Joystick m_xboxStick;
-    static final int NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
-    static boolean disabledStateBroadcasted = false;
-    static boolean teleopStateBroadcasted = false;
-    static boolean autonomousStateBroadcasted = false;
-    double lastZValue;                         // last Z value for the dial on the joystick
-    RRDrive drive;
-    ADXL345_I2C accel;
+    DriverStation       m_ds;                   // driver station object
+    DriverStationLCD    m_dsLCD;                // driver station LCD object
+    Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
+    Joystick            m_leftStick;		// joystick 2 (tank left stick)
+    Joystick            m_xboxStick;
+    Jaguar              launcher;
+    Victor              elevation;
+    Victor              lazySusan;
+    Victor              loader;
+    PWM                 currentPWM;
+    RRDrive             drive;
+    ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
-    RRTracker tracker = new RRTracker();
+    RRTracker           tracker;
+    //RRTracker tracker = new RRTracker();   // New objects shouldn't be created outside of a method.
+    
+    double              lastZValue;                         // last Z value for the dial on the joystick
+    double              autonomousStartTime;    // holds the start time for autonomous mode
     double              robotDriveSensitivity = 0.25;       // sensitivity of the RobotDrive object
     boolean             tankDrive = false;
-    final static int LAUNCHER_CHANNEL = 3;
-    final static int ELEVATION_CHANNEL = 5;
-    final static int LAZY_SUSAN_CHANNEL = 4;
-    final static int LOADER_CHANNEL = 7;
-    Jaguar launcher;
-    Victor elevation;
-    Victor lazySusan;
-    Victor loader;
-    int pwmTest = 0;
-    boolean btnPressed = false;
-    PWM currentPWM;
-    double launcher_speed = 0.0;
-    boolean launcher_button_pressed = false;
-    //PWM Tester;
+    final static int    LAUNCHER_CHANNEL = 3;
+    final static int    ELEVATION_CHANNEL = 7;
+    final static int    LAZY_SUSAN_CHANNEL = 8;
+    final static int    LOADER_CHANNEL = 5;
+    static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
+    static boolean      disabledStateBroadcasted = false;
+    static boolean      teleopStateBroadcasted = false;
+    static boolean      autonomousStateBroadcasted = false;
+    int                 pwmTest = 0;
+    boolean             btnPressed = false;
+    double              launcher_speed = 0.0;
+    boolean             launcher_button_pressed = false;
+    
 
     /*
      *          (\_/)
@@ -124,49 +139,20 @@ public class RoboRebels extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        
         System.out.println("robotInit()");
-        //m_robotDrive = new RobotDrive(4, 3, 2, 1);
-        //System.out.println("Robot Drive Set");
+        
         launcher = new Jaguar(LAUNCHER_CHANNEL);
         elevation = new Victor(ELEVATION_CHANNEL);
         lazySusan = new Victor(LAZY_SUSAN_CHANNEL);
         loader = new Victor(LOADER_CHANNEL);
 
-
-
-        //Watchdog.getInstance().setExpiration(0.75);
-
-
-
-        // Camera init code
-        //Timer.delay(5.0);
-        //cam = AxisCamera.getInstance();
-
-
-        // front left, rear left, front right, rear right
-
-        /*
-         *
-         *
-         *     ^
-         *     |
-         * +-------+
-         * |J2   J4|
-         *L|J1   J3|R
-         * |       |
-         * |       |
-         * +-------+
-         *
-         * Match jag numbers with the dig i/o ports
-         *
-         */
-
-        //                              FL, FR, BL, BR
         System.out.println("About to setup joysticks");
 
         m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
         m_xboxStick = new Joystick(1);//TODO test, check if problem is solved
+        
         
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         
@@ -174,13 +160,6 @@ public class RoboRebels extends IterativeRobot {
         //System.out.println("Robot Drive Set");
         drive = new RRDrive(m_xboxStick, 2, 1);
         System.out.println("Drive Set");
-
-
-
-//        cam = AxisCamera.getInstance();  // get an instance ofthe camera
-//        cc = new CriteriaCollection();      // create the criteria for the particle filter
-//        cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
-//        cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
 
         System.out.println("Robot Ready");
     }
@@ -197,7 +176,6 @@ public class RoboRebels extends IterativeRobot {
         teleopStateBroadcasted = false;
 
         // Get the time that the autonomous mode starts
-        //autonomousStartTime = Timer.getUsClock();
         autonomousStartTime = Timer.getFPGATimestamp();
     }
 
@@ -206,13 +184,7 @@ public class RoboRebels extends IterativeRobot {
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
-        //m_rightStick = new Joystick(2);
-        //m_leftStick = new Joystick(1);
         tankDrive = false;
-        //Teleop Setup
-
-
-
 
         /* Drive station code */
         //m_ds = DriverStation.getInstance();
@@ -231,15 +203,6 @@ public class RoboRebels extends IterativeRobot {
     public void autonomousPeriodic() {
         tracker.trackTarget();
         //System.out.println(getAngle());
-    }
-
-    public double getAngle() {
-        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
-        System.out.println("X Accel: " + axes.XAxis);
-        System.out.println("Y Accel: " + axes.YAxis);
-        double yAxis = Math.min(1, axes.YAxis);
-        yAxis = Math.max(-1, yAxis);
-        return 180.0 * MathUtils.asin(yAxis) / 3.14159;
     }
 
     /**
@@ -421,5 +384,16 @@ public class RoboRebels extends IterativeRobot {
         System.out.println( "RY: " + m_xboxStick.getRawAxis(5));
         System.out.flush();
          */
+    }
+    
+    
+
+    public double getAngle() {
+        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
+        System.out.println("X Accel: " + axes.XAxis);
+        System.out.println("Y Accel: " + axes.YAxis);
+        double yAxis = Math.min(1, axes.YAxis);
+        yAxis = Math.max(-1, yAxis);
+        return 180.0 * MathUtils.asin(yAxis) / 3.14159;
     }
 }
