@@ -39,8 +39,6 @@ public class RRDrive implements MotorSafety
 
     public RRDrive(Joystick xbox, int leftChannel, int rightChannel)
     {
-        NullPointerException        ex;
-        
         System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         if ( xbox != null )
@@ -58,22 +56,20 @@ public class RRDrive implements MotorSafety
     
     public RRDrive(Joystick ljs, Joystick rjs, int leftChannel, int rightChannel)
     {
-        NullPointerException        ex;
-        
         System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         if ( ljs != null )
             l_joystick = ljs;
         else
         {
-            throw new NullPointerException("RRDrive was passed a null Joystick object!");
+            throw new NullPointerException("RRDrive was passed a null Joystick object (ljs)! ");
         }
         
         if ( rjs != null )
             r_joystick = rjs;
         else
         {
-            throw new NullPointerException("RRDrive was passed a null Joystick object!");
+            throw new NullPointerException("RRDrive was passed a null Joystick object (rjs)!");
         }
         
         setupDrive(leftChannel, rightChannel);
