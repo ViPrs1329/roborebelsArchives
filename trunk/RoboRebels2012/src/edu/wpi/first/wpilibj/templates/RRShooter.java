@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.Victor;
  */
 public class RRShooter 
 {
-    private final double        MAX_SHOOTING_SPEED = 0.8;
+    private final double        MAX_SHOOTING_SPEED = 1.0;
     private final double        LS_SPEED = 0.4;
     private final double        TILT_SPEED = 0.4;
     
@@ -138,7 +138,7 @@ public class RRShooter
 
         double tempSqrtEquation = Math.sqrt((muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
                                             (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance));
-
+        System.out.println("tempSqrtEq: " + tempSqrtEquation);
         double theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(tempSqrtEquation))/(gravity*xDistance));
 
         theta = theta * ( 180 / 3.14159265); // converts radians to degreese
@@ -155,6 +155,7 @@ public class RRShooter
         // Spin up if trigger is pressed (button 1)
         if ( shootingJoystick.getRawButton(1) && !shootingButtonPressed )
         {
+            System.out.println("Trigger");
             if ( shootingWheelState )
             {
                 shootingWheelSpeed = 0.0;
@@ -175,11 +176,29 @@ public class RRShooter
         // Check for tilting button up, down (button 6, 7)
         if ( shootingJoystick.getRawButton(6) )
         {
-            tiltSpeed = TILT_SPEED;
+            System.out.println("Tilt up");
+            
+            tiltSpeed = -1.0 * TILT_SPEED;
+            
         }
         else if ( shootingJoystick.getRawButton(7) )
         {
-            tiltSpeed = -1.0 * TILT_SPEED;
+            System.out.println("Tilt down");
+            /*
+            if ( !tiltLimitSwitch.get() )
+            {
+                tiltSpeed = TILT_SPEED;
+            }
+            else
+            {
+                System.out.println("Tilter limit switch pressed!");
+                tiltSpeed = 0.0;
+            }
+            *
+            * 
+            */
+            
+            tiltSpeed = TILT_SPEED;
         }
         else if ( !shootingJoystick.getRawButton(6) && !shootingJoystick.getRawButton(7) )
         {
@@ -190,10 +209,12 @@ public class RRShooter
         // Check for lazy susan button left, right (button 4, 5)
         if ( shootingJoystick.getRawButton(4) )
         {
+            System.out.println("Lazy susan left");
             lazySusanSpeed = LS_SPEED;
         }
         else if ( shootingJoystick.getRawButton(5) )
         {
+            System.out.println("Lazy susan left");
             lazySusanSpeed = -1.0 * LS_SPEED;
         }
         else if ( !shootingJoystick.getRawButton(4) && !shootingJoystick.getRawButton(5) )
@@ -201,12 +222,7 @@ public class RRShooter
             lazySusanSpeed = 0.0;
         }
         
-        // If tilt limit switch is activated stop tilt!!! 
-        if ( tiltLimitSwitch.get() )
-        {
-            System.out.println("Limit switch pressed!");
-            tiltSpeed = 0.0;
-        }
+        
     }
     
    
@@ -232,8 +248,9 @@ public class RRShooter
     
     private void setShooterSpeeds()
     {
-        shootingWheelJaguar.set(shootingWheelSpeed);
+        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
         lsVictor.set(lazySusanSpeed);
+        System.out.println("s: " + tiltSpeed);
         tiltVictor.set(tiltSpeed);
     }
     
@@ -246,6 +263,6 @@ public class RRShooter
     
     private double getTransformedZValue()
     {
-        return MAX_SHOOTING_SPEED * shootingJoystick.getZ();
+        return MAX_SHOOTING_SPEED * (shootingJoystick.getZ() + 1.0) / 2.0;
     }
 }

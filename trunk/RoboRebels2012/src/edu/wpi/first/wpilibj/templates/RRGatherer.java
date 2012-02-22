@@ -142,7 +142,7 @@ public class RRGatherer
             spinnerButtonPressed = false;
         }
         
-        System.out.println("RRGatherer::gatherInputStates - CS: " + conveyerSpeed + " | SS: " + spinnerSpeed);
+        //System.out.println("RRGatherer::gatherInputStates - CS: " + conveyerSpeed + " | SS: " + spinnerSpeed);
         
         // Check ball sensors ...
     }

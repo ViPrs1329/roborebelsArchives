@@ -110,7 +110,7 @@ public class RRDrive implements MotorSafety
         double r_xVal  = leftJoystick.getRawAxis(4);
         double r_yVal  = leftJoystick.getRawAxis(5);
 
-        System.out.println("drive()");
+        //System.out.println("drive()");
            
         
         if (Math.abs(l_xVal) < .13)
@@ -118,7 +118,7 @@ public class RRDrive implements MotorSafety
             l_xVal = 0;
         }
 
-        if (Math.abs(l_yVal)< .13)
+        if (Math.abs(l_yVal) < .13)
         {
             l_yVal = 0;
         }
@@ -128,10 +128,13 @@ public class RRDrive implements MotorSafety
             r_xVal = 0;
         }
 
-        if (Math.abs(r_yVal)< .13)
+        if (Math.abs(r_yVal) < .13)
         {
             r_yVal = 0;
         }
+        
+        
+        
 
         //Change the range of the joystick values to account for the dead zone
         if (l_xVal > 0)

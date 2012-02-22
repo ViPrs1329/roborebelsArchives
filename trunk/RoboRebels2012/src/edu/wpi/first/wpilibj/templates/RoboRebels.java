@@ -171,6 +171,8 @@ public class RoboRebels extends IterativeRobot {
 
         arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
         
+        tracker = new RRTracker();
+        
         System.out.println("Robot Ready");
     }
 
@@ -242,8 +244,8 @@ public class RoboRebels extends IterativeRobot {
         }
 
       shooter.shoot();
-      //gatherer.gather();
-      //arm.arm();
+      gatherer.gather();
+      arm.arm();
         
 
 

@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class RRBridgeArm 
 {
-    private final double    ARM_SPEED = 0.5;
+    private final double    ARM_SPEED = 1.0;
     
     private     int         bav_channel;
     
@@ -62,10 +62,12 @@ public class RRBridgeArm
         // Get Bridge Arm button states
         if ( js.getRawButton(8) )
         {
+            System.out.println("Bridge lower arm");
             armSpeed = ARM_SPEED;
         }
         else if ( js.getRawButton(9) )
         {
+            System.out.println("Bridge lower arm");
             armSpeed = -1.0 * ARM_SPEED;
         }
         else if ( !js.getRawButton(8) && !js.getRawButton(9) )
@@ -85,6 +87,7 @@ public class RRBridgeArm
     
     private void setBridgeArmSpeeds()
     {
+        //System.out.println("armSpeed: " + armSpeed);
         bridgeArmVictor.set(armSpeed);
     }
     
