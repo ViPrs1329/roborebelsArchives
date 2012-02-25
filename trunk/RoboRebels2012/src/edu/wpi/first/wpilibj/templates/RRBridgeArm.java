@@ -60,17 +60,17 @@ public class RRBridgeArm
     private void gatherInputStates()
     {
         // Get Bridge Arm button states
-        if ( js.getRawButton(8) )
+        if ( js.getRawButton(RRButtonMap.BRIDGE_ARM_DOWN) )
         {
             System.out.println("Bridge lower arm");
             armSpeed = ARM_SPEED;
         }
-        else if ( js.getRawButton(9) )
+        else if ( js.getRawButton(RRButtonMap.BRIDGE_ARM_UP) )
         {
             System.out.println("Bridge lower arm");
             armSpeed = -1.0 * ARM_SPEED;
         }
-        else if ( !js.getRawButton(8) && !js.getRawButton(9) )
+        else if ( !js.getRawButton(RRButtonMap.BRIDGE_ARM_DOWN) && !js.getRawButton(RRButtonMap.BRIDGE_ARM_UP) )
         {
             armSpeed = 0.0;
         }

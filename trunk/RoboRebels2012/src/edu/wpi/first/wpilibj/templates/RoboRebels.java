@@ -159,7 +159,8 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
         //m_xboxStick = new Joystick(1);
-        
+
+        RRButtonMap.setController("joystick");
         
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         

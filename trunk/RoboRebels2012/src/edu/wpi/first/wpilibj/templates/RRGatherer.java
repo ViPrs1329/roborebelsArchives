@@ -102,22 +102,22 @@ public class RRGatherer
         //System.out.println("RRGatherer::gatherInputStates()");
         
         // Get conveyer button state
-        if ( js.getRawButton(2) && !js.getRawButton(3) )
+        if ( js.getRawButton(RRButtonMap.LOADER_UP) && !js.getRawButton(RRButtonMap.LOADER_DOWN) )
         {
             conveyerSpeed = CONVEYER_SPEED;
         }
-        else if ( js.getRawButton(3) && !js.getRawButton(2) )
+        else if ( js.getRawButton(RRButtonMap.LOADER_DOWN) && !js.getRawButton(RRButtonMap.LOADER_UP) )
         {
             conveyerSpeed = -1.0 * CONVEYER_SPEED;
         }
-        else if ( !js.getRawButton(2) && !js.getRawButton(3) )
+        else if ( !js.getRawButton(RRButtonMap.LOADER_UP) && !js.getRawButton(RRButtonMap.LOADER_DOWN) )
         {
             conveyerSpeed = 0.0;
         }
         
         
         // Check for spinner button state
-        if ( js.getRawButton(10) && !spinnerButtonPressed )
+        if ( js.getRawButton(RRButtonMap.SPINNER) && !spinnerButtonPressed )
         {
             if ( spinnerState == 0 )
             {
@@ -137,7 +137,7 @@ public class RRGatherer
             
             spinnerButtonPressed = true;
         }
-        else if ( !js.getRawButton(10) )
+        else if ( !js.getRawButton(RRButtonMap.SPINNER) )
         {
             spinnerButtonPressed = false;
         }

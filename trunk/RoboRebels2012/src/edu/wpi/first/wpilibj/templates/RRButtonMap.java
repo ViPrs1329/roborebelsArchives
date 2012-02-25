@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wpi.first.wpilibj.templates;
 
 /**
@@ -47,10 +43,36 @@ Right trigger           Shoot on, off
  */
 public class RRButtonMap 
 {
-    int     spinnerUpButton;
-    
+    static int SHOOT,
+               LOADER_UP,
+               LOADER_DOWN,
+               LAZY_SUSAN_LEFT,
+               LAZY_SUSAN_RIGHT,
+               TILT_UP,
+               TILT_DOWN,
+               BRIDGE_ARM_DOWN,
+               BRIDGE_ARM_UP,
+               SPINNER;
+
     RRButtonMap()
     {
         
+    }
+
+    public static void setController(String type) {
+        if (type.equals("joystick")) {
+            SHOOT = 1;
+            LOADER_UP = 2;
+            LOADER_DOWN = 3;
+            LAZY_SUSAN_LEFT = 4;
+            LAZY_SUSAN_RIGHT = 5;
+            TILT_UP = 6;
+            TILT_DOWN = 7;
+            BRIDGE_ARM_DOWN = 8;
+            BRIDGE_ARM_UP = 9;
+            SPINNER = 10;
+        } else if (type.equals("xbox")) {
+            // TODO: Put Xbox Controller Values Here
+        }
     }
 }

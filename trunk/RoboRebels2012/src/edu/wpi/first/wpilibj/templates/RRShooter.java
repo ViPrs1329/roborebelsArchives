@@ -95,7 +95,7 @@ public class RRShooter
      * @return Returns the angle for which to move the shooter at
      */
     
-    static double determineAngle(double distance,int targetID) 
+    static double determineAngle(double distance, int targetID)
     {            
         double muzzleVelocity = 7.1; //meters per second
 
@@ -153,7 +153,7 @@ public class RRShooter
     private void gatherInputStates()
     {
         // Spin up if trigger is pressed (button 1)
-        if ( shootingJoystick.getRawButton(1) && !shootingButtonPressed )
+        if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         {
             System.out.println("Trigger");
             if ( shootingWheelState )
@@ -167,21 +167,21 @@ public class RRShooter
                 shootingWheelState = true;
             }
         }
-        else if ( !shootingJoystick.getRawButton(1) )
+        else if ( !shootingJoystick.getRawButton(RRButtonMap.SHOOT) )
         {
             shootingButtonPressed = false;
         }
         
         
         // Check for tilting button up, down (button 6, 7)
-        if ( shootingJoystick.getRawButton(6) )
+        if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         {
             System.out.println("Tilt up");
             
             tiltSpeed = -1.0 * TILT_SPEED;
             
         }
-        else if ( shootingJoystick.getRawButton(7) )
+        else if ( shootingJoystick.getRawButton(RRButtonMap.TILT_DOWN) )
         {
             System.out.println("Tilt down");
             /*
@@ -200,24 +200,24 @@ public class RRShooter
             
             tiltSpeed = TILT_SPEED;
         }
-        else if ( !shootingJoystick.getRawButton(6) && !shootingJoystick.getRawButton(7) )
+        else if ( !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) && !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         {
             tiltSpeed = 0.0;
         }
         
         
         // Check for lazy susan button left, right (button 4, 5)
-        if ( shootingJoystick.getRawButton(4) )
+        if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
         {
             System.out.println("Lazy susan left");
             lazySusanSpeed = LS_SPEED;
         }
-        else if ( shootingJoystick.getRawButton(5) )
+        else if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
         {
             System.out.println("Lazy susan left");
             lazySusanSpeed = -1.0 * LS_SPEED;
         }
-        else if ( !shootingJoystick.getRawButton(4) && !shootingJoystick.getRawButton(5) )
+        else if ( !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) && !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
         {
             lazySusanSpeed = 0.0;
         }
