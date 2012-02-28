@@ -134,7 +134,7 @@ public class RoboRebels extends IterativeRobot {
      *          (\_/)
      *          (O.0)
      *           =o=
-     *         (    ) <--- bunny
+     *         (    ) <--- bunny ;)
      *          (  )
      *
      */

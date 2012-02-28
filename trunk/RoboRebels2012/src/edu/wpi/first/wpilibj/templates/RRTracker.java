@@ -45,7 +45,7 @@ public class RRTracker
             try {
                 image.write("/raw.jpg");
             } catch (Exception e) {
-                System.out.println("error saving image");
+                System.out.println("error saving image 1");
             }
             System.out.println("WROTE IMAGE1");
 
@@ -61,7 +61,7 @@ public class RRTracker
             try {
                 thresholdImage.write("/after_thresh.bmp");    // this seems to work well
             } catch (Exception e) {
-                System.out.println("error saving image");
+                System.out.println("error saving image 2");
             }
             System.out.println("WROTE IMAGE2");
 
@@ -77,7 +77,7 @@ public class RRTracker
             try {
                 filteredImage.write("/processed.bmp");     // This seems to work well.
             } catch (Exception e) {
-                System.out.println("error saving image");
+                System.out.println("error saving image 3");
             }
             System.out.println("WROTE IMAGE3");
 
@@ -144,7 +144,7 @@ public class RRTracker
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
 
-        double angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / 3.14159);
+        double angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
 
         return angle;
         

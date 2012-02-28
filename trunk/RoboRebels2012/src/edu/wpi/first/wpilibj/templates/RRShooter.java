@@ -209,12 +209,12 @@ public class RRShooter
         // Check for lazy susan button left, right (button 4, 5)
         if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
         {
-            System.out.println("Lazy susan left");
+            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
             lazySusanSpeed = LS_SPEED;
         }
         else if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
         {
-            System.out.println("Lazy susan left");
+            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
             lazySusanSpeed = -1.0 * LS_SPEED;
         }
         else if ( !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) && !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
