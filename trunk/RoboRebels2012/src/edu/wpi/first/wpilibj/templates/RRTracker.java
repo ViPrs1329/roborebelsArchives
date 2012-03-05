@@ -42,12 +42,12 @@ public class RRTracker
            ColorImage image = cam.getImage();     // comment if using stored images
 
            // TODO: This image write section should be commented out for the production code
-            try {
-                image.write("/raw.jpg");
-            } catch (Exception e) {
-                System.out.println("error saving image 1");
-            }
-            System.out.println("WROTE IMAGE1");
+//            try {
+//                image.write("/raw.jpg");
+//            } catch (Exception e) {
+//                System.out.println("error saving image 1");
+//            }
+//            System.out.println("WROTE IMAGE1");
 
             //BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
 
@@ -58,12 +58,12 @@ public class RRTracker
            
             
             // TODO: This image write section should be commented out for the production code
-            try {
-                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
-            } catch (Exception e) {
-                System.out.println("error saving image 2");
-            }
-            System.out.println("WROTE IMAGE2");
+//            try {
+//                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+//            } catch (Exception e) {
+//                System.out.println("error saving image 2");
+//            }
+//            System.out.println("WROTE IMAGE2");
 
 
           //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
@@ -74,12 +74,12 @@ public class RRTracker
 
             
             // TODO: This image write section should be commented out for the production code
-            try {
-                filteredImage.write("/processed.bmp");     // This seems to work well.
-            } catch (Exception e) {
-                System.out.println("error saving image 3");
-            }
-            System.out.println("WROTE IMAGE3");
+//            try {
+//                filteredImage.write("/processed.bmp");     // This seems to work well.
+//            } catch (Exception e) {
+//                System.out.println("error saving image 3");
+//            }
+//            System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             for (int i = 0; i < Math.min(reports.length, 4); i++) {

@@ -166,13 +166,13 @@ public class RoboRebels extends IterativeRobot {
         
         drive = new RRDrive(m_rightStick, 2, 1);
         
-        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick);
-        
         gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL, m_rightStick);
 
         arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
         
         tracker = new RRTracker();
+        
+        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker);
         
         System.out.println("Robot Ready");
     }

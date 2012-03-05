@@ -3,7 +3,9 @@ package edu.wpi.first.wpilibj.templates;
 /**
  * This class will store data about the button map setup
  * 
- * NOTE:  This is a back-burner project
+ * TODO:
+ * 
+ *   - Add 
  * 
  * 
 Joystick Buttons/axis	Action	                This button layout is if the auto ball sensing is not functional
@@ -39,6 +41,37 @@ Left trigger            Spinner start, reverse, stop
 Right trigger           Shoot on, off	
  * 
  * 
+ * 
+ *  Xbox button map
+ * 0
+ * 1 A
+ * 2 B
+ * 3 X
+ * 4 Y
+ * 5 L Bumper
+ * 6 R Bumper
+ * 7 Back
+ * 8 Start
+ * 9 L Stick Click
+ * 10 R Stick Click
+ * 
+ * Axis
+ * 
+ *  ¥1: Left Stick X Axis
+        -Left:Negative ; Right: Positive
+    ¥2: Left Stick Y Axis
+        -Up: Negative ; Down: Positive
+    ¥3: Triggers
+        -Left: Positive ; Right: Negative
+    ¥4: Right Stick X Axis
+        -Left: Negative ; Right: Positive
+    ¥5: Right Stick Y Axis
+        -Up: Negative ; Down: Positive
+    ¥6: Directional Pad (Not recommended, buggy)
+ * 
+ * 
+ * 
+ * 
  * @author dmw
  */
 public class RRButtonMap 
@@ -57,6 +90,7 @@ public class RRButtonMap
     RRButtonMap()
     {
         
+        
     }
 
     public static void setController(String type) {
@@ -73,6 +107,7 @@ public class RRButtonMap
             SPINNER = 10;
         } else if (type.equals("xbox")) {
             // TODO: Put Xbox Controller Values Here
+            
         }
     }
 }

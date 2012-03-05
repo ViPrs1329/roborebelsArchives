@@ -56,6 +56,8 @@ public class RRShooter
     
     private     Joystick        shootingJoystick;
     
+    private     RRTracker       tracker;
+    
     
     /**
      * Sets up the speed controllers for the shooter
@@ -65,7 +67,7 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js, RRTracker t)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
@@ -80,6 +82,12 @@ public class RRShooter
             shootingJoystick = js;
         else
             throw new NullPointerException("RRShooter was passed a null Joystick object!");
+        
+        
+        if ( t != null )
+            tracker = t;
+        else
+            throw new NullPointerException("RRShooter was passed a null RRTracker object!");
         
         shootingWheelJaguar = new Jaguar(swj_channel);
         tiltVictor = new Victor(tltv_channel);
@@ -238,6 +246,9 @@ public class RRShooter
         
         // Process shooter states
         setShooterSpeeds();
+        
+        // track target
+        tracker.trackTarget();
     }
     
     
