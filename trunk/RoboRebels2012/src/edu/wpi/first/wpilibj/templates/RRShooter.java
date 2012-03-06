@@ -40,7 +40,9 @@ public class RRShooter
     private     int             lsv_channel;        // Lazy Susan Victor channel
     private     int             tltv_channel;       // Tilter Victor channel
     private     int             tltls_channel;      // Tilter Limit Swith channel
-    
+    private     int             os_top_channel;     // Top Optical Sensor channel
+    private     int             os_bottom_channel;  // Bottom Optical Sensor channel
+
     private     double          shootingWheelSpeed = 0.0;
     private     double          lazySusanSpeed = 0.0;
     private     double          tiltSpeed = 0.0;
@@ -53,11 +55,12 @@ public class RRShooter
     private     Victor          tiltVictor;
     private     Victor          lsVictor;
     private     DigitalInput    tiltLimitSwitch;
+    private     DigitalInput    topOpticalSensor;
+    private     DigitalInput    bottomOpticalSensor;
     
     private     Joystick        shootingJoystick;
     
     private     RRTracker       tracker;
-    
     
     /**
      * Sets up the speed controllers for the shooter
@@ -160,6 +163,7 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
+        System.out.println("Limit Switch: " + tiltLimitSwitch.get());
         // Spin up if trigger is pressed (button 1)
         if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         {
@@ -192,21 +196,15 @@ public class RRShooter
         else if ( shootingJoystick.getRawButton(RRButtonMap.TILT_DOWN) )
         {
             System.out.println("Tilt down");
-            /*
-            if ( !tiltLimitSwitch.get() )
+            
+            if (!tiltLimitSwitch.get())
             {
                 tiltSpeed = TILT_SPEED;
-            }
-            else
-            {
+            } else {
                 System.out.println("Tilter limit switch pressed!");
                 tiltSpeed = 0.0;
             }
-            *
-            * 
-            */
             
-            tiltSpeed = TILT_SPEED;
         }
         else if ( !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) && !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         {

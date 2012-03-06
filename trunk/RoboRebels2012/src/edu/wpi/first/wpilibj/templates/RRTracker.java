@@ -37,6 +37,7 @@ public class RRTracker
 
     public void trackTarget()
     {
+        double start = Timer.getFPGATimestamp();
         try
         {
            ColorImage image = cam.getImage();     // comment if using stored images
@@ -115,6 +116,7 @@ public class RRTracker
             System.err.println("There was an error while tracking a target!");
             ex.printStackTrace();
         }
+        System.out.println(Timer.getFPGATimestamp() - start);
     }
 
     public static Target highestTarget() {
