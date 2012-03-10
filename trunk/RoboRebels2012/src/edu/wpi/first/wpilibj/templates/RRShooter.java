@@ -228,7 +228,7 @@ public class RRShooter
             tiltSpeed = 0.0;
         }
         
-        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))
+        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // joystick button 11
             
         {
          
@@ -272,31 +272,7 @@ public class RRShooter
             lazySusanSpeed = 0.0;
         }
         
-        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))
-            
-        {
-         
-            if (RoboRebels.target_direction == -1)
-            {
-                        System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
-                lazySusanSpeed = LS_SPEED;
-            }
-            else if (RoboRebels.target_direction == 1)
-            {
-                System.out.println("Lazy susan right"); //TODO: should this be lazy susan left or right
-                lazySusanSpeed = -1.0 * LS_SPEED;
-            }
-            else if (RoboRebels.target_direction == 0)
-            {
-                lazySusanSpeed = 0.0;
-            }
-        
-        } else
-        {
-             lazySusanSpeed = 0.0;
-          
-        }
-            
+             
            
 
         
