@@ -83,7 +83,7 @@ public class RoboRebels extends IterativeRobot {
 
     // Declare a variable to use to access the driver station object
     DriverStation       m_ds;                   // driver station object
-    DriverStationLCD    m_dsLCD;                // driver station LCD object
+    static DriverStationLCD    m_dsLCD;                // driver station LCD object
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
     //Joystick            m_xboxStick;
@@ -156,6 +156,8 @@ public class RoboRebels extends IterativeRobot {
     public void robotInit() {
         
         System.out.println("robotInit()");
+        
+        m_dsLCD = DriverStationLCD.getInstance();
 
         m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
@@ -249,12 +251,13 @@ public class RoboRebels extends IterativeRobot {
             drive.drive(false);
             //System.out.println("Arcade Drive");
         }
-
+        
+      tracker.trackTarget();
       shooter.shoot();
       gatherer.gather();
       arm.arm();
         
-
+      
 
     }
 
@@ -282,6 +285,8 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void teleopContinuous() {
+        
+        
 
     }
 
@@ -416,6 +421,29 @@ public class RoboRebels extends IterativeRobot {
     
     
 
+    public static void printLCD(int lineNum, String value) {
+        DriverStationLCD.Line line = null;
+        switch (lineNum) {
+            case 2:
+                line = DriverStationLCD.Line.kUser2;
+                break;
+            case 3:
+                line = DriverStationLCD.Line.kUser3;
+                break;
+            case 4:
+                line = DriverStationLCD.Line.kUser4;
+                break;
+            case 5:
+                line = DriverStationLCD.Line.kUser5;
+                break;
+            case 6:
+                line = DriverStationLCD.Line.kMain6;
+                break;
+        }
+        m_dsLCD.println(line, 1, value);
+        m_dsLCD.updateLCD();
+    }
+    
     public double getAngle() {
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
         System.out.println("X Accel: " + axes.XAxis);

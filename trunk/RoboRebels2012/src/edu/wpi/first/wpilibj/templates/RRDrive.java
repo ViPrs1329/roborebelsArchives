@@ -176,7 +176,7 @@ public class RRDrive implements MotorSafety
         
         if (!tankDrive)
         {
-           arcadeDrive(l_yVal, l_xVal); 
+           arcadeDrive(l_yVal, 0.75 * l_xVal); 
         }
         else
         {

@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.Victor;
 public class RRShooter 
 {
     private final double        MAX_SHOOTING_SPEED = 1.0;
-    private final double        LS_SPEED = 0.4;
+    private final double        LS_SPEED = 0.2;
     private final double        TILT_SPEED = 0.4;
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
@@ -98,7 +98,7 @@ public class RRShooter
         shootingWheelJaguar = new Jaguar(swj_channel);
         tiltVictor = new Victor(tltv_channel);
         lsVictor = new Victor(lsv_channel);
-        tiltLimitSwitch = new DigitalInput(tltls_channel);
+        //tiltLimitSwitch = new DigitalInput(tltls_channel);
     }
     
     
@@ -170,6 +170,8 @@ public class RRShooter
             theta = 0;    // There is no angle for this muzzle velocity
         
         theta = theta * ( 180 / 3.14159265); // converts radians to degreese
+        
+        
 
         return theta;
     }
@@ -180,25 +182,28 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        System.out.println("Limit Switch: " + tiltLimitSwitch.get());
+        RoboRebels.printLCD(2, "Shooting Speed:" + shootingWheelJaguar.get());
+        RoboRebels.printLCD(3, "Z:" + this.getTransformedZValue());
+        System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
+        System.out.println("Z: " + this.getTransformedZValue());
+        //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
+        
+        
         // Spin up if trigger is pressed (button 1)
         if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         {
             System.out.println("Trigger");
-            if ( shootingWheelState )
-            {
-                shootingWheelSpeed = 0.0;
-                shootingWheelState = false;
-            }
-            else
-            {
-                shootingWheelSpeed = this.getTransformedZValue();
-                shootingWheelState = true;
-            }
+            shootingWheelState = !shootingWheelState;
         }
         else if ( !shootingJoystick.getRawButton(RRButtonMap.SHOOT) )
         {
             shootingButtonPressed = false;
+        }
+        
+        if ( shootingWheelState ) {
+            shootingWheelSpeed = this.getTransformedZValue();
+        } else {
+            shootingWheelSpeed = 0.0;
         }
         
         
@@ -214,13 +219,14 @@ public class RRShooter
         {
             System.out.println("Tilt down");
             
-            if (!tiltLimitSwitch.get())
+            /*if (!tiltLimitSwitch.get())
             {
                 tiltSpeed = TILT_SPEED;
             } else {
                 System.out.println("Tilter limit switch pressed!");
                 tiltSpeed = 0.0;
-            }
+            }*/
+            tiltSpeed = TILT_SPEED;
             
         }
         else if ( !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) && !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
