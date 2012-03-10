@@ -8,9 +8,8 @@ public class Target {
     Target(ParticleAnalysisReport report) {
         this.report = report;
     }
-
+ 
     public double shootingAngle() {
-        
         return 0;
     }
 
