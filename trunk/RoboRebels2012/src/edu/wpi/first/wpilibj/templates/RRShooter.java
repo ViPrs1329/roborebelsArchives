@@ -61,6 +61,9 @@ public class RRShooter
     private     Joystick        shootingJoystick;
     
     private     RRTracker       tracker;
+    private     boolean istracking = false; // Indicates if robot is tracking or not
+    
+    //int target_direction = 1;
     
     /**
      * Sets up the speed controllers for the shooter
@@ -106,19 +109,21 @@ public class RRShooter
      * @return Returns the angle for which to move the shooter at
      */
     
-    static double determineAngle(double distance, int targetID)
+    static double determineAngle(double distance, double muzzleVelocity, int targetID)
     {            
-        double muzzleVelocity = 7.1; //meters per second
-
+//        double muzzleVelocity = 8.1; //meters per second
+//      double muzzleVelocity = 7.1; //meters per second
+   
         double gravity = 9.81;  //meters per (second)^2
         double yLower = .466953;
         double yMiddle = 1.30515;
         double yHigher = 2.24485;
         double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
         double shooterHeight = .914; // meters off the ground
-        double y; // define by asking driver "top, middle, or bottom?" (BELOW)
-
-        xDistance = distance /3.28; // converts feet into meters
+        double y; // determined by targetID (see below)
+        double theta = 0;
+                
+        xDistance = distance / 3.28; // converts feet into meters
 
         
 
@@ -146,12 +151,24 @@ public class RRShooter
                 double tempSqrtEquationMiddle = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yMiddle)-(gravity*gravity*xDistance));
                 double tempSqrtEquationLower = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yLower)-(gravity*gravity*xDistance));
         */
+        
+                System.out.println("distance: " + distance);
+                System.out.println("gravity: " + gravity);
+                System.out.println("muzzleVelocity: " + muzzleVelocity);
+                System.out.println("y: " + y);
+                System.out.println("xDistance: " + xDistance);
 
-        double tempSqrtEquation = Math.sqrt((muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
-                                            (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance));
-        System.out.println("tempSqrtEq: " + tempSqrtEquation);
-        double theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(tempSqrtEquation))/(gravity*xDistance));
-
+        double tempSqrtEquation = (muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
+                         (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance);
+        
+        if (tempSqrtEquation > 0)
+        {
+            System.out.println("tempSqrtEq: " + tempSqrtEquation);
+            theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(Math.sqrt(tempSqrtEquation)))/(gravity*xDistance));
+        }
+        else
+            theta = 0;    // There is no angle for this muzzle velocity
+        
         theta = theta * ( 180 / 3.14159265); // converts radians to degreese
 
         return theta;
@@ -211,6 +228,33 @@ public class RRShooter
             tiltSpeed = 0.0;
         }
         
+        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))
+            
+        {
+         
+            if (RoboRebels.target_direction == -1)
+            {
+                        System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+                lazySusanSpeed = LS_SPEED;
+                istracking = true;
+            }
+            else if (RoboRebels.target_direction == 1)
+            {
+                System.out.println("Lazy susan right"); //TODO: should this be lazy susan left or right
+                lazySusanSpeed = -1.0 * LS_SPEED;
+                istracking = true;
+            }
+            else if (RoboRebels.target_direction == 0)
+            {
+                lazySusanSpeed = 0.0;
+            }
+        
+        } else if (istracking)
+        {
+             lazySusanSpeed = 0.0;
+             istracking = false;
+          
+        }
         
         // Check for lazy susan button left, right (button 4, 5)
         if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
@@ -228,6 +272,33 @@ public class RRShooter
             lazySusanSpeed = 0.0;
         }
         
+        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))
+            
+        {
+         
+            if (RoboRebels.target_direction == -1)
+            {
+                        System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+                lazySusanSpeed = LS_SPEED;
+            }
+            else if (RoboRebels.target_direction == 1)
+            {
+                System.out.println("Lazy susan right"); //TODO: should this be lazy susan left or right
+                lazySusanSpeed = -1.0 * LS_SPEED;
+            }
+            else if (RoboRebels.target_direction == 0)
+            {
+                lazySusanSpeed = 0.0;
+            }
+        
+        } else
+        {
+             lazySusanSpeed = 0.0;
+          
+        }
+            
+           
+
         
     }
     

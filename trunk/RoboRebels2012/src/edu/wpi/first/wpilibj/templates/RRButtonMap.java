@@ -19,7 +19,7 @@ Joystick Buttons/axis	Action	                This button layout is if the auto b
 8	                Bridge arm down	
 9	                Bridge arm up	
 10	                Spinner in, reverse, stop	
-11	                	
+11	                Track target using Lazy Susan	
 Z	                Shooter speed control	
 Axis	                Drive (Arcade)	
 		
@@ -85,7 +85,8 @@ public class RRButtonMap
                TILT_DOWN,
                BRIDGE_ARM_DOWN,
                BRIDGE_ARM_UP,
-               SPINNER;
+               SPINNER,
+               TRACK_TARGET;
 
     RRButtonMap()
     {
@@ -105,6 +106,7 @@ public class RRButtonMap
             BRIDGE_ARM_DOWN = 8;
             BRIDGE_ARM_UP = 9;
             SPINNER = 10;
+            TRACK_TARGET = 11;
         } else if (type.equals("xbox")) {
             // TODO: Put Xbox Controller Values Here
             

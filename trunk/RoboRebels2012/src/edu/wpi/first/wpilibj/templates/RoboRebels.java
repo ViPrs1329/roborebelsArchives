@@ -128,7 +128,8 @@ public class RoboRebels extends IterativeRobot {
     boolean             btnPressed = false;
     double              launcher_speed = 0.0;
     boolean             launcher_button_pressed = false;
-    
+    static int          target_direction = -1;  // -1 if target is to left, 0 if on target, 1 if target is the right
+    static double       muzzle_velocity = 7.1; //muzzle velocity in meters per second
 
     /*
      *          (\_/)
@@ -159,18 +160,23 @@ public class RoboRebels extends IterativeRobot {
         m_leftStick = new Joystick(3);
         m_rightStick = new Joystick(2);
         //m_xboxStick = new Joystick(1);
+        System.out.println("Joysticks set");
 
         RRButtonMap.setController("joystick");
-        
+        System.out.println("Button map");        
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        System.out.println("accel");
         
         drive = new RRDrive(m_rightStick, 2, 1);
+        System.out.println("Drive");
         
         gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL, m_rightStick);
-
+        System.out.println("Gatherer");
         arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
+        System.out.println("Arm");
         
-        tracker = new RRTracker();
+        tracker = new RRTracker(accel);
+        System.out.println("Tracker");
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker);
         

@@ -20,16 +20,23 @@ public class RRTracker
     private static Target[] targets;
     ADXL345_I2C accel;
 
-    public RRTracker()
+    public RRTracker(ADXL345_I2C a)
     {
-        Timer.delay(5.0);       // This delay is recommended as the camera takes some time to start up
+        Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
         cam = AxisCamera.getInstance();
+        System.out.println("Camera");
 
         cc = new CriteriaCollection();      // create the criteria for the particle filter
+        System.out.println("Criteria Collection ownage");
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
+        System.out.println("Criteria Collection ownage 2");
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
-        RRTracker.targets = new Target[4];
-        accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        System.out.println("Criteria Collection ownage 3");
+        targets = new Target[4];
+        System.out.println("Targets");
+        //accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        accel = a;
+        System.out.println("accel");
 
     }
     
@@ -75,26 +82,54 @@ public class RRTracker
 
             
             // TODO: This image write section should be commented out for the production code
-//            try {
-//                filteredImage.write("/processed.bmp");     // This seems to work well.
-//            } catch (Exception e) {
-//                System.out.println("error saving image 3");
-//            }
-//            System.out.println("WROTE IMAGE3");
+            try {
+                filteredImage.write("/processed.bmp");     // This seems to work well.
+            } catch (Exception e) {
+                System.out.println("error saving image 3");
+            }
+            System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
-            for (int i = 0; i < Math.min(reports.length, 4); i++) {
-		RRTracker.targets[i] = new Target(reports[i]);
+ //          for (int i = 0; i < Math.min(reports.length, 4); i++) {
+
+            // Just do 1 target for now
+            {   int i=0;
+                RRTracker.targets[i] = new Target(reports[i]);
                 ParticleAnalysisReport r = reports[i];
-                double distance = 18.27 - r.boundingRectWidth/11.0;  // distance to target based on rectangle width
+                
+                double distance = r.boundingRectWidth/801.4;  // distance to target based on rectangle width
                 System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth+ " Height: " + r.boundingRectHeight + "Aspect: " + r.boundingRectWidth/r.boundingRectHeight + " Distance: " + distance);
                 
                 int     targetID = 2;
                 
-                double angle = RRShooter.determineAngle(distance,targetID);
+                double angle = 0;
+                
+                while (angle !=0)
+                {
+                    angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
+                    
+                    if (angle == 0)
+                    {
+                        RoboRebels.muzzle_velocity = RoboRebels.muzzle_velocity + 1.0;// increase muzzle velocity and try again.
+                    }
+                }              
+                
  //               double angle = 1.5;
-                System.out.println("Theta: " + angle);
+                System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + "Theta: " + angle);
+                
+                if ((r.center_mass_x - 160) > 2)      // Needs offset calculation
+                    RoboRebels.target_direction = -1;  // move LazySusan to left
+                else if((r.center_mass_x - 160) < -2)
+                    RoboRebels.target_direction = 1;   // move LazySusan to left
+                else
+                    RoboRebels.target_direction = 0;   // Don't move, we are facing target!
+                
+             
+                       
             }
+            
+           
+            
             
             System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
 
