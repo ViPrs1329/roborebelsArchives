@@ -105,7 +105,10 @@ public class RRTracker
                 ParticleAnalysisReport r = reports[i];
                 
                 double distance = 801.4/r.boundingRectWidth;  // distance to target based on rectangle width
-                System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth+ " Height: " + r.boundingRectHeight + " Aspect: " + r.boundingRectWidth/r.boundingRectHeight + " Distance: " + distance);
+                System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + 
+                        "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth + " Height: " +
+                        r.boundingRectHeight + " Aspect: " + r.boundingRectWidth/r.boundingRectHeight + 
+                        " Distance: " + distance);
                 
                 RoboRebels.printLCD(5, "Dist: " + distance);
                 
