@@ -137,6 +137,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    FASTER = 1;
     final static int    SLOWER = -1;
     final static int    HOLD = -2; 
+    final static int    MIN_TILT_ANGLE = 46; 
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
@@ -147,8 +148,9 @@ public class RoboRebels extends IterativeRobot {
     static double       previous_angles[];   // Is this automatically all zeros?
     static int          curent_angle_index = 1;
     static double       current_angle_sum = 0;
-    final static int    NUMBER_OF_PREVIOUS = 50;   
+    final static int    NUMBER_OF_PREVIOUS = 50;  
     
+                                                // Might not need these - could use LOCK values above
     static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired
     static boolean      elevation_lock = false; // elevation (up/down) target lock acquired
     static boolean      muzzle_velocity_lock = false;  // muzzle velocity is correct

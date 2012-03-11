@@ -219,61 +219,80 @@ public class RRShooter
         }
         else if ( shootingJoystick.getRawButton(RRButtonMap.TILT_DOWN) )
         {
-            System.out.println("Tilt down");
-            
-            /*if (!tiltLimitSwitch.get())
-            {
+            if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
+            {        
+                System.out.println("Tilt down");
+
+                /*if (!tiltLimitSwitch.get())
+                {
+                    tiltSpeed = TILT_SPEED;
+                } else {
+                    System.out.println("Tilter limit switch pressed!");
+                    tiltSpeed = 0.0;
+                }*/
                 tiltSpeed = TILT_SPEED;
-            } else {
-                System.out.println("Tilter limit switch pressed!");
-                tiltSpeed = 0.0;
-            }*/
-            tiltSpeed = TILT_SPEED;
-            
+            }
+            else
+            {
+                System.out.println("Min tilt angle exceeded!");
+                tiltSpeed = 0.0;              
+            }
         }
         else if ( !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) && !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         {
             tiltSpeed = 0.0;
         }
         
-        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // joystick button 11
-            
+        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // joystick button 11   
         {
-         
             if (RoboRebels.target_azimuth == RoboRebels.LEFT)   // Track target azimuth (left/right)
             {
                 System.out.println("Auto Lazy susan left"); 
                 lazySusanSpeed = LS_SPEED;
                 tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
             else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)
             {
                 System.out.println("Auto Lazy susan right"); 
                 lazySusanSpeed = -1.0 * LS_SPEED;
                 tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
             else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
             {
                 lazySusanSpeed = 0.0;
                 RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
+            } else              // Must be set to HOLD
+            {
+                lazySusanSpeed = 0.0;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
+
             }
-            
+           
             if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
             {
                 System.out.println("Auto Tilt Up"); 
                 tiltSpeed = -1.0 * TILT_SPEED;
                 tracking = true;
+                RoboRebels.elevation_lock = false;         // No elevation target lock
             }
             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
                 tiltSpeed = TILT_SPEED;
                 tracking = true;
-            }
+                RoboRebels.elevation_lock = false;         // No elevation target lock
+           }
             else if (RoboRebels.target_elevation == RoboRebels.LOCK)
             {
-                  tiltSpeed = 0.0;                      // Stop Tilting
-                  RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+                tiltSpeed = 0.0;                      // Stop Tilting
+                RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+            }
+            else             // is HOLD
+            {
+               tiltSpeed = 0.0;
+               RoboRebels.elevation_lock = false;         // No elevation target lock
             }
             
             if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
@@ -281,17 +300,24 @@ public class RRShooter
                 System.out.println("Auto Shooting Speed Up"); 
                // Don't know how to do this
                 tracking = true;
+                RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
             {
                 System.out.println("Auto Shooting Speed Down"); 
                // Don't know how to do this
                 tracking = true;
+                RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK)
             {
                    // Muzzle velocity is fine - don't change
-                  RoboRebels.muzzle_velocity_lock = true;     // Indicate elevation target lock
+                  RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
+            }
+            else
+            {
+                  RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
+
             }
 
         
@@ -299,7 +325,11 @@ public class RRShooter
         {
              lazySusanSpeed = 0.0;      // Stop azimuth tracking
              tiltSpeed = 0.0;           // Stop elevation tracking
+                                        // Stop shooter speed tracking
              tracking = false;
+             RoboRebels.target_azimuth = RoboRebels.HOLD;   //  Put hold on tracking until tracking is re-initiated
+             RoboRebels.target_elevation = RoboRebels.HOLD;
+             RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
         }
         
         // Check for lazy susan button left, right (button 4, 5)

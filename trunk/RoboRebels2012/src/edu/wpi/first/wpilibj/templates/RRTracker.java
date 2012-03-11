@@ -141,9 +141,9 @@ public class RRTracker
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
                     
-                    if (RoboRebels.tilt_angle > 60 + 1)        // First try it against a fixed angle = 60 degrees
+                    if (RoboRebels.tilt_angle < 60 - 1)        // First try it against a fixed angle = 60 degrees
                         RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
-                    else if (RoboRebels.tilt_angle < 60 - 1)    // First try it against a fixed angle = 60 degrees
+                    else if (RoboRebels.tilt_angle > 60 + 1)    // First try it against a fixed angle = 60 degrees
                         RoboRebels.target_elevation = RoboRebels.DOWN;  // Shooter meeds to tilt down
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!
