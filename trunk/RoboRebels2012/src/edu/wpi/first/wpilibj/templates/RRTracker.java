@@ -45,6 +45,7 @@ public class RRTracker
     public void trackTarget()
     {
         double start = Timer.getFPGATimestamp();
+        double angle;
         try
         {
            ColorImage image = cam.getImage();     // comment if using stored images
@@ -93,8 +94,12 @@ public class RRTracker
  //          for (int i = 0; i < Math.min(reports.length, 4); i++) {
 
             // Just do 1 target for now
+           
+            
             if ((reports != null) && (reports.length > 0))  
-            {   int i=0;
+            {   int i = 0;     // pick first target
+            
+            //  int i = reports.length;     // pick last target
 
                 //RRTracker.targets[i] = new Target(reports[i]);
                 ParticleAnalysisReport r = reports[i];
@@ -108,25 +113,43 @@ public class RRTracker
                 
                 
                 
-                double angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
+                angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
                     
-                if (angle == 0)
-                {
-                    RoboRebels.muzzle_velocity = RoboRebels.muzzle_velocity + 1.0;// increase muzzle velocity and try again.
-                }            
                 
  //               double angle = 1.5;
                 System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + "Theta: " + angle);
                 
                 if ((r.center_mass_x - 160) > 2)      // Needs offset calculation
-                    RoboRebels.target_direction = -1;  // move LazySusan to left
+                    RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
                 else if((r.center_mass_x - 160) < -2)
-                    RoboRebels.target_direction = 1;   // move LazySusan to left
+                    RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
                 else
-                    RoboRebels.target_direction = 0;   // Don't move, we are facing target!
+                    RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
                 
+                   
+                if (angle == 0)  // Check to see if there is a valid angle
+                {
+                    RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
+                    RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
+                }
+                else if (angle > 80.0)
+                {
+                    RoboRebels.target_muzzle_velocity = RoboRebels.SLOWER; // Muzzel velocity needs to be slower
+                    RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
+                }
+                else  // The angle is valid, so adjust tilt angle
+                {
+                    RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
+                    
+                    if (RoboRebels.tilt_angle > 60 + 1)        // First try it against a fixed angle = 60 degrees
+                        RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
+                    else if (RoboRebels.tilt_angle < 60 - 1)    // First try it against a fixed angle = 60 degrees
+                        RoboRebels.target_elevation = RoboRebels.DOWN;  // Shooter meeds to tilt down
+                    else
+                        RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!
              
-                       
+                }
+       
             }
             
            

@@ -128,13 +128,32 @@ public class RoboRebels extends IterativeRobot {
     boolean             btnPressed = false;
     double              launcher_speed = 0.0;
     boolean             launcher_button_pressed = false;
-    static int          target_direction = -1;  // -1 if target is to left, 0 if on target, 1 if target is the right
-    static double       muzzle_velocity = 7.1; //muzzle velocity in meters per second
+    
+    final static int    LEFT = -1;
+    final static int    RIGHT = 1;
+    final static int    LOCK = 0;
+    final static int    UP = 1;
+    final static int    DOWN = -1;
+    final static int    FASTER = 1;
+    final static int    SLOWER = -1;
+    final static int    HOLD = -2; 
+    
+    static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
+    static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
+    static int          target_muzzle_velocity = HOLD; //muzzle velocity in meters per second
+    
+    static double       muzzle_velocity = 7.1;  // Actual muzzle velocity in meters per second
 
     static double       previous_angles[];   // Is this automatically all zeros?
     static int          curent_angle_index = 1;
     static double       current_angle_sum = 0;
-    final static int    NUMBER_OF_PREVIOUS = 50;       
+    final static int    NUMBER_OF_PREVIOUS = 50;   
+    
+    static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired
+    static boolean      elevation_lock = false; // elevation (up/down) target lock acquired
+    static boolean      muzzle_velocity_lock = false;  // muzzle velocity is correct
+    
+    static double       tilt_angle = 90;        // tilt angle (elevation)
 
     /*
      *          (\_/)

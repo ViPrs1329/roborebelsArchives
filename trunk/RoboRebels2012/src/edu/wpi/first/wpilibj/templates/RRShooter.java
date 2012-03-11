@@ -61,7 +61,9 @@ public class RRShooter
     private     Joystick        shootingJoystick;
     
     private     RRTracker       tracker;
-    private     boolean istracking = false; // Indicates if robot is tracking or not
+    private     boolean         tracking = false; // Indicates if robot is tracking target
+    //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
+                                                               // for azimuth and elevation.
     
     //int target_direction = 1;
     
@@ -238,28 +240,66 @@ public class RRShooter
             
         {
          
-            if (RoboRebels.target_direction == -1)
+            if (RoboRebels.target_azimuth == RoboRebels.LEFT)   // Track target azimuth (left/right)
             {
-                        System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+                System.out.println("Auto Lazy susan left"); 
                 lazySusanSpeed = LS_SPEED;
-                istracking = true;
+                tracking = true;
             }
-            else if (RoboRebels.target_direction == 1)
+            else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)
             {
-                System.out.println("Lazy susan right"); //TODO: should this be lazy susan left or right
+                System.out.println("Auto Lazy susan right"); 
                 lazySusanSpeed = -1.0 * LS_SPEED;
-                istracking = true;
+                tracking = true;
             }
-            else if (RoboRebels.target_direction == 0)
+            else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
             {
                 lazySusanSpeed = 0.0;
+                RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
             }
+            
+            if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
+            {
+                System.out.println("Auto Tilt Up"); 
+                tiltSpeed = -1.0 * TILT_SPEED;
+                tracking = true;
+            }
+            else if (RoboRebels.target_elevation == RoboRebels.DOWN)
+            {
+                System.out.println("Auto Tilt Down"); 
+                tiltSpeed = TILT_SPEED;
+                tracking = true;
+            }
+            else if (RoboRebels.target_elevation == RoboRebels.LOCK)
+            {
+                  tiltSpeed = 0.0;                      // Stop Tilting
+                  RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+            }
+            
+            if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
+            {
+                System.out.println("Auto Shooting Speed Up"); 
+               // Don't know how to do this
+                tracking = true;
+            }
+            else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
+            {
+                System.out.println("Auto Shooting Speed Down"); 
+               // Don't know how to do this
+                tracking = true;
+            }
+            else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK)
+            {
+                   // Muzzle velocity is fine - don't change
+                  RoboRebels.muzzle_velocity_lock = true;     // Indicate elevation target lock
+            }
+
         
-        } else if (istracking)
+        } else if (tracking)   // Was tracking target, but now no longer tracking
         {
-             lazySusanSpeed = 0.0;
-             istracking = false;
-          
+             lazySusanSpeed = 0.0;      // Stop azimuth tracking
+             tiltSpeed = 0.0;           // Stop elevation tracking
+             tracking = false;
         }
         
         // Check for lazy susan button left, right (button 4, 5)
@@ -279,9 +319,13 @@ public class RRShooter
         }
         
              
-           
 
-        
+       if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(5, "Target Locked!");   // I think 5 is unused
+       else if (tracking) 
+            RoboRebels.printLCD(5, "Tracking Target"); 
+       else 
+            RoboRebels.printLCD(5, "  ");   // Wasn't sure if we need to clear the display
     }
     
    
