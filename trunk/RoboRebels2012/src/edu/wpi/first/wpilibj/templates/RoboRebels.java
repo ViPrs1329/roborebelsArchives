@@ -57,9 +57,8 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-
-
 import com.sun.squawk.util.MathUtils;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -67,8 +66,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.PWM;
 
 
@@ -86,7 +83,7 @@ public class RoboRebels extends IterativeRobot {
     static DriverStationLCD    m_dsLCD;                // driver station LCD object
     Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;		// joystick 2 (tank left stick)
-    //Joystick            m_xboxStick;
+    Joystick            m_xboxStick;
     PWM                 currentPWM;
     RRDrive             drive;
     RRShooter           shooter;
@@ -186,9 +183,9 @@ public class RoboRebels extends IterativeRobot {
         
         m_dsLCD = DriverStationLCD.getInstance();
 
-        m_leftStick = new Joystick(3);
+        m_leftStick = new Joystick(1);
         m_rightStick = new Joystick(2);
-        //m_xboxStick = new Joystick(1);
+        m_xboxStick = new Joystick(3);
         System.out.println("Joysticks set");
 
         RRButtonMap.setController("joystick");

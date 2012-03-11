@@ -127,6 +127,12 @@ public class RRGatherer
             else if ( spinnerState == 1 )
             {
                 spinnerSpeed = -1.0 * SPINNER_SPEED;
+                spinnerState = 0;
+            }
+            /*
+            else if ( spinnerState == 1 )
+            {
+                spinnerSpeed = -1.0 * SPINNER_SPEED;
                 spinnerState = 2;
             }
             else if ( spinnerState == 2 )
@@ -134,6 +140,8 @@ public class RRGatherer
                 spinnerSpeed = 0.0;
                 spinnerState = 0;
             }
+            * 
+            */
             
             spinnerButtonPressed = true;
         }

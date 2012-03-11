@@ -74,23 +74,32 @@ Right trigger           Shoot on, off
  * 
  * @author dmw
  */
+
+import edu.wpi.first.wpilibj.Joystick;
+
 public class RRButtonMap 
 {
-    static int SHOOT,
-               LOADER_UP,
-               LOADER_DOWN,
-               LAZY_SUSAN_LEFT,
-               LAZY_SUSAN_RIGHT,
-               TILT_UP,
-               TILT_DOWN,
-               BRIDGE_ARM_DOWN,
-               BRIDGE_ARM_UP,
-               SPINNER,
-               TRACK_TARGET;
-
-    RRButtonMap()
+    private class RRAction
     {
-        
+        int         button_map;
+        Joystick    joystick;
+    }
+    
+    static int      SHOOT,
+                    LOADER_UP,
+                    LOADER_DOWN,
+                    LAZY_SUSAN_LEFT,
+                    LAZY_SUSAN_RIGHT,
+                    TILT_UP,
+                    TILT_DOWN,
+                    BRIDGE_ARM_DOWN,
+                    BRIDGE_ARM_UP,
+                    SPINNER,
+                    TRACK_TARGET;
+
+
+    RRButtonMap(Joystick j1, Joystick j2, Joystick j3)
+    {
         
     }
 

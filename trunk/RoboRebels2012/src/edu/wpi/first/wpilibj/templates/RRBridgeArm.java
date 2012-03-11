@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class RRBridgeArm 
 {
-    private final double    ARM_SPEED = 1.0;
+    // Reduced the retraction (UP) speed of the arm by half
+    private final double    ARM_DOWN_SPEED = -1.0;
+    private final double    ARM_UP_SPEED = 0.5;
     
     private     int         bav_channel;
     
@@ -63,12 +65,12 @@ public class RRBridgeArm
         if ( js.getRawButton(RRButtonMap.BRIDGE_ARM_DOWN) )
         {
             System.out.println("Bridge lower arm");
-            armSpeed = ARM_SPEED;
+            armSpeed = ARM_DOWN_SPEED;
         }
         else if ( js.getRawButton(RRButtonMap.BRIDGE_ARM_UP) )
         {
             System.out.println("Bridge lower arm");
-            armSpeed = -1.0 * ARM_SPEED;
+            armSpeed = ARM_UP_SPEED;
         }
         else if ( !js.getRawButton(RRButtonMap.BRIDGE_ARM_DOWN) && !js.getRawButton(RRButtonMap.BRIDGE_ARM_UP) )
         {
