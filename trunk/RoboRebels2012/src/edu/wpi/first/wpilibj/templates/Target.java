@@ -14,7 +14,7 @@ public class Target {
     }
 
     public double distance() {
-        return 18.27 - report.boundingRectWidth/11.0;
+        return 801.34/report.boundingRectWidth;
     }
 
     public int height() {

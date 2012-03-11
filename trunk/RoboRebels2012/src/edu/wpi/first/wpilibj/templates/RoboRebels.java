@@ -131,6 +131,11 @@ public class RoboRebels extends IterativeRobot {
     static int          target_direction = -1;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static double       muzzle_velocity = 7.1; //muzzle velocity in meters per second
 
+    static double       previous_angles[];   // Is this automatically all zeros?
+    static int          curent_angle_index = 1;
+    static double       current_angle_sum = 0;
+    final static int    NUMBER_OF_PREVIOUS = 50;       
+
     /*
      *          (\_/)
      *          (O.0)

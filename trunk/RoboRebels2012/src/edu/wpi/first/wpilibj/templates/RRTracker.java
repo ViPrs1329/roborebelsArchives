@@ -95,6 +95,7 @@ public class RRTracker
             // Just do 1 target for now
             if ((reports != null) && (reports.length > 0))  
             {   int i=0;
+
                 //RRTracker.targets[i] = new Target(reports[i]);
                 ParticleAnalysisReport r = reports[i];
                 
@@ -165,6 +166,18 @@ public class RRTracker
 
         return highest;
     }
+    
+        public static Target lowestTarget() {
+        Target lowest = null;
+
+        for (int i = 0; i < targets.length; i++) {
+            if (lowest == null || targets[i].posY() < lowest.posY()) {
+                lowest = targets[i];
+            }
+        }
+
+        return lowest;
+    }
 
     public static Target[] targets() {
         return targets;
@@ -181,11 +194,27 @@ public class RRTracker
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
 
-        double angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
+        double current_angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
         
-        RoboRebels.printLCD(4, "Tilt ang.: " + angle);
+        // Updates current moving average sum by subtracing oldest entry and adding in current entry
+        
+        RoboRebels.current_angle_sum = RoboRebels.current_angle_sum - RoboRebels.previous_angles[RoboRebels.curent_angle_index] + current_angle;
+        
+        // Replaces oldest entry with current entry
+        
+        RoboRebels.previous_angles[RoboRebels.curent_angle_index] = current_angle;
+        
+        // Increment index, modulo the size of the moving average
+        
+        RoboRebels.curent_angle_index = (RoboRebels.curent_angle_index + 1) % RoboRebels.NUMBER_OF_PREVIOUS;  // this might need a - 1 here
+        
+        // Compute the current moving average value
+                
+        double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
+        
+        RoboRebels.printLCD(4, "Tilt ang.: " + moving_average_angle);
 
-        return angle;
+        return moving_average_angle;
         
     }
   }
