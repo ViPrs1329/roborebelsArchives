@@ -143,12 +143,13 @@ public class RoboRebels extends IterativeRobot {
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
     static int          target_muzzle_velocity = HOLD; //muzzle velocity in meters per second
     
-    static double       muzzle_velocity = 7.1;  // Actual muzzle velocity in meters per second
+    static double       muzzle_velocity = 8.5;  // Actual muzzle velocity in meters per second
 
-    static double       previous_angles[];   // Is this automatically all zeros?
-    static int          curent_angle_index = 1;
+    final static int    NUMBER_OF_PREVIOUS = 50;
+    static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
+    static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;
-    final static int    NUMBER_OF_PREVIOUS = 50;  
+  
     
                                                 // Might not need these - could use LOCK values above
     static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired

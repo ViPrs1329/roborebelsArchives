@@ -243,44 +243,66 @@ public class RRShooter
             tiltSpeed = 0.0;
         }
         
+        // Check for lazy susan button left, right (button 4, 5)
+        if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
+        {
+            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+            lazySusanSpeed = 1.0 * LS_SPEED;
+        }
+        else if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
+        {
+            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+            lazySusanSpeed = -1.0 * LS_SPEED;
+        }
+        else if ( !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) && !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
+        {
+            lazySusanSpeed = 0.0;
+        }
+        
+     
+        
+        
         if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // joystick button 11   
         {
+            System.out.println("Track Target Button Pressed");
+            
             if (RoboRebels.target_azimuth == RoboRebels.LEFT)   // Track target azimuth (left/right)
             {
                 System.out.println("Auto Lazy susan left"); 
-                lazySusanSpeed = LS_SPEED;
+                lazySusanSpeed = -1.0 * LS_SPEED;
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
             else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)
             {
                 System.out.println("Auto Lazy susan right"); 
-                lazySusanSpeed = -1.0 * LS_SPEED;
+                lazySusanSpeed = 1.0 * LS_SPEED;
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
             else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
             {
+                System.out.println("Auto Lazy susan Lock"); 
                 lazySusanSpeed = 0.0;
                 RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
             } else              // Must be set to HOLD
             {
+                System.out.println("Auto Lazy susan Hold"); 
                 lazySusanSpeed = 0.0;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
-
             }
            
             if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
             {
                 System.out.println("Auto Tilt Up"); 
-                tiltSpeed = -1.0 * TILT_SPEED;
+                tiltSpeed = -1.0 * TILT_SPEED * 0.5;
                 tracking = true;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
             }
             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
-                tiltSpeed = TILT_SPEED;
+                tiltSpeed = 1.0 * TILT_SPEED * 0.5;
                 tracking = true;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
            }
@@ -332,30 +354,17 @@ public class RRShooter
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
         }
         
-        // Check for lazy susan button left, right (button 4, 5)
-        if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
-        {
-            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
-            lazySusanSpeed = LS_SPEED;
-        }
-        else if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
-        {
-            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
-            lazySusanSpeed = -1.0 * LS_SPEED;
-        }
-        else if ( !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) && !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
-        {
-            lazySusanSpeed = 0.0;
-        }
+        System.out.println("Target_Azimuth:" + RoboRebels.target_azimuth + " Targeting: " +
+                tracking + " lazySusanSpeed: " + lazySusanSpeed);
         
-             
+                
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(5, "Target Locked!");   // I think 5 is unused
+            RoboRebels.printLCD(6, "Target Locked!");   // I think 5 is unused
        else if (tracking) 
-            RoboRebels.printLCD(5, "Tracking Target"); 
+            RoboRebels.printLCD(6, "Tracking Target"); 
        else 
-            RoboRebels.printLCD(5, "  ");   // Wasn't sure if we need to clear the display
+            RoboRebels.printLCD(6, "                ");   // Wasn't sure if we need to clear the display
     }
     
    

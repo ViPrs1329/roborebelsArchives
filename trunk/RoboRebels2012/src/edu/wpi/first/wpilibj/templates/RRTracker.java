@@ -48,7 +48,10 @@ public class RRTracker
         double angle;
         try
         {
-           ColorImage image = cam.getImage();     // comment if using stored images
+           
+            RoboRebels.tilt_angle = accelAngle();
+            
+            ColorImage image = cam.getImage();     // comment if using stored images
 
            // TODO: This image write section should be commented out for the production code
 //            try {
@@ -91,28 +94,41 @@ public class RRTracker
             System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
- //          for (int i = 0; i < Math.min(reports.length, 4); i++) {
-
-            // Just do 1 target for now
-           
             
-            if ((reports != null) && (reports.length > 0))  
-            {   int i = 0;     // pick first target
+            int center_target_index = 0;
+            int distance_from_center = 160;
+            int dist;
+                    
+              if ((reports != null) && (reports.length > 0)) 
+              {     
+                for (int i = 0; i < Math.min(reports.length, 4); i++) 
+                {
+             
+                    ParticleAnalysisReport r = reports[i];
+                    if ((dist = Math.abs((r.center_mass_x - 160))) < distance_from_center)
+                    {
+                        distance_from_center = dist;
+                        center_target_index = i;
+                    }        
+                }           
+            
+ 
+ //           {   int i = 0;     // pick first target
             
             //  int i = reports.length;     // pick last target
 
                 //RRTracker.targets[i] = new Target(reports[i]);
-                ParticleAnalysisReport r = reports[i];
+                ParticleAnalysisReport r = reports[center_target_index];
                 
                 double distance = 801.4/r.boundingRectWidth;  // distance to target based on rectangle width
-                System.out.println("Target: " + i + "Center: (x,y)  (" + (r.center_mass_x - 160) + 
+                System.out.println("Target: " + center_target_index + "Center: (x,y)  (" + (r.center_mass_x - 160) + 
                         "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth + " Height: " +
-                        r.boundingRectHeight + " Aspect: " + r.boundingRectWidth/r.boundingRectHeight + 
+                        r.boundingRectHeight + " Aspect: " + (double)r.boundingRectWidth/r.boundingRectHeight + 
                         " Distance: " + distance);
                 
                 RoboRebels.printLCD(5, "Dist: " + distance);
                 
-                int     targetID = 2;
+                int     targetID = 0;
                 
                 
                 
@@ -122,13 +138,15 @@ public class RRTracker
  //               double angle = 1.5;
                 System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + "Theta: " + angle);
                 
-                if ((r.center_mass_x - 160) > 2)      // Needs offset calculation
+                if ((r.center_mass_x - 160) > 10)      // Needs offset calculation
                     RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
-                else if((r.center_mass_x - 160) < -2)
+                else if((r.center_mass_x - 160) < - 10)
                     RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
                 else
                     RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
                 
+               // angle = 60;
+                System.out.println("Tilt_angle: " + RoboRebels.tilt_angle);
                    
                 if (angle == 0)  // Check to see if there is a valid angle
                 {
@@ -144,14 +162,16 @@ public class RRTracker
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
                     
-                    if (RoboRebels.tilt_angle < 60 - 1)        // First try it against a fixed angle = 60 degrees
+                    if (RoboRebels.tilt_angle < (angle - 3))        // First try it against a fixed angle = 60 degrees
                         RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
-                    else if (RoboRebels.tilt_angle > 60 + 1)    // First try it against a fixed angle = 60 degrees
+                    else if (RoboRebels.tilt_angle > (angle + 3))    // First try it against a fixed angle = 60 degrees
                         RoboRebels.target_elevation = RoboRebels.DOWN;  // Shooter meeds to tilt down
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!
              
                 }
+                
+           //     RoboRebels.target_elevation = RoboRebels.HOLD; // Hold during testing!
        
             }
             
