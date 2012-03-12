@@ -164,8 +164,8 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        RoboRebels.printLCD(3, "SS: " + Double.toString(shootingWheelJaguar.get()).substring(0, 4) + "Z: " + Double.toString(this.getTransformedZValue()).substring(0, 4));
-        //RoboRebels.printLCD(3, "Z:" + this.getTransformedZValue());
+        RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
+        RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
         System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
         System.out.println("Z: " + this.getTransformedZValue());
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
@@ -248,14 +248,14 @@ public class RRShooter
             if (RoboRebels.target_azimuth == RoboRebels.LEFT)   // Track target azimuth (left/right)
             {
                 System.out.println("Auto Lazy susan left"); 
-                lazySusanSpeed = -1.0 * LS_SPEED;
+                lazySusanSpeed = -1.0 * LS_SPEED * .75;  // .75 is the lowest possible.
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
             else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)
             {
                 System.out.println("Auto Lazy susan right"); 
-                lazySusanSpeed = 1.0 * LS_SPEED;
+                lazySusanSpeed = 1.0 * LS_SPEED * .75;
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
@@ -340,7 +340,7 @@ public class RRShooter
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
             RoboRebels.printLCD(6, "Azimuth & Elevation Locked!"); 
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Elevation and Speed Locked!"); 
+            RoboRebels.printLCD(6, "Elevation & Speed Locked!"); 
        else if (tracking) 
             RoboRebels.printLCD(6, "Tracking Target            "); 
        else 

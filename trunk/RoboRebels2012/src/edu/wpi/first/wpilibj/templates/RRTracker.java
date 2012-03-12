@@ -358,7 +358,7 @@ public class RRTracker
     
     public int x(int raw_x, int target_image_width)
     {   
-        double camera_offset = 12.0;   // camera offset from center of robot in inches.  Positive is to the right side of robot
+        double camera_offset = 10.0;   // camera offset from center of robot in inches.  Positive is to the right side of robot
         double target_width = 24.0;     // width of backboard target in inches   
         int correction;
         
@@ -366,7 +366,7 @@ public class RRTracker
         
         System.out.println("x: " + raw_x + "correction: " + correction);
         
-        return (raw_x - 160 - correction);
+        return (raw_x - 160 + correction);
     }
     
     public int y(int raw_y)
