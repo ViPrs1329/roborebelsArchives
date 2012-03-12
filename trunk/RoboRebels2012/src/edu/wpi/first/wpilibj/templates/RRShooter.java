@@ -164,8 +164,8 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        RoboRebels.printLCD(2, "Shooting Speed:" + shootingWheelJaguar.get());
-        RoboRebels.printLCD(3, "Z:" + this.getTransformedZValue());
+        RoboRebels.printLCD(3, "SS: " + Double.toString(shootingWheelJaguar.get()).substring(0, 4) + "Z: " + Double.toString(this.getTransformedZValue()).substring(0, 4));
+        //RoboRebels.printLCD(3, "Z:" + this.getTransformedZValue());
         System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
         System.out.println("Z: " + this.getTransformedZValue());
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
