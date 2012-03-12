@@ -122,32 +122,18 @@ public class RRShooter
         double yHigher = 2.24485;
         double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
         double shooterHeight = .914; // meters off the ground
-        double y; // determined by targetID (see below)
+        double y = yHigher; // determined by targetID (see below)
         double theta = 0;
                 
         xDistance = distance / 3.28; // converts feet into meters
-
         
-
-        if (targetID == 0)
-        {
+        if (targetID == RoboRebels.LOWEST)
             y = yLower; 
-
-        } 
-        else if (targetID == 1)
-        {
-            y = yMiddle;
-        }
-        else if ( targetID == 2 )
-        {
-            y = yHigher;
-
-        }
-        else 
-        {
-            y = yMiddle;
-        }
-        
+        else if (targetID == RoboRebels.MIDDLE)
+             y = yMiddle;
+        else if ( targetID == RoboRebels.HIGHEST)
+             y = yHigher;
+         
         /*
                 double tempSqrtEquationHigher = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yHigher)-(gravity*gravity*xDistance));
                 double tempSqrtEquationMiddle = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yMiddle)-(gravity*gravity*xDistance));
