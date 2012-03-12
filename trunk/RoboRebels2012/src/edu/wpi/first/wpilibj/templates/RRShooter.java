@@ -140,26 +140,20 @@ public class RRShooter
                 double tempSqrtEquationLower = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yLower)-(gravity*gravity*xDistance));
         */
         
-                System.out.println("distance: " + distance);
-                System.out.println("gravity: " + gravity);
-                System.out.println("muzzleVelocity: " + muzzleVelocity);
-                System.out.println("y: " + y);
-                System.out.println("xDistance: " + xDistance);
+                System.out.println("d: " + distance + "v: " + muzzleVelocity + "y: " + y + "x: " + xDistance);
 
         double tempSqrtEquation = (muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
                          (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance);
         
         if (tempSqrtEquation > 0)
         {
-            System.out.println("tempSqrtEq: " + tempSqrtEquation);
+       //     System.out.println("tempSqrtEq: " + tempSqrtEquation);
             theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(Math.sqrt(tempSqrtEquation)))/(gravity*xDistance));
         }
         else
             theta = 0;    // There is no angle for this muzzle velocity
         
-        theta = theta * ( 180 / 3.14159265); // converts radians to degreese
-        
-        
+        theta = theta * ( 180.0 / 3.14159265); // converts radians to degreese
 
         return theta;
     }

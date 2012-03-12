@@ -106,7 +106,7 @@ public class RRTracker
                 for (int i = 0; i < potential_targets; i++) 
                 {
                     ParticleAnalysisReport r = reports[i];
-                    if ((dist = Math.abs(x(r.center_mass_x))) < distance_from_center)
+                    if ((dist = Math.abs(x(r.center_mass_x, 0))) < distance_from_center)  // This does not have camera offset calculation built in
                     {
                         distance_from_center = dist;
                         center_target_index = i;
@@ -213,7 +213,7 @@ public class RRTracker
                 double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
                 
                 System.out.println("Target " + center_target_index + "/" + potential_targets + " Center: (x,y)  (" +
-                        x(r.center_mass_x) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
+                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + " Aspect: " + (double)r.boundingRectWidth/r.boundingRectHeight + 
                         " Distance: " + distance);
                 
@@ -239,9 +239,9 @@ public class RRTracker
                     
                 System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + " Theta: " + angle + " Tilt_angle: " + RoboRebels.tilt_angle);
                 
-                if (x(r.center_mass_x) > 10)      // Needs offset calculation
+                if (x(r.center_mass_x, r.boundingRectWidth) > 10)      // Needs offset calculation
                     RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
-                else if(x(r.center_mass_x) < -10)
+                else if(x(r.center_mass_x, r.boundingRectWidth) < -10)
                     RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
                 else
                     RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
@@ -356,9 +356,17 @@ public class RRTracker
         
     }
     
-    public int x(int raw_x)
+    public int x(int raw_x, int target_image_width)
     {   
-         return (raw_x - 160);
+        double camera_offset = 12.0;   // camera offset from center of robot in inches.  Positive is to the right side of robot
+        double target_width = 24.0;     // width of backboard target in inches   
+        int correction;
+        
+        correction = (int)((camera_offset/target_width) * target_image_width);
+        
+        System.out.println("x: " + raw_x + "correction: " + correction);
+        
+        return (raw_x - 160 - correction);
     }
     
     public int y(int raw_y)
