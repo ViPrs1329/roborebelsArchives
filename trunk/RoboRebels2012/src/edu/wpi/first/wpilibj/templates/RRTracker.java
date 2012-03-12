@@ -91,64 +91,162 @@ public class RRTracker
             } catch (Exception e) {
                 System.out.println("error saving image 3");
             }
-            System.out.println("WROTE IMAGE3");
+            //System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             
-            int center_target_index = 0;
-            int distance_from_center = 160;
-            int dist;
-                    
+            int center_target_index = 0;    // initialize to zero 
+            int distance_from_center = 160; // set to maximum
+            int dist;                       // distance of center of target from the center of the image
+            int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
+            boolean lowest = true;          // true if center target is the lowest target in the image
+          
               if ((reports != null) && (reports.length > 0)) 
               {     
-                for (int i = 0; i < Math.min(reports.length, 4); i++) 
+                for (int i = 0; i < potential_targets; i++) 
                 {
-             
                     ParticleAnalysisReport r = reports[i];
-                    if ((dist = Math.abs((r.center_mass_x - 160))) < distance_from_center)
+                    if ((dist = Math.abs(x(r.center_mass_x))) < distance_from_center)
                     {
                         distance_from_center = dist;
                         center_target_index = i;
                     }        
-                }           
-            
- 
- //           {   int i = 0;     // pick first target
-            
-            //  int i = reports.length;     // pick last target
-
-                //RRTracker.targets[i] = new Target(reports[i]);
+                } 
+                               
+                if (potential_targets == 1)
+                    lowest = true;
+                else if (potential_targets == 2)
+                {
+                    int other_index;
+                    if (center_target_index == 0)
+                        other_index = 1;
+                    else
+                        other_index = 0;
+                       
+                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport other_target_r = reports[other_index];
+                    
+                    if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) 
+                        lowest = true;
+                    else
+                        lowest = false; 
+                }
+                if (potential_targets == 3)
+                {
+                    int other_index;
+                    int another_index;
+                    
+                    if (center_target_index == 0)
+                    {
+                        other_index = 1;
+                        another_index = 2;
+                    }
+                    else if (center_target_index == 1)
+                    {  
+                        other_index = 0;
+                        another_index = 2;
+                    }
+                    else
+                    {
+                        other_index = 0;
+                        another_index = 1;
+                    }
+                       
+                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport other_target_r = reports[other_index];
+                    ParticleAnalysisReport another_target_r = reports[another_index];
+                    
+                    if ((y(center_target_r.center_mass_y) < y(other_target_r.center_mass_y)) && 
+                            (y(center_target_r.center_mass_y) < y(another_target_r.center_mass_y))) 
+                        lowest = true;
+                    else
+                        lowest = false; 
+  
+                }
+                if (potential_targets == 4)
+                {
+                    int other_index;
+                    int another_index;
+                    int yet_another_index;
+                    
+                    if (center_target_index == 0)
+                    {
+                        other_index = 1;
+                        another_index = 2;
+                        yet_another_index = 3;
+                    }
+                    else if (center_target_index == 1)
+                    {  
+                        other_index = 0;
+                        another_index = 2;
+                        yet_another_index = 3;
+                    }
+                    else if (center_target_index == 2)
+                    {
+                        other_index = 0;
+                        another_index = 1;
+                        yet_another_index = 3;
+                    }
+                    else   // center_target_index == 3
+                    {
+                        other_index = 0;
+                        another_index = 1;
+                        yet_another_index = 2;
+                    }
+                       
+                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport other_target_r = reports[other_index];
+                    ParticleAnalysisReport another_target_r = reports[another_index];
+                    ParticleAnalysisReport yet_another_target_r = reports[yet_another_index];
+                    
+                    if ((y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) && 
+                            (y(center_target_r.center_mass_y) <= y(another_target_r.center_mass_y)) &&
+                            (y(center_target_r.center_mass_y) <= y(yet_another_target_r.center_mass_y))) 
+                        lowest = true;
+                    else
+                        lowest = false; 
+  
+                }   
+                
                 ParticleAnalysisReport r = reports[center_target_index];
                 
-                double distance = 801.4/r.boundingRectWidth;  // distance to target based on rectangle width
-                System.out.println("Target: " + center_target_index + "Center: (x,y)  (" + (r.center_mass_x - 160) + 
-                        "," + (280 - r.center_mass_y) + ") Width: " + r.boundingRectWidth + " Height: " +
-                        r.boundingRectHeight + " Aspect: " + (double)r.boundingRectWidth/r.boundingRectHeight + 
-                        " Distance: " + distance);
+                double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
                 
-                RoboRebels.printLCD(5, "Dist: " + distance);
+                System.out.println("Target " + center_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+                        x(r.center_mass_x) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
+                        " Height: " + r.boundingRectHeight + " Aspect: " + (double)r.boundingRectWidth/r.boundingRectHeight + 
+                        " Distance: " + distance);
                 
                 int     targetID = 0;
                 
-                
-                
+                if (lowest && RoboRebels.going_for_highest)
+                {
+                    targetID = RoboRebels.HIGHEST;
+                    RoboRebels.printLCD(5, "Dist: " + distance + " to Highest" );
+                }
+                else if (lowest && !RoboRebels.going_for_highest)
+                {
+                    targetID = RoboRebels.LOWEST;
+                    RoboRebels.printLCD(5, "Dist: " + distance + " to Lowest" );
+                }
+                else if (!lowest)
+                {
+                    targetID = RoboRebels.MIDDLE;
+                    RoboRebels.printLCD(5, "Dist: " + distance + " to Middle" );
+                }
+                         
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
                     
+                System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + " Theta: " + angle + " Tilt_angle: " + RoboRebels.tilt_angle);
                 
- //               double angle = 1.5;
-                System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + "Theta: " + angle);
-                
-                if ((r.center_mass_x - 160) > 10)      // Needs offset calculation
+                if (x(r.center_mass_x) > 10)      // Needs offset calculation
                     RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
-                else if((r.center_mass_x - 160) < - 10)
+                else if(x(r.center_mass_x) < -10)
                     RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
                 else
                     RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
-                
-               // angle = 60;
-                System.out.println("Tilt_angle: " + RoboRebels.tilt_angle);
                    
-                if (angle == 0)  // Check to see if there is a valid angle
+                if (angle == 0.0)  // Check to see if there is a valid angle
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
                     RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
@@ -162,23 +260,17 @@ public class RRTracker
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
                     
-                    if (RoboRebels.tilt_angle < (angle - 3))        // First try it against a fixed angle = 60 degrees
+                    if (RoboRebels.tilt_angle < (angle - 3))        
                         RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
-                    else if (RoboRebels.tilt_angle > (angle + 3))    // First try it against a fixed angle = 60 degrees
+                    else if (RoboRebels.tilt_angle > (angle + 3))    
                         RoboRebels.target_elevation = RoboRebels.DOWN;  // Shooter meeds to tilt down
                     else
-                        RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!
-             
-                }
-                
-           //     RoboRebels.target_elevation = RoboRebels.HOLD; // Hold during testing!
-       
+                        RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
+                }       
             }
+                
             
-           
-            
-            
-            System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
+       //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
 
             /**
              * all images in Java must be freed after they are used since they are allocated out
@@ -192,7 +284,7 @@ public class RRTracker
             thresholdImage.free();
             image.free();
 
-            System.out.println("accel angle: " + accelAngle());
+        //    System.out.println("accel angle: " + accelAngle());
 
         } catch (Exception ex) {
             System.err.println("There was an error while tracking a target!");
@@ -262,5 +354,15 @@ public class RRTracker
 
         return moving_average_angle;
         
+    }
+    
+    public int x(int raw_x)
+    {   
+         return (raw_x - 160);
+    }
+    
+    public int y(int raw_y)
+    {   
+         return (280 - raw_y);
     }
   }

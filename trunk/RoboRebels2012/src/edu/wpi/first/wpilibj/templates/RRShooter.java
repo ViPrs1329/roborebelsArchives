@@ -261,8 +261,7 @@ public class RRShooter
         
      
         
-        
-        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // joystick button 11   
+        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
         {
             System.out.println("Track Target Button Pressed");
             
@@ -285,25 +284,26 @@ public class RRShooter
                 System.out.println("Auto Lazy susan Lock"); 
                 lazySusanSpeed = 0.0;
                 RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
-            } else              // Must be set to HOLD
+                tracking = true;
+            } 
+            else              // Must be set to HOLD
             {
                 System.out.println("Auto Lazy susan Hold"); 
                 lazySusanSpeed = 0.0;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                tracking = true;
             }
            
             if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
             {
                 System.out.println("Auto Tilt Up"); 
                 tiltSpeed = -1.0 * TILT_SPEED * 0.5;
-                tracking = true;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
             }
             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
                 tiltSpeed = 1.0 * TILT_SPEED * 0.5;
-                tracking = true;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
            }
             else if (RoboRebels.target_elevation == RoboRebels.LOCK)
@@ -321,27 +321,23 @@ public class RRShooter
             {
                 System.out.println("Auto Shooting Speed Up"); 
                // Don't know how to do this
-                tracking = true;
                 RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
             {
                 System.out.println("Auto Shooting Speed Down"); 
                // Don't know how to do this
-                tracking = true;
                 RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK)
             {
-                   // Muzzle velocity is fine - don't change
-                  RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
+                // Muzzle velocity is fine - don't change
+                RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
             }
             else
             {
                   RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
-
             }
-
         
         } else if (tracking)   // Was tracking target, but now no longer tracking
         {
@@ -355,16 +351,20 @@ public class RRShooter
         }
         
         System.out.println("Target_Azimuth:" + RoboRebels.target_azimuth + " Targeting: " +
-                tracking + " lazySusanSpeed: " + lazySusanSpeed);
-        
-                
+                tracking + " lazySusanSpeed: " + lazySusanSpeed + " tiltSpeed: " + tiltSpeed);
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Target Locked!");   // I think 5 is unused
+            RoboRebels.printLCD(6, "All Locked!                ");   
+       else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Azimuth & Speed Locked!    "); 
+       else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "Azimuth & Elevation Locked!"); 
+       else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Elevation and Speed Locked!"); 
        else if (tracking) 
-            RoboRebels.printLCD(6, "Tracking Target"); 
+            RoboRebels.printLCD(6, "Tracking Target            "); 
        else 
-            RoboRebels.printLCD(6, "                ");   // Wasn't sure if we need to clear the display
+            RoboRebels.printLCD(6, "                           ");   // Clear the display
     }
     
    

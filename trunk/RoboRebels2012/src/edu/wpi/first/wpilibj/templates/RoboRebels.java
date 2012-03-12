@@ -136,6 +136,12 @@ public class RoboRebels extends IterativeRobot {
     final static int    HOLD = -2; 
     final static int    MIN_TILT_ANGLE = 46; 
     
+    final static int    LOWEST = 0;     // Lowest basket target
+    final static int    MIDDLE = 1;     // Middle basket target
+    final static int    HIGHEST = 2;    // Highest basket target
+    
+    static boolean      going_for_highest = true;   // When locked on a center target, shoot for highest instead of lowest basket target
+    
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
     static int          target_muzzle_velocity = HOLD; //muzzle velocity in meters per second
