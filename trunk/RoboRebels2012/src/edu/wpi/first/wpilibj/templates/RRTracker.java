@@ -19,6 +19,8 @@ public class RRTracker
     CriteriaCollection cc;             // the criteria for doing the particle filter operation
     private static Target[] targets;
     ADXL345_I2C accel;
+    
+    RRShooter       shooter;
 
     public RRTracker(ADXL345_I2C a)
     {
@@ -38,6 +40,15 @@ public class RRTracker
         accel = a;
         System.out.println("accel");
 
+    }
+    
+    
+    public void setShooter(RRShooter s)
+    {
+        if ( s != null )
+            shooter = s;
+        else
+            throw new NullPointerException("RRTracker was passed a null RRShooter object!");
     }
     
     
@@ -257,7 +268,7 @@ public class RRTracker
                 else
                 {
                     RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
-                    RRShooter.stopLazySusan();                     // Immediately stop LazySusan to prevent overshoot
+                    shooter.stopLazySusan();                     // Immediately stop LazySusan to prevent overshoot
                 }
                 if (angle == 0.0)  // Check to see if there is a valid angle
                 {

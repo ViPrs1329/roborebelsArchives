@@ -218,6 +218,7 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("Tracker");
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker);
+        tracker.setShooter(shooter);
         
         System.out.println("Robot Ready");
     }
