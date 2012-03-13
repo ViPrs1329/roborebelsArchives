@@ -133,14 +133,8 @@ public class RRShooter
              y = yMiddle;
         else if ( targetID == RoboRebels.HIGHEST)
              y = yHigher;
-         
-        /*
-                double tempSqrtEquationHigher = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yHigher)-(gravity*gravity*xDistance));
-                double tempSqrtEquationMiddle = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yMiddle)-(gravity*gravity*xDistance));
-                double tempSqrtEquationLower = Math.sqrt((muzzleVelocity*muzzleVelocity)-(2*gravity*muzzleVelocity*muzzleVelocity*yLower)-(gravity*gravity*xDistance));
-        */
-        
-                System.out.println("d: " + distance + "v: " + muzzleVelocity + "y: " + y + "x: " + xDistance);
+                 
+        System.out.println("d: " + distance + "v: " + muzzleVelocity + "y: " + y + "x: " + xDistance);
 
         double tempSqrtEquation = (muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
                          (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance);
@@ -244,18 +238,32 @@ public class RRShooter
         if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
         {
             System.out.println("Track Target Button Pressed");
-            
-            if (RoboRebels.target_azimuth == RoboRebels.LEFT)   // Track target azimuth (left/right)
+                        
+            if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left slowly
             {
                 System.out.println("Auto Lazy susan left"); 
-                lazySusanSpeed = -1.0 * LS_SPEED * .75;  // .75 is the lowest possible.
+                lazySusanSpeed = -0.15;  // was -0.75 * LS_SPEED
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
-            else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)
+             if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
+            {
+                System.out.println("Auto Lazy susan left fast"); 
+                lazySusanSpeed = -0.3;  
+                tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
+            }
+            else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right slowly
             {
                 System.out.println("Auto Lazy susan right"); 
-                lazySusanSpeed = 1.0 * LS_SPEED * .75;
+                lazySusanSpeed = 0.15;
+                tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
+            }
+           else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
+            {
+                System.out.println("Auto Lazy susan right fast"); 
+                lazySusanSpeed = 0.30;
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
@@ -362,7 +370,7 @@ public class RRShooter
         setShooterSpeeds();
         
         // track target
-        tracker.trackTarget();
+        //tracker.trackTarget();    // trackTarget was getting called twice
     }
     
     
@@ -389,5 +397,17 @@ public class RRShooter
     private double getTransformedZValue()
     {
         return MAX_SHOOTING_SPEED * (shootingJoystick.getZ() + 1.0) / 2.0;
+    }
+    
+        /**
+     * This public immediately stops the lazySusan to prevent overshoot
+     * mechanisms used by the tracker module  
+     */
+    
+    public void stopLazySusan()
+    {
+        lazySusanSpeed = 0.0;
+        lsVictor.set(0.0);
+        System.out.println("Halting LazySusan!");
     }
 }

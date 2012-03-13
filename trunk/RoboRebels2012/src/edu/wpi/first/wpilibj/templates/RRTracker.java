@@ -234,18 +234,31 @@ public class RRTracker
                     targetID = RoboRebels.MIDDLE;
                     RoboRebels.printLCD(5, "Dist: " + distance + " to Middle" );
                 }
-                         
+                   
+                // TODO:  Probably only need to do the rest of this if active tracking is happening.
+                
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
                     
                 System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + " Theta: " + angle + " Tilt_angle: " + RoboRebels.tilt_angle);
                 
-                if (x(r.center_mass_x, r.boundingRectWidth) > 10)      // Needs offset calculation
-                    RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
-                else if(x(r.center_mass_x, r.boundingRectWidth) < -10)
-                    RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
+                if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY/2)      
+                {   if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY)      
+                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far to left
+                    else
+                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
+                }
+                else if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY/2)
+                {
+                    if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY)
+                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;   // LazySusan meeds to move far to left
+                    else
+                        RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
+                }
                 else
+                {
                     RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
-                   
+                    RRShooter.stopLazySusan();                     // Immediately stop LazySusan to prevent overshoot
+                }
                 if (angle == 0.0)  // Check to see if there is a valid angle
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
@@ -260,10 +273,20 @@ public class RRTracker
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
                     
-                    if (RoboRebels.tilt_angle < (angle - 3))        
-                        RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
-                    else if (RoboRebels.tilt_angle > (angle + 3))    
-                        RoboRebels.target_elevation = RoboRebels.DOWN;  // Shooter meeds to tilt down
+                    if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY/2))
+                    {
+                        if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY))
+                            RoboRebels.target_elevation = RoboRebels.FAR_UP;  // Shooter needs to tilt far up
+                        else
+                            RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
+                    }
+                    else if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY/2))    
+                    {
+                        if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY))
+                            RoboRebels.target_elevation = RoboRebels.FAR_DOWN;
+                        else
+                             RoboRebels.target_elevation = RoboRebels.DOWN;                        
+                    }
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
                 }       

@@ -128,13 +128,20 @@ public class RoboRebels extends IterativeRobot {
     
     final static int    LEFT = -1;
     final static int    RIGHT = 1;
+    final static int    FAR_LEFT = -2;
+    final static int    FAR_RIGHT = 2;
     final static int    LOCK = 0;
     final static int    UP = 1;
     final static int    DOWN = -1;
+    final static int    FAR_UP = 2;
+    final static int    FAR_DOWN = -2;
     final static int    FASTER = 1;
     final static int    SLOWER = -1;
-    final static int    HOLD = -2; 
+    final static int    HOLD = -3; 
     final static int    MIN_TILT_ANGLE = 46; 
+    
+    final static int    PIXEL_ACCURACY = 20;     // Used by RRTRacker to determne when Locked.
+    final static int    ANGLE_ACCURACY = 6;     // Used by RRTRacker to determne when Locked.
     
     final static int    LOWEST = 0;     // Lowest basket target
     final static int    MIDDLE = 1;     // Middle basket target
@@ -282,7 +289,7 @@ public class RoboRebels extends IterativeRobot {
             //System.out.println("Arcade Drive");
         }
         
-      tracker.trackTarget();
+      tracker.trackTarget();   
       shooter.shoot();
       gatherer.gather();
       arm.arm();
