@@ -61,6 +61,8 @@ public class RRShooter
     private     Joystick        shootingJoystick;
     
     private     RRTracker       tracker;
+    private     RRBallSensor    sensor;
+    
     private     boolean         tracking = false; // Indicates if robot is tracking target
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
                                                                // for azimuth and elevation.
@@ -409,5 +411,12 @@ public class RRShooter
         lazySusanSpeed = 0.0;
         lsVictor.set(0.0);
         System.out.println("Halting LazySusan!");
+    }
+    
+    public boolean shootBall()
+    {
+        System.out.println("Ball Sensor: " + sensor.getShootSensor());
+        
+        return (true);  // ball shot!
     }
 }

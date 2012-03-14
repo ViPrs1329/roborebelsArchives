@@ -21,6 +21,7 @@ public class RRTracker
     ADXL345_I2C accel;
     
     RRShooter       shooter;
+    RRDIPSwitch     dipSwitch;
 
     public RRTracker(ADXL345_I2C a)
     {
@@ -230,6 +231,9 @@ public class RRTracker
                 
                 int     targetID = 0;
                 
+                RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
+                System.out.println("DIP Switch 0: " + RoboRebels.going_for_highest);
+                        
                 if (lowest && RoboRebels.going_for_highest)
                 {
                     targetID = RoboRebels.HIGHEST;

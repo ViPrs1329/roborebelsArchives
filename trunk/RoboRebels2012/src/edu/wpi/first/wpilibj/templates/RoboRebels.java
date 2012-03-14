@@ -92,6 +92,9 @@ public class RoboRebels extends IterativeRobot {
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
+    RRBallSensor        sensor;
+    RRDIPSwitch         dipSwitch;
+    
     //RRTracker tracker = new RRTracker();   // New objects shouldn't be created outside of a method.
     
     double              lastZValue;                         // last Z value for the dial on the joystick
@@ -159,9 +162,7 @@ public class RoboRebels extends IterativeRobot {
     static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
     static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;
-  
-    
-                                                // Might not need these - could use LOCK values above
+                                                  // Might not need these - could use LOCK values above
     static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired
     static boolean      elevation_lock = false; // elevation (up/down) target lock acquired
     static boolean      muzzle_velocity_lock = false;  // muzzle velocity is correct
@@ -219,6 +220,10 @@ public class RoboRebels extends IterativeRobot {
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker);
         tracker.setShooter(shooter);
+        
+        sensor.ballSensorInit(4, 5); // These are the values from last year.
+        
+        dipSwitch = new RRDIPSwitch(8, 11);  // These are the values from last year.
         
         System.out.println("Robot Ready");
     }
