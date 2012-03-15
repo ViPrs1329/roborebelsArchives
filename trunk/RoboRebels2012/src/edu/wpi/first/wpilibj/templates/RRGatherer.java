@@ -18,11 +18,6 @@ import edu.wpi.first.wpilibj.Victor;
  * 
  * Joystick Buttons/axis	Action	        This button layout is if the auto ball sensing is not functional
 
-2                       Loader Up	
-3	                Loader Down	        Also, this is in right hand config mode
-4	                
-10	                Spinner in	
-11	                Spinner out
 * 
  *
  * TODO:
@@ -66,7 +61,7 @@ public class RRGatherer
      * @param tbsc Top ball sensor channel
      * @param j Joystick
      */
-    RRGatherer(int sc, int bcc, int bbsc, int mbsc, int tbsc, Joystick j)
+    RRGatherer(int sc, int bcc, int bbsc, int mbsc, int tbsc)
     {
         spinner_channel = sc;
         ball_conveyer_channel = bcc;
@@ -74,10 +69,6 @@ public class RRGatherer
         middle_ball_sensor_channel = mbsc;
         top_ball_sensor_channel = tbsc;
         
-        if ( j != null)
-            js = j;
-        else
-            throw new NullPointerException("RRGatherer was passed a null Joystick object!!!");
         
         spinnerVictor = new Victor(spinner_channel);
         ballConveyerVictor = new Victor(ball_conveyer_channel);
@@ -101,58 +92,42 @@ public class RRGatherer
     {
         //System.out.println("RRGatherer::gatherInputStates()");
         
+        boolean     loader_up = RRButtonMap.getActionObject(RRButtonMap.LOADER_UP).valueOf(),
+                    loader_down = RRButtonMap.getActionObject(RRButtonMap.LOADER_DOWN).valueOf();
+        RRAction    aoSF = RRButtonMap.getActionObject(RRButtonMap.SPINNER_FORWARD),
+                    aoSR = RRButtonMap.getActionObject(RRButtonMap.SPINNER_REVERSED);
+        
+        
         // Get conveyer button state
-        if ( js.getRawButton(RRButtonMap.LOADER_UP) && !js.getRawButton(RRButtonMap.LOADER_DOWN) )
+        if ( loader_up && !loader_down )
         {
             conveyerSpeed = CONVEYER_SPEED;
         }
-        else if ( js.getRawButton(RRButtonMap.LOADER_DOWN) && !js.getRawButton(RRButtonMap.LOADER_UP) )
+        else if ( loader_down && !loader_up )
         {
             conveyerSpeed = -1.0 * CONVEYER_SPEED;
         }
-        else if ( !js.getRawButton(RRButtonMap.LOADER_UP) && !js.getRawButton(RRButtonMap.LOADER_DOWN) )
+        else if ( !loader_up && !loader_down )
         {
             conveyerSpeed = 0.0;
         }
         
         
-        // Check for spinner button state
-        if ( js.getRawButton(RRButtonMap.SPINNER) && !spinnerButtonPressed )
+        if ( aoSF.getAxisState() <= 1.0 && aoSF.getAxisState() > 0.0 )
         {
-            if ( spinnerState == 0 )
-            {
-                spinnerSpeed = SPINNER_SPEED;
-                spinnerState = 1;
-            }
-            else if ( spinnerState == 1 )
-            {
-                spinnerSpeed = -1.0 * SPINNER_SPEED;
-                spinnerState = 0;
-            }
-            /*
-            else if ( spinnerState == 1 )
-            {
-                spinnerSpeed = -1.0 * SPINNER_SPEED;
-                spinnerState = 2;
-            }
-            else if ( spinnerState == 2 )
-            {
-                spinnerSpeed = 0.0;
-                spinnerState = 0;
-            }
-            * 
-            */
-            
-            spinnerButtonPressed = true;
+            // Left trigger pushed, spin forward
+            spinnerSpeed = SPINNER_SPEED;
         }
-        else if ( !js.getRawButton(RRButtonMap.SPINNER) )
+        else if ( aoSR.getAxisState() >= -1.0 && aoSR.getAxisState() < 0.0 )
         {
-            spinnerButtonPressed = false;
+            spinnerSpeed = -1.0 * SPINNER_SPEED;
+        }
+        else if ( aoSF.getAxisState() == 0.0 || aoSR.getAxisState() == 0.0 )
+        {
+            spinnerSpeed = 0.0;
         }
         
-        //System.out.println("RRGatherer::gatherInputStates - CS: " + conveyerSpeed + " | SS: " + spinnerSpeed);
         
-        // Check ball sensors ...
     }
     
     

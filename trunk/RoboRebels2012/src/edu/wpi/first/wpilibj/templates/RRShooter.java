@@ -77,7 +77,7 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js, RRTracker t, RRBallSensor ballSensor)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
@@ -90,10 +90,6 @@ public class RRShooter
         
         shootingButtonPressed = false;      // indicates if the 
         
-        if ( js != null )
-            shootingJoystick = js;
-        else
-            throw new NullPointerException("RRShooter was passed a null Joystick object!");
         
         
         if ( t != null )
@@ -162,6 +158,9 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
+        RRAction aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED);
+        boolean  shooterButtonState = aoS.getButtonState();
+        
         RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
         //RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
         System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
@@ -170,12 +169,14 @@ public class RRShooter
         
         
         // Spin up if trigger is pressed (button 1)
-        if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
+        //if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
+        if ( shooterButtonState && !shootingButtonPressed )
         {
             System.out.println("Trigger");
             shootingWheelState = !shootingWheelState;
         }
-        else if ( !shootingJoystick.getRawButton(RRButtonMap.SHOOT) )
+        //else if ( !shootingJoystick.getRawButton(RRButtonMap.SHOOT) )
+        else if ( !shooterButtonState )
         {
             shootingButtonPressed = false;
         }
@@ -417,7 +418,8 @@ public class RRShooter
     
     private double getTransformedZValue()
     {
-        return MAX_SHOOTING_SPEED * (shootingJoystick.getZ() + 1.0) / 2.0;
+        RRAction        aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED);
+        return MAX_SHOOTING_SPEED * (aoS.js.getZ() + 1.0) / 2.0;
     }
     
         /**

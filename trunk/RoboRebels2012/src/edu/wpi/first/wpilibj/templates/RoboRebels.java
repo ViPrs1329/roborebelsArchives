@@ -1,4 +1,3 @@
-
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) FIRST 2008. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -22,17 +21,17 @@
  * 
  * Axis
  * 
- *  ¥1: Left Stick X Axis
+ *  ´1: Left Stick X Axis
         -Left:Negative ; Right: Positive
-    ¥2: Left Stick Y Axis
+    ´2: Left Stick Y Axis
         -Up: Negative ; Down: Positive
-    ¥3: Triggers
+    ´3: Triggers
         -Left: Positive ; Right: Negative
-    ¥4: Right Stick X Axis
+    ´4: Right Stick X Axis
         -Left: Negative ; Right: Positive
-    ¥5: Right Stick Y Axis
+    ´5: Right Stick Y Axis
         -Up: Negative ; Down: Positive
-    ¥6: Directional Pad (Not recommended, buggy)
+    ´6: Directional Pad (Not recommended, buggy)
 
  * 
  */
@@ -81,8 +80,8 @@ public class RoboRebels extends IterativeRobot {
     // Declare a variable to use to access the driver station object
     DriverStation       m_ds;                   // driver station object
     static DriverStationLCD    m_dsLCD;                // driver station LCD object
-    Joystick            m_rightStick;		// joystick 1 (arcade stick or right tank stick)
-    Joystick            m_leftStick;		// joystick 2 (tank left stick)
+    Joystick            m_rightStick;           // joystick 1 (arcade stick or right tank stick)
+    Joystick            m_leftStick;            // joystick 2 (tank left stick)
     Joystick            m_xboxStick;
     PWM                 currentPWM;
     RRDrive             drive;
@@ -94,6 +93,7 @@ public class RoboRebels extends IterativeRobot {
     RRTracker           tracker;
     RRBallSensor        sensor;
     RRDIPSwitch         dipSwitch;
+    RRButtonMap         buttonMap;
     
     //RRTracker tracker = new RRTracker();   // New objects shouldn't be created outside of a method.
     
@@ -202,7 +202,8 @@ public class RoboRebels extends IterativeRobot {
         m_xboxStick = new Joystick(3);
         System.out.println("Joysticks set");
 
-        RRButtonMap.setController("joystick");
+        buttonMap = new RRButtonMap(m_leftStick, m_rightStick, m_xboxStick);
+        buttonMap.setControllers();
         System.out.println("Button map");        
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         System.out.println("accel");
@@ -210,21 +211,23 @@ public class RoboRebels extends IterativeRobot {
         drive = new RRDrive(m_rightStick, 2, 1);
         System.out.println("Drive");
         
-        gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL, m_rightStick);
+        gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
         System.out.println("Gatherer");
-        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
-        System.out.println("Arm");
+        
         
         dipSwitch = new RRDIPSwitch(7, 10);  // These are the values from last year.
         
         tracker = new RRTracker(accel, dipSwitch);
         System.out.println("Tracker");
         
+        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, tracker);
+        System.out.println("Arm");
+        
         sensor = new RRBallSensor();
         sensor.ballSensorInit(6, 4); // These are the values from last year.
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker, sensor);
+                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor);
         tracker.setShooter(shooter);
         
          

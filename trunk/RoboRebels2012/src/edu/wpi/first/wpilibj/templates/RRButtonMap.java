@@ -1,5 +1,8 @@
 package edu.wpi.first.wpilibj.templates;
 
+
+
+
 /**
  * This class will store data about the button map setup
  * 
@@ -75,34 +78,98 @@ Right trigger           Shoot on, off
  * @author dmw
  */
 
+import com.sun.squawk.util.SquawkHashtable;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class RRButtonMap 
 {
-    private class RRAction
-    {
-        int         button_map;
-        Joystick    joystick;
-    }
+    static int      SHOOTER_ENABLED = 1,
+                    LOADER_UP = 3,
+                    LOADER_DOWN = 4,
+                    LAZY_SUSAN_LEFT = 5,
+                    LAZY_SUSAN_RIGHT = 6,
+                    TILT_UP = 7,
+                    TILT_DOWN = 8,
+                    BRIDGE_ARM_DOWN = 9,
+                    BRIDGE_ARM_UP = 10,
+                    SPINNER_FORWARD = 11,
+                    //SPINNER_DISABLED = 12,
+                    SPINNER_REVERSED = 13,
+                    TRACK_TARGET = 14,
+                    CANNON_SPEED = 15,
+                    ARCADE_STICK_X = 16,
+                    ARCADE_STICK_Y = 17,
+                    CONTRACT_SHOOTER = 18;
     
-    static int      SHOOT,
-                    LOADER_UP,
-                    LOADER_DOWN,
-                    LAZY_SUSAN_LEFT,
-                    LAZY_SUSAN_RIGHT,
-                    TILT_UP,
-                    TILT_DOWN,
-                    BRIDGE_ARM_DOWN,
-                    BRIDGE_ARM_UP,
-                    SPINNER,
-                    TRACK_TARGET;
+    Joystick        lJoystick, rJoystick, xboxController;
+    
+    static SquawkHashtable    actionList;
 
 
     RRButtonMap(Joystick j1, Joystick j2, Joystick j3)
     {
+        actionList = new SquawkHashtable();
         
+        if ( j1 != null )
+            lJoystick = j1;
+        else
+            throw new NullPointerException("RRButtonMap was passed a null Joystick object (j1)! ");
+        
+        if ( j2 != null )
+            rJoystick = j2;
+        else
+            throw new NullPointerException("RRButtonMap was passed a null Joystick object (j2)! ");
+        
+        if ( j3 != null )
+            xboxController = j3;
+        else
+            throw new NullPointerException("RRButtonMap was passed a null Joystick object (j3)! ");
+        
+        setControllers();
     }
+    
+     
+    public void setControllers()
+    {
+        insertAction(ARCADE_STICK_X, -1, 1, xboxController );
+        insertAction(ARCADE_STICK_Y, -1, 2, xboxController );
+        insertAction(SHOOTER_ENABLED, 3, -1, xboxController);
+        //insertAction(SHOOTER_ENABLED, 1,  -1, rJoystick);
+        insertAction(LOADER_UP, 4,  -1, xboxController);
+        insertAction(LOADER_DOWN, 1,  -1, xboxController);
+        insertAction(SPINNER_FORWARD, -1, 3, xboxController); // RT
+        insertAction(SPINNER_REVERSED, -1,  3, xboxController); // LT
+        insertAction(LAZY_SUSAN_LEFT, 4,  -1, rJoystick);
+        insertAction(LAZY_SUSAN_RIGHT, 5,  -1, rJoystick);
+        insertAction(TILT_UP, 3,  -1, rJoystick);
+        insertAction(TILT_DOWN, 2,  -1, rJoystick);
+        insertAction(CANNON_SPEED, -1, -1, rJoystick); // Z axis on joystick
+        insertAction(BRIDGE_ARM_DOWN, -1, 2, rJoystick); // Up on joystick
+        insertAction(BRIDGE_ARM_UP, -1, 2, rJoystick); // Down on joystick
+        insertAction(CONTRACT_SHOOTER, 6, -1, rJoystick);
+        insertAction(TRACK_TARGET, 11, -1, rJoystick);
+        
+        // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top
+        // warns not to use the DPad.
+        
+        // Start and back at the same time causes an emergency backwards cannon pulse
+    }
+    
+    public void insertAction(int actionID, int buttonID, int axisID, Joystick js)
+    {
+        actionList.put(Integer.valueOf(actionID), new RRAction(actionID, buttonID, axisID, js));
+    }
+    
+    
+    public static RRAction getActionObject(int k)
+    {
+        Object  a = RRButtonMap.actionList.get(Integer.valueOf(k));
+        
+        return (RRAction) a;
+    }
+    
 
+    /*
     public static void setController(String type) {
         if (type.equals("joystick")) {
             SHOOT = 1;
@@ -121,4 +188,6 @@ public class RRButtonMap
             
         }
     }
+    * 
+    */
 }
