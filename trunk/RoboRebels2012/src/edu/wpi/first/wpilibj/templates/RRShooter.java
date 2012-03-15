@@ -162,7 +162,6 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        RRAction          ao;
         RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
         //RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
         System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
@@ -171,15 +170,12 @@ public class RRShooter
         
         
         // Spin up if trigger is pressed (button 1)
-        //if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
-        
-        ao = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED);
-        if ( ao.valueOf() && !shootingButtonPressed )
+        if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         {
             System.out.println("Trigger");
             shootingWheelState = !shootingWheelState;
         }
-        else if ( !ao.valueOf() )
+        else if ( !shootingJoystick.getRawButton(RRButtonMap.SHOOT) )
         {
             shootingButtonPressed = false;
         }
@@ -191,15 +187,15 @@ public class RRShooter
         }
         
         
-        ao = RRButtonMap.getActionObject(RRButtonMap.TILT_UP);
-        if ( ao.valueOf() )
+        // Check for tilting button up, down (button 6, 7)
+        if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         {
             System.out.println("Tilt up");
             
             tiltSpeed = -1.0 * TILT_SPEED;
             
         }
-        else if ( RRButtonMap.getActionObject(RRButtonMap.TILT_UP).valueOf() )
+        else if ( shootingJoystick.getRawButton(RRButtonMap.TILT_DOWN) )
         {
             if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
             {        
@@ -380,6 +376,7 @@ public class RRShooter
             RoboRebels.printLCD(6, "                           ");   // Clear the display
     }
     
+   
     
     /**
      * This is the general shoot periodic method for shooting functions.
