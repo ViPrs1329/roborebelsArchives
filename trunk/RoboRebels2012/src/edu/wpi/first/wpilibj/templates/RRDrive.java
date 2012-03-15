@@ -24,8 +24,7 @@ public class RRDrive implements MotorSafety
     private     MotorSafetyHelper       motorSafetyHelper;
     
     private     boolean                 arcade;
-    private     Joystick                leftJoystick,
-                                        rightJoystick;
+    
     private     Jaguar                  leftMotor,
                                         rightMotor;
     
@@ -38,47 +37,9 @@ public class RRDrive implements MotorSafety
      * @param leftChannel
      * @param rightChannel 
      */
-    public RRDrive(Joystick js, int leftChannel, int rightChannel)
+    public RRDrive(int leftChannel, int rightChannel)
     {
         //System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
-        
-        if ( js != null )
-            leftJoystick = js;
-        else
-        {
-            throw new NullPointerException("RRDrive was passed a null Joystick object!");
-        }
-        
-        setupDrive(leftChannel, rightChannel);
-        
-        setupMotorSafety();
-    }
-    
-    
-    /**
-     * 
-     * @param ljs
-     * @param rjs
-     * @param leftChannel
-     * @param rightChannel 
-     */
-    public RRDrive(Joystick ljs, Joystick rjs, int leftChannel, int rightChannel)
-    {
-        //System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
-        
-        if ( ljs != null )
-            leftJoystick = ljs;
-        else
-        {
-            throw new NullPointerException("RRDrive was passed a null Joystick object (ljs)! ");
-        }
-        
-        if ( rjs != null )
-            rightJoystick = rjs;
-        else
-        {
-            throw new NullPointerException("RRDrive was passed a null Joystick object (rjs)!");
-        }
         
         setupDrive(leftChannel, rightChannel);
         
@@ -104,11 +65,17 @@ public class RRDrive implements MotorSafety
      */
     public void drive(boolean tankDrive)
     {
-        double l_xVal  = leftJoystick.getRawAxis(1);
-        double l_yVal  = leftJoystick.getRawAxis(2);
-
-        double r_xVal  = leftJoystick.getRawAxis(4);
-        double r_yVal  = leftJoystick.getRawAxis(5);
+//        double l_xVal  = leftJoystick.getRawAxis(1);
+//        double l_yVal  = leftJoystick.getRawAxis(2);
+//
+//        double r_xVal  = leftJoystick.getRawAxis(4);
+//        double r_yVal  = leftJoystick.getRawAxis(5);
+        
+        RRAction    aoX = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_X),
+                    aoY = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_Y);
+        
+        double l_xVal = aoX.getAxisState();
+        double l_yVal = aoY.getAxisState();
 
         //System.out.println("drive()");
            
@@ -123,15 +90,15 @@ public class RRDrive implements MotorSafety
             l_yVal = 0;
         }
 
-        if (Math.abs(r_xVal) < .13)
-        {
-            r_xVal = 0;
-        }
-
-        if (Math.abs(r_yVal) < .13)
-        {
-            r_yVal = 0;
-        }
+//        if (Math.abs(r_xVal) < .13)
+//        {
+//            r_xVal = 0;
+//        }
+//
+//        if (Math.abs(r_yVal) < .13)
+//        {
+//            r_yVal = 0;
+//        }
         
         
         
@@ -155,23 +122,23 @@ public class RRDrive implements MotorSafety
             l_yVal = (l_yVal+.13)/(1-.13);
         }
 
-        if (r_xVal > 0)
-        {
-            r_xVal = (r_xVal-.13)/(1-.13);
-        }
-        else if (r_xVal < 0)
-        {
-            r_xVal = (r_xVal+.13)/(1-.13);
-        }
-
-        if (r_yVal > 0)
-        {
-            r_yVal = (r_yVal-.13)/(1-.13);
-        }
-        else if (r_yVal < 0)
-        {
-            r_yVal = (r_yVal+.13)/(1-.13);
-        }
+//        if (r_xVal > 0)
+//        {
+//            r_xVal = (r_xVal-.13)/(1-.13);
+//        }
+//        else if (r_xVal < 0)
+//        {
+//            r_xVal = (r_xVal+.13)/(1-.13);
+//        }
+//
+//        if (r_yVal > 0)
+//        {
+//            r_yVal = (r_yVal-.13)/(1-.13);
+//        }
+//        else if (r_yVal < 0)
+//        {
+//            r_yVal = (r_yVal+.13)/(1-.13);
+//        }
            
         
         if (!tankDrive)

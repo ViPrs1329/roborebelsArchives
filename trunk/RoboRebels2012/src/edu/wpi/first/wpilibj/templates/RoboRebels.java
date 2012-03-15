@@ -208,7 +208,7 @@ public class RoboRebels extends IterativeRobot {
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         System.out.println("accel");
         
-        drive = new RRDrive(m_rightStick, 2, 1);
+        drive = new RRDrive(2, 1);
         System.out.println("Drive");
         
         gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
