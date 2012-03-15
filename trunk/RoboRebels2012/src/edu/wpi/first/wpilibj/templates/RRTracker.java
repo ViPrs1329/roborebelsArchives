@@ -23,7 +23,7 @@ public class RRTracker
     RRShooter       shooter;
     RRDIPSwitch     dipSwitch;
 
-    public RRTracker(ADXL345_I2C a)
+    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     {
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
         cam = AxisCamera.getInstance();
@@ -36,6 +36,9 @@ public class RRTracker
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
         //System.out.println("Criteria Collection ownage 3");
         targets = new Target[4];
+        
+        dipSwitch = the_dipswitch;
+        
         System.out.println("Targets");
         //accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         accel = a;
@@ -233,38 +236,42 @@ public class RRTracker
                 
                 RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
                 System.out.println("DIP Switch 0: " + RoboRebels.going_for_highest);
-                        
+                    
+                double display_distance = ((int)(distance * 100))/100.0;
+                
                 if (lowest && RoboRebels.going_for_highest)
                 {
                     targetID = RoboRebels.HIGHEST;
-                    RoboRebels.printLCD(5, "Dist: " + distance + " to Highest" );
+                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Highest" );
                 }
                 else if (lowest && !RoboRebels.going_for_highest)
                 {
                     targetID = RoboRebels.LOWEST;
-                    RoboRebels.printLCD(5, "Dist: " + distance + " to Lowest" );
+                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Lowest" );
                 }
                 else if (!lowest)
                 {
                     targetID = RoboRebels.MIDDLE;
-                    RoboRebels.printLCD(5, "Dist: " + distance + " to Middle" );
+                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Middle" );
                 }
                    
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
+                
+                angle = 55.0;
                     
                 System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + " Theta: " + angle + " Tilt_angle: " + RoboRebels.tilt_angle);
                 
                 if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY/2)      
-                {   if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY)      
+                {   if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY*3)      
                         RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far to left
                     else
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
                 }
                 else if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY/2)
                 {
-                    if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY)
+                    if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY*3)
                         RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;   // LazySusan meeds to move far to left
                     else
                         RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
@@ -290,14 +297,14 @@ public class RRTracker
                     
                     if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY/2))
                     {
-                        if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY))
+                        if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY*3))
                             RoboRebels.target_elevation = RoboRebels.FAR_UP;  // Shooter needs to tilt far up
                         else
                             RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
                     }
                     else if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY/2))    
                     {
-                        if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY))
+                        if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY*3))
                             RoboRebels.target_elevation = RoboRebels.FAR_DOWN;
                         else
                              RoboRebels.target_elevation = RoboRebels.DOWN;                        

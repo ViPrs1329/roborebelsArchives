@@ -77,12 +77,14 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js, RRTracker t)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, Joystick js, RRTracker t, RRBallSensor ballSensor)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
         tltv_channel = tltvc;
         tltls_channel = tltlsc;
+        
+        sensor = ballSensor;
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
@@ -161,7 +163,7 @@ public class RRShooter
     private void gatherInputStates()
     {
         RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
-        RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
+        //RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
         System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
         System.out.println("Z: " + this.getTransformedZValue());
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
@@ -283,6 +285,8 @@ public class RRShooter
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
                 tracking = true;
             }
+             
+            System.out.println("Tilt value:" + RoboRebels.target_elevation); 
            
             if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
             {
@@ -290,10 +294,22 @@ public class RRShooter
                 tiltSpeed = -1.0 * TILT_SPEED * 0.5;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
             }
+            else if (RoboRebels.target_elevation == RoboRebels.FAR_UP)  // Track target elevation (up/down)
+            {
+                System.out.println("Auto Tilt Far Up"); 
+                tiltSpeed = -1.0 * TILT_SPEED * 0.75;
+                RoboRebels.elevation_lock = false;         // No elevation target lock
+            }
             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
                 tiltSpeed = 1.0 * TILT_SPEED * 0.5;
+                RoboRebels.elevation_lock = false;         // No elevation target lock
+           }
+            else if (RoboRebels.target_elevation == RoboRebels.FAR_DOWN)
+            {
+                System.out.println("Auto Tilt Far Down"); 
+                tiltSpeed = 1.0 * TILT_SPEED * 0.75;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
            }
             else if (RoboRebels.target_elevation == RoboRebels.LOCK)
@@ -344,7 +360,10 @@ public class RRShooter
                 tracking + " lazySusanSpeed: " + lazySusanSpeed + " tiltSpeed: " + tiltSpeed);
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "All Locked!                ");   
+       {
+            RoboRebels.printLCD(6, "All Locked!                ");  
+            shootBall();
+       }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
             RoboRebels.printLCD(6, "Azimuth & Speed Locked!    "); 
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)

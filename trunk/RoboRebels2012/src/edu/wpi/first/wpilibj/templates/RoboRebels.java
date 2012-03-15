@@ -143,22 +143,22 @@ public class RoboRebels extends IterativeRobot {
     final static int    HOLD = -3; 
     final static int    MIN_TILT_ANGLE = 46; 
     
-    final static int    PIXEL_ACCURACY = 20;     // Used by RRTRacker to determne when Locked.
+    final static int    PIXEL_ACCURACY = 16;     // Used by RRTRacker to determne when Locked.
     final static int    ANGLE_ACCURACY = 6;     // Used by RRTRacker to determne when Locked.
     
     final static int    LOWEST = 0;     // Lowest basket target
     final static int    MIDDLE = 1;     // Middle basket target
     final static int    HIGHEST = 2;    // Highest basket target
     
-    static boolean      going_for_highest = true;   // When locked on a center target, shoot for highest instead of lowest basket target
+    static boolean      going_for_highest = false;   // When locked on a center target, shoot for highest instead of lowest basket target
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
     static int          target_muzzle_velocity = HOLD; //muzzle velocity in meters per second
     
-    static double       muzzle_velocity = 8.5;  // Actual muzzle velocity in meters per second
+    static double       muzzle_velocity = 7.5;  // Actual muzzle velocity 8.5 meters per second
 
-    final static int    NUMBER_OF_PREVIOUS = 50;
+    final static int    NUMBER_OF_PREVIOUS = 20;
     static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
     static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;
@@ -215,16 +215,19 @@ public class RoboRebels extends IterativeRobot {
         arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, m_rightStick);
         System.out.println("Arm");
         
-        tracker = new RRTracker(accel);
+        dipSwitch = new RRDIPSwitch(7, 10);  // These are the values from last year.
+        
+        tracker = new RRTracker(accel, dipSwitch);
         System.out.println("Tracker");
         
-        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker);
+        sensor = new RRBallSensor();
+        sensor.ballSensorInit(6, 4); // These are the values from last year.
+        
+        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
+                TILT_LIMIT_SWITCH_CHANNEL, m_rightStick, tracker, sensor);
         tracker.setShooter(shooter);
         
-        sensor.ballSensorInit(4, 5); // These are the values from last year.
-        
-        dipSwitch = new RRDIPSwitch(8, 11);  // These are the values from last year.
-        
+         
         System.out.println("Robot Ready");
     }
 
