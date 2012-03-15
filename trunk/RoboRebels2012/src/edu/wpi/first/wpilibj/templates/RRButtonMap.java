@@ -83,6 +83,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class RRButtonMap 
 {
+    /************  NOTE:  THESE ARE NO LONGER BUTTON VARIABLES, BUT ACTION IDs!!! ********/
     static int      SHOOTER_ENABLED = 1,
                     LOADER_UP = 3,
                     LOADER_DOWN = 4,

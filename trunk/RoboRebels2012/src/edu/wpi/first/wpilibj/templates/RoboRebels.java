@@ -197,14 +197,15 @@ public class RoboRebels extends IterativeRobot {
         
         m_dsLCD = DriverStationLCD.getInstance();
 
-        m_leftStick = new Joystick(1);
-        m_rightStick = new Joystick(2);
-        m_xboxStick = new Joystick(3);
+        m_leftStick     = new Joystick(1);
+        m_rightStick    = new Joystick(2);
+        m_xboxStick     = new Joystick(3);
         System.out.println("Joysticks set");
 
         buttonMap = new RRButtonMap(m_leftStick, m_rightStick, m_xboxStick);
         buttonMap.setControllers();
-        System.out.println("Button map");        
+        System.out.println("Button map");   
+        
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         System.out.println("accel");
         
@@ -227,7 +228,8 @@ public class RoboRebels extends IterativeRobot {
         sensor.ballSensorInit(6, 4); // These are the values from last year.
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor);
+                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor);
+        
         tracker.setShooter(shooter);
         
          

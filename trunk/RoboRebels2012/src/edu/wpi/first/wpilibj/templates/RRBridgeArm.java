@@ -6,7 +6,6 @@ package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.ADXL345_I2C;
 
 /**
  *
@@ -100,11 +99,7 @@ public class RRBridgeArm
         }
         * 
         */
-        
-        RRAction    aoBD =  RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN),
-                    aoBU =  RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_UP);
-        
-        double      armAxis = aoBD.getAxisState();
+        double      armAxis = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getAxisState();
         
         if ( armAxis > ARM_DEAD_ZONE && armAxis < (-1.0 * ARM_DEAD_ZONE) )
         {

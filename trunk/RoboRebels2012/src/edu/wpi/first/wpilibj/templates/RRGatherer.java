@@ -94,9 +94,8 @@ public class RRGatherer
         
         boolean     loader_up = RRButtonMap.getActionObject(RRButtonMap.LOADER_UP).valueOf(),
                     loader_down = RRButtonMap.getActionObject(RRButtonMap.LOADER_DOWN).valueOf();
-        RRAction    aoSF = RRButtonMap.getActionObject(RRButtonMap.SPINNER_FORWARD),
-                    aoSR = RRButtonMap.getActionObject(RRButtonMap.SPINNER_REVERSED);
-        
+        double      spinnerForward = RRButtonMap.getActionObject(RRButtonMap.SPINNER_FORWARD).getAxisState(),
+                    spinnerReverse = RRButtonMap.getActionObject(RRButtonMap.SPINNER_REVERSED).getAxisState();
         
         // Get conveyer button state
         if ( loader_up && !loader_down )
@@ -113,16 +112,16 @@ public class RRGatherer
         }
         
         
-        if ( aoSF.getAxisState() <= 1.0 && aoSF.getAxisState() > 0.0 )
+        if ( spinnerForward <= 1.0 && spinnerForward > 0.0 )
         {
             // Left trigger pushed, spin forward
             spinnerSpeed = SPINNER_SPEED;
         }
-        else if ( aoSR.getAxisState() >= -1.0 && aoSR.getAxisState() < 0.0 )
+        else if ( spinnerReverse >= -1.0 && spinnerReverse < 0.0 )
         {
             spinnerSpeed = -1.0 * SPINNER_SPEED;
         }
-        else if ( aoSF.getAxisState() == 0.0 || aoSR.getAxisState() == 0.0 )
+        else if ( spinnerForward == 0.0 || spinnerReverse == 0.0 )
         {
             spinnerSpeed = 0.0;
         }

@@ -158,8 +158,8 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        RRAction aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED);
-        boolean  shooterButtonState = aoS.getButtonState();
+        boolean LSLState, LSRState, TUState, TDState, TTState;
+        boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
         RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
         //RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
@@ -168,7 +168,7 @@ public class RRShooter
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
         
         
-        // Spin up if trigger is pressed (button 1)
+        // Spin up if trigger is pressed 
         //if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         if ( shooterButtonState && !shootingButtonPressed )
         {
@@ -188,15 +188,18 @@ public class RRShooter
         }
         
         
-        // Check for tilting button up, down (button 6, 7)
-        if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
+        // Check for tilting button up, down 
+        //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
+        TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
+        TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
+        if ( TUState )
         {
             System.out.println("Tilt up");
             
             tiltSpeed = -1.0 * TILT_SPEED;
             
         }
-        else if ( shootingJoystick.getRawButton(RRButtonMap.TILT_DOWN) )
+        else if ( TDState )
         {
             if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
             {        
@@ -217,30 +220,37 @@ public class RRShooter
                 tiltSpeed = 0.0;              
             }
         }
-        else if ( !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) && !shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
+        else if ( !TUState && !TDState )
         {
             tiltSpeed = 0.0;
         }
         
-        // Check for lazy susan button left, right (button 4, 5)
-        if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
+        
+        LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
+        LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
+        
+        // Check for lazy susan button left, right 
+        //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
+        if ( LSLState )
         {
             System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
             lazySusanSpeed = 1.0 * LS_SPEED;
         }
-        else if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
+        else if ( LSRState )
         {
             System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
             lazySusanSpeed = -1.0 * LS_SPEED;
         }
-        else if ( !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) && !shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_RIGHT) )
+        else if ( !LSLState && !LSRState )
         {
             lazySusanSpeed = 0.0;
         }
         
      
         
-        if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
+        TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
+        //if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
+        if ( TTState )
         {
             System.out.println("Track Target Button Pressed");
                         
@@ -439,5 +449,15 @@ public class RRShooter
         System.out.println("Ball Sensor: " + sensor.getShootSensor());
         
         return (true);  // ball shot!
+    }
+    
+    public void retractShooter()
+    {
+        
+    }
+    
+    public void expandShooter()
+    {
+        
     }
 }
