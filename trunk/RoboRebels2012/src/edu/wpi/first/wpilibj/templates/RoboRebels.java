@@ -143,8 +143,15 @@ public class RoboRebels extends IterativeRobot {
     final static int    HOLD = -3; 
     final static int    MIN_TILT_ANGLE = 46; 
     
-    final static int    PIXEL_ACCURACY = 16;     // Used by RRTRacker to determne when Locked.
-    final static int    ANGLE_ACCURACY = 6;     // Used by RRTRacker to determne when Locked.
+    final static int    AT_RIGHT_LIMIT = 1;
+    final static int    AT_LEFT_LIMIT = -1;
+    final static int    OK = 0;
+    
+    static double       angle_position = 0.0;     // Initial position of LS.
+    static double       time_last_update = 0;     // Timestamp of last position update       
+    
+    final static int    PIXEL_ACCURACY = 16;      // Used by RRTRacker to determne when Locked.
+    final static int    ANGLE_ACCURACY = 6;       // Used by RRTRacker to determne when Locked.
     
     final static int    LOWEST = 0;     // Lowest basket target
     final static int    MIDDLE = 1;     // Middle basket target
@@ -232,6 +239,7 @@ public class RoboRebels extends IterativeRobot {
         
         tracker.setShooter(shooter);
         
+        time_last_update = Timer.getFPGATimestamp();
          
         System.out.println("Robot Ready");
     }

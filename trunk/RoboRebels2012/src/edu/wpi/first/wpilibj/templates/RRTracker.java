@@ -282,8 +282,9 @@ public class RRTracker
                 }
                 else
                 {
-                    RoboRebels.target_azimuth = RoboRebels.LOCK;   // Don't move, we are facing target!
-                    shooter.stopLazySusan();                     // Immediately stop LazySusan to prevent overshoot
+                    RoboRebels.target_azimuth = RoboRebels.LOCK; 
+                    RoboRebels.azimuth_lock = true;                 // Don't move, we are facing target!
+                    shooter.stopLazySusan();                        // Immediately stop LazySusan to prevent overshoot
                 }
                 if (angle == 0.0)  // Check to see if there is a valid angle
                 {

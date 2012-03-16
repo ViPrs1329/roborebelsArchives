@@ -5,10 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import com.sun.squawk.util.MathUtils;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.*;
 
 /**
  *
@@ -45,6 +42,7 @@ public class RRShooter
 
     private     double          shootingWheelSpeed = 0.0;
     private     double          lazySusanSpeed = 0.0;
+    private     double          current_lazySusanSpeed = 0.0;
     private     double          tiltSpeed = 0.0;
     
     private     boolean         shootingWheelState;
@@ -416,9 +414,23 @@ public class RRShooter
     private void setShooterSpeeds()
     {
         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
-        lsVictor.set(lazySusanSpeed);
         System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
+        
+        int result = check_ls_position();    // Check for LS position before changing LS Speed.
+        
+        if ((lazySusanSpeed < 0.0) && result == RoboRebels.AT_LEFT_LIMIT)
+        {
+            System.out.println("LS Stopped at Left Limit");
+            //lazySusanSpeed = 0.0;
+        }
+        else if ((lazySusanSpeed > 0.0) && result == RoboRebels.AT_RIGHT_LIMIT)
+        {
+            System.out.println("LS Stopped at Right Limit");
+            //lazySusanSpeed = 0.0;
+        }   
+        lsVictor.set(lazySusanSpeed);
+        current_lazySusanSpeed = lazySusanSpeed;    // Stores current speed for next position calculation
     }
     
     /**
@@ -442,8 +454,13 @@ public class RRShooter
     public void stopLazySusan()
     {
         lazySusanSpeed = 0.0;
+        check_ls_position();
         lsVictor.set(0.0);
+        current_lazySusanSpeed = lazySusanSpeed;
+ 
         System.out.println("Halting LazySusan!");
+ 
+        
     }
     
     public boolean shootBall()
@@ -462,4 +479,32 @@ public class RRShooter
     {
         
     }
+    
+    public int check_ls_position()
+    {
+        
+        double calibration_factor = 1.0;  // converts lazySusanSpeed to angular velocity in degrees per tick
+                                          // Need to determine this value
+        
+        System.out.println("Checking Position...");
+        
+        double time_current = Timer.getFPGATimestamp();
+        
+        RoboRebels.angle_position += current_lazySusanSpeed * calibration_factor * (time_current - RoboRebels.time_last_update);
+        
+        RoboRebels.time_last_update = time_current;
+        
+        RoboRebels.printLCD(1, "LS Position: " + RRTracker.round(RoboRebels.angle_position)); 
+        
+        System.out.println("LS Position: " + RRTracker.round(RoboRebels.angle_position));
+        
+        int result = RoboRebels.OK;                 // Return indication if at either limit
+        if (RoboRebels.angle_position > 45.0)       // Make 80 degrees when done testing
+            result = RoboRebels.AT_RIGHT_LIMIT;
+        else if (RoboRebels.angle_position < -45.0) // Make -80 degrees when done testing
+            result = RoboRebels.AT_LEFT_LIMIT;
+       
+        return (result);
+    }
+    
 }
