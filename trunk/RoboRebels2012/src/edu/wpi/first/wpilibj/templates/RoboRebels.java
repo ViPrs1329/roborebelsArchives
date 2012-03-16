@@ -499,6 +499,7 @@ public class RoboRebels extends IterativeRobot {
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
         System.out.println("X Accel: " + axes.XAxis);
         System.out.println("Y Accel: " + axes.YAxis);
+        System.out.println("Z Accel: " + axes.ZAxis); 
         double yAxis = Math.min(1, axes.YAxis);
         yAxis = Math.max(-1, yAxis);
         return 180.0 * MathUtils.asin(yAxis) / 3.14159;

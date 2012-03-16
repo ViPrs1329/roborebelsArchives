@@ -15,17 +15,17 @@ public class RRBallSensor {
  
     public void ballSensorInit(int i, int j)
     {
-        shootBallSensor   = new DigitalInput(i);
+        shootBallSensor = new DigitalInput(i);
         loadBallSensor = new DigitalInput(j);
     }
    
     //returns the values of the ball sensors
     
     public boolean getShootSensor() {
-        return shootBallSensor.get();
+        return !shootBallSensor.get();  // True if ball is there, false if no ball
     }
     public boolean getLoadSensor() {
-        return loadBallSensor.get();
+        return !loadBallSensor.get();   // True if ball is there, false if no ball
     }
 
 }

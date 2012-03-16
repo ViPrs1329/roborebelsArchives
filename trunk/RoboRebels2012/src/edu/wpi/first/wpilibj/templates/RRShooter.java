@@ -134,14 +134,15 @@ public class RRShooter
         else if ( targetID == RoboRebels.HIGHEST)
              y = yHigher;
                  
-        System.out.println("d: " + distance + "v: " + muzzleVelocity + "y: " + y + "x: " + xDistance);
+        System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
+                "y: " + y + "x: " + xDistance);
 
         double tempSqrtEquation = (muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
                          (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance);
         
         if (tempSqrtEquation > 0)
         {
-       //     System.out.println("tempSqrtEq: " + tempSqrtEquation);
+       //     System.out.println("tempSqrtEq: " + RRTracker.round2(tempSqrtEquation));
             theta = MathUtils.atan(((muzzleVelocity*muzzleVelocity)+(Math.sqrt(tempSqrtEquation)))/(gravity*xDistance));
         }
         else
@@ -161,10 +162,10 @@ public class RRShooter
         boolean LSLState, LSRState, TUState, TDState, TTState;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
-        RoboRebels.printLCD(3, "SS: " + shootingWheelJaguar.get());
-        //RoboRebels.printLCD(4, "Z:" + this.getTransformedZValue());
-        System.out.println("Shooting Speed: " + shootingWheelJaguar.get());
-        System.out.println("Z: " + this.getTransformedZValue());
+        RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()));
+        //RoboRebels.printLCD(4, "Z:" + RRTracker.round2(this.getTransformedZValue()));
+        System.out.println("Shooting Speed: " + RRTracker.round2(shootingWheelJaguar.get()));
+        System.out.println("Z: " + RRTracker.round2(this.getTransformedZValue()));
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
         
         
@@ -367,12 +368,13 @@ public class RRShooter
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
         }
         
-        System.out.println("Target_Azimuth:" + RoboRebels.target_azimuth + " Targeting: " +
-                tracking + " lazySusanSpeed: " + lazySusanSpeed + " tiltSpeed: " + tiltSpeed);
+        System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
+                tracking + " lazySusanSpeed: " + RRTracker.round2(lazySusanSpeed) + 
+                " tiltSpeed: " + RRTracker.round2(tiltSpeed));
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
-            RoboRebels.printLCD(6, "All Locked!                ");  
+            RoboRebels.printLCD(6, "All Locked! Fire When Ready!  ");  
             shootBall();
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
@@ -382,7 +384,7 @@ public class RRShooter
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
             RoboRebels.printLCD(6, "Elevation & Speed Locked!"); 
        else if (tracking) 
-            RoboRebels.printLCD(6, "Tracking Target            "); 
+            RoboRebels.printLCD(6, "Tracking Target...         "); 
        else 
             RoboRebels.printLCD(6, "                           ");   // Clear the display
     }
@@ -415,7 +417,7 @@ public class RRShooter
     {
         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
         lsVictor.set(lazySusanSpeed);
-        System.out.println("s: " + tiltSpeed);
+        System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
     }
     
@@ -446,7 +448,7 @@ public class RRShooter
     
     public boolean shootBall()
     {
-        System.out.println("Ball Sensor: " + sensor.getShootSensor());
+        System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
         
         return (true);  // ball shot!
     }

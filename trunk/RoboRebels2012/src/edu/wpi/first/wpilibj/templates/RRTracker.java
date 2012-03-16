@@ -229,15 +229,18 @@ public class RRTracker
                 
                 System.out.println("Target " + center_target_index + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
-                        " Height: " + r.boundingRectHeight + " Aspect: " + (double)r.boundingRectWidth/r.boundingRectHeight + 
-                        " Distance: " + distance);
+                        " Height: " + r.boundingRectHeight + 
+                        " Aspect: " + round2((double)r.boundingRectWidth/r.boundingRectHeight) + 
+                        " Distance: " + round(distance));
                 
                 int     targetID = 0;
                 
                 RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
                 System.out.println("DIP Switch 0: " + RoboRebels.going_for_highest);
                     
-                double display_distance = ((int)(distance * 100))/100.0;
+       //       double display_distance = ((int)(distance * 100))/100.0;
+                
+                double display_distance = round(distance);
                 
                 if (lowest && RoboRebels.going_for_highest)
                 {
@@ -261,7 +264,8 @@ public class RRTracker
                 
                 angle = 55.0;
                     
-                System.out.println("Muzzle Velocity: " + RoboRebels.muzzle_velocity + " Theta: " + angle + " Tilt_angle: " + RoboRebels.tilt_angle);
+                System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
+                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
                 if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY/2)      
                 {   if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY*3)      
@@ -370,10 +374,21 @@ public class RRTracker
     public double accelAngle() {
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
  //       System.out.println("X Accel: " + axes.XAxis);
- //       System.out.println("Y Accel: " + axes.YAxis);
+        System.out.println("Y Accel: " + axes.YAxis);
+        System.out.println("Z Accel: " + axes.ZAxis);
+        
+        // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
+        
         double yAxis = Math.min(1, axes.YAxis);
         yAxis = Math.max(-1, yAxis);
-
+        
+        double zAxis = Math.min(1, axes.ZAxis);
+        zAxis = Math.max(-1, zAxis);
+        
+        double another_angle = (180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+        
+        System.out.println("Accel Angle from Z Axis:" + round(another_angle));
+        
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
 
@@ -395,7 +410,79 @@ public class RRTracker
                 
         double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
         
-        RoboRebels.printLCD(4, "Tilt ang.: " + moving_average_angle);
+        RoboRebels.printLCD(4, "Tilt ang.: " + round(moving_average_angle));
+
+        return moving_average_angle;
+        
+    }
+    
+        public double new_accelAngle() {
+        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
+ //       System.out.println("X Accel: " + axes.XAxis);
+        System.out.println("Y Accel: " + axes.YAxis);
+        System.out.println("Z Accel: " + axes.ZAxis);
+        
+        // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
+        
+        double yAxis = axes.YAxis;
+        double zAxis = axes.ZAxis;
+        boolean update_moving_average = false;
+        double angle_from_y = 45.0;
+        double angle_from_z = 45.0;
+        double current_angle = 45.0;
+        
+        if ((yAxis < 1.0) && (yAxis > -1.0))  // Make sure in range for inverse sin operation
+        {
+               
+            // Need to subtract 90 degrees to return correct angle when
+            // accelerometer is mounted on back of shooter
+            
+            angle_from_y = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
+
+            System.out.println("Accel Angle from X Axis:" + round(angle_from_y));
+ 
+            update_moving_average = true;
+        }
+        
+                if ((zAxis < 1.0) && (zAxis > -1.0))  // Make sure in range for inverse sin operation
+        {           
+            angle_from_z = (180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+
+            System.out.println("Accel Angle from Z Axis:" + round(angle_from_z));
+
+            update_moving_average = true;
+        }
+                
+        if ((angle_from_y > 60.0) && (angle_from_z > 60.0))
+            current_angle = angle_from_z;                         // choose Z as Y is unreliable
+        else if ((angle_from_y < 60.0) && (angle_from_z < 60.0))
+            current_angle = (angle_from_y + angle_from_z) / 2.0;  // average Y and Z readings
+        else if ((angle_from_y > 0) && (angle_from_y < 90))
+            current_angle = angle_from_y;                         // choose Y if valid
+        else
+            update_moving_average = false;                        // otherwise, no valid angle - don't update MA
+        
+        if (update_moving_average)
+        {
+            // Updates current moving average sum by subtracing oldest entry and adding in current entry
+
+            RoboRebels.current_angle_sum = RoboRebels.current_angle_sum - RoboRebels.previous_angles[RoboRebels.curent_angle_index] + current_angle;
+
+            // Replaces oldest entry with current entry
+
+            RoboRebels.previous_angles[RoboRebels.curent_angle_index] = current_angle;
+
+            // Increment index, modulo the size of the moving average
+
+            RoboRebels.curent_angle_index = (RoboRebels.curent_angle_index + 1) % RoboRebels.NUMBER_OF_PREVIOUS;  // this might need a - 1 here
+
+        }
+        
+        // Compute and return the current moving average value
+                
+        double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
+        
+        RoboRebels.printLCD(4, "Tilt ang.: " + round(moving_average_angle));
 
         return moving_average_angle;
         
@@ -407,7 +494,7 @@ public class RRTracker
         double target_width = 24.0;     // width of backboard target in inches   
         int correction;
         
-        correction = (int)((camera_offset/target_width) * target_image_width);
+        correction = (int)(((camera_offset/target_width) * target_image_width) + 0.5);
         
         System.out.println("x: " + raw_x + "correction: " + correction);
         
@@ -418,4 +505,22 @@ public class RRTracker
     {   
          return (280 - raw_y);
     }
+    
+    
+    static public double round(double x)  // Rounds double X to one decimal place
+    {
+        double z = ((int)((x + 0.5) * 10.0))/10.0;
+                       
+        return z;
+                
+    }
+    
+    static public double round2(double x)  // Rounds double X to two decimal places
+    {
+        double z = ((int)((x + 0.05) * 100.0))/100.0;
+                       
+        return z;
+                
+    }
+   
   }
