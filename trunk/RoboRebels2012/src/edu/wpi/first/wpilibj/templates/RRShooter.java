@@ -157,7 +157,7 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
-        boolean LSLState, LSRState, TUState, TDState, TTState;
+        boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
         RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()));
@@ -369,6 +369,18 @@ public class RRShooter
         System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
                 tracking + " lazySusanSpeed: " + RRTracker.round2(lazySusanSpeed) + 
                 " tiltSpeed: " + RRTracker.round2(tiltSpeed));
+        
+        
+        ESState = RRButtonMap.getActionObject(RRButtonMap.EXPAND_SHOOTER).getButtonState();
+        CSState = RRButtonMap.getActionObject(RRButtonMap.CONTRACT_SHOOTER).getButtonState();
+        if ( CSState )
+        {
+            
+        }
+        else if ( ESState )
+        {
+            
+        }
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
@@ -470,6 +482,11 @@ public class RRShooter
         return (true);  // ball shot!
     }
     
+    
+    /**
+     * This method retracts the shooter by making use of the accelerometer in 
+     * RRTracker
+     */
     public void retractShooter()
     {
         

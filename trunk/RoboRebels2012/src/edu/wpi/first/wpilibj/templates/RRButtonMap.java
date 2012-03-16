@@ -100,7 +100,8 @@ public class RRButtonMap
                     CANNON_SPEED = 15,
                     ARCADE_STICK_X = 16,
                     ARCADE_STICK_Y = 17,
-                    CONTRACT_SHOOTER = 18;
+                    CONTRACT_SHOOTER = 18,
+                    EXPAND_SHOOTER = 19;
     
     Joystick        lJoystick, rJoystick, xboxController;
     
@@ -148,6 +149,7 @@ public class RRButtonMap
         insertAction(BRIDGE_ARM_DOWN, -1, 2, rJoystick); // Up on joystick
         insertAction(BRIDGE_ARM_UP, -1, 2, rJoystick); // Down on joystick
         insertAction(CONTRACT_SHOOTER, 6, -1, rJoystick);
+        insertAction(EXPAND_SHOOTER, 7, -1, rJoystick);
         insertAction(TRACK_TARGET, 11, -1, rJoystick);
         
         // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top
