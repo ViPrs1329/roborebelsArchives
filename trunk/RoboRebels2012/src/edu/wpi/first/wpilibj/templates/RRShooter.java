@@ -123,13 +123,13 @@ public class RRShooter
     
     static double determineAngle(double distance, double muzzleVelocity, int targetID)
     {            
-//        double muzzleVelocity = 8.1; //meters per second
+//      double muzzleVelocity = 8.1; //meters per second
 //      double muzzleVelocity = 7.1; //meters per second
    
         double gravity = 9.81;  //meters per (second)^2
-        double yLower = .466953;
-        double yMiddle = 1.30515;
-        double yHigher = 2.24485;
+        double yLower = 0.7112;         // .466953;
+        double yMiddle = 1.5494;       // 1.30515;
+        double yHigher = 2.4892;        //2.24485;
         double xDistance = 3.6576; // distance to base of basket (as if shooting from key)
         double shooterHeight = .914; // meters off the ground
         double y = yHigher; // determined by targetID (see below)
@@ -168,6 +168,8 @@ public class RRShooter
             theta = 0;    // There is no angle for this muzzle velocity
         
         theta = theta * ( 180.0 / 3.14159265); // converts radians to degreese
+        
+        //theta -= 10;    // Fudge factor to make theta correct.
 
         return theta;
     }
