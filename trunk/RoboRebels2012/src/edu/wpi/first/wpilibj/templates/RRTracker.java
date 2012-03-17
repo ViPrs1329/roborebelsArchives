@@ -57,7 +57,7 @@ public class RRTracker
     
     
 
-    public void trackTarget()
+    public void trackTarget(int target_selected)   // Target selected is HIGEST, LOWEST, LEFT, RIGHT, or AUTO
     {
         double start = Timer.getFPGATimestamp();
         double angle;
@@ -116,6 +116,8 @@ public class RRTracker
             int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
             boolean lowest = true;          // true if center target is the lowest target in the image
           
+            if (target_selected == RoboRebels.AUTO)
+            {
               if ((reports != null) && (reports.length > 0)) 
               {     
                 for (int i = 0; i < potential_targets; i++) 
@@ -221,7 +223,10 @@ public class RRTracker
                     else
                         lowest = false; 
   
-                }   
+                }
+              }
+              
+              // TODO: For Autonomous need to select correct target using target_selected
                 
                 ParticleAnalysisReport r = reports[center_target_index];
                 
