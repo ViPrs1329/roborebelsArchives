@@ -136,8 +136,6 @@ public class RoboRebels extends IterativeRobot {
     final static int    LOCK = 0;
     final static int    UP = 1;
     final static int    DOWN = -1;
-    final static int    FAR_UP = 2;
-    final static int    FAR_DOWN = -2;
     final static int    FASTER = 1;
     final static int    SLOWER = -1;
     final static int    HOLD = -3; 
@@ -160,7 +158,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    RIGHT_TARGET = 4;      // Right Middle target
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
-    static boolean      going_for_highest = false;   // When locked on a center target, shoot for highest instead of lowest basket target
+    static boolean      going_for_highest = true;   // When locked on a center target, shoot for highest instead of lowest basket target
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK

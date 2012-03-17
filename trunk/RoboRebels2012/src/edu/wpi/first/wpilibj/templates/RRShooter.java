@@ -311,22 +311,10 @@ public class RRShooter
                 tiltSpeed = -1.0 * TILT_SPEED * 0.5;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
             }
-            else if (RoboRebels.target_elevation == RoboRebels.FAR_UP)  // Track target elevation (up/down)
-            {
-                System.out.println("Auto Tilt Far Up"); 
-                tiltSpeed = -1.0 * TILT_SPEED * 0.75;
-                RoboRebels.elevation_lock = false;         // No elevation target lock
-            }
-            else if (RoboRebels.target_elevation == RoboRebels.DOWN)
+             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
                 tiltSpeed = 1.0 * TILT_SPEED * 0.5;
-                RoboRebels.elevation_lock = false;         // No elevation target lock
-           }
-            else if (RoboRebels.target_elevation == RoboRebels.FAR_DOWN)
-            {
-                System.out.println("Auto Tilt Far Down"); 
-                tiltSpeed = 1.0 * TILT_SPEED * 0.75;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
            }
             else if (RoboRebels.target_elevation == RoboRebels.LOCK)
@@ -421,11 +409,11 @@ public class RRShooter
             shootBall();
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Azimuth & Speed Locked!    "); 
+            RoboRebels.printLCD(6, "LS & Speed Locked!    "); 
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
-            RoboRebels.printLCD(6, "Azimuth & Elevation Locked!"); 
+            RoboRebels.printLCD(6, "LS & Angle Locked!"); 
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Elevation & Speed Locked!"); 
+            RoboRebels.printLCD(6, "Angle & Speed Locked!"); 
        else if (tracking) 
             RoboRebels.printLCD(6, "Tracking Target...         "); 
        else 

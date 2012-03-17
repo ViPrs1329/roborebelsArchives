@@ -342,17 +342,11 @@ public class RRTracker
                     
                     if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY/2))
                     {
-                        if (RoboRebels.tilt_angle < (angle - RoboRebels.ANGLE_ACCURACY*3))
-                            RoboRebels.target_elevation = RoboRebels.FAR_UP;  // Shooter needs to tilt far up
-                        else
-                            RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
+                        RoboRebels.target_elevation = RoboRebels.UP;  // Shooter needs to tilt up
                     }
                     else if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY/2))    
                     {
-                        if (RoboRebels.tilt_angle > (angle + RoboRebels.ANGLE_ACCURACY*3))
-                            RoboRebels.target_elevation = RoboRebels.FAR_DOWN;
-                        else
-                             RoboRebels.target_elevation = RoboRebels.DOWN;                        
+                        RoboRebels.target_elevation = RoboRebels.DOWN;                        
                     }
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
