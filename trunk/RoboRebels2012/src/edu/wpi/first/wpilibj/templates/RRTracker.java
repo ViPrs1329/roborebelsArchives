@@ -116,7 +116,9 @@ public class RRTracker
             int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
             boolean lowest = true;          // true if center target is the lowest target in the image
           
-            if (target_selected == RoboRebels.AUTO_TARGET)
+            if ((target_selected == RoboRebels.AUTO_TARGET) ||
+                    (target_selected == RoboRebels.HIGHEST_TARGET)
+                      || (target_selected == RoboRebels.LOWEST_TARGET))
             {
               if ((reports != null) && (reports.length > 0)) 
               {     
@@ -226,6 +228,38 @@ public class RRTracker
                 }
               }
               
+              if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
+              {
+                 center_target_index = 0; 
+                 int left_target_index = 0;
+                 int right_target_index = 0;
+                 int left_most_target = 160;
+                 int right_most_target = -160;
+                 
+                 for (int i = 0; i < targets.length; i++) {
+                     
+                     ParticleAnalysisReport r = reports[i];
+                     
+                     if (y(r.center_mass_y) < left_most_target)
+                     {
+                         left_most_target = y(r.center_mass_y);
+                         left_target_index = i;
+                     }
+                     if (y(r.center_mass_y) > right_most_target)
+                     {
+                         right_most_target = y(r.center_mass_y);
+                         right_target_index = i;
+                     }  
+                  }
+                 
+                 if (target_selected == RoboRebels.RIGHT_TARGET)
+                     center_target_index = right_target_index;
+                 else if (target_selected == RoboRebels.LEFT_TARGET)
+                     center_target_index = left_target_index;
+               }   
+                  
+              }
+              
               // TODO: For Autonomous need to select correct target using target_selected
                 
                 ParticleAnalysisReport r = reports[center_target_index];
@@ -323,7 +357,6 @@ public class RRTracker
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
                 }       
-            }
                 
             
        //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
@@ -361,7 +394,7 @@ public class RRTracker
         return highest;
     }
     
-        public static Target lowestTarget() {
+    public static Target lowestTarget() {
         Target lowest = null;
 
         for (int i = 0; i < targets.length; i++) {
