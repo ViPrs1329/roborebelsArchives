@@ -116,7 +116,7 @@ public class RRTracker
             int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
             boolean lowest = true;          // true if center target is the lowest target in the image
           
-            if (target_selected == RoboRebels.AUTO)
+            if (target_selected == RoboRebels.AUTO_TARGET)
             {
               if ((reports != null) && (reports.length > 0)) 
               {     
@@ -238,34 +238,35 @@ public class RRTracker
                         " Aspect: " + round2((double)r.boundingRectWidth/r.boundingRectHeight) + 
                         " Distance: " + round(distance));
                 
-                int     targetID = 0;
+ //               int     targetID = 0;
                 
-                RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
-                System.out.println("DIP Switch 0: " + RoboRebels.going_for_highest);
+ //               RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
+ //               System.out.println("DIP Switch 0: " + RoboRebels.going_for_highest);
                     
        //       double display_distance = ((int)(distance * 100))/100.0;
                 
                 double display_distance = round(distance);
                 
-                if (lowest && RoboRebels.going_for_highest)
+                if (target_selected == RoboRebels.HIGHEST_TARGET)
                 {
-                    targetID = RoboRebels.HIGHEST;
-                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Highest" );
+                     RoboRebels.printLCD(5, "Dist: " + display_distance + " to Highest" );
                 }
-                else if (lowest && !RoboRebels.going_for_highest)
+                else if ( target_selected == RoboRebels.LEFT_TARGET)
                 {
-                    targetID = RoboRebels.LOWEST;
-                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Lowest" );
-                }
-                else if (!lowest)
+                RoboRebels.printLCD(5, "Dist: " + display_distance + " to Left" );
+                }             
+                else if ( target_selected == RoboRebels. LOWEST_TARGET)
                 {
-                    targetID = RoboRebels.MIDDLE;
-                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Middle" );
+                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Lowest" );  
+                }    
+                 else if ( target_selected == RoboRebels. RIGHT_TARGET)
+                {
+                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Right" ); 
                 }
-                   
+                                 
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
                 
-                angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, targetID);
+                angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
                 angle = 55.0;
                     

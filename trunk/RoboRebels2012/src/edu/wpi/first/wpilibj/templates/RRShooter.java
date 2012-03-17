@@ -129,11 +129,11 @@ public class RRShooter
                 
         xDistance = distance / 3.28; // converts feet into meters
         
-        if (targetID == RoboRebels.LOWEST)
+        if (targetID == RoboRebels.LOWEST_TARGET)
             y = yLower; 
-        else if (targetID == RoboRebels.MIDDLE)
+        else if ((targetID == RoboRebels.LEFT_TARGET) && (targetID == RoboRebels.RIGHT_TARGET))
              y = yMiddle;
-        else if ( targetID == RoboRebels.HIGHEST)
+        else if ( targetID == RoboRebels.HIGHEST_TARGET )
              y = yHigher;
                  
         System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
