@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.*;
 public class RRShooter 
 {
     private final double        MAX_SHOOTING_SPEED = 1.0;
-    private final double        LS_SPEED = 0.2;
+    private final double        LS_SPEED = 0.15;
     private final double        TILT_SPEED = 0.4;
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
@@ -48,6 +48,8 @@ public class RRShooter
     private     boolean         shootingWheelState;
     
     private     boolean         shootingButtonPressed;
+    
+    private     boolean         retractionContractionInProgress = false;
             
     private     Jaguar          shootingWheelJaguar;
     private     Victor          tiltVictor;
@@ -65,6 +67,8 @@ public class RRShooter
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
                                                                // for azimuth and elevation.
     
+    private boolean isRetracting = false;
+    private boolean isExpanding = false;
     //int target_direction = 1;
     
     /**
@@ -160,7 +164,7 @@ public class RRShooter
         boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
-        RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()));
+        RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()));
         //RoboRebels.printLCD(4, "Z:" + RRTracker.round2(this.getTransformedZValue()));
         System.out.println("Shooting Speed: " + RRTracker.round2(shootingWheelJaguar.get()));
         System.out.println("Z: " + RRTracker.round2(this.getTransformedZValue()));
@@ -190,7 +194,7 @@ public class RRShooter
         // Check for tilting button up, down 
         //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
-        TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
+        TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
         if ( TUState )
         {
             System.out.println("Tilt up");
@@ -373,13 +377,35 @@ public class RRShooter
         
         ESState = RRButtonMap.getActionObject(RRButtonMap.EXPAND_SHOOTER).getButtonState();
         CSState = RRButtonMap.getActionObject(RRButtonMap.CONTRACT_SHOOTER).getButtonState();
+        
         if ( CSState )
         {
-            
+            if (!isExpanding ) {
+                isRetracting = true;
+            }
         }
         else if ( ESState )
         {
+            if (!isRetracting) {
+                isExpanding = true;
+            }
             
+        }
+        
+        if (isRetracting) {
+            if (tracker.accelAngle() < 90) {
+                tiltSpeed = -1 * TILT_SPEED;
+            }
+            else if (tracker.accelAngle() >= 90) {
+                tiltSpeed = 0;
+                isRetracting = false;
+            }
+        }
+        if (isExpanding) {
+            if (tracker.accelAngle() >= 60) {
+                tiltSpeed = TILT_SPEED;
+            }
+            else if (tracker)
         }
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
@@ -454,7 +480,7 @@ public class RRShooter
     
     private double getTransformedZValue()
     {
-        RRAction        aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED);
+        RRAction        aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_SPEED);
         return MAX_SHOOTING_SPEED * (aoS.js.getZ() + 1.0) / 2.0;
     }
     
@@ -500,8 +526,8 @@ public class RRShooter
     public int check_ls_position()
     {
         
-        double calibration_factor = 1.0;  // converts lazySusanSpeed to angular velocity in degrees per tick
-                                          // Need to determine this value
+        double calibration_factor = 46.0;  // converts lazySusanSpeed to angular velocity in degrees per tick
+                                          // 23.0 is approximate value for 0.2 LS SPEED
         
         System.out.println("Checking Position...");
         
@@ -511,7 +537,7 @@ public class RRShooter
         
         RoboRebels.time_last_update = time_current;
         
-        RoboRebels.printLCD(1, "LS Position: " + RRTracker.round(RoboRebels.angle_position)); 
+        RoboRebels.printLCD(6, "LS Position: " + RRTracker.round(RoboRebels.angle_position)); 
         
         System.out.println("LS Position: " + RRTracker.round(RoboRebels.angle_position));
         
@@ -522,6 +548,11 @@ public class RRShooter
             result = RoboRebels.AT_LEFT_LIMIT;
        
         return (result);
+    }
+    
+    public void reset()
+    {
+        tracking = false;
     }
     
 }

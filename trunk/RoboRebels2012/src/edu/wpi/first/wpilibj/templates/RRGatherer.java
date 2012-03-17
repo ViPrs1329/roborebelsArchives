@@ -100,11 +100,11 @@ public class RRGatherer
         // Get conveyer button state
         if ( loader_up && !loader_down )
         {
-            conveyerSpeed = CONVEYER_SPEED;
+            conveyerSpeed = -1.0 * CONVEYER_SPEED;
         }
         else if ( loader_down && !loader_up )
         {
-            conveyerSpeed = -1.0 * CONVEYER_SPEED;
+            conveyerSpeed = CONVEYER_SPEED;
         }
         else if ( !loader_up && !loader_down )
         {
@@ -115,11 +115,11 @@ public class RRGatherer
         if ( spinnerForward <= 1.0 && spinnerForward > 0.0 )
         {
             // Left trigger pushed, spin forward
-            spinnerSpeed = SPINNER_SPEED;
+            spinnerSpeed = -1.0 * SPINNER_SPEED;
         }
         else if ( spinnerReverse >= -1.0 && spinnerReverse < 0.0 )
         {
-            spinnerSpeed = -1.0 * SPINNER_SPEED;
+            spinnerSpeed = SPINNER_SPEED;
         }
         else if ( spinnerForward == 0.0 || spinnerReverse == 0.0 )
         {

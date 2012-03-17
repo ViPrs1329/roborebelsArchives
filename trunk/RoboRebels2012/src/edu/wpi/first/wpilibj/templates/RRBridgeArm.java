@@ -24,7 +24,7 @@ public class RRBridgeArm
     // Reduced the retraction (UP) speed of the arm by half
     private final double    ARM_DOWN_SPEED = -1.0;
     private final double    ARM_UP_SPEED = 0.5;
-    private final double    ARM_DEAD_ZONE = 0.1;
+    private final double    ARM_DEAD_ZONE = 0.2;
     
     private final int       BRIDGE_ARM_LOWER_REQUEST = 0,
                             BRIDGE_ARM_RAISE_REQUEST = 1,
@@ -39,7 +39,6 @@ public class RRBridgeArm
     private     double      armSpeed = 0.0;
     
     private     Victor      bridgeArmVictor;
-    private     Joystick    js;
     
     private     RRTracker   tracker;                // used for shooter angle information
     
@@ -59,12 +58,6 @@ public class RRBridgeArm
             throw new NullPointerException("RRBridgeArm was passed a null RRTracker object (t)! ");
         }
         
-        if ( js != null )
-            this.js = js;
-        else
-        {
-            throw new NullPointerException("RRBridgeArm was passed a null Joystick object (js)! ");
-        }
         
         bridgeArmVictor = new Victor(bav_channel);
     }
@@ -101,9 +94,19 @@ public class RRBridgeArm
         */
         double      armAxis = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getAxisState();
         
-        if ( armAxis > ARM_DEAD_ZONE && armAxis < (-1.0 * ARM_DEAD_ZONE) )
+        System.out.println("*********RRBridgeArm::armAxis = " + armAxis);
+        
+        if ( !(armAxis < ARM_DEAD_ZONE && armAxis > (-1.0 * ARM_DEAD_ZONE)) )
         {
-            armSpeed = armAxis;
+            if ( armAxis < 0 )
+                armSpeed = armAxis;
+            else
+                armSpeed = armAxis * ARM_UP_SPEED;
+            System.out.println("**********RRBridgeArm::gatherInputStates()::armSpeed = " + armSpeed);
+        }
+        else
+        {
+            armSpeed = 0.0;
         }
         
     }

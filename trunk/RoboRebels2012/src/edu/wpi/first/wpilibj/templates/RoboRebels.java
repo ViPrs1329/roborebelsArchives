@@ -247,6 +247,8 @@ public class RoboRebels extends IterativeRobot {
     public void disabledInit() {
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
+        
+        shooter.reset();
     }
 
     public void autonomousInit() {

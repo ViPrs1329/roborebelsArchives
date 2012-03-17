@@ -85,6 +85,7 @@ public class RRButtonMap
 {
     /************  NOTE:  THESE ARE NO LONGER BUTTON VARIABLES, BUT ACTION IDs!!! ********/
     static int      SHOOTER_ENABLED = 1,
+                    SHOOTER_SPEED = 2,
                     LOADER_UP = 3,
                     LOADER_DOWN = 4,
                     LAZY_SUSAN_LEFT = 5,
@@ -133,10 +134,11 @@ public class RRButtonMap
      
     public void setControllers()
     {
-        insertAction(ARCADE_STICK_X, -1, 1, xboxController );
-        insertAction(ARCADE_STICK_Y, -1, 2, xboxController );
+        insertAction(ARCADE_STICK_X, -1, 1, lJoystick );
+        insertAction(ARCADE_STICK_Y, -1, 2, lJoystick );
         insertAction(SHOOTER_ENABLED, 3, -1, xboxController);
         //insertAction(SHOOTER_ENABLED, 1,  -1, rJoystick);
+        insertAction(SHOOTER_SPEED, -1, -1, rJoystick);
         insertAction(LOADER_UP, 4,  -1, xboxController);
         insertAction(LOADER_DOWN, 1,  -1, xboxController);
         insertAction(SPINNER_FORWARD, -1, 3, xboxController); // RT

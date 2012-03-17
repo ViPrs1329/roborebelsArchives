@@ -386,7 +386,7 @@ public class RRTracker
         double zAxis = Math.min(1, axes.ZAxis);
         zAxis = Math.max(-1, zAxis);
         
-        double another_angle = (180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+        double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
         
         System.out.println("Accel Angle from Z Axis:" + round(another_angle));
         
@@ -447,7 +447,7 @@ public class RRTracker
         
                 if ((zAxis < 1.0) && (zAxis > -1.0))  // Make sure in range for inverse sin operation
         {           
-            angle_from_z = (180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+            angle_from_z = (-180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
 
             System.out.println("Accel Angle from Z Axis:" + round(angle_from_z));
 
