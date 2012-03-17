@@ -110,25 +110,27 @@ public class RRTracker
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             
-            int center_target_index = 0;    // initialize to zero 
-            int distance_from_center = 160; // set to maximum
-            int dist;                       // distance of center of target from the center of the image
+            int selected_target_index = 0;    // initialize to zero 
             int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
-            boolean lowest = true;          // true if center target is the lowest target in the image
           
+            if ((reports != null) && (reports.length > 0))   // Only do tracking if there is at least one target
+            {
+                
             if ((target_selected == RoboRebels.AUTO_TARGET) ||
                     (target_selected == RoboRebels.HIGHEST_TARGET)
                       || (target_selected == RoboRebels.LOWEST_TARGET))
             {
-              if ((reports != null) && (reports.length > 0)) 
-              {     
+                int distance_from_center = 160; // set to maximum
+                boolean lowest = true;          // true if center target is the lowest target in the image
+                int dist;                       // distance of center of target from the center of the image
+ 
                 for (int i = 0; i < potential_targets; i++) 
                 {
                     ParticleAnalysisReport r = reports[i];
                     if ((dist = Math.abs(x(r.center_mass_x, 0))) < distance_from_center)  // This does not have camera offset calculation built in
                     {
                         distance_from_center = dist;
-                        center_target_index = i;
+                        selected_target_index = i;
                     }        
                 } 
                                
@@ -137,12 +139,12 @@ public class RRTracker
                 else if (potential_targets == 2)
                 {
                     int other_index;
-                    if (center_target_index == 0)
+                    if (selected_target_index == 0)
                         other_index = 1;
                     else
                         other_index = 0;
                        
-                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
                     ParticleAnalysisReport other_target_r = reports[other_index];
                     
                     if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) 
@@ -155,12 +157,12 @@ public class RRTracker
                     int other_index;
                     int another_index;
                     
-                    if (center_target_index == 0)
+                    if (selected_target_index == 0)
                     {
                         other_index = 1;
                         another_index = 2;
                     }
-                    else if (center_target_index == 1)
+                    else if (selected_target_index == 1)
                     {  
                         other_index = 0;
                         another_index = 2;
@@ -171,7 +173,7 @@ public class RRTracker
                         another_index = 1;
                     }
                        
-                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
                     ParticleAnalysisReport other_target_r = reports[other_index];
                     ParticleAnalysisReport another_target_r = reports[another_index];
                     
@@ -188,32 +190,32 @@ public class RRTracker
                     int another_index;
                     int yet_another_index;
                     
-                    if (center_target_index == 0)
+                    if (selected_target_index == 0)
                     {
                         other_index = 1;
                         another_index = 2;
                         yet_another_index = 3;
                     }
-                    else if (center_target_index == 1)
+                    else if (selected_target_index == 1)
                     {  
                         other_index = 0;
                         another_index = 2;
                         yet_another_index = 3;
                     }
-                    else if (center_target_index == 2)
+                    else if (selected_target_index == 2)
                     {
                         other_index = 0;
                         another_index = 1;
                         yet_another_index = 3;
                     }
-                    else   // center_target_index == 3
+                    else   // selected_target_index == 3
                     {
                         other_index = 0;
                         another_index = 1;
                         yet_another_index = 2;
                     }
                        
-                    ParticleAnalysisReport center_target_r = reports[center_target_index];
+                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
                     ParticleAnalysisReport other_target_r = reports[other_index];
                     ParticleAnalysisReport another_target_r = reports[another_index];
                     ParticleAnalysisReport yet_another_target_r = reports[yet_another_index];
@@ -230,7 +232,7 @@ public class RRTracker
               
               if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
               {
-                 center_target_index = 0; 
+                 selected_target_index = 0; 
                  int left_target_index = 0;
                  int right_target_index = 0;
                  int left_most_target = 160;
@@ -253,20 +255,18 @@ public class RRTracker
                   }
                  
                  if (target_selected == RoboRebels.RIGHT_TARGET)
-                     center_target_index = right_target_index;
+                     selected_target_index = right_target_index;
                  else if (target_selected == RoboRebels.LEFT_TARGET)
-                     center_target_index = left_target_index;
+                     selected_target_index = left_target_index;
                }   
-                  
-              }
               
-              // TODO: For Autonomous need to select correct target using target_selected
-                
-                ParticleAnalysisReport r = reports[center_target_index];
+              // Targeting image processing is now done.
+                  
+                ParticleAnalysisReport r = reports[selected_target_index];
                 
                 double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
                 
-                System.out.println("Target " + center_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+                System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2((double)r.boundingRectWidth/r.boundingRectHeight) + 
@@ -302,7 +302,7 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                angle = 55.0;
+                // angle = 55.0;
                     
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
@@ -350,17 +350,16 @@ public class RRTracker
                     }
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
-                }       
-                
+                }                      
             
        //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
-
+            }
             /**
              * all images in Java must be freed after they are used since they are allocated out
              * of C data structures. Not calling free() will cause the memory to accumulate over
              * each pass of this loop.
-             */
-
+             **/
+            
             filteredImage.free();
             convexHullImage.free();
         //  bigObjectsImage.free();
@@ -375,7 +374,9 @@ public class RRTracker
         }
         System.out.println(Timer.getFPGATimestamp() - start);
     }
-
+    
+/**  These two are not currently used. 
+ * 
     public static Target highestTarget() {
         Target highest = null;
 
@@ -399,6 +400,7 @@ public class RRTracker
 
         return lowest;
     }
+    * */
 
     public static Target[] targets() {
         return targets;
@@ -409,19 +411,19 @@ public class RRTracker
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
  //       System.out.println("X Accel: " + axes.XAxis);
         System.out.println("Y Accel: " + axes.YAxis);
-        System.out.println("Z Accel: " + axes.ZAxis);
+ //       System.out.println("Z Accel: " + axes.ZAxis);
         
         // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
         
         double yAxis = Math.min(1, axes.YAxis);
         yAxis = Math.max(-1, yAxis);
         
-        double zAxis = Math.min(1, axes.ZAxis);
-        zAxis = Math.max(-1, zAxis);
+ //       double zAxis = Math.min(1, axes.ZAxis);
+ //       zAxis = Math.max(-1, zAxis);
         
-        double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+ //       double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
         
-        System.out.println("Accel Angle from Z Axis:" + round(another_angle));
+ //       System.out.println("Accel Angle from Z Axis:" + round(another_angle));
         
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
@@ -450,78 +452,7 @@ public class RRTracker
         
     }
     
-        public double new_accelAngle() {
-        ADXL345_I2C.AllAxes axes = accel.getAccelerations();
- //       System.out.println("X Accel: " + axes.XAxis);
-        System.out.println("Y Accel: " + axes.YAxis);
-        System.out.println("Z Accel: " + axes.ZAxis);
-        
-        // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
-        
-        double yAxis = axes.YAxis;
-        double zAxis = axes.ZAxis;
-        boolean update_moving_average = false;
-        double angle_from_y = 45.0;
-        double angle_from_z = 45.0;
-        double current_angle = 45.0;
-        
-        if ((yAxis < 1.0) && (yAxis > -1.0))  // Make sure in range for inverse sin operation
-        {
-               
-            // Need to subtract 90 degrees to return correct angle when
-            // accelerometer is mounted on back of shooter
-            
-            angle_from_y = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
-
-            System.out.println("Accel Angle from X Axis:" + round(angle_from_y));
- 
-            update_moving_average = true;
-        }
-        
-                if ((zAxis < 1.0) && (zAxis > -1.0))  // Make sure in range for inverse sin operation
-        {           
-            angle_from_z = (-180.0 * MathUtils.asin(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
-
-            System.out.println("Accel Angle from Z Axis:" + round(angle_from_z));
-
-            update_moving_average = true;
-        }
-                
-        if ((angle_from_y > 60.0) && (angle_from_z > 60.0))
-            current_angle = angle_from_z;                         // choose Z as Y is unreliable
-        else if ((angle_from_y < 60.0) && (angle_from_z < 60.0))
-            current_angle = (angle_from_y + angle_from_z) / 2.0;  // average Y and Z readings
-        else if ((angle_from_y > 0) && (angle_from_y < 90))
-            current_angle = angle_from_y;                         // choose Y if valid
-        else
-            update_moving_average = false;                        // otherwise, no valid angle - don't update MA
-        
-        if (update_moving_average)
-        {
-            // Updates current moving average sum by subtracing oldest entry and adding in current entry
-
-            RoboRebels.current_angle_sum = RoboRebels.current_angle_sum - RoboRebels.previous_angles[RoboRebels.curent_angle_index] + current_angle;
-
-            // Replaces oldest entry with current entry
-
-            RoboRebels.previous_angles[RoboRebels.curent_angle_index] = current_angle;
-
-            // Increment index, modulo the size of the moving average
-
-            RoboRebels.curent_angle_index = (RoboRebels.curent_angle_index + 1) % RoboRebels.NUMBER_OF_PREVIOUS;  // this might need a - 1 here
-
-        }
-        
-        // Compute and return the current moving average value
-                
-        double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
-        
-        RoboRebels.printLCD(4, "Tilt ang.: " + round(moving_average_angle));
-
-        return moving_average_angle;
-        
-    }
-    
+      
     public int x(int raw_x, int target_image_width)
     {   
         double camera_offset = 10.0;   // camera offset from center of robot in inches.  Positive is to the right side of robot

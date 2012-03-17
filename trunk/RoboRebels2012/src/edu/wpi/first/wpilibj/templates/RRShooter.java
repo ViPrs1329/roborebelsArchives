@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.*;
 public class RRShooter 
 {
     private final double        MAX_SHOOTING_SPEED = 1.0;
-    private final double        LS_SPEED = 0.15;
+    private final double        LS_SPEED = 0.20;
     private final double        TILT_SPEED = 0.4;
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
