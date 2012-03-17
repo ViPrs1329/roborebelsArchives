@@ -92,8 +92,8 @@ public class RRBridgeArm
         }
         * 
         */
-        double      armAxis = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getAxisState();
-        
+        //double      armAxis = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getAxisState();
+        /*
         
         if ( !(armAxis < ARM_DEAD_ZONE && armAxis > (-1.0 * ARM_DEAD_ZONE)) )
         {
@@ -105,6 +105,19 @@ public class RRBridgeArm
         else
         {
             armSpeed = 0.0;
+        }
+        * 
+        */
+        boolean armDown = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getButtonState();
+        boolean armUp = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_UP).getButtonState();
+        if (armDown) {
+            lower();
+        }
+        else if (armUp) {
+            raise();
+        }
+        else {
+            stop();
         }
         
     }

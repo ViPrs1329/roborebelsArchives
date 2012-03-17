@@ -17,6 +17,13 @@ public class RRAutonomous {
     private     RRBallSensor    sensor;
 
     private     boolean         delay_shooting  = true;
+    public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr)
+    {
+        dipSwitch = ds; 
+        tracker = tr;
+        shooter = sh;
+        sensor = sr;
+    }
     
     void auton_init()   // called once at start of Autonomous period
     {
@@ -50,12 +57,18 @@ public class RRAutonomous {
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
-        }        
+        }   
+        
+        System.out.println("auton_init");
+        
+        shooter.isFinishedShooting = false;
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
     {
                          
+        System.out.println("Auton Periodic!!");
+        
         //lock onto correct target
         
         tracker.trackTarget(target_selected);
@@ -65,6 +78,8 @@ public class RRAutonomous {
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
            shooter.isShooting = true;
+           System.out.println("Shooting Now");
+
        }
         
        if (shooter.isFinishedShooting == true);
@@ -74,7 +89,7 @@ public class RRAutonomous {
          */
            
            // shooter.isFinishedShooting = false;
-        
+           System.out.println("Shooting is now Complete");
         }
         
        

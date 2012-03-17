@@ -239,7 +239,7 @@ public class RRTracker
                  int left_most_target = 160;
                  int right_most_target = -160;
                  
-                 for (int i = 0; i < targets.length; i++) {
+                 for (int i = 0; ((i < targets.length) && (i < reports.length)); i++) {
                      
                      ParticleAnalysisReport r = reports[i];
                      

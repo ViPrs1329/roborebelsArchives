@@ -101,8 +101,10 @@ public class RRButtonMap
                     CANNON_SPEED = 15,
                     ARCADE_STICK_X = 16,
                     ARCADE_STICK_Y = 17,
-                    CONTRACT_SHOOTER = 18,
-                    EXPAND_SHOOTER = 19;
+                    EXPAND_CONTRACT_SHOOTER = 18,
+                    //EXPAND_SHOOTER = 19;
+                    REVERSE_SHOOTING_1 = 20,
+                    REVERSE_SHOOTING_2 = 21;
     
     Joystick        lJoystick, rJoystick, xboxController;
     
@@ -134,8 +136,10 @@ public class RRButtonMap
      
     public void setControllers()
     {
-        insertAction(ARCADE_STICK_X, -1, 1, lJoystick );
-        insertAction(ARCADE_STICK_Y, -1, 2, lJoystick );
+        insertAction(ARCADE_STICK_X, -1, 1, xboxController );
+        insertAction(ARCADE_STICK_Y, -1, 2, xboxController );
+//        insertAction(ARCADE_STICK_X, -1, 1, rJoystick );
+//        insertAction(ARCADE_STICK_Y, -1, 2, rJoystick );
         insertAction(SHOOTER_ENABLED, 3, -1, xboxController);
         //insertAction(SHOOTER_ENABLED, 1,  -1, rJoystick);
         insertAction(SHOOTER_SPEED, -1, -1, rJoystick);
@@ -148,11 +152,13 @@ public class RRButtonMap
         insertAction(TILT_UP, 3,  -1, rJoystick);
         insertAction(TILT_DOWN, 2,  -1, rJoystick);
         insertAction(CANNON_SPEED, -1, -1, rJoystick); // Z axis on joystick
-        insertAction(BRIDGE_ARM_DOWN, -1, 2, rJoystick); // Up on joystick
-        insertAction(BRIDGE_ARM_UP, -1, 2, rJoystick); // Down on joystick
-        insertAction(CONTRACT_SHOOTER, 6, -1, rJoystick);
-        insertAction(EXPAND_SHOOTER, 7, -1, rJoystick);
-        insertAction(TRACK_TARGET, 11, -1, rJoystick);
+        insertAction(BRIDGE_ARM_DOWN, 6, -1, xboxController); // Up on joystick
+        insertAction(BRIDGE_ARM_UP, 5, -1, xboxController); // Down on joystick
+        insertAction(EXPAND_CONTRACT_SHOOTER, 10, -1, xboxController);
+        //insertAction(EXPAND_SHOOTER, 7, -1, rJoystick);
+        insertAction(TRACK_TARGET, 2, -1, xboxController);
+        insertAction(REVERSE_SHOOTING_1, 7, -1, xboxController);
+        insertAction(REVERSE_SHOOTING_2, 8, -1, xboxController);
         
         // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top
         // warns not to use the DPad.

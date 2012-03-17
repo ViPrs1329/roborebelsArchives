@@ -241,6 +241,10 @@ public class RoboRebels extends IterativeRobot {
         
         tracker.setShooter(shooter);
         
+        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor);
+        
+        shooter.isFinishedShooting = false;  // This should go in auton_init but it doesn't seem to be called now.
+        
         time_last_update = Timer.getFPGATimestamp();
          
         System.out.println("Robot Ready");

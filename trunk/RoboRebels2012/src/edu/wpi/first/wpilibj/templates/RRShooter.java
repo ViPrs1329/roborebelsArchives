@@ -151,7 +151,7 @@ public class RRShooter
                 y = yLower;
         }
         
-            
+        y -= Math.max(shooterHeight,0);
                  
         System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
                 "y: " + y + "x: " + xDistance);
@@ -179,7 +179,7 @@ public class RRShooter
     private void gatherInputStates()
     {
         double retExpAngle = 0.0;
-        boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState;
+        boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState, ECSState, ReverseShootingState1, ReverseShootingState2;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
         RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()));
@@ -385,24 +385,26 @@ public class RRShooter
                 " tiltSpeed: " + RRTracker.round2(tiltSpeed));
         
         
-        ESState = RRButtonMap.getActionObject(RRButtonMap.EXPAND_SHOOTER).getButtonState();
-        CSState = RRButtonMap.getActionObject(RRButtonMap.CONTRACT_SHOOTER).getButtonState();
+        ECSState = RRButtonMap.getActionObject(RRButtonMap.EXPAND_CONTRACT_SHOOTER).getButtonState();
+        //CSState = RRButtonMap.getActionObject(RRButtonMap.CONTRACT_SHOOTER).getButtonState();
         
-        if ( CSState )
+        if ( ECSState )
         {
-            if (!isExpanding ) {
-                System.out.println("##### Shooter will contract now! " + retExpAngle);
-                isRetracting = true;
+            retExpAngle = tracker.accelAngle();
+            if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
+                if (!isRetracting ) {
+                    System.out.println("##### Shooter will expand now! " + retExpAngle);
+                    isExpanding = true;
+                }
+            }
+            else if (retExpAngle < EXP_CONT_MAX_ANGLE) {
+                if (!isExpanding) {
+                    System.out.println("##### Shooter will contract now" + retExpAngle );
+                    isRetracting = true;
+                }
             }
         }
-        else if ( ESState )
-        {
-            if (!isRetracting) {
-                System.out.println("##### Shooter will expand now! " + retExpAngle);
-                isExpanding = true;
-            }
-            
-        }
+        
         
         if (isRetracting) {
             retExpAngle = tracker.accelAngle();
@@ -427,6 +429,13 @@ public class RRShooter
                 isExpanding = false;
             }
         }
+        ReverseShootingState1 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_1).getButtonState();
+        ReverseShootingState2 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_2).getButtonState();
+        if ((ReverseShootingState1) && (ReverseShootingState2)) {
+            shootingWheelState = false;
+            shootingWheelSpeed = -this.getTransformedZValue();
+        }
+        
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
@@ -439,6 +448,12 @@ public class RRShooter
             RoboRebels.printLCD(6, "LS & Angle Locked!"); 
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
             RoboRebels.printLCD(6, "Angle & Speed Locked!"); 
+       else if (RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "Angle Locked!");
+       else if (RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Speed Locked!");
+       else if (RoboRebels.azimuth_lock)
+            RoboRebels.printLCD(6, "LS Locked!");
        else if (tracking) 
             RoboRebels.printLCD(6, "Tracking Target...         "); 
        else 
@@ -471,7 +486,8 @@ public class RRShooter
             {
                 // load motor stop
                 
-                gatherer.stop();
+                // gatherer.stop();
+                System.out.println("Gatherer Off!");
 
                 ball_present = false;
                 isShooting = false;
@@ -480,7 +496,8 @@ public class RRShooter
            
             }       
         
-            gatherer.elevate();
+            //gatherer.elevate();
+            System.out.println("Gatherer On!");
 
             
         }

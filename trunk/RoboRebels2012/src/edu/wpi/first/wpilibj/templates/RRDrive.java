@@ -143,7 +143,7 @@ public class RRDrive implements MotorSafety
         
         if (!tankDrive)
         {
-           arcadeDrive(0.75 * l_yVal, 0.75 * l_xVal); 
+           arcadeDrive(l_yVal, l_xVal); 
         }
         else
         {
@@ -189,6 +189,8 @@ public class RRDrive implements MotorSafety
                 rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
             }
         }
+        
+        System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
         
         //System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
