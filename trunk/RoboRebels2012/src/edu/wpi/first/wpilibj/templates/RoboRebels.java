@@ -94,6 +94,7 @@ public class RoboRebels extends IterativeRobot {
     RRBallSensor        sensor;
     RRDIPSwitch         dipSwitch;
     RRButtonMap         buttonMap;
+    RRAutonomous        autonomous;
     
     //RRTracker tracker = new RRTracker();   // New objects shouldn't be created outside of a method.
     
@@ -266,6 +267,8 @@ public class RoboRebels extends IterativeRobot {
 
         // Get the time that the autonomous mode starts
         autonomousStartTime = Timer.getFPGATimestamp();
+        
+        autonomous.auton_init();
     }
 
     public void teleopInit() {
@@ -290,9 +293,9 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void autonomousPeriodic() {
-        tracker.trackTarget(RoboRebels.AUTO_TARGET);
+//        tracker.trackTarget(RoboRebels.AUTO_TARGET);
         
-        
+          autonomous.auton_periodic();      
         
         //System.out.println(getAngle());
     }

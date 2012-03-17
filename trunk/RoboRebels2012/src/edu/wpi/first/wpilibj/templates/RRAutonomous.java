@@ -17,9 +17,8 @@ public class RRAutonomous {
     private     boolean         ball_present = false;
     private     boolean         delay_shooting  = true;
     
-    void auton_periodic()
+    void auton_init()   // called once at start of Autonomous period
     {
-        
         //check dip switches
         
         if (dipSwitch.getState(0))
@@ -46,16 +45,16 @@ public class RRAutonomous {
             System.out.println("COOLIO! We're locked onto the right target! =)");
         }
             
-         
-        
         if (dipSwitch.getState(3))
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
-        }
-            
-                    
-                    
+        }        
+    }
+    
+    void auton_periodic()  // called repeatedly suring Autonomous period
+    {
+                         
         //lock onto correct target
         
         tracker.trackTarget(target_selected);
@@ -96,6 +95,8 @@ public class RRAutonomous {
         // drive backwards about 5-10 feet (to be closer than other robots to the balls on the bridge)
         
         //EXPLODE
+    
+        // Pwn other robots
         
         
     }
