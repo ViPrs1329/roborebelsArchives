@@ -405,7 +405,11 @@ public class RRShooter
             if (tracker.accelAngle() >= 60) {
                 tiltSpeed = TILT_SPEED;
             }
-            else if (tracker)
+            else if (tracker.accelAngle() < 60)
+            {
+                tiltSpeed = 0;
+                isExpanding = false;
+            }
         }
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
@@ -515,12 +519,12 @@ public class RRShooter
      */
     public void retractShooter()
     {
-        
+        isRetracting = true;
     }
     
     public void expandShooter()
     {
-        
+        isExpanding = true;
     }
     
     public int check_ls_position()
