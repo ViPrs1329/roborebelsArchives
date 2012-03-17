@@ -118,25 +118,39 @@ public class RRBridgeArm
     }
     
     
+    public void armAuton()
+    {
+        setBridgeArmSpeeds();
+    }
+    
+    /**
+     * Lowers the BridgeArm
+     */
+    public void lower()
+    {
+        armSpeed = ARM_DOWN_SPEED;
+    }
+    
+    /**
+     * Raises the BridgeArm
+     */
+    public void raise()
+    {
+        armSpeed = ARM_UP_SPEED;
+    }
+    
+    
+    public void stop()
+    {
+        armSpeed = 0.0;
+    }
+    
+    
     private void setBridgeArmSpeeds()
     {
         System.out.println("Shooter is not in a valid position yet!");
         bridgeArmVictor.set(armSpeed);
     }
     
-    /**
-     * Lowers the BridgeArm
-     */
-    public void LowerBridgeArm()
-    {
-        System.out.println("LowerBridgeArm has not been implemented yet!");
-    }
     
-    /**
-     * Raises the BridgeArm
-     */
-    public void RaiseBridgeArm()
-    {
-        System.out.println("RaiseBridgeArm has not been implemented yet!");
-    }
 }
