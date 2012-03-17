@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 public class Target {
     private ParticleAnalysisReport report;
+    private     RRTracker       tracker;
 
     Target(ParticleAnalysisReport report) {
         this.report = report;
@@ -26,10 +27,11 @@ public class Target {
     }
 
     public int posY() {
-        return report.center_mass_y;
+ //       return report.center_mass_y;
+        return tracker.y(report.center_mass_y);
     }
 
     public int posX() {
-        return report.center_mass_x;
+        return tracker.x(report.center_mass_x, width());
     }
 }
