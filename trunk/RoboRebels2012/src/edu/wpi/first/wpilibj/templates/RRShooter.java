@@ -32,6 +32,9 @@ public class RRShooter
     private final double        MAX_SHOOTING_SPEED = 1.0;
     private final double        LS_SPEED = 0.20;
     private final double        TILT_SPEED = 0.4;
+    private final double        EXP_CONTR_TILT_MULT = 0.75;
+    private final double        EXP_CONT_MAX_ANGLE = 85,
+                                EXP_CONT_MIN_ANGLE = 60;
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
     private     int             lsv_channel;        // Lazy Susan Victor channel
@@ -138,8 +141,17 @@ public class RRShooter
             y = yLower; 
         else if ((targetID == RoboRebels.LEFT_TARGET) && (targetID == RoboRebels.RIGHT_TARGET))
              y = yMiddle;
-        else if ( targetID == RoboRebels.HIGHEST_TARGET )
+        else if (targetID == RoboRebels.HIGHEST_TARGET)
              y = yHigher;
+        else if (targetID == RoboRebels.AUTO_TARGET)
+        {
+            if (RoboRebels.going_for_highest)
+                y = yHigher;
+            else
+                y = yLower;
+        }
+        
+            
                  
         System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
                 "y: " + y + "x: " + xDistance);
@@ -166,6 +178,7 @@ public class RRShooter
      */
     private void gatherInputStates()
     {
+        double retExpAngle = 0.0;
         boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
@@ -242,16 +255,17 @@ public class RRShooter
         if ( LSLState )
         {
             System.out.println("Lazy susan Right");
-            lazySusanSpeed = 1.0 * LS_SPEED;
+           if (LS_SPEED == 0.2)
+                lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
+            else
+                lazySusanSpeed = 1.0 * LS_SPEED;
+
         }
         else if ( LSRState )
         {
+            lazySusanSpeed = -1.0 * LS_SPEED;
             System.out.println("Lazy susan Left"); 
-            if (LS_SPEED == 0.2)
-                lazySusanSpeed = -1.0 * LS_SPEED * 1.32;  // Motor runs more slowly to left at this speed
-            else
-                lazySusanSpeed = -1.0 * LS_SPEED;
-        }
+         }
         else if ( !LSLState && !LSRState )
         {
             lazySusanSpeed = 0.0;
@@ -377,31 +391,37 @@ public class RRShooter
         if ( CSState )
         {
             if (!isExpanding ) {
+                System.out.println("##### Shooter will contract now! " + retExpAngle);
                 isRetracting = true;
             }
         }
         else if ( ESState )
         {
             if (!isRetracting) {
+                System.out.println("##### Shooter will expand now! " + retExpAngle);
                 isExpanding = true;
             }
             
         }
         
         if (isRetracting) {
-            if (tracker.accelAngle() < 90) {
-                tiltSpeed = -1 * TILT_SPEED;
+            retExpAngle = tracker.accelAngle();
+            if (retExpAngle < EXP_CONT_MAX_ANGLE) {
+                System.out.println("##### Shooter is retracting! " + retExpAngle);
+                tiltSpeed = -1 * TILT_SPEED * EXP_CONTR_TILT_MULT;
             }
-            else if (tracker.accelAngle() >= 90) {
+            else if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
                 tiltSpeed = 0;
                 isRetracting = false;
             }
         }
         if (isExpanding) {
-            if (tracker.accelAngle() >= 60) {
-                tiltSpeed = TILT_SPEED;
+            retExpAngle = tracker.accelAngle();
+            if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
+                System.out.println("##### Shooter is expanding! " + retExpAngle);
+                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT;
             }
-            else if (tracker.accelAngle() < 60)
+            else if (retExpAngle < EXP_CONT_MIN_ANGLE)
             {
                 tiltSpeed = 0;
                 isExpanding = false;
@@ -564,7 +584,7 @@ public class RRShooter
         
         RoboRebels.time_last_update = time_current;
         
-        RoboRebels.printLCD(6, "LS Position: " + RRTracker.round(RoboRebels.angle_position)); 
+        RoboRebels.printLCD(5, "LS Position: " + RRTracker.round(RoboRebels.angle_position)); 
         
         System.out.println("LS Position: " + RRTracker.round(RoboRebels.angle_position));
         

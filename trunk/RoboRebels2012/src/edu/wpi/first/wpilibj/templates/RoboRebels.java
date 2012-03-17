@@ -159,7 +159,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    RIGHT_TARGET = 4;      // Right Middle target
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
-    static boolean      going_for_highest = true;   // When locked on a center target, shoot for highest instead of lowest basket target
+    static boolean      going_for_highest = false;   // When locked on a center target, shoot for highest instead of lowest basket target
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
@@ -167,7 +167,7 @@ public class RoboRebels extends IterativeRobot {
     
     static double       muzzle_velocity = 7.5;  // Actual muzzle velocity 8.5 meters per second
 
-    final static int    NUMBER_OF_PREVIOUS = 20;
+    final static int    NUMBER_OF_PREVIOUS = 15;
     static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
     static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;

@@ -228,9 +228,10 @@ public class RRTracker
                         lowest = false; 
   
                 }
+                        // Put it here!
               }
-              
-              if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
+
+            else if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
               {
                  selected_target_index = 0; 
                  int left_target_index = 0;
@@ -261,15 +262,20 @@ public class RRTracker
                }   
               
               // Targeting image processing is now done.
-                  
-                ParticleAnalysisReport r = reports[selected_target_index];
-                
+              
+              ParticleAnalysisReport r = reports[selected_target_index];
+           
+              double aspect_ratio = ((double)r.boundingRectWidth)/((double)r.boundingRectHeight);
+              
+              if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
+               {
+                               
                 double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
                 
                 System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + 
-                        " Aspect: " + round2((double)r.boundingRectWidth/r.boundingRectHeight) + 
+                        " Aspect: " + round2(aspect_ratio) + 
                         " Distance: " + round(distance));
                 
  //               int     targetID = 0;
@@ -283,19 +289,27 @@ public class RRTracker
                 
                 if (target_selected == RoboRebels.HIGHEST_TARGET)
                 {
-                     RoboRebels.printLCD(5, "Dist: " + display_distance + " to Highest" );
+                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Highest" );
                 }
                 else if ( target_selected == RoboRebels.LEFT_TARGET)
                 {
-                RoboRebels.printLCD(5, "Dist: " + display_distance + " to Left" );
+                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Left" );
                 }             
-                else if ( target_selected == RoboRebels. LOWEST_TARGET)
+                else if ( target_selected == RoboRebels.LOWEST_TARGET)
                 {
-                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Lowest" );  
+                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Lowest" );  
                 }    
-                 else if ( target_selected == RoboRebels. RIGHT_TARGET)
+                 else if ( target_selected == RoboRebels.RIGHT_TARGET)
                 {
-                    RoboRebels.printLCD(5, "Dist: " + display_distance + " to Right" ); 
+                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Right" ); 
+                }
+                 else if ( target_selected == RoboRebels.AUTO_TARGET)
+                {
+                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Center" ); 
+                }
+                else
+                {
+                    RoboRebels.printLCD(2, "Dist: No Target" ); 
                 }
                                  
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
@@ -351,14 +365,15 @@ public class RRTracker
                     else
                         RoboRebels.target_elevation = RoboRebels.LOCK;  // Don't move, we are at right angle!          
                 }                      
-            
        //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
-                
-            } else  // with no target, hold all tracking
-            {
-                RoboRebels.target_azimuth = RoboRebels.HOLD;
-                RoboRebels.target_elevation = RoboRebels.HOLD;
-                RoboRebels.target_elevation = RoboRebels.HOLD;
+             } else
+              {
+                  RoboRebels.printLCD(2, "No Target Detected!" );
+                  RoboRebels.target_azimuth = RoboRebels.HOLD;
+                  RoboRebels.target_elevation = RoboRebels.HOLD;
+                  RoboRebels.target_elevation = RoboRebels.HOLD;
+              }
+              
             }
             /**
              * all images in Java must be freed after they are used since they are allocated out
@@ -452,7 +467,7 @@ public class RRTracker
                 
         double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
         
-        RoboRebels.printLCD(4, "Tilt ang.: " + round(moving_average_angle));
+        RoboRebels.printLCD(4, "Tilt: " + round(moving_average_angle) + "|Act: " + round(current_angle));
 
         return moving_average_angle;
         
