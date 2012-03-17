@@ -62,6 +62,7 @@ public class RRShooter
     
     private     RRTracker       tracker;
     private     RRBallSensor    sensor;
+    private     RRGatherer      gatherer;
     
     private     boolean         tracking = false; // Indicates if robot is tracking target
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
@@ -69,6 +70,10 @@ public class RRShooter
     
     private boolean isRetracting = false;
     private boolean isExpanding = false;
+    public  boolean isShooting = false;
+    public  boolean isFinishedShooting = false;
+    private boolean ball_present = false;
+        
     //int target_direction = 1;
     
     /**
@@ -431,11 +436,38 @@ public class RRShooter
         // Process input from joystick and other inputs
         gatherInputStates();
         
+        if (isShooting){
+            
+             
+            System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
+        
+            if (sensor.getShootSensor() == true)
+            {
+                ball_present = true; 
+            }
+
+            else if (sensor.getShootSensor() == false && ball_present == true )
+
+            {
+                // load motor stop
+                
+                gatherer.stop();
+
+                ball_present = false;
+                isShooting = false;
+                
+                isFinishedShooting = true;   // Need to set this to false somewhere
+           
+            }       
+        
+            gatherer.elevate();
+
+            
+        }
+        
         // Process shooter states
         setShooterSpeeds();
-        
-        // track target
-        //tracker.trackTarget();    // trackTarget was getting called twice
+  
     }
     
     
@@ -548,6 +580,11 @@ public class RRShooter
     public void reset()
     {
         tracking = false;
+        isShooting = false;
+        isRetracting = false;
+        isExpanding = false;
+        ball_present = false;
+        
     }
     
 }

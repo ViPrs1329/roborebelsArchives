@@ -13,8 +13,9 @@ public class RRAutonomous {
     int                         target_selected;
     RRDIPSwitch                 dipSwitch;
     private     RRTracker       tracker;
+    private     RRShooter       shooter;
     private     RRBallSensor    sensor;
-    private     boolean         ball_present = false;
+
     private     boolean         delay_shooting  = true;
     
     void auton_init()   // called once at start of Autonomous period
@@ -59,33 +60,24 @@ public class RRAutonomous {
         
         tracker.trackTarget(target_selected);
         
-        //calculate trajectory
+        //check to see if target locked
         
+       if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+       {
+           shooter.isShooting = true;
+       }
+        
+       if (shooter.isFinishedShooting == true);
+       {
         /*
-         * power shooting motor and move loader belts
-         * check sensors 'is ball launched' 
+         *Need to delay so we don't shoot again immediately 
          */
-        
-        System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
-        
-        if (sensor.getShootSensor() == true)
-        {
-            ball_present = true; 
-        }
-        
-        else if (sensor.getShootSensor() == false && ball_present == true )
-            
-        {
-            // load motor stop
-            
-            ball_present = false;
            
-        }
+           // shooter.isFinishedShooting = false;
         
         }
         
-        
-        
+       
         // wait for ball to score while re-calculating trajectory
         
         //shoot a second time
@@ -101,5 +93,5 @@ public class RRAutonomous {
         
     }
     
-    
+}
 
