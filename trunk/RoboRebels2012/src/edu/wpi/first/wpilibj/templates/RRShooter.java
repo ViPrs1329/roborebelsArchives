@@ -236,13 +236,16 @@ public class RRShooter
         //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
         if ( LSLState )
         {
-            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
+            System.out.println("Lazy susan Right");
             lazySusanSpeed = 1.0 * LS_SPEED;
         }
         else if ( LSRState )
         {
-            System.out.println("Lazy susan left"); //TODO: should this be lazy susan left or right
-            lazySusanSpeed = -1.0 * LS_SPEED;
+            System.out.println("Lazy susan Left"); 
+            if (LS_SPEED == 0.2)
+                lazySusanSpeed = -1.0 * LS_SPEED * 1.32;  // Motor runs more slowly to left at this speed
+            else
+                lazySusanSpeed = -1.0 * LS_SPEED;
         }
         else if ( !LSLState && !LSRState )
         {
