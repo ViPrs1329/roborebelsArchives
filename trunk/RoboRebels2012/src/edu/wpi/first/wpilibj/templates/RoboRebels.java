@@ -153,9 +153,12 @@ public class RoboRebels extends IterativeRobot {
     final static int    PIXEL_ACCURACY = 16;      // Used by RRTRacker to determne when Locked.
     final static int    ANGLE_ACCURACY = 6;       // Used by RRTRacker to determne when Locked.
     
-    final static int    LOWEST = 0;     // Lowest basket target
-    final static int    MIDDLE = 1;     // Middle basket target
-    final static int    HIGHEST = 2;    // Highest basket target
+    final static int    LOWEST_TARGET  = 0;     // Lowest basket target
+    //    final static int    MIDDLE = 1;     // Middle basket target
+    final static int    HIGHEST_TARGET = 2;    // Highest basket target
+    final static int    LEFT_TARGET = 3;       // Left Middle target
+    final static int    RIGHT_TARGET = 4;      // Right Middle target
+    final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
     static boolean      going_for_highest = false;   // When locked on a center target, shoot for highest instead of lowest basket target
     
@@ -283,7 +286,10 @@ public class RoboRebels extends IterativeRobot {
      *
      */
     public void autonomousPeriodic() {
-        tracker.trackTarget();
+        tracker.trackTarget(RoboRebels.AUTO_TARGET);
+        
+        
+        
         //System.out.println(getAngle());
     }
 
@@ -313,7 +319,7 @@ public class RoboRebels extends IterativeRobot {
             //System.out.println("Arcade Drive");
         }
         
-      tracker.trackTarget();   
+      tracker.trackTarget(RoboRebels.AUTO_TARGET);   
       shooter.shoot();
       gatherer.gather();
       arm.arm();
@@ -337,6 +343,8 @@ public class RoboRebels extends IterativeRobot {
      * The VM will try to call this function as often as possible during the autonomous state
      *
      */
+   
+    
     public void autonomousContinuous() {
         //nothing right now
     }
