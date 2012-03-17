@@ -353,6 +353,12 @@ public class RRTracker
                 }                      
             
        //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
+                
+            } else  // with no target, hold all tracking
+            {
+                RoboRebels.target_azimuth = RoboRebels.HOLD;
+                RoboRebels.target_elevation = RoboRebels.HOLD;
+                RoboRebels.target_elevation = RoboRebels.HOLD;
             }
             /**
              * all images in Java must be freed after they are used since they are allocated out
