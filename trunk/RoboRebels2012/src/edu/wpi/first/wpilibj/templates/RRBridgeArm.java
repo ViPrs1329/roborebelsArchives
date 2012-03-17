@@ -94,7 +94,6 @@ public class RRBridgeArm
         */
         double      armAxis = RRButtonMap.getActionObject(RRButtonMap.BRIDGE_ARM_DOWN).getAxisState();
         
-        System.out.println("*********RRBridgeArm::armAxis = " + armAxis);
         
         if ( !(armAxis < ARM_DEAD_ZONE && armAxis > (-1.0 * ARM_DEAD_ZONE)) )
         {
@@ -102,7 +101,6 @@ public class RRBridgeArm
                 armSpeed = armAxis;
             else
                 armSpeed = armAxis * ARM_UP_SPEED;
-            System.out.println("**********RRBridgeArm::gatherInputStates()::armSpeed = " + armSpeed);
         }
         else
         {

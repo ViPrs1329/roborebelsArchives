@@ -140,6 +140,30 @@ public class RRGatherer
         setGathererSpeeds();
     }
     
+    
+    
+    public void gatherAuton()
+    {
+        setGathererSpeeds();
+    }
+    
+    
+    public void elevate()
+    {
+        conveyerSpeed = -1.0 * CONVEYER_SPEED;
+    }
+    
+    public void descend()
+    {
+        conveyerSpeed = CONVEYER_SPEED;
+    }
+    
+    public void stop()
+    {
+        conveyerSpeed = 0.0;
+    }
+    
+    
     /**
      * 
      */
