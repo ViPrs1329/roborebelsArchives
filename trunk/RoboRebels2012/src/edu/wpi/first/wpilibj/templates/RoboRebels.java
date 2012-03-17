@@ -130,10 +130,12 @@ public class RoboRebels extends IterativeRobot {
     double              launcher_speed = 0.0;
     boolean             launcher_button_pressed = false;
     
-    final static int    LEFT = -1;
-    final static int    RIGHT = 1;
-    final static int    FAR_LEFT = -2;
-    final static int    FAR_RIGHT = 2;
+    final static int    CLOSE_LEFT = -1;
+    final static int    CLOSE_RIGHT = 1;
+    final static int    LEFT = -2;
+    final static int    RIGHT = -2;
+    final static int    FAR_LEFT = -3;
+    final static int    FAR_RIGHT = 3;
     final static int    LOCK = 0;
     final static int    UP = 1;
     final static int    DOWN = -1;
@@ -175,6 +177,9 @@ public class RoboRebels extends IterativeRobot {
     static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired
     static boolean      elevation_lock = false; // elevation (up/down) target lock acquired
     static boolean      muzzle_velocity_lock = false;  // muzzle velocity is correct
+    
+    static  boolean     isFinishedShooting = false;  // True when a ball has just been shot
+    static  boolean     isShooting = false;         // True when ball is in process of being shot
     
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
@@ -243,7 +248,7 @@ public class RoboRebels extends IterativeRobot {
         
         autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor);
         
-        shooter.isFinishedShooting = false;  // This should go in auton_init but it doesn't seem to be called now.
+        isFinishedShooting = false;  
         
         time_last_update = Timer.getFPGATimestamp();
          
@@ -272,6 +277,9 @@ public class RoboRebels extends IterativeRobot {
         // Get the time that the autonomous mode starts
         autonomousStartTime = Timer.getFPGATimestamp();
         
+        isFinishedShooting = false;  
+        isShooting = false;  
+     
         autonomous.auton_init();
     }
 

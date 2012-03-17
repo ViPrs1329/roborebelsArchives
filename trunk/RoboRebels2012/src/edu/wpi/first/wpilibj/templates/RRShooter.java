@@ -73,8 +73,8 @@ public class RRShooter
     
     private boolean isRetracting = false;
     private boolean isExpanding = false;
-    public  boolean isShooting = false;
-    public  boolean isFinishedShooting = false;
+
+
     private boolean ball_present = false;
         
     //int target_direction = 1;
@@ -279,28 +279,42 @@ public class RRShooter
         {
             System.out.println("Track Target Button Pressed");
                         
-            if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left slowly
+            if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
             {
-                System.out.println("Auto Lazy susan left"); 
-                lazySusanSpeed = -0.15;  // was -0.75 * LS_SPEED
+                System.out.println("Auto Lazy susan left fast"); 
+                lazySusanSpeed = -0.15;  
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
-             if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
+            else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
+            {
+                System.out.println("Auto Lazy susan left"); 
+                lazySusanSpeed = -0.20;  // was -0.75 * LS_SPEED
+                tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
+            }
+            else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
             {
                 System.out.println("Auto Lazy susan left fast"); 
                 lazySusanSpeed = -0.3;  
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
-            else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right slowly
+            else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
             {
                 System.out.println("Auto Lazy susan right"); 
-                lazySusanSpeed = 0.15;
+                lazySusanSpeed = 0.15 * 1.2;            // Added 20% due to motor slowness
                 tracking = true;
                 RoboRebels.azimuth_lock = false;         // No azimuth target lock
             }
-           else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
+            else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
+            {
+                System.out.println("Auto Lazy susan right"); 
+                lazySusanSpeed = 0.20  * 1.2;           // Added 20% due to motor slowness
+                tracking = true;
+                RoboRebels.azimuth_lock = false;         // No azimuth target lock
+            }
+            else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
             {
                 System.out.println("Auto Lazy susan right fast"); 
                 lazySusanSpeed = 0.30;
@@ -330,14 +344,14 @@ public class RRShooter
                 tiltSpeed = -1.0 * TILT_SPEED * 0.5;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
             }
-             else if (RoboRebels.target_elevation == RoboRebels.DOWN)
+            else if (RoboRebels.target_elevation == RoboRebels.DOWN)
             {
                 System.out.println("Auto Tilt Down"); 
                 tiltSpeed = 1.0 * TILT_SPEED * 0.5;
                 RoboRebels.elevation_lock = false;         // No elevation target lock
            }
-            else if (RoboRebels.target_elevation == RoboRebels.LOCK)
-            {
+           else if (RoboRebels.target_elevation == RoboRebels.LOCK)
+           {
                 tiltSpeed = 0.0;                      // Stop Tilting
                 RoboRebels.elevation_lock = true;     // Indicate elevation target lock
             }
@@ -471,7 +485,7 @@ public class RRShooter
         // Process input from joystick and other inputs
         gatherInputStates();
         
-        if (isShooting){
+        if (RoboRebels.isShooting){
             
              
             System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
@@ -486,18 +500,18 @@ public class RRShooter
             {
                 // load motor stop
                 
-                // gatherer.stop();
-                System.out.println("Gatherer Off!");
+                //gatherer.stop();
+                System.out.println("Gatherer Motor is Off!");
 
                 ball_present = false;
-                isShooting = false;
+                RoboRebels.isShooting = false;
                 
-                isFinishedShooting = true;   // Need to set this to false somewhere
+                RoboRebels.isFinishedShooting = true;   // Need to set this to false somewhere
            
             }       
         
-            //gatherer.elevate();
-            System.out.println("Gatherer On!");
+            // gatherer.elevate();
+            System.out.println("Gatherer Motor is On!");
 
             
         }
@@ -617,7 +631,6 @@ public class RRShooter
     public void reset()
     {
         tracking = false;
-        isShooting = false;
         isRetracting = false;
         isExpanding = false;
         ball_present = false;

@@ -61,7 +61,7 @@ public class RRAutonomous {
         
         System.out.println("auton_init");
         
-        shooter.isFinishedShooting = false;
+        RoboRebels.isFinishedShooting = false;
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
@@ -77,12 +77,12 @@ public class RRAutonomous {
         
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
-           shooter.isShooting = true;
+           RoboRebels.isShooting = true;
            System.out.println("Shooting Now");
 
        }
         
-       if (shooter.isFinishedShooting == true);
+       if (RoboRebels.isFinishedShooting == true);
        {
         /*
          *Need to delay so we don't shoot again immediately 

@@ -231,7 +231,7 @@ public class RRTracker
                         // Put it here!
               }
 
-            else if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
+              else if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
               {
                  selected_target_index = 0; 
                  int left_target_index = 0;
@@ -305,7 +305,7 @@ public class RRTracker
                 }
                  else if ( target_selected == RoboRebels.AUTO_TARGET)
                 {
-                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Center" ); 
+                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Target" ); 
                 }
                 else
                 {
@@ -321,18 +321,31 @@ public class RRTracker
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
-                if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY/2)      
-                {   if (x(r.center_mass_x, r.boundingRectWidth) > RoboRebels.PIXEL_ACCURACY*3)      
-                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far to left
-                    else
-                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move to left
-                }
-                else if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY/2)
+                int x = x(r.center_mass_x, r.boundingRectWidth);
+                
+                if ((x > RoboRebels.PIXEL_ACCURACY/2) && (x < RoboRebels.PIXEL_ACCURACY*2))      
                 {
-                    if(x(r.center_mass_x, r.boundingRectWidth) < -RoboRebels.PIXEL_ACCURACY*3)
-                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;   // LazySusan meeds to move far to left
-                    else
-                        RoboRebels.target_azimuth = RoboRebels.RIGHT;   // LazySusan meeds to move to left
+                        RoboRebels.target_azimuth = RoboRebels.CLOSE_LEFT;  // LazySusan needs to only a little to left
+                }
+                else if ((x >= RoboRebels.PIXEL_ACCURACY*2) && (x < RoboRebels.PIXEL_ACCURACY*4))
+                {
+                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
+                }  
+                else if (x >= RoboRebels.PIXEL_ACCURACY*4)
+                {
+                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
+                }
+                else if ((x < -RoboRebels.PIXEL_ACCURACY/2) && (x > -RoboRebels.PIXEL_ACCURACY*2))      
+                {
+                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
+                }
+                else if ((x <= -RoboRebels.PIXEL_ACCURACY*2) && (x > -RoboRebels.PIXEL_ACCURACY*4))
+                {
+                        RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
+                }  
+                else if (x <= -RoboRebels.PIXEL_ACCURACY*4)
+                {
+                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
                 }
                 else
                 {
@@ -340,6 +353,7 @@ public class RRTracker
                     RoboRebels.azimuth_lock = true;                 // Don't move, we are facing target!
                     shooter.stopLazySusan();                        // Immediately stop LazySusan to prevent overshoot
                 }
+                
                 if (angle == 0.0)  // Check to see if there is a valid angle
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
@@ -395,6 +409,7 @@ public class RRTracker
         }
         System.out.println(Timer.getFPGATimestamp() - start);
     }
+//}       // Just added this now
     
 /**  These two are not currently used. 
  * 
