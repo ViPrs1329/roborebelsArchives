@@ -251,6 +251,12 @@ public class RoboRebels extends IterativeRobot {
         teleopStateBroadcasted = false;
         autonomousStateBroadcasted = false;
         
+        time_last_update = Timer.getFPGATimestamp();
+        azimuth_lock = false;  //  azimuth (left/right) target lock acquired
+        elevation_lock = false; // elevation (up/down) target lock acquired
+        muzzle_velocity_lock = false;
+        angle_position = 0.0;
+        
         shooter.reset();
     }
 
