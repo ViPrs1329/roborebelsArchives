@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.*;
 public class RRShooter 
 {
     private final double        MAX_SHOOTING_SPEED = 1.0;
+    private final double        STARTING_SHOOTING_SPEED = 0.85;
     private final double        LS_SPEED = 0.20;
     private final double        TILT_SPEED = 0.4;
     private final double        EXP_CONTR_TILT_MULT = 0.75;
@@ -560,8 +561,15 @@ public class RRShooter
     
     private double getTransformedZValue()
     {
+        double speed;
         RRAction        aoS = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_SPEED);
-        return MAX_SHOOTING_SPEED * (aoS.js.getZ() + 1.0) / 2.0;
+ //       return MAX_SHOOTING_SPEED * (aoS.js.getZ() + 1.0) / 2.0;
+        
+        //  speed is adjusted between (2*STARTING_SHOOTING_SPEED - MAX_SHOOTING_SPEED) and MAX_SHOOTING_SPEED
+        
+        speed = STARTING_SHOOTING_SPEED + (STARTING_SHOOTING_SPEED - MAX_SHOOTING_SPEED) * aoS.js.getZ(); // getZ() is in range +/- 1?
+        System.out.println("New Shooting Speed: " + RRTracker.round2(speed));
+        return speed;
     }
     
         /**
