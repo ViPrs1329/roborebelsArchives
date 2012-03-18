@@ -205,7 +205,7 @@ public class RRShooter
             shootingButtonPressed = false;
         }
         
-        if ( shootingWheelState ) 
+        if ( shootingWheelState ) // Shooting button just pressed
         {
         //    shootingWheelSpeed = this.getTransformedZValue();
             
@@ -218,6 +218,7 @@ public class RRShooter
             else
                 shootingWheelSpeed = 0.85;
            
+            shootBall();
             
         } else 
         {
@@ -296,9 +297,10 @@ public class RRShooter
         
         TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
         //if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
-        if ( TTState )
+        if ( TTState  || RoboRebels.autonomous_mode)
         {
-            System.out.println("Track Target Button Pressed");
+             if (TTState) 
+                 System.out.println("Track Target Button Pressed");
                         
             if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
             {
@@ -375,11 +377,13 @@ public class RRShooter
            {
                 tiltSpeed = 0.0;                      // Stop Tilting
                 RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+                System.out.println("Auto Tilt Lock"); 
             }
             else             // is HOLD
             {
                tiltSpeed = 0.0;
                RoboRebels.elevation_lock = false;         // No elevation target lock
+               System.out.println("Auto Tilt Hold"); 
             }
             
             if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
@@ -398,10 +402,12 @@ public class RRShooter
             {
                 // Muzzle velocity is fine - don't change
                 RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
+                System.out.println("Auto Shooting Lock"); 
             }
             else
             {
                   RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
+                  System.out.println("Auto Shooting Hold"); 
             }
         
         } else if (tracking)   // Was tracking target, but now no longer tracking
@@ -474,7 +480,7 @@ public class RRShooter
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
-            RoboRebels.printLCD(6, "All Locked! Fire When Ready!");  
+            RoboRebels.printLCD(6, "All Locked!                ");  
             shootBall();
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
@@ -486,9 +492,9 @@ public class RRShooter
        else if (RoboRebels.elevation_lock)
             RoboRebels.printLCD(6, "Angle Locked!               ");
        else if (RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Speed Locked!");
+            RoboRebels.printLCD(6, "Speed Locked!               ");
        else if (RoboRebels.azimuth_lock)
-            RoboRebels.printLCD(6, "LS Locked!");
+            RoboRebels.printLCD(6, "LS Locked!                  ");
        else if (tracking) 
             RoboRebels.printLCD(6, "Tracking Target...          "); 
        else 
@@ -504,7 +510,11 @@ public class RRShooter
     public void shoot()
     {
         // Process input from joystick and other inputs
+        System.out.println("Starting Shoot"); 
+        
         gatherInputStates();
+        
+        System.out.println("Middle of Shoot");
         
         if (RoboRebels.isShooting){
             
@@ -554,18 +564,18 @@ public class RRShooter
         System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
         
-        int result = check_ls_position();    // Check for LS position before changing LS Speed.
+ //       int result = check_ls_position();    // Check for LS position before changing LS Speed.
         
-        if ((lazySusanSpeed < 0.0) && result == RoboRebels.AT_LEFT_LIMIT)
-        {
-            System.out.println("LS Stopped at Left Limit");
+ //       if ((lazySusanSpeed < 0.0) && result == RoboRebels.AT_LEFT_LIMIT)
+ //       {
+ //           System.out.println("LS Stopped at Left Limit");
             //lazySusanSpeed = 0.0;
-        }
-        else if ((lazySusanSpeed > 0.0) && result == RoboRebels.AT_RIGHT_LIMIT)
-        {
-            System.out.println("LS Stopped at Right Limit");
+  //      }
+  //      else if ((lazySusanSpeed > 0.0) && result == RoboRebels.AT_RIGHT_LIMIT)
+  //      {
+   //         System.out.println("LS Stopped at Right Limit");
             //lazySusanSpeed = 0.0;
-        }   
+   //     }   
         lsVictor.set(lazySusanSpeed);
         current_lazySusanSpeed = lazySusanSpeed;    // Stores current speed for next position calculation
     }
@@ -598,7 +608,7 @@ public class RRShooter
     public void stopLazySusan()
     {
         lazySusanSpeed = 0.0;
-        check_ls_position();
+        //check_ls_position();
         lsVictor.set(0.0);
         current_lazySusanSpeed = lazySusanSpeed;
  

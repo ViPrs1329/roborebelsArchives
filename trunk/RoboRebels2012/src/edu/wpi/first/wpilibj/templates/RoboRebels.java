@@ -184,8 +184,10 @@ public class RoboRebels extends IterativeRobot {
     static  boolean     delay_after_two_balls = false;
     static  boolean     shot_first_ball = false;
     static  boolean     shot_second_ball = false;
-    final static double TICKS_FOR_3_SECONDS = 0;  // Used for delay between shots
+    final static double TICKS_FOR_3_SECONDS = 3.0;  // Used for delay between shots
     static  double      time_started_waiting;
+    
+    static  boolean     autonomous_mode = true;
     
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
@@ -245,7 +247,7 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("Arm");
         
         sensor = new RRBallSensor();
-        sensor.ballSensorInit(6, 4); // These are the values from last year.
+        sensor.ballSensorInit(5, 4); // These are the values from last year.
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
                                 TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor);
@@ -289,6 +291,8 @@ public class RoboRebels extends IterativeRobot {
         delay_after_two_balls = false;
         shot_first_ball = false;
         shot_second_ball = false;
+        
+        autonomous_mode = true;
      
         autonomous.auton_init();
     }
@@ -299,6 +303,7 @@ public class RoboRebels extends IterativeRobot {
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
         tankDrive = false;
+        autonomous_mode = false;
 
         /* Drive station code */
         //m_ds = DriverStation.getInstance();

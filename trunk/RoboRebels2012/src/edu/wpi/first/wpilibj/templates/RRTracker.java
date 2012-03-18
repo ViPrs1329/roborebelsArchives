@@ -79,7 +79,8 @@ public class RRTracker
             //BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
 
             // TODO:  The white object threshold value needs to be tested to get an optimal number
-            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
+//            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
+            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects
 
             // blue value was adjusted (above) because of ambient sunlight
            
@@ -267,17 +268,19 @@ public class RRTracker
            
               double aspect_ratio = ((double)r.boundingRectWidth)/((double)r.boundingRectHeight);
               
-              if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
-               {
-                               
-                double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
-                
-                System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+              double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
+           
+               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) + 
                         " Distance: " + round(distance));
+               
+               if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
+               {
+                               
                 
+            
  //               int     targetID = 0;
                 
  //               RoboRebels.going_for_highest = dipSwitch.getState(0);                   // Read first DIP Switch
@@ -316,38 +319,40 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                // angle = 55.0;
+                angle += -10.0;  // Fudge Factor.
+                
+                // angle = 55;
                     
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
-                RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + " Calc: " + round(angle) + " Delta: " +
+                RoboRebels.printLCD(4, "T " + round(RoboRebels.tilt_angle) + " C " + round(angle) + " D " +
                         round(angle - RoboRebels.tilt_angle));
 
                 
                 int x = x(r.center_mass_x, r.boundingRectWidth);
                 
-                if ((x > RoboRebels.PIXEL_ACCURACY/2) && (x < RoboRebels.PIXEL_ACCURACY*2))      
+                if ((x > RoboRebels.PIXEL_ACCURACY/2) && (x < RoboRebels.PIXEL_ACCURACY*4))      
                 {
                         RoboRebels.target_azimuth = RoboRebels.CLOSE_LEFT;  // LazySusan needs to only a little to left
                 }
-                else if ((x >= RoboRebels.PIXEL_ACCURACY*2) && (x < RoboRebels.PIXEL_ACCURACY*4))
+                else if ((x >= RoboRebels.PIXEL_ACCURACY*4) && (x < RoboRebels.PIXEL_ACCURACY*6))
                 {
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
                 }  
-                else if (x >= RoboRebels.PIXEL_ACCURACY*4)
+                else if (x >= RoboRebels.PIXEL_ACCURACY*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
                 }
-                else if ((x < -RoboRebels.PIXEL_ACCURACY/2) && (x > -RoboRebels.PIXEL_ACCURACY*2))      
+                else if ((x < -RoboRebels.PIXEL_ACCURACY/2) && (x > -RoboRebels.PIXEL_ACCURACY*4))      
                 {
                         RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
                 }
-                else if ((x <= -RoboRebels.PIXEL_ACCURACY*2) && (x > -RoboRebels.PIXEL_ACCURACY*4))
+                else if ((x <= -RoboRebels.PIXEL_ACCURACY*4) && (x > -RoboRebels.PIXEL_ACCURACY*6))
                 {
                         RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
                 }  
-                else if (x <= -RoboRebels.PIXEL_ACCURACY*4)
+                else if (x <= -RoboRebels.PIXEL_ACCURACY*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
                 }
@@ -358,7 +363,7 @@ public class RRTracker
                     shooter.stopLazySusan();                        // Immediately stop LazySusan to prevent overshoot
                 }
                 
-                if (angle == 0.0)  // Check to see if there is a valid angle
+                if (angle <= 45.0)  // Check to see if there is a valid angle
                 {
                     RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
                     RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
@@ -386,12 +391,25 @@ public class RRTracker
        //     System.out.println(filteredImage.getNumberParticles() + "  " + Timer.getFPGATimestamp());
              } else
               {
-                  RoboRebels.printLCD(2, "No Target Detected!" );
+                  RoboRebels.printLCD(2, "Target Not Valid!          " );
+                  
+                  System.out.println("Target Not Valid!         ");
+                  
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
               }
               
+            }
+            else
+            {
+                  RoboRebels.printLCD(2, "No Target Detected!          " );
+                  System.out.println("No Target Detected!         ");
+                  
+                  RoboRebels.target_azimuth = RoboRebels.HOLD;
+                  RoboRebels.target_elevation = RoboRebels.HOLD;
+                  RoboRebels.target_elevation = RoboRebels.HOLD;
+
             }
             /**
              * all images in Java must be freed after they are used since they are allocated out
