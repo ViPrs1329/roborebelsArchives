@@ -510,7 +510,7 @@ public class RRTracker
     
     static public double round(double x)  // Rounds double X to one decimal place
     {
-        double z = ((int)((x + 0.5) * 10.0))/10.0;
+        double z = ((int)((x + 0.05) * 10.0))/10.0;
                        
         return z;
                 
@@ -518,7 +518,7 @@ public class RRTracker
     
     static public double round2(double x)  // Rounds double X to two decimal places
     {
-        double z = ((int)((x + 0.05) * 100.0))/100.0;
+        double z = ((int)((x + 0.005) * 100.0))/100.0;
                        
         return z;
                 
