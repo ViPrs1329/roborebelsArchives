@@ -180,6 +180,12 @@ public class RoboRebels extends IterativeRobot {
     
     static  boolean     isFinishedShooting = false;  // True when a ball has just been shot
     static  boolean     isShooting = false;         // True when ball is in process of being shot
+    static  boolean     delay_between_balls = false;  // True when waiting between shooting balls
+    static  boolean     delay_after_two_balls = false;
+    static  boolean     shot_first_ball = false;
+    static  boolean     shot_second_ball = false;
+    final static double TICKS_FOR_3_SECONDS = 0;  // Used for delay between shots
+    static  double      time_started_waiting;
     
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
@@ -279,6 +285,10 @@ public class RoboRebels extends IterativeRobot {
         
         isFinishedShooting = false;  
         isShooting = false;  
+        delay_between_balls = false;
+        delay_after_two_balls = false;
+        shot_first_ball = false;
+        shot_second_ball = false;
      
         autonomous.auton_init();
     }

@@ -219,7 +219,8 @@ public class RRShooter
         if ( TUState )
         {
             System.out.println("Tilt up");
-            
+            RoboRebels.elevation_lock = false;         // No elevation target lock
+ 
             tiltSpeed = -1.0 * TILT_SPEED;
             
         }
@@ -236,6 +237,8 @@ public class RRShooter
                     System.out.println("Tilter limit switch pressed!");
                     tiltSpeed = 0.0;
                 }*/
+                RoboRebels.elevation_lock = false;         // No elevation target lock
+ 
                 tiltSpeed = TILT_SPEED;
             }
             else
@@ -257,7 +260,8 @@ public class RRShooter
         //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
         if ( LSLState )
         {
-            System.out.println("Lazy susan Right");
+           System.out.println("Lazy susan Right");
+           RoboRebels.azimuth_lock = false;         // No azimuth target lock
            if (LS_SPEED == 0.2)
                 lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
             else
@@ -266,6 +270,7 @@ public class RRShooter
         }
         else if ( LSRState )
         {
+            RoboRebels.azimuth_lock = false;         // No azimuth target lock
             lazySusanSpeed = -1.0 * LS_SPEED;
             System.out.println("Lazy susan Left"); 
          }
@@ -589,11 +594,10 @@ public class RRShooter
         
     }
     
-    public boolean shootBall()
+    public void shootBall()
     {
-        System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
-        
-        return (true);  // ball shot!
+        RoboRebels.isShooting = true; 
+        return;  
     }
     
     

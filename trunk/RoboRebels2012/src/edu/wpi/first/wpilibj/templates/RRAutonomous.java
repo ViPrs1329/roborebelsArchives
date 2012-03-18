@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  *
  * @author aidan/alan
@@ -59,46 +61,103 @@ public class RRAutonomous {
             delay_shooting = true;
         }   
         
-        System.out.println("auton_init");
-        
         RoboRebels.isFinishedShooting = false;
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
     {
                          
-        System.out.println("Auton Periodic!!");
+        System.out.println("Auton Periodic State: " + RoboRebels.azimuth_lock + RoboRebels.elevation_lock +
+                RoboRebels.azimuth_lock + RoboRebels.muzzle_velocity_lock + RoboRebels.isShooting + 
+                RoboRebels.isFinishedShooting + RoboRebels.shot_first_ball + RoboRebels.shot_second_ball + 
+                RoboRebels.delay_between_balls + RoboRebels.delay_after_two_balls
+                );
         
+        System.out.println("DIP Switch State: " + dipSwitch.getState(0) + dipSwitch.getState(1) +
+                dipSwitch.getState(2) + dipSwitch.getState(3));
+       
         //lock onto correct target
         
         tracker.trackTarget(target_selected);
         
         //check to see if target locked
         
-       if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+       if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+               && (!RoboRebels.shot_first_ball) && (!RoboRebels.isShooting))
        {
            RoboRebels.isShooting = true;
-           System.out.println("Shooting Now");
-
+           System.out.println("Starting shooting first ball now");
        }
         
-       if (RoboRebels.isFinishedShooting == true);
+       if ((RoboRebels.isFinishedShooting) && (!RoboRebels.shot_first_ball));
+       {
+        /*
+         *Need to delay so we don't shoot again immediately 
+         */
+           
+           System.out.println("Shooting first ball is now Complete");
+           RoboRebels.delay_between_balls = true;
+           RoboRebels.isFinishedShooting = false;
+           RoboRebels.shot_first_ball = true;
+           RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+        }
+        
+       if (RoboRebels.delay_between_balls)
+       {
+       
+        // wait for ball to score while re-calculating trajectory
+            System.out.println("Delaying between balls");
+            
+            double time_current = Timer.getFPGATimestamp();
+            
+            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.TICKS_FOR_3_SECONDS))
+            {
+                RoboRebels.delay_between_balls = false;  // Done waiting
+                 
+                System.out.println("Finished delaying between balls");
+            }       
+       }
+       
+        //shoot a second time
+       if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+               && (RoboRebels.shot_first_ball) && (!RoboRebels.isShooting))
+       {
+           RoboRebels.isShooting = true;
+           System.out.println("Starting shooting second ball now");
+       }
+    
+       if ((RoboRebels.isFinishedShooting) && (RoboRebels.shot_first_ball));
        {
         /*
          *Need to delay so we don't shoot again immediately 
          */
            
            // shooter.isFinishedShooting = false;
-           System.out.println("Shooting is now Complete");
+           System.out.println("Shooting second ball is now Complete");
+           RoboRebels.delay_after_two_balls = true;
+           RoboRebels.isFinishedShooting = false;
+           RoboRebels.shot_second_ball = true;
+           RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
         }
         
+       if (RoboRebels.delay_after_two_balls)
+       {
        
         // wait for ball to score while re-calculating trajectory
-        
-        //shoot a second time
-    
-    
-        
+            System.out.println("Delaying after second ball");
+           
+            double time_current = Timer.getFPGATimestamp();
+            
+            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.TICKS_FOR_3_SECONDS))
+            {
+                System.out.println("Delaying after second ball is now Complete");
+           
+                RoboRebels.delay_after_two_balls = false;  // Done waiting
+             }
+ 
+           
+       }
+
         // drive backwards about 5-10 feet (to be closer than other robots to the balls on the bridge)
         
         //EXPLODE
