@@ -321,6 +321,10 @@ public class RRTracker
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
+                RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + " Calc: " + round(angle) + " Delta: " +
+                        round(angle - RoboRebels.tilt_angle));
+
+                
                 int x = x(r.center_mass_x, r.boundingRectWidth);
                 
                 if ((x > RoboRebels.PIXEL_ACCURACY/2) && (x < RoboRebels.PIXEL_ACCURACY*2))      
@@ -482,7 +486,7 @@ public class RRTracker
                 
         double moving_average_angle = RoboRebels.current_angle_sum / RoboRebels.NUMBER_OF_PREVIOUS;
         
-        RoboRebels.printLCD(4, "Tilt: " + round(moving_average_angle) + "|Act: " + round(current_angle));
+//        RoboRebels.printLCD(4, "Tilt: " + round(moving_average_angle) + "|Act: " + round(current_angle));
 
         return moving_average_angle;
         

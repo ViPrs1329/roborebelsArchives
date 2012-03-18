@@ -217,6 +217,7 @@ public class RRShooter
                 shootingWheelSpeed = 1.0;
             else
                 shootingWheelSpeed = 0.85;
+           
             
         } else 
         {
@@ -473,25 +474,25 @@ public class RRShooter
 
        if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
        {
-            RoboRebels.printLCD(6, "All Locked! Fire When Ready!  ");  
+            RoboRebels.printLCD(6, "All Locked! Fire When Ready!");  
             shootBall();
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "LS & Speed Locked!    "); 
+            RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
-            RoboRebels.printLCD(6, "LS & Angle Locked!"); 
+            RoboRebels.printLCD(6, "LS & Angle Locked!          "); 
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Angle & Speed Locked!"); 
+            RoboRebels.printLCD(6, "Angle & Speed Locked!       "); 
        else if (RoboRebels.elevation_lock)
-            RoboRebels.printLCD(6, "Angle Locked!");
+            RoboRebels.printLCD(6, "Angle Locked!               ");
        else if (RoboRebels.muzzle_velocity_lock)
             RoboRebels.printLCD(6, "Speed Locked!");
        else if (RoboRebels.azimuth_lock)
             RoboRebels.printLCD(6, "LS Locked!");
        else if (tracking) 
-            RoboRebels.printLCD(6, "Tracking Target...         "); 
+            RoboRebels.printLCD(6, "Tracking Target...          "); 
        else 
-            RoboRebels.printLCD(6, "                           ");   // Clear the display
+            RoboRebels.printLCD(6, "                            ");   // Clear the display
     }
     
    
