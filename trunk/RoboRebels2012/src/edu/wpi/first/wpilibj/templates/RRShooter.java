@@ -205,9 +205,21 @@ public class RRShooter
             shootingButtonPressed = false;
         }
         
-        if ( shootingWheelState ) {
-            shootingWheelSpeed = this.getTransformedZValue();
-        } else {
+        if ( shootingWheelState ) 
+        {
+        //    shootingWheelSpeed = this.getTransformedZValue();
+            
+            // Set shooter wheel to speed set by tracking calculations
+            
+            if (RoboRebels.muzzle_velocity == 7.5)
+                shootingWheelSpeed = 0.85;
+            else if (RoboRebels.muzzle_velocity == 8.0)
+                shootingWheelSpeed = 1.0;
+            else
+                shootingWheelSpeed = 0.85;
+            
+        } else 
+        {
             shootingWheelSpeed = 0.0;
         }
         
@@ -372,13 +384,13 @@ public class RRShooter
             if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
             {
                 System.out.println("Auto Shooting Speed Up"); 
-               // Don't know how to do this
+                RoboRebels.muzzle_velocity = 8.0;
                 RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
             {
                 System.out.println("Auto Shooting Speed Down"); 
-               // Don't know how to do this
+                RoboRebels.muzzle_velocity = 7.5;
                 RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
             }
             else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK)
