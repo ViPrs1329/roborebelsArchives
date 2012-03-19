@@ -235,6 +235,8 @@ public class RRShooter
             if (!shootingButtonPressed)  // Button is pushed for first time
             {
                 shootingButtonPressed = true;
+                
+                System.out.println("Trigger Joystick Button Pressed");
    
                 // Set shooter wheel to speed set by tracking calculations
             
@@ -576,7 +578,7 @@ public class RRShooter
             
             else if ((time_left < RoboRebels.SHOOTER_SPINUP_TIME) && (time_left > 0.0))
             {
-
+                 // Motor is up to speed.  Sense ball and run gatherer.
                 boolean ball = sensor.getShootSensor(); 
 
                 System.out.println("Ball Sensor: " + ball);  // True if ball is there, false if no ball
@@ -588,9 +590,7 @@ public class RRShooter
                     gatherer.elevate();                       // Turn on gatherer motor
                     System.out.println("Gatherer Motor is On!");
                 }
-
                 else if (!ball && ball_present)
-
                 {
                     // load motor stop
                     System.out.println("Ball has been shot!");
@@ -620,12 +620,12 @@ public class RRShooter
                     
                     stopShootingBall(); 
             }
-        }
+        }                                               // Finished shooting and now wait before turning off shooting motor.
         else if (RoboRebels.shooter_motor_running)
         {          
-            double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_after_shooting);
+            double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_delivered_ball);
        
-            if (time_left >=  RoboRebels.SHOOTER_SPINDOWN_TIME)
+            if (time_left <  0.0)
             {
                 RoboRebels.shooter_motor_running = false;
                 shootingWheelSpeed = 0.0;
@@ -715,6 +715,7 @@ public class RRShooter
     {
         RoboRebels.isShooting = false;
         RoboRebels.isFinishedShooting = true; 
+        RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
         
         return;
     }
@@ -733,7 +734,7 @@ public class RRShooter
         isExpanding = true;
     }
     
-    public int check_ls_position()
+    public int check_ls_position()      // Didn't get this working - not used.
     {
         
         double calibration_factor = 46.0;  // converts lazySusanSpeed to angular velocity in degrees per tick

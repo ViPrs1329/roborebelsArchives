@@ -191,6 +191,7 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_started_shooter_motor;
     static  double      time_started_tracking;
     static  double      time_after_shooting;
+    static  double      time_delivered_ball;
     static  boolean     shooter_motor_running = false;
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
