@@ -31,31 +31,31 @@ public class RRAutonomous {
     {
         //check dip switches
         
-        if (dipSwitch.getState(0))
+        if (dipSwitch.getState(1))
         {
             target_selected = RoboRebels.HIGHEST_TARGET;   // Read first DIP Switch
             System.out.println("COOLIO! We're locked onto the top target! =)");
         }   
         
-        else if (dipSwitch.getState(1) && dipSwitch.getState(2))
+        else if (dipSwitch.getState(0) && dipSwitch.getState(3))
         {
             target_selected = RoboRebels.LOWEST_TARGET;
             System.out.println("We're locked onto the lowest target! =)");
         }
         
-        else if (dipSwitch.getState(1))
+        else if (dipSwitch.getState(0))
         {
             target_selected = RoboRebels.LEFT_TARGET;
             System.out.println("COOLIO! We're locked onto the left target! =)");
         }
             
-        else if (dipSwitch.getState(2))
+        else if (dipSwitch.getState(3))
         {
             target_selected = RoboRebels.RIGHT_TARGET;
             System.out.println("COOLIO! We're locked onto the right target! =)");
         }
             
-        if (dipSwitch.getState(3))
+        if (dipSwitch.getState(2))
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
@@ -68,9 +68,9 @@ public class RRAutonomous {
     {
                          
         System.out.println("Auton Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + 
-                RoboRebels.azimuth_lock + " " +  RoboRebels.muzzle_velocity_lock + " " +  RoboRebels.isShooting + " " +  
-                RoboRebels.isFinishedShooting + " " +  RoboRebels.shot_first_ball + " " +  RoboRebels.shot_second_ball + " " +  
-                RoboRebels.delay_between_balls + " " +  RoboRebels.delay_after_two_balls
+                RoboRebels.muzzle_velocity_lock + " " +  RoboRebels.isShooting + " " +  
+                RoboRebels.isFinishedShooting + " " +  RoboRebels.shot_first_ball + " " +  RoboRebels.delay_between_balls + " " + 
+                RoboRebels.shot_second_ball + " " +  RoboRebels.delay_after_two_balls + " " + RoboRebels.driving_to_bridge
                 );
         
         System.out.println("DIP Switch State: " + dipSwitch.getState(0) + " " +  dipSwitch.getState(1) + " " + 
@@ -97,7 +97,7 @@ public class RRAutonomous {
          *Need to delay so we don't shoot again immediately 
          */
            
-           System.out.println("Auton Shooting first ball is now Complete!!" + RoboRebels.isFinishedShooting + " " + RoboRebels.shot_first_ball);
+           System.out.println("Auton Shooting first ball is now Complete!! " + RoboRebels.isFinishedShooting + " " + RoboRebels.shot_first_ball);
            RoboRebels.delay_between_balls = true;
            RoboRebels.isFinishedShooting = false;
            RoboRebels.shot_first_ball = true;
@@ -155,11 +155,32 @@ public class RRAutonomous {
                 System.out.println("Auton Delaying after second ball is now Complete");
            
                 RoboRebels.delay_after_two_balls = false;  // Done waiting
+                
+                RoboRebels.time_started_waiting = Timer.getFPGATimestamp();  // Now start driving timer
+                
+                // Drive, robot, drive!!
+             }
+       }
+       if (RoboRebels.driving_to_bridge)
+       {
+       
+        // drive towards bridge.
+           
+            System.out.println("Driving to bridge...");
+           
+            double time_current = Timer.getFPGATimestamp();
+            
+            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DRIVE_TIME_TO_BRIDGE))
+            {
+                System.out.println("Driving to bridge is complete - stopping");
+           
+                RoboRebels.driving_to_bridge = false; 
+               
+                // Stop driving!!
              }
  
            
        }
-
         // drive backwards about 5-10 feet (to be closer than other robots to the balls on the bridge)
         
         //EXPLODE
