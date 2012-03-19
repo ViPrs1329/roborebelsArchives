@@ -207,6 +207,8 @@ public class RoboRebels extends IterativeRobot {
     
     static  boolean     autonomous_mode = true;
     
+    static  boolean     troubleshooting = true;
+    
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
     /*
@@ -268,13 +270,13 @@ public class RoboRebels extends IterativeRobot {
         sensor.ballSensorInit(5, 4); // These are the values from last year.
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor);
+                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor, dipSwitch);
         
         tracker.setShooter(shooter);
         
         autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gatherer);
         
-        isFinishedShooting = false;  
+        isFinishedShooting = true;  
         
         time_last_update = Timer.getFPGATimestamp();
          

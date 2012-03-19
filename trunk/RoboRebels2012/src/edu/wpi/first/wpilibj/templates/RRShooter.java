@@ -67,6 +67,7 @@ public class RRShooter
     private     RRTracker       tracker;
     private     RRBallSensor    sensor;
     private     RRGatherer      gatherer;
+    private     RRDIPSwitch     dipSwitch;
     
     private     boolean         tracking = false; // Indicates if robot is tracking target
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
@@ -88,7 +89,7 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor, RRDIPSwitch ds)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
@@ -96,6 +97,8 @@ public class RRShooter
         tltls_channel = tltlsc;
         
         sensor = ballSensor;
+        
+        dipSwitch = ds; 
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
@@ -328,7 +331,7 @@ public class RRShooter
             
             double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
             
-            if (time > 0)
+            if ((time > 0) && !RoboRebels.troubleshooting)          // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch
             {          
                 if (TTState) 
                     System.out.println("Track Target Button Pressed");
@@ -768,7 +771,14 @@ public class RRShooter
     
     public boolean locked()
     {
-        return (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock);
+        boolean lock_value;
+        
+        if (!RoboRebels.troubleshooting)
+            lock_value =RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
+        else
+            lock_value = dipSwitch.getState(2);
+        
+        return lock_value;
     }
     
 }

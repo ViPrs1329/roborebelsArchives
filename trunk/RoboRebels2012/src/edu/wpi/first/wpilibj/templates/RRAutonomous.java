@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class RRAutonomous {
     
     int                         target_selected;
-    RRDIPSwitch                 dipSwitch;
+    private     RRDIPSwitch     dipSwitch;
     private     RRTracker       tracker;
     private     RRShooter       shooter;
     private     RRBallSensor    sensor;
