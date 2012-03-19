@@ -188,10 +188,16 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_started_waiting;
     static  boolean     driving_to_bridge = false;
     static  double      time_started_shooting;
+    static  double      time_started_shooter_motor;
     static  double      time_started_tracking;
-    static  double      MAX_SHOOTING_TIME = 2.0;
-    static  double      MAX_TRACKING_TIME = 3.0;
+
+    final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
+    final   static  double      SHOOTER_SPINUP_TIME = 1.0;  // Time taken for shooter to get up to speed before we send ball
+    final   static  double      MAX_SHOOTING_TIME = SHOOTER_SPINUP_TIME + 2.0;  // Total time for shooter to give ball to basket
+    final   static  double      DELAY_BETWEEN_SHOTS = 3.0;  // Used for delay between shots in autonomous
+    
     static  boolean     autonomous_complete = false;
+    static  boolean     autonomous_mode_tracking = false;
     static  boolean     autonomous_tracking_failed = false;
     
     final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds

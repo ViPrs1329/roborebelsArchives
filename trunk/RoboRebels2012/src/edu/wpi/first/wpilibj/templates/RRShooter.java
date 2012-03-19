@@ -191,7 +191,8 @@ public class RRShooter
         System.out.println("Z: " + RRTracker.round2(this.getTransformedZValue()));
         //System.out.println("Limit Switch: " + tiltLimitSwitch.get());
         
-        
+ /*     This is the old trigger code that used to turn the shooter motor on and off.  New trigger code puts shooter motor under shooting control 
+  * 
         // Spin up if trigger is pressed 
         //if ( shootingJoystick.getRawButton(RRButtonMap.SHOOT) && !shootingButtonPressed )
         if ( shooterButtonState && !shootingButtonPressed )
@@ -223,6 +224,26 @@ public class RRShooter
         } else 
         {
             shootingWheelSpeed = 0.0;
+        }
+        
+ */     
+        if (shooterButtonState)
+        {
+            if (!shootingButtonPressed)  // Button is pushed for first time
+            {
+                shootingButtonPressed = true;
+   
+                // Set shooter wheel to speed set by tracking calculations
+            
+                if (RoboRebels.muzzle_velocity == 7.5)
+                    shootingWheelSpeed = 0.85;
+                else if (RoboRebels.muzzle_velocity == 8.0)
+                    shootingWheelSpeed = 1.0;
+                else
+                    shootingWheelSpeed = 0.85;
+           
+                shootBall();
+            }
         }
         
         
@@ -295,7 +316,7 @@ public class RRShooter
               
         TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
         //if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
-        if ( TTState || RoboRebels.autonomous_mode)
+        if ( TTState || RoboRebels.autonomous_mode_tracking)
         {
             if (!tracking)      // Starting tracking - first time through this path
             {
@@ -543,8 +564,14 @@ public class RRShooter
         if ((RoboRebels.isShooting))  //  
         {
             double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_shooting);
- 
-            if (time_left > 0.0)
+       
+            if (time_left >=  RoboRebels.SHOOTER_SPINUP_TIME)
+            {
+                // Waiting for motor to spinup
+                System.out.println("Waiting for shooting motor to spinup");
+            }
+            
+            else if ((time_left < RoboRebels.SHOOTER_SPINUP_TIME) && (time_left > 0.0))
             {
 
                 boolean ball = sensor.getShootSensor(); 
@@ -664,6 +691,9 @@ public class RRShooter
     {
         RoboRebels.isShooting = true; 
         RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
+        if (RoboRebels.autonomous_mode)
+            RoboRebels.autonomous_mode_tracking = false; // Don't target while shooting since motor vibration will interfere with targeting
+        
         return;  
     }
     
@@ -671,6 +701,8 @@ public class RRShooter
     {
         RoboRebels.isShooting = false;
         RoboRebels.isFinishedShooting = true; 
+        
+        return;
     }
     
     /**
