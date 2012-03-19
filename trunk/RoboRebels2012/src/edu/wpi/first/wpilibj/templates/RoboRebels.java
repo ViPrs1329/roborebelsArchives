@@ -187,6 +187,8 @@ public class RoboRebels extends IterativeRobot {
     final static double TICKS_FOR_3_SECONDS = 3.0;  // Used for delay between shots
     static  double      time_started_waiting;
     static  boolean     driving_to_bridge = false;
+    static  double      time_started_shooting;
+    static  double      MAX_SHOOTING_TIME = 2.0;    
     
     final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
     
@@ -257,7 +259,7 @@ public class RoboRebels extends IterativeRobot {
         
         tracker.setShooter(shooter);
         
-        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor);
+        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gatherer);
         
         isFinishedShooting = false;  
         
@@ -309,6 +311,9 @@ public class RoboRebels extends IterativeRobot {
         tankDrive = false;
         autonomous_mode = false;
 
+        isFinishedShooting = false;  
+        isShooting = false; 
+        
         /* Drive station code */
         //m_ds = DriverStation.getInstance();
         //m_dsLCD = DriverStationLCD.getInstance();

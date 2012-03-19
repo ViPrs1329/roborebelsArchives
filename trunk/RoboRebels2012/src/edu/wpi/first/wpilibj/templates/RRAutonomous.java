@@ -17,14 +17,16 @@ public class RRAutonomous {
     private     RRTracker       tracker;
     private     RRShooter       shooter;
     private     RRBallSensor    sensor;
+    private     RRGatherer      gatherer;
 
     private     boolean         delay_shooting  = true;
-    public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr)
+    public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr, RRGatherer gr)
     {
         dipSwitch = ds; 
         tracker = tr;
         shooter = sh;
         sensor = sr;
+        gatherer = gr;
     }
     
     void auton_init()   // called once at start of Autonomous period
@@ -60,8 +62,7 @@ public class RRAutonomous {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
         }   
-        
-        RoboRebels.isFinishedShooting = false;
+
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
@@ -80,14 +81,15 @@ public class RRAutonomous {
         
         tracker.trackTarget(target_selected);
         shooter.shoot();
-        //gatherer.gather();
+        gatherer.gather();
         
         //check to see if target locked
         
        if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
                && (!RoboRebels.shot_first_ball) && (!RoboRebels.isShooting))
        {
-           RoboRebels.isShooting = true;
+           shooter.shootBall();
+           
            System.out.println("Auton Starting shooting first ball now");
        }
         
@@ -114,8 +116,7 @@ public class RRAutonomous {
             
             if (time_current > (RoboRebels.time_started_waiting + RoboRebels.TICKS_FOR_3_SECONDS))
             {
-                RoboRebels.delay_between_balls = false;  // Done waiting
-                 
+                RoboRebels.delay_between_balls = false;  // Done waiting              
                 System.out.println("Auton Finished delaying between balls");
             }       
        }
@@ -124,7 +125,8 @@ public class RRAutonomous {
        if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
                && (RoboRebels.shot_first_ball) && (!RoboRebels.isShooting))
        {
-           RoboRebels.isShooting = true;
+           shooter.shootBall();
+           
            System.out.println("Auton Starting shooting second ball now");
        }
     

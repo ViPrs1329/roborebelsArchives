@@ -514,43 +514,65 @@ public class RRShooter
         
         gatherInputStates();
         
-        System.out.println("Middle of Shoot");
+        //System.out.println("Middle of Shoot");
         
-        if (RoboRebels.isShooting){
-            
-             
-            System.out.println("Ball Sensor: " + sensor.getShootSensor());  // True if ball is there, false if no ball
+        // 
         
-            if (sensor.getShootSensor() == true)
+         
+        if ((RoboRebels.isShooting))  //  
+        {
+            double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_shooting);
+ 
+            if (time_left > 0.0)
             {
-                ball_present = true; 
+
+                boolean ball = sensor.getShootSensor(); 
+
+                System.out.println("Ball Sensor: " + ball);  // True if ball is there, false if no ball
+
+                if (ball)
+                {
+                    ball_present = true; 
+                    System.out.println("Ball is Present");
+                    gatherer.elevate();                       // Turn on gatherer motor
+                    System.out.println("Gatherer Motor is On!");
+                }
+
+                else if (!ball && ball_present)
+
+                {
+                    // load motor stop
+                    System.out.println("Ball is no longer Present");
+
+                    gatherer.stop();
+                    System.out.println("Gatherer Motor is Off!");
+
+                    ball_present = false;
+                    
+                    stopShootingBall();  
+
+                } else  
+                {
+
+                // gatherer.elevate();                          // Turn on gatherer motor
+                    System.out.println("Gatherer Motor is On!");
+                }
             }
+            else  // too much time has elapsed
+            {                               
+                    System.out.println("Ball Shooting Timeout!");
 
-            else if (sensor.getShootSensor() == false && ball_present == true )
+                    gatherer.stop();
+                    System.out.println("Gatherer Motor is Off!");
 
-            {
-                // load motor stop
-                
-                //gatherer.stop();
-                System.out.println("Gatherer Motor is Off!");
-
-                ball_present = false;
-                RoboRebels.isShooting = false;
-                
-                RoboRebels.isFinishedShooting = true;   // Need to set this to false somewhere
-           
-            } else
-            {
-        
-            // gatherer.elevate();
-                System.out.println("Gatherer Motor is On!");
+                    ball_present = false;
+                    
+                    stopShootingBall(); 
             }
-            
         }
         
         // Process shooter states
         setShooterSpeeds();
-  
     }
     
     
@@ -621,9 +643,15 @@ public class RRShooter
     public void shootBall()
     {
         RoboRebels.isShooting = true; 
+        RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
         return;  
     }
     
+    public void stopShootingBall()
+    {
+        RoboRebels.isShooting = false;
+        RoboRebels.isFinishedShooting = true; 
+    }
     
     /**
      * This method retracts the shooter by making use of the accelerometer in 

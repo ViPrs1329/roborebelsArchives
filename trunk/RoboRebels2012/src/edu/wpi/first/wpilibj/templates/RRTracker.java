@@ -80,7 +80,7 @@ public class RRTracker
 
             // TODO:  The white object threshold value needs to be tested to get an optimal number
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
-            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects
+            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
 
             // blue value was adjusted (above) because of ambient sunlight
            
