@@ -424,6 +424,12 @@ public class RRShooter
                 RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
                 
                 System.out.println("Tracking Timeout!"); 
+                
+                if (RoboRebels.autonomous_mode)
+                {
+                    RoboRebels.autonomous_tracking_failed = true;
+                    System.out.println("End autonomous tracking"); 
+                }
 
             }
         } 

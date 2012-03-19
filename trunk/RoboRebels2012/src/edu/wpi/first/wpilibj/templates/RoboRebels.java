@@ -192,6 +192,7 @@ public class RoboRebels extends IterativeRobot {
     static  double      MAX_SHOOTING_TIME = 2.0;
     static  double      MAX_TRACKING_TIME = 3.0;
     static  boolean     autonomous_complete = false;
+    static  boolean     autonomous_tracking_failed = false;
     
     final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
     
@@ -303,6 +304,7 @@ public class RoboRebels extends IterativeRobot {
         
         autonomous_mode = true;
         autonomous_complete = false;
+        autonomous_tracking_failed = false;
      
         autonomous.auton_init();
     }

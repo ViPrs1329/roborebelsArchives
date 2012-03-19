@@ -83,6 +83,9 @@ public class RRAutonomous {
         shooter.shoot();
         gatherer.gather();
         
+        if (RoboRebels.autonomous_tracking_failed)  // If tracking failed, end shooting
+            RoboRebels.autonomous_complete = true;   // TODO: Make robot still drive towards bridge to get balls
+        
         //check to see if target locked
         
        if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
