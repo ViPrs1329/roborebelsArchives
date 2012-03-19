@@ -539,11 +539,12 @@ public class RRShooter
                 
                 RoboRebels.isFinishedShooting = true;   // Need to set this to false somewhere
            
-            }       
+            } else
+            {
         
             // gatherer.elevate();
-            System.out.println("Gatherer Motor is On!");
-
+                System.out.println("Gatherer Motor is On!");
+            }
             
         }
         

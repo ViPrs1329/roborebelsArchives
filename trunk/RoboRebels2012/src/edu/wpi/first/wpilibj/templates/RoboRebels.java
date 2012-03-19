@@ -186,6 +186,9 @@ public class RoboRebels extends IterativeRobot {
     static  boolean     shot_second_ball = false;
     final static double TICKS_FOR_3_SECONDS = 3.0;  // Used for delay between shots
     static  double      time_started_waiting;
+    static  boolean     driving_to_bridge = false;
+    
+    final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
     
     static  boolean     autonomous_mode = true;
     
@@ -291,6 +294,7 @@ public class RoboRebels extends IterativeRobot {
         delay_after_two_balls = false;
         shot_first_ball = false;
         shot_second_ball = false;
+        driving_to_bridge = false;
         
         autonomous_mode = true;
      
