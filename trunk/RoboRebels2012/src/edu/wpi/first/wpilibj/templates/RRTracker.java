@@ -552,7 +552,7 @@ public class RRTracker
         double temp; 
         temp = 0.0;
         
-        // coefficients 
+        // coefficients from http://zunzun.com/Equation/2/Polynomial/Quadratic/
         double a = -1.4456094367262210E+01; 
         double b = 1.7038026632980896E+00; 
         double c = -4.6058642266421534E-02;
