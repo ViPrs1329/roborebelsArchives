@@ -88,15 +88,14 @@ public class RRAutonomous {
         
         //check to see if target locked
         
-       if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-               && (!RoboRebels.shot_first_ball) && (!RoboRebels.isShooting) && !RoboRebels.autonomous_complete)
+       if (shooter.locked() && !RoboRebels.shot_first_ball && !RoboRebels.isShooting && !RoboRebels.autonomous_complete)
        {
            shooter.shootBall();
            
            System.out.println("Auton Starting shooting first ball now");
        }
         
-       else if ((RoboRebels.isFinishedShooting) && (!RoboRebels.shot_first_ball) && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.isFinishedShooting && !RoboRebels.shot_first_ball && !RoboRebels.autonomous_complete)
        {
         /*
          *Need to delay so we don't shoot again immediately 
@@ -109,7 +108,7 @@ public class RRAutonomous {
            RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
         }
         
-       else if ((RoboRebels.delay_between_balls) && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.delay_between_balls && !RoboRebels.autonomous_complete)
        {
        
         // wait for ball to score while re-calculating trajectory
@@ -125,16 +124,15 @@ public class RRAutonomous {
        }
        
         //shoot a second time
-       else if ((RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-               && (RoboRebels.shot_first_ball)   && !(RoboRebels.shot_second_ball) && (!RoboRebels.delay_between_balls)
-               && (!RoboRebels.isShooting) && !RoboRebels.autonomous_complete)
+       else if (shooter.locked() && RoboRebels.shot_first_ball && !RoboRebels.shot_second_ball && !RoboRebels.delay_between_balls
+               && !RoboRebels.isShooting && !RoboRebels.autonomous_complete)
        {
            shooter.shootBall();
            
            System.out.println("Auton Starting shooting second ball now");
        }
     
-       else if ((RoboRebels.isFinishedShooting) && (RoboRebels.shot_first_ball)  && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.isFinishedShooting && RoboRebels.shot_first_ball && !RoboRebels.autonomous_complete)
        {
         /*
          *Need to delay so we don't shoot again immediately 
@@ -148,7 +146,7 @@ public class RRAutonomous {
            RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
         }
         
-       else if ((RoboRebels.delay_after_two_balls) && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.delay_after_two_balls && !RoboRebels.autonomous_complete)
        {
        
         // wait for ball to score while re-calculating trajectory
@@ -167,7 +165,7 @@ public class RRAutonomous {
                 // Drive, robot, drive!!
              }
        }
-       else if ((RoboRebels.driving_to_bridge) && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.driving_to_bridge && !RoboRebels.autonomous_complete)
        {
        
         // drive towards bridge.

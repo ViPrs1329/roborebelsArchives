@@ -209,6 +209,8 @@ public class RRDrive implements MotorSafety
         leftMotor.set(left);
         rightMotor.set(right);
         
+        RoboRebels.elevation_lock = false;      // Not sure if this is the right place, but somewhere we need to remove lock if robot is driven.
+        
         motorSafetyHelper.feed();
     }
 

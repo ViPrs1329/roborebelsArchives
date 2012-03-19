@@ -502,7 +502,7 @@ public class RRShooter
         }
         
 
-       if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+       if (locked())
        {
             RoboRebels.printLCD(6, "All Locked!                ");  
             shootBall();
@@ -539,10 +539,7 @@ public class RRShooter
         gatherInputStates();
         
         //System.out.println("Middle of Shoot");
-        
-        // 
-        
-         
+                 
         if ((RoboRebels.isShooting))  //  
         {
             double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_shooting);
@@ -578,7 +575,7 @@ public class RRShooter
                 } else  
                 {
 
-                // gatherer.elevate();                          // Turn on gatherer motor
+                    gatherer.elevate();                          // Turn on gatherer motor
                     System.out.println("Gatherer Motor is On!");
                 }
             }
@@ -660,7 +657,6 @@ public class RRShooter
         current_lazySusanSpeed = lazySusanSpeed;
  
         System.out.println("Halting LazySusan!");
- 
         
     }
     
@@ -725,6 +721,11 @@ public class RRShooter
         isExpanding = false;
         ball_present = false;
         
+    }
+    
+    public boolean locked()
+    {
+        return (RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock);
     }
     
 }
