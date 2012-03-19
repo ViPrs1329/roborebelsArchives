@@ -590,7 +590,7 @@ public class RRShooter
 
                 {
                     // load motor stop
-                    System.out.println("Ball is no longer Present");
+                    System.out.println("Ball has been shot!");
 
                     gatherer.stop();
                     System.out.println("Gatherer Motor is Off!");
@@ -617,6 +617,16 @@ public class RRShooter
                     
                     stopShootingBall(); 
             }
+        }
+        else if (RoboRebels.shooter_motor_running)
+        {          
+            double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_after_shooting);
+       
+            if (time_left >=  RoboRebels.SHOOTER_SPINDOWN_TIME)
+            {
+                RoboRebels.shooter_motor_running = false;
+                shootingWheelSpeed = 0.0;
+            }          
         }
         
         // Process shooter states
@@ -690,6 +700,7 @@ public class RRShooter
     public void shootBall()
     {
         RoboRebels.isShooting = true; 
+        RoboRebels.shooter_motor_running = true;
         RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
         if (RoboRebels.autonomous_mode)
             RoboRebels.autonomous_mode_tracking = false; // Don't target while shooting since motor vibration will interfere with targeting
