@@ -188,7 +188,9 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_started_waiting;
     static  boolean     driving_to_bridge = false;
     static  double      time_started_shooting;
+    static  double      time_started_tracking;
     static  double      MAX_SHOOTING_TIME = 2.0;
+    static  double      MAX_TRACKING_TIME = 3.0;
     static  boolean     autonomous_complete = false;
     
     final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
