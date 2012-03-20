@@ -68,14 +68,22 @@ public class RRTracker
             
             ColorImage image = cam.getImage();     // comment if using stored images
 
-           // TODO: This image write section should be commented out for the production code
-//            try {
-//                image.write("/raw.jpg");
-//            } catch (Exception e) {
-//                System.out.println("error saving image 1");
-//            }
-//            System.out.println("WROTE IMAGE1");
+            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
+            {
+                try {
+                    image.write("/raw.jpg");
+                } catch (Exception e) {
+                    System.out.println("error saving image 1");
+                }
+                System.out.println("Saved raw camera image to cRIO");
+                
+                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+            }
 
+            /*  
+             *   Choose thresholds for white by setting save_camer_image_file variable and FTPing the image off cRIO and examining in PhotoShop
+             */
+            
             //BinaryImage thresholdImage = image.thresholdRGB(25, 255, 0, 45, 0, 47);   // keep only red objects
 
             // TODO:  The white object threshold value needs to be tested to get an optimal number

@@ -196,6 +196,8 @@ public class RoboRebels extends IterativeRobot {
     static  boolean     shooter_motor_running = false;
     static  boolean     no_balls_shot = true;
     static  boolean     second_ball_started_shoot = false;
+    
+    static  boolean     save_camera_image_file = true;      // During match setup, save image file to set image thresholds
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
     final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
