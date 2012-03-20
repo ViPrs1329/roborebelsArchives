@@ -89,7 +89,7 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor, RRDIPSwitch ds)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor, RRDIPSwitch ds, RRGatherer gr)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
@@ -97,8 +97,8 @@ public class RRShooter
         tltls_channel = tltlsc;
         
         sensor = ballSensor;
-        
         dipSwitch = ds; 
+        gatherer = gr;
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
@@ -233,8 +233,10 @@ public class RRShooter
         if (shooterButtonState)
         {
             if (!shootingButtonPressed)  // Button is pushed for first time
+ //           if (first_time)
             {
                 shootingButtonPressed = true;
+ //               first_time = false
                 
                 System.out.println("Trigger Joystick Button Pressed");
    
@@ -249,7 +251,10 @@ public class RRShooter
            
                 shootBall();
             }
+               
         }
+        else
+            shootingButtonPressed = false;
         
         
         // Check for tilting button up, down 
@@ -333,8 +338,12 @@ public class RRShooter
             
             double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
             
-            if ((time > 0) && !RoboRebels.troubleshooting)          // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch
+            if ((time > 0))          // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch
             {          
+                if (!RoboRebels.troubleshooting)
+                {
+                        
+                
                 if (TTState) 
                     System.out.println("Track Target Button Pressed");
 
@@ -437,7 +446,8 @@ public class RRShooter
                     RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                     System.out.println("Auto Shooting Hold"); 
                 }
-            }
+                }
+            }  
             else  // Tracking timeout
             {
                 tracking = false;
@@ -530,8 +540,7 @@ public class RRShooter
 
        if (locked())
        {
-            RoboRebels.printLCD(6, "All Locked!                ");  
-            shootBall();
+            RoboRebels.printLCD(6, "All Locked!                "); 
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
             RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
@@ -568,15 +577,16 @@ public class RRShooter
                  
         if ((RoboRebels.isShooting))  //  
         {
-            double time_left = RoboRebels.MAX_SHOOTING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_shooting);
+            double time_left = Timer.getFPGATimestamp();
        
-            if (time_left >=  RoboRebels.SHOOTER_SPINUP_TIME)
+            if ((time_left - RoboRebels.time_started_shooting) <=  RoboRebels.SHOOTER_SPINUP_TIME)
             {
                 // Waiting for motor to spinup
-                System.out.println("Waiting for shooting motor to spinup");
+                System.out.println("Waiting for shooting motor to spinup" + RoboRebels.time_started_shooting + " " + time_left);
             }
             
-            else if ((time_left < RoboRebels.SHOOTER_SPINUP_TIME) && (time_left > 0.0))
+            else if (((time_left - RoboRebels.time_started_shooting) >= RoboRebels.SHOOTER_SPINUP_TIME) 
+                    && ((time_left - RoboRebels.time_started_shooting) < RoboRebels.MAX_SHOOTING_TIME))
             {
                  // Motor is up to speed.  Sense ball and run gatherer.
                 boolean ball = sensor.getShootSensor(); 
@@ -587,7 +597,7 @@ public class RRShooter
                 {
                     ball_present = true; 
                     System.out.println("Ball is Present");
-                    gatherer.elevate();                       // Turn on gatherer motor
+                    gatherer.descend();                       // Turn on gatherer motor
                     System.out.println("Gatherer Motor is On!");
                 }
                 else if (!ball && ball_present)
@@ -600,16 +610,25 @@ public class RRShooter
 
                     ball_present = false;
                     
-                    stopShootingBall();  
+                    stopShootingBall(); 
 
-                } else  
+                }
+                else  
                 {
 
-                    gatherer.elevate();                          // Turn on gatherer motor
+                    gatherer.descend();                          // Turn on gatherer motor
                     System.out.println("Gatherer Motor is On!");
                 }
+                
+  //              if ((time_left - RoboRebels.time_after_shooting) <=  RoboRebels.DELAY_BETWEEN_SHOTS)
+  //              {
+  //                  System.out.println("Waiting for ball to be shot!"); 
+  //              }
+           
             }
-            else  // too much time has elapsed
+             else
+                    
+               // too much time has elapsed
             {                               
                     System.out.println("Ball Shooting Timeout!");
 
@@ -620,10 +639,13 @@ public class RRShooter
                     
                     stopShootingBall(); 
             }
+            
         }                                               // Finished shooting and now wait before turning off shooting motor.
         else if (RoboRebels.shooter_motor_running)
         {          
             double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_delivered_ball);
+            
+            System.out.println("Waiting for shooting motor to spin down"+ RoboRebels.time_started_shooting + " " + time_left);
        
             if (time_left <  0.0)
             {
@@ -715,7 +737,7 @@ public class RRShooter
     {
         RoboRebels.isShooting = false;
         RoboRebels.isFinishedShooting = true; 
-        RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
+        RoboRebels.time_after_shooting = Timer.getFPGATimestamp();
         
         return;
     }
@@ -780,6 +802,16 @@ public class RRShooter
             lock_value = dipSwitch.getState(2);
         
         return lock_value;
+    }
+    
+    public void auton_shoot()
+    {
+        if (RoboRebels.muzzle_velocity == 7.5)
+            shootingWheelSpeed = 0.85;
+        else if (RoboRebels.muzzle_velocity == 8.0)
+            shootingWheelSpeed = 1.0;
+        else
+            shootingWheelSpeed = 0.85;
     }
     
 }

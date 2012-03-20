@@ -91,14 +91,16 @@ public class RRAutonomous {
         
         //check to see if target locked
         
-       if (shooter.locked() && !RoboRebels.shot_first_ball && !RoboRebels.isShooting && !RoboRebels.autonomous_complete)
+       if (shooter.locked() && !RoboRebels.shot_first_ball && !RoboRebels.isShooting && !RoboRebels.driving_to_bridge && !RoboRebels.autonomous_complete)
        {
+           shooter.auton_shoot();
            shooter.shootBall();
+           RoboRebels.no_balls_shot = false;
            
            System.out.println("Auton Starting shooting first ball now");
        }
         
-       else if (RoboRebels.isFinishedShooting && !RoboRebels.shot_first_ball && !RoboRebels.autonomous_complete)
+       else if (!RoboRebels.no_balls_shot && RoboRebels.isFinishedShooting && !RoboRebels.shot_first_ball && !RoboRebels.autonomous_complete)
        {
         /*
          *Need to delay so we don't shoot again immediately 
@@ -119,8 +121,8 @@ public class RRAutonomous {
             
             double time_current = Timer.getFPGATimestamp();
             
-            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_BETWEEN_SHOTS))
             {
+            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_BETWEEN_SHOTS))
                 RoboRebels.delay_between_balls = false;  // Done waiting              
                 System.out.println("Auton Finished delaying between balls");
                 RoboRebels.autonomous_mode_tracking = true;                     // Start tracking again
@@ -131,12 +133,13 @@ public class RRAutonomous {
        else if (shooter.locked() && RoboRebels.shot_first_ball && !RoboRebels.shot_second_ball && !RoboRebels.delay_between_balls
                && !RoboRebels.isShooting && !RoboRebels.autonomous_complete)
        {
+           shooter.auton_shoot();
            shooter.shootBall();
            
            System.out.println("Auton Starting shooting second ball now");
        }
     
-       else if (RoboRebels.isFinishedShooting && RoboRebels.shot_first_ball && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.isFinishedShooting && RoboRebels.shot_first_ball && !RoboRebels.shot_second_ball && !RoboRebels.autonomous_complete)
        {
         /*
          *Need to delay so we don't shoot again immediately 
@@ -163,6 +166,7 @@ public class RRAutonomous {
                 System.out.println("Auton Delaying after second ball is now Complete");
            
                 RoboRebels.delay_after_two_balls = false;  // Done waiting
+                RoboRebels.driving_to_bridge = true;
                 
                 RoboRebels.time_started_waiting = Timer.getFPGATimestamp();  // Now start driving timer
                 

@@ -193,12 +193,13 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_after_shooting;
     static  double      time_delivered_ball;
     static  boolean     shooter_motor_running = false;
+    static  boolean     no_balls_shot = true;
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
-    final   static  double      SHOOTER_SPINUP_TIME = 1.0;  // Time taken for shooter to get up to speed before we send ball
-    final   static  double      MAX_SHOOTING_TIME = SHOOTER_SPINUP_TIME + 2.0;  // Total time for shooter to give ball to basket
+    final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
+    final   static  double      MAX_SHOOTING_TIME = 6.0;  // Total time for shooter to give ball to basket
     final   static  double      DELAY_BETWEEN_SHOTS = 3.0;  // Used for delay between shots in autonomous
-    final   static  double      SHOOTER_SPINDOWN_TIME = 1.0;  // Time to wait for motor to spin down
+    final   static  double      SHOOTER_SPINDOWN_TIME = 2.0;  // Time to wait for motor to spin down
     
     static  boolean     autonomous_complete = false;
     static  boolean     autonomous_mode_tracking = false;
@@ -271,7 +272,7 @@ public class RoboRebels extends IterativeRobot {
         sensor.ballSensorInit(5, 4); // These are the values from last year.
         
         shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor, dipSwitch);
+                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor, dipSwitch, gatherer);
         
         tracker.setShooter(shooter);
         
@@ -318,6 +319,7 @@ public class RoboRebels extends IterativeRobot {
         autonomous_mode = true;
         autonomous_complete = false;
         autonomous_tracking_failed = false;
+        no_balls_shot = true;
      
         autonomous.auton_init();
     }
