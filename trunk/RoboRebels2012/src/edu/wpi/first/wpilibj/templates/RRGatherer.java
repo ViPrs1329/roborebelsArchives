@@ -44,6 +44,8 @@ public class RRGatherer
     
     private     int             spinnerState = 0;           // 0 = off, 1 = up, 2 = down
     private     boolean         spinnerButtonPressed = false;
+    private     boolean         autoElevateUp = false;
+    private     boolean         autoElevateDown = false;
     
     private     Joystick        js;
     private     Victor          spinnerVictor;
@@ -98,11 +100,11 @@ public class RRGatherer
                     spinnerReverse = RRButtonMap.getActionObject(RRButtonMap.SPINNER_REVERSED).getAxisState();
         
         // Get conveyer button state
-        if ( loader_up && !loader_down )
+        if ( (loader_up && !loader_down) || autoElevateDown )
         {
             conveyerSpeed = -1.0 * CONVEYER_SPEED;
         }
-        else if ( loader_down && !loader_up )
+        else if ( (loader_down && !loader_up) || autoElevateUp )
         {
             conveyerSpeed = CONVEYER_SPEED;
         }
@@ -150,17 +152,21 @@ public class RRGatherer
     
     public void elevate()
     {
-        conveyerSpeed = -1.0 * CONVEYER_SPEED;
+        //conveyerSpeed = -1.0 * CONVEYER_SPEED;
+        autoElevateUp = true;
     }
     
     public void descend()
     {
-        conveyerSpeed = CONVEYER_SPEED;
+        //conveyerSpeed = CONVEYER_SPEED;
+        autoElevateDown = true;
     }
     
     public void stop()
     {
-        conveyerSpeed = 0.0;
+        //conveyerSpeed = 0.0;
+        
+        autoElevateDown = autoElevateUp = false;
     }
     
     
