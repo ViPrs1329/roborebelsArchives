@@ -61,17 +61,22 @@ public class RRAutonomous {
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
-        }   
+            RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+        }
+        else
+        {
+            delay_shooting = false;  // Don't delay shooting at start of autonomous
+        }
         
-        RoboRebels.autonomous_mode_tracking = true;
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
     {
                          
         System.out.println("Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + 
-                RoboRebels.muzzle_velocity_lock + " " + RoboRebels.autonomous_mode_tracking + " " + RoboRebels.isShooting + " " +  
-                RoboRebels.isFinishedShooting + " " +  RoboRebels.shot_first_ball + " " +  RoboRebels.delay_between_balls + " " + 
+                RoboRebels.muzzle_velocity_lock + " " + RoboRebels.autonomous_mode_tracking + " " + RoboRebels.no_balls_shot + " " + 
+                RoboRebels.isShooting + " " +  delay_shooting + " " + RoboRebels.isFinishedShooting + " " +  
+                RoboRebels.shot_first_ball + " " +  RoboRebels.delay_between_balls + " " +  RoboRebels.second_ball_started_shoot + " " +
                 RoboRebels.shot_second_ball + " " +  RoboRebels.delay_after_two_balls + " " + RoboRebels.driving_to_bridge + " " +
                 RoboRebels.autonomous_complete
                 );
@@ -88,9 +93,21 @@ public class RRAutonomous {
         if (RoboRebels.autonomous_tracking_failed)  // If tracking failed, end shooting
             RoboRebels.autonomous_complete = true;   // TODO: Make robot still drive towards bridge to get balls
         
-        //check to see if target locked
         
-       if (shooter.locked() && RoboRebels.no_balls_shot && !RoboRebels.shot_first_ball &&
+        if (delay_shooting)
+        {
+             System.out.println("Auton Delaying Delaying at Start");
+             
+             double time_current = Timer.getFPGATimestamp();
+            
+            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_AT_START_OF_AUTON))
+            {
+                System.out.println("Auton Finished Delaying at Start");
+                delay_shooting = false;  
+            }
+        }
+        //check to see if target locked
+        else if (shooter.locked() && RoboRebels.no_balls_shot && !RoboRebels.shot_first_ball &&
                !RoboRebels.isShooting && !RoboRebels.driving_to_bridge && !RoboRebels.autonomous_complete)
        {
            shooter.auton_shoot();
