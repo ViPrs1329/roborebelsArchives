@@ -190,10 +190,12 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_started_shooting;
     static  double      time_started_shooter_motor;
     static  double      time_started_tracking;
+    static  double      time_started_driving;
     static  double      time_after_shooting;
     static  double      time_delivered_ball;
     static  boolean     shooter_motor_running = false;
     static  boolean     no_balls_shot = true;
+    static  boolean     second_ball_started_shoot = false;
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
     final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
@@ -320,7 +322,8 @@ public class RoboRebels extends IterativeRobot {
         autonomous_complete = false;
         autonomous_tracking_failed = false;
         no_balls_shot = true;
-     
+        second_ball_started_shoot = false;
+        
         autonomous.auton_init();
     }
 

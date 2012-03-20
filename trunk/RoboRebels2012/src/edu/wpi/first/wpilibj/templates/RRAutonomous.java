@@ -64,7 +64,6 @@ public class RRAutonomous {
         }   
         
         RoboRebels.autonomous_mode_tracking = true;
-
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
@@ -91,7 +90,8 @@ public class RRAutonomous {
         
         //check to see if target locked
         
-       if (shooter.locked() && !RoboRebels.shot_first_ball && !RoboRebels.isShooting && !RoboRebels.driving_to_bridge && !RoboRebels.autonomous_complete)
+       if (shooter.locked() && RoboRebels.no_balls_shot && !RoboRebels.shot_first_ball &&
+               !RoboRebels.isShooting && !RoboRebels.driving_to_bridge && !RoboRebels.autonomous_complete)
        {
            shooter.auton_shoot();
            shooter.shootBall();
@@ -118,11 +118,11 @@ public class RRAutonomous {
        
         // wait for ball to shoot and score with no tracking on
             System.out.println("Auton Delaying between balls");
-            
+                        
             double time_current = Timer.getFPGATimestamp();
             
-            {
             if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_BETWEEN_SHOTS))
+            {
                 RoboRebels.delay_between_balls = false;  // Done waiting              
                 System.out.println("Auton Finished delaying between balls");
                 RoboRebels.autonomous_mode_tracking = true;                     // Start tracking again
@@ -130,16 +130,19 @@ public class RRAutonomous {
        }
        
         //shoot a second time
-       else if (shooter.locked() && RoboRebels.shot_first_ball && !RoboRebels.shot_second_ball && !RoboRebels.delay_between_balls
+       else if (shooter.locked() && RoboRebels.shot_first_ball && !RoboRebels.second_ball_started_shoot &&
+               !RoboRebels.shot_second_ball && !RoboRebels.delay_between_balls
                && !RoboRebels.isShooting && !RoboRebels.autonomous_complete)
        {
            shooter.auton_shoot();
            shooter.shootBall();
+           RoboRebels.second_ball_started_shoot = true;
            
            System.out.println("Auton Starting shooting second ball now");
        }
     
-       else if (RoboRebels.isFinishedShooting && RoboRebels.shot_first_ball && !RoboRebels.shot_second_ball && !RoboRebels.autonomous_complete)
+       else if (RoboRebels.isFinishedShooting && RoboRebels.shot_first_ball && RoboRebels.second_ball_started_shoot
+               && !RoboRebels.shot_second_ball && !RoboRebels.autonomous_complete)
        {
         /*
          *Need to delay so we don't shoot again immediately 
@@ -168,7 +171,7 @@ public class RRAutonomous {
                 RoboRebels.delay_after_two_balls = false;  // Done waiting
                 RoboRebels.driving_to_bridge = true;
                 
-                RoboRebels.time_started_waiting = Timer.getFPGATimestamp();  // Now start driving timer
+                RoboRebels.time_started_driving = Timer.getFPGATimestamp();  // Now start driving timer
                 
                 // Drive, robot, drive!!
              }
@@ -182,7 +185,7 @@ public class RRAutonomous {
            
             double time_current = Timer.getFPGATimestamp();
             
-            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DRIVE_TIME_TO_BRIDGE))
+            if (time_current > (RoboRebels.time_started_driving + RoboRebels.DRIVE_TIME_TO_BRIDGE))
             {
                 System.out.println("Driving to bridge is complete - stopping");
            
