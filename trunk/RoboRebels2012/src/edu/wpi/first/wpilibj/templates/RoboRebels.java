@@ -161,7 +161,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    RIGHT_TARGET = 4;      // Right Middle target
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
-    static boolean      going_for_highest = false;   // When locked on a center target, shoot for highest instead of lowest basket target
+    static boolean      going_for_highest = false;   // Don't change this as we calibrated this this set to false!!
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
@@ -169,11 +169,11 @@ public class RoboRebels extends IterativeRobot {
     
     static double       muzzle_velocity = 7.5;  // Actual muzzle velocity 8.5 meters per second
 
-    final static int    NUMBER_OF_PREVIOUS = 15;
+    final static int    NUMBER_OF_PREVIOUS = 15;    // Moving average values
     static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
     static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;
-                                                  // Might not need these - could use LOCK values above
+                                                  
     static boolean      azimuth_lock = false;  //  azimuth (left/right) target lock acquired
     static boolean      elevation_lock = false; // elevation (up/down) target lock acquired
     static boolean      muzzle_velocity_lock = false;  // muzzle velocity is correct
@@ -184,33 +184,37 @@ public class RoboRebels extends IterativeRobot {
     static  boolean     delay_after_two_balls = false;
     static  boolean     shot_first_ball = false;
     static  boolean     shot_second_ball = false;
-    final static double TICKS_FOR_3_SECONDS = 3.0;  // Used for delay between shots
-    static  double      time_started_waiting;
+//    final static double TICKS_FOR_3_SECONDS = 3.0;  // Used for delay between shots
     static  boolean     driving_to_bridge = false;
+    static  boolean     no_balls_shot = true;
+    static  boolean     second_ball_started_shoot = false;
+    static  boolean     autonomous_complete = false;
+    static  boolean     autonomous_mode_tracking = false;
+    static  boolean     autonomous_tracking_failed = false;    
+    static  boolean     shooter_motor_running = false;
+    
+    static  boolean     save_camera_image_file = true;
+    
+    static  double      time_started_waiting;           // Time variables
     static  double      time_started_shooting;
     static  double      time_started_shooter_motor;
     static  double      time_started_tracking;
     static  double      time_started_driving;
     static  double      time_after_shooting;
     static  double      time_delivered_ball;
-    static  boolean     shooter_motor_running = false;
-    static  boolean     no_balls_shot = true;
-    static  boolean     second_ball_started_shoot = false;
     
-    static  boolean     save_camera_image_file = true;      // During match setup, save image file to set image thresholds
+
+      // During match setup, save image file to set image thresholds
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
-    final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
+    
+    final   static  double      DELAY_AT_START_OF_AUTON = 3.0;  // Delay set by DIP switch in shooting
     final   static  double      MAX_SHOOTING_TIME = 6.0;  // Total time for shooter to give ball to basket
     final   static  double      DELAY_BETWEEN_SHOTS = 3.0;  // Used for delay between shots in autonomous
+    final   static  double      DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
+    
+    final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
     final   static  double      SHOOTER_SPINDOWN_TIME = 2.0;  // Time to wait for motor to spin down
-    final   static  double      DELAY_AT_START_OF_AUTON = 3.0;  // Delay set by DIP switch in shooting
-    
-    static  boolean     autonomous_complete = false;
-    static  boolean     autonomous_mode_tracking = false;
-    static  boolean     autonomous_tracking_failed = false;
-    
-    final   static  double  DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
     
     static  boolean     autonomous_mode = true;
     
@@ -327,6 +331,11 @@ public class RoboRebels extends IterativeRobot {
         no_balls_shot = true;
         second_ball_started_shoot = false;
         
+        for (int i = 0; i < NUMBER_OF_PREVIOUS; i++)    // initialize Moving Average values
+        {
+            previous_angles[i] = 90.0;
+        }
+        
         autonomous.auton_init();
     }
 
@@ -394,9 +403,6 @@ public class RoboRebels extends IterativeRobot {
       shooter.shoot();
       gatherer.gather();
       arm.arm();
-        
-      
-
     }
 
     /**
@@ -583,7 +589,7 @@ public class RoboRebels extends IterativeRobot {
         m_dsLCD.println(line, 1, value);
         m_dsLCD.updateLCD();
     }
-    
+ /*   
     public double getAngle() {
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
         System.out.println("X Accel: " + axes.XAxis);
@@ -593,4 +599,6 @@ public class RoboRebels extends IterativeRobot {
         yAxis = Math.max(-1, yAxis);
         return 180.0 * MathUtils.asin(yAxis) / 3.14159;
     }
+    *
+    */
 }

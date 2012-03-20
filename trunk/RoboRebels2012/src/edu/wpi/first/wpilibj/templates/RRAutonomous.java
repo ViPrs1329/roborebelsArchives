@@ -93,7 +93,6 @@ public class RRAutonomous {
         if (RoboRebels.autonomous_tracking_failed)  // If tracking failed, end shooting
             RoboRebels.autonomous_complete = true;   // TODO: Make robot still drive towards bridge to get balls
         
-        
         if (delay_shooting)
         {
              System.out.println("Auton Delaying Delaying at Start");
@@ -165,7 +164,6 @@ public class RRAutonomous {
          *Need to delay so we don't shoot again immediately 
          */
            
-           // shooter.isFinishedShooting = false;
            System.out.println("Auton Shooting second ball is now Complete");
            RoboRebels.delay_after_two_balls = true;
            RoboRebels.isFinishedShooting = false;
@@ -199,6 +197,8 @@ public class RRAutonomous {
         // drive towards bridge.
            
             System.out.println("Driving to bridge...");
+            
+            // Drive, drive!
            
             double time_current = Timer.getFPGATimestamp();
             
@@ -218,9 +218,7 @@ public class RRAutonomous {
         
         //EXPLODE
     
-        // Pwn other robots
-        
-        
+        // Pwn other robots       
     }
     
 }
