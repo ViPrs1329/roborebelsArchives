@@ -102,7 +102,7 @@ public class RRTracker
 //            System.out.println("WROTE IMAGE2");
 
 
-          //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts
+          //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts  TODO: Add this back in??  And below freeup too
           //BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
             BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
             BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
@@ -336,31 +336,38 @@ public class RRTracker
                 
                 RoboRebels.printLCD(4, "T " + round(RoboRebels.tilt_angle) + " C " + round(angle) + " D " +
                         round(angle - RoboRebels.tilt_angle));
+                
+                int x_accuracy;
+                
+//                if ((distance > 6.0) && (distance < 25.0))                                    // Adjust pixel accuracy with distance.
+//                    x_accuracy = (int)(RoboRebels.PIXEL_ACCURACY * (12.0/distance) + 0.5);    // Further away from target, smaller pixel accuracy must be
+//                else
+                    x_accuracy = RoboRebels.PIXEL_ACCURACY;
 
                 
                 int x = x(r.center_mass_x, r.boundingRectWidth);
                 
-                if ((x > RoboRebels.PIXEL_ACCURACY/2) && (x < RoboRebels.PIXEL_ACCURACY*4))      
+                if ((x > x_accuracy/2) && (x < x_accuracy*4))      
                 {
                         RoboRebels.target_azimuth = RoboRebels.CLOSE_LEFT;  // LazySusan needs to only a little to left
                 }
-                else if ((x >= RoboRebels.PIXEL_ACCURACY*4) && (x < RoboRebels.PIXEL_ACCURACY*6))
+                else if ((x >= x_accuracy*4) && (x < x_accuracy*6))
                 {
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
                 }  
-                else if (x >= RoboRebels.PIXEL_ACCURACY*6)
+                else if (x >= x_accuracy*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
                 }
-                else if ((x < -RoboRebels.PIXEL_ACCURACY/2) && (x > -RoboRebels.PIXEL_ACCURACY*4))      
+                else if ((x < -x_accuracy/2) && (x > -x_accuracy*4))      
                 {
                         RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
                 }
-                else if ((x <= -RoboRebels.PIXEL_ACCURACY*4) && (x > -RoboRebels.PIXEL_ACCURACY*6))
+                else if ((x <= -x_accuracy*4) && (x > -x_accuracy*6))
                 {
                         RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
                 }  
-                else if (x <= -RoboRebels.PIXEL_ACCURACY*6)
+                else if (x <= -x_accuracy*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
                 }
