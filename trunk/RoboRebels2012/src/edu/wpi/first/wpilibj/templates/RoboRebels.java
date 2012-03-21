@@ -203,7 +203,8 @@ public class RoboRebels extends IterativeRobot {
     static  double      time_after_shooting;
     static  double      time_delivered_ball;
     
-
+    static  boolean      remove_small_objects_from_image = false;    // Set true to try adding back in image processing step
+    
       // During match setup, save image file to set image thresholds
 
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained

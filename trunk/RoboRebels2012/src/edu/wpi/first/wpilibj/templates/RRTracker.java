@@ -101,20 +101,29 @@ public class RRTracker
 //            }
 //            System.out.println("WROTE IMAGE2");
 
+                BinaryImage filteredImage;
+                BinaryImage convexHullImage;
+                BinaryImage bigObjectsImage;
 
-          //BinaryImage bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts  TODO: Add this back in??  And below freeup too
-          //BinaryImage convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles
-            BinaryImage convexHullImage = thresholdImage.convexHull(false);          // fill in occluded rectangles
-            BinaryImage filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
-          // BinaryImage filteredImage = thresholdImage.particleFilter(cc);           
+                bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts 
+ 
+                if (RoboRebels.remove_small_objects_from_image)     // We commented out the removeSmallObjects step very early on.  Now should try it back in again
+                {
+                    convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles after removing small objects   
+                }
+                else
+                {
+                    convexHullImage = thresholdImage.convexHull(false);            // fill in occluded rectangles without removing small objects
+                }
+                
+                filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
 
-            
             // TODO: This image write section should be commented out for the production code
-            try {
+            //try {
                 //filteredImage.write("/processed.bmp");     // This seems to work well.
-            } catch (Exception e) {
-                System.out.println("error saving image 3");
-            }
+            //} catch (Exception e) {
+            //    System.out.println("error saving image 3");
+            //}
             //System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
@@ -433,8 +442,8 @@ public class RRTracker
              **/
             
             filteredImage.free();
-            convexHullImage.free();
-        //  bigObjectsImage.free();
+            convexHullImage.free();       
+            bigObjectsImage.free();     // Still free up even if not used.
             thresholdImage.free();
             image.free();
 
