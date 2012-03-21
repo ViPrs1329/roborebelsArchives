@@ -185,6 +185,9 @@ public class RRShooter
     private void gatherInputStates()
     {
         double retExpAngle = 0.0;
+        double LSXValue, TXValue;
+        double LSX_DEAD_ZONE = 0.15,
+               TX_DEAD_ZONE = 0.15;
         boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState, ECSState, ReverseShootingState1, ReverseShootingState2;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         
@@ -261,6 +264,20 @@ public class RRShooter
         //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
         TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
+        TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
+        
+        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
+        {
+            if ( TXValue > 0.0 )
+                tiltSpeed = TILT_SPEED;
+            else
+                tiltSpeed = -1.0 * TILT_SPEED;
+        }
+        else
+        {
+            tiltSpeed = 0.0;
+        }
+        
         if ( TUState )
         {
             System.out.println("Tilt up");
@@ -300,6 +317,27 @@ public class RRShooter
         
         LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
         LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
+        LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
+        
+        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
+        {
+            if ( LSXValue > 0.0 )
+            {
+                lazySusanSpeed = -1.0 * LS_SPEED;
+            }
+            else
+            {
+                if (LS_SPEED == 0.2)
+                    lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
+                else
+                    lazySusanSpeed = 1.0 * LS_SPEED;
+            }
+            RoboRebels.azimuth_lock = false;         // No azimuth target lock
+        }
+        else
+        {
+            lazySusanSpeed = 0.0;
+        }
         
         // Check for lazy susan button left, right 
         //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
