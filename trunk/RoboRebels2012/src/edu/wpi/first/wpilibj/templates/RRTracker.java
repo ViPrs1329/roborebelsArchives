@@ -336,15 +336,15 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                angle += correction(distance);      // Correction, i.e. fudge factor based on data.
+                angle += correction(distance) + 10.0;      // Correction, i.e. fudge factor based on data.
                 
                 // angle = 55;
                     
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
-                RoboRebels.printLCD(4, "T " + round(RoboRebels.tilt_angle) + " C " + round(angle) + " D " +
-                        round(angle - RoboRebels.tilt_angle));
+                RoboRebels.printLCD(4, "T: " + round(RoboRebels.tilt_angle) + " d: " +  round(distance) +  // Get rid of - correction eventually
+                        " c: " + round2(angle - correction(distance) - RoboRebels.tilt_angle) + "              ");
                 
                 int x_accuracy;
                 
@@ -581,7 +581,7 @@ public class RRTracker
         double b = 1.7038026632980896E+00; 
         double c = -4.6058642266421534E-02;
         
-        temp += a + 10.0 + b * x + c * x * x; 
+        temp += a + b * x + c * x * x; 
         
         return temp;
 
