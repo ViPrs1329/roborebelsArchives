@@ -186,6 +186,8 @@ public class RRAutonomous {
                 RoboRebels.delay_after_two_balls = false;  // Done waiting
                 RoboRebels.driving_to_bridge = true;
                 
+                shooter.retractShooter();           // Retract shooter so we can deploy bridge arm as soon as teleop begins!
+                
                 RoboRebels.time_started_driving = Timer.getFPGATimestamp();  // Now start driving timer
                 
                 // Drive, robot, drive!!
