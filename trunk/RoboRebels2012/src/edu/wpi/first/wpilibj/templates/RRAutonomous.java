@@ -81,7 +81,8 @@ public class RRAutonomous {
     {
                          
         System.out.println("Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + shooter.locked() + " " + 
-                RoboRebels.muzzle_velocity_lock + " " + RoboRebels.autonomous_mode_tracking + " " + RoboRebels.no_balls_shot + " " + 
+                RoboRebels.muzzle_velocity_lock + " " + RoboRebels.autonomous_mode_tracking + " " + RoboRebels.autonomous_tracking_failed + " " +
+                RoboRebels.no_balls_shot + " " + 
                 RoboRebels.isShooting + " " +  delay_shooting + " " + RoboRebels.isFinishedShooting + " " +  
                 RoboRebels.shot_first_ball + " " +  RoboRebels.delay_between_balls + " " +  RoboRebels.second_ball_started_shoot + " " +
                 RoboRebels.shot_second_ball + " " +  RoboRebels.delay_after_two_balls + " " + RoboRebels.driving_to_bridge + " " +

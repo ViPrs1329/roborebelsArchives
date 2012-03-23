@@ -161,7 +161,7 @@ public class RRBridgeArm
     
     private void setBridgeArmSpeeds()
     {
-        System.out.println("Shooter is not in a valid position yet!");
+        //System.out.println("Shooter is not in a valid position yet!");
         bridgeArmVictor.set(armSpeed);
     }
     

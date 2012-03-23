@@ -157,8 +157,8 @@ public class RRShooter
         
         y -= Math.max(shooterHeight,0);
                  
-        System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
-                "y: " + y + "x: " + xDistance);
+   //     System.out.println("d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
+   //            "y: " + y + "x: " + xDistance);
 
         double tempSqrtEquation = (muzzleVelocity*muzzleVelocity*muzzleVelocity*muzzleVelocity)-
                          (2*gravity*muzzleVelocity*muzzleVelocity*y)-(gravity*gravity*xDistance*xDistance);
@@ -523,11 +523,10 @@ public class RRShooter
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
         }
         
-        System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
-                tracking + " lazySusanSpeed: " + RRTracker.round2(lazySusanSpeed) + 
-                " tiltSpeed: " + RRTracker.round2(tiltSpeed));
-        
-        
+   //     System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
+   //             tracking + " lazySusanSpeed: " + RRTracker.round2(lazySusanSpeed) + 
+   //             " tiltSpeed: " + RRTracker.round2(tiltSpeed));
+                
         ECSState = RRButtonMap.getActionObject(RRButtonMap.EXPAND_CONTRACT_SHOOTER).getButtonState();
         //CSState = RRButtonMap.getActionObject(RRButtonMap.CONTRACT_SHOOTER).getButtonState();
         
@@ -712,7 +711,7 @@ public class RRShooter
     private void setShooterSpeeds()
     {
         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
-        System.out.println("s: " + RRTracker.round2(tiltSpeed));
+     //   System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
         
  //       int result = check_ls_position();    // Check for LS position before changing LS Speed.

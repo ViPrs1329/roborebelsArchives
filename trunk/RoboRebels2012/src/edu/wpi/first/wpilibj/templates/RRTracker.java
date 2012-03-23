@@ -494,20 +494,20 @@ public class RRTracker
     public double accelAngle() {
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
  //       System.out.println("X Accel: " + axes.XAxis);
-        System.out.println("Y Accel: " + axes.YAxis);
-        System.out.println("Z Accel: " + axes.ZAxis);
+ //       System.out.println("Y Accel: " + axes.YAxis);
+ //       System.out.println("Z Accel: " + axes.ZAxis);
         
         // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
         
         double yAxis = Math.min(1, axes.YAxis);
         yAxis = Math.max(-1, yAxis);
         
-        double zAxis = Math.min(1, axes.ZAxis);
-        zAxis = Math.max(-1, zAxis);
+ //       double zAxis = Math.min(1, axes.ZAxis);
+ //       zAxis = Math.max(-1, zAxis);
         
-        double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+ //       double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
         
-        System.out.println("Accel Angle from Z Axis:" + round(another_angle));
+ //       System.out.println("Accel Angle from Z Axis:" + round(another_angle));
         
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
@@ -547,7 +547,7 @@ public class RRTracker
         
         correction = (int)(((camera_offset/target_width) * target_image_width) + 0.5);
         
-        System.out.println("x: " + raw_x + "correction: " + correction);
+    //    System.out.println("x: " + raw_x + "correction: " + correction);
         
         return (raw_x - 160 + correction);
     }
