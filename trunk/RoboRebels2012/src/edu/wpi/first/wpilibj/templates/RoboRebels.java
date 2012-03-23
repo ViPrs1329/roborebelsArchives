@@ -332,6 +332,7 @@ public class RoboRebels extends IterativeRobot {
         autonomous_tracking_failed = false;
         no_balls_shot = true;
         second_ball_started_shoot = false;
+        autonomous_mode_tracking = true;
         
         for (int i = 0; i < NUMBER_OF_PREVIOUS; i++)    // initialize Moving Average values
         {
@@ -351,7 +352,7 @@ public class RoboRebels extends IterativeRobot {
         autonomousStateBroadcasted = false;
         tankDrive = false;
         autonomous_mode = false;
-
+        autonomous_mode_tracking = false;
         // Need to fix this!!
         
         gatherer.stop();
