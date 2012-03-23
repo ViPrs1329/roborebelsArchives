@@ -338,7 +338,7 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                angle += correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+                angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
                 
                 // angle = 55;
                     

@@ -20,6 +20,8 @@ public class RRAutonomous {
     private     RRGatherer      gatherer;
 
     private     boolean         delay_shooting  = true;
+    private     boolean         extra_delay_shooting  = false;
+    
     public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr, RRGatherer gr)
     {
         dipSwitch = ds; 
@@ -60,15 +62,17 @@ public class RRAutonomous {
         if (dipSwitch.getState(3))
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
-            delay_shooting = true;
-            RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+            extra_delay_shooting = true;
         }
-        else
-        {
-            delay_shooting = false;  // Don't delay shooting at start of autonomous
-        }
+            
+        RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+//        }
+//        else
+//        {
+//            delay_shooting = false;  // Don't delay shooting at start of autonomous
+//        }
         
-        shooter.expandShooter(); // Doesn't work anyway
+        shooter.expandShooter(); // Works now! :-)
         //RoboRebels.autonomous_complete = true;                  // For now
         
     }
@@ -102,11 +106,22 @@ public class RRAutonomous {
              
              double time_current = Timer.getFPGATimestamp();
             
-            if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_AT_START_OF_AUTON))
-            {
-                System.out.println("Auton Finished Delaying at Start");
-                delay_shooting = false;  
-            }
+             if (extra_delay_shooting)
+             {
+                if (time_current > (RoboRebels.time_started_waiting + RoboRebels.DELAY_AT_START_OF_AUTON + RoboRebels.EXPAND_TIME))
+                {
+                    System.out.println("Auton Finished Delaying at Start");
+                    delay_shooting = false;  
+                }
+             } else
+             {
+                if (time_current > (RoboRebels.time_started_waiting + RoboRebels.EXPAND_TIME ))
+                {
+                    System.out.println("Auton Finished Delaying at Start");
+                    delay_shooting = false;  
+                }
+             }
+                
         }
         //check to see if target locked
         else if (shooter.locked() && RoboRebels.no_balls_shot && !RoboRebels.shot_first_ball &&
