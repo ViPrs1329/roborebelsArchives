@@ -427,8 +427,7 @@ public class RRTracker
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
-              }
-              
+              }             
             }
             else
             {
@@ -460,7 +459,7 @@ public class RRTracker
             System.err.println("There was an error while tracking a target!");
             ex.printStackTrace();
         }
-        System.out.println(Timer.getFPGATimestamp() - start);
+        System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*100) + " milleseconds");
     }
 //}       // Just added this now
     
