@@ -64,12 +64,12 @@ public class RRShooter
     
     private     Joystick        shootingJoystick;
     
-    private     RRTracker       tracker;
+    private     RRTracker       tracker;        
     private     RRBallSensor    sensor;
     private     RRGatherer      gatherer;
     private     RRDIPSwitch     dipSwitch;
     
-    private     boolean         tracking = false; // Indicates if robot is tracking target
+    public      boolean         tracking = false; // Indicates if robot is tracking target  // was private, changed to public
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
                                                                // for azimuth and elevation.
     
@@ -410,13 +410,13 @@ public class RRShooter
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.17;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                        lazySusanSpeed = 0.17 * 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
                     {
                         System.out.println("Auto Lazy susan right fast"); 
-                        lazySusanSpeed = 0.20;          // 0.30
+                        lazySusanSpeed = 0.20 * 1.2;          // 0.30
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
@@ -514,6 +514,8 @@ public class RRShooter
         else if (tracking)   // Was tracking target, but now no longer tracking
         {
              tracking = false;
+             
+             System.out.println("End of tracking"); 
              
              lazySusanSpeed = 0.0;      // Stop azimuth tracking
              tiltSpeed = 0.0;           // Stop elevation tracking

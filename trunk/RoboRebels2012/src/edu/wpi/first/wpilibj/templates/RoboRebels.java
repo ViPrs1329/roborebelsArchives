@@ -162,6 +162,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
     static boolean      going_for_highest = false;   // Don't change this as we calibrated this this set to false!!
+    static boolean      continuous_targeting = false;    // Targeting all the time or only when button pressed
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK
@@ -340,6 +341,8 @@ public class RoboRebels extends IterativeRobot {
         }
         current_angle_sum = 90.0 * NUMBER_OF_PREVIOUS;  // initialize MA sum
         
+        shooter.reset();
+        
         autonomous.auton_init();
         
   
@@ -359,6 +362,9 @@ public class RoboRebels extends IterativeRobot {
         
         isFinishedShooting = false;  
         isShooting = false; 
+        
+        shooter.reset();
+        
         // shooter_motor_running = false;
         
         /* Drive station code */
