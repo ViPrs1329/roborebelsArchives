@@ -33,31 +33,31 @@ public class RRAutonomous {
     {
         //check dip switches
         
-        if (dipSwitch.getState(1))
+        if (dipSwitch.getState(0))
         {
             target_selected = RoboRebels.HIGHEST_TARGET;   // Read first DIP Switch
             System.out.println("COOLIO! We're locked onto the top target! =)");
         }   
         
-        else if (dipSwitch.getState(0) && dipSwitch.getState(3))
+        else if (dipSwitch.getState(1) && dipSwitch.getState(2))
         {
             target_selected = RoboRebels.LOWEST_TARGET;
             System.out.println("We're locked onto the lowest target! =)");
         }
         
-        else if (dipSwitch.getState(0))
+        else if (dipSwitch.getState(1))
         {
             target_selected = RoboRebels.LEFT_TARGET;
             System.out.println("COOLIO! We're locked onto the left target! =)");
         }
             
-        else if (dipSwitch.getState(3))
+        else if (dipSwitch.getState(2))
         {
             target_selected = RoboRebels.RIGHT_TARGET;
             System.out.println("COOLIO! We're locked onto the right target! =)");
         }
             
-        if (dipSwitch.getState(2))
+        if (dipSwitch.getState(3))
         {
             System.out.println("OK! Let's wait for the other team to shoot first...)");
             delay_shooting = true;
@@ -68,12 +68,15 @@ public class RRAutonomous {
             delay_shooting = false;  // Don't delay shooting at start of autonomous
         }
         
+        shooter.expandShooter(); // Doesn't work anyway
+        //RoboRebels.autonomous_complete = true;                  // For now
+        
     }
     
     void auton_periodic()  // called repeatedly suring Autonomous period
     {
                          
-        System.out.println("Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + 
+        System.out.println("Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + shooter.locked() + " " + 
                 RoboRebels.muzzle_velocity_lock + " " + RoboRebels.autonomous_mode_tracking + " " + RoboRebels.no_balls_shot + " " + 
                 RoboRebels.isShooting + " " +  delay_shooting + " " + RoboRebels.isFinishedShooting + " " +  
                 RoboRebels.shot_first_ball + " " +  RoboRebels.delay_between_balls + " " +  RoboRebels.second_ball_started_shoot + " " +
@@ -186,7 +189,7 @@ public class RRAutonomous {
                 RoboRebels.delay_after_two_balls = false;  // Done waiting
                 RoboRebels.driving_to_bridge = true;
                 
-                shooter.retractShooter();           // Retract shooter so we can deploy bridge arm as soon as teleop begins!
+                //shooter.retractShooter();           // Didn't work - tried to keep retracting.  Retract shooter so we can deploy bridge arm as soon as teleop begins!
                 
                 RoboRebels.time_started_driving = Timer.getFPGATimestamp();  // Now start driving timer
                 
@@ -198,7 +201,7 @@ public class RRAutonomous {
        
         // drive towards bridge.
            
-            System.out.println("Driving to bridge...");
+            System.out.println("Auton Driving to bridge...");
             
             // Drive, drive!
            

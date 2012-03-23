@@ -169,7 +169,7 @@ public class RoboRebels extends IterativeRobot {
     
     static double       muzzle_velocity = 7.5;  // Actual muzzle velocity 8.5 meters per second
 
-    final static int    NUMBER_OF_PREVIOUS = 15;    // Moving average values
+    final static int    NUMBER_OF_PREVIOUS = 10;    // Moving average values
     static double       previous_angles[] = new double [NUMBER_OF_PREVIOUS];   
     static int          curent_angle_index = 0;
     static double       current_angle_sum = 0;
@@ -210,16 +210,16 @@ public class RoboRebels extends IterativeRobot {
     final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
     
     final   static  double      DELAY_AT_START_OF_AUTON = 3.0;  // Delay set by DIP switch in shooting
-    final   static  double      MAX_SHOOTING_TIME = 6.0;  // Total time for shooter to give ball to basket
+    final   static  double      MAX_SHOOTING_TIME = 9.0;  // Total time for shooter to give ball to basket
     final   static  double      DELAY_BETWEEN_SHOTS = 3.0;  // Used for delay between shots in autonomous
     final   static  double      DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
     
-    final   static  double      SHOOTER_SPINUP_TIME = 2.0;  // Time taken for shooter to get up to speed before we send ball
+    final   static  double      SHOOTER_SPINUP_TIME = 1.0;  // Time taken for shooter to get up to speed before we send ball
     final   static  double      SHOOTER_SPINDOWN_TIME = 2.0;  // Time to wait for motor to spin down
     
     static  boolean     autonomous_mode = true;
     
-    static  boolean     troubleshooting = true;
+    static  boolean     troubleshooting = false;  // true;
     
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
@@ -336,8 +336,11 @@ public class RoboRebels extends IterativeRobot {
         {
             previous_angles[i] = 90.0;
         }
+        current_angle_sum = 90.0 * NUMBER_OF_PREVIOUS;  // initialize MA sum
         
         autonomous.auton_init();
+        
+  
     }
 
     public void teleopInit() {
@@ -348,9 +351,13 @@ public class RoboRebels extends IterativeRobot {
         tankDrive = false;
         autonomous_mode = false;
 
+        // Need to fix this!!
+        
+        gatherer.stop();
+        
         isFinishedShooting = false;  
         isShooting = false; 
-        shooter_motor_running = false;
+        // shooter_motor_running = false;
         
         /* Drive station code */
         //m_ds = DriverStation.getInstance();

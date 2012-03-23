@@ -35,7 +35,7 @@ public class RRShooter
     private final double        TILT_SPEED = 0.4;
     private final double        EXP_CONTR_TILT_MULT = 0.75;
     private final double        EXP_CONT_MAX_ANGLE = 85,
-                                EXP_CONT_MIN_ANGLE = 60;
+                                EXP_CONT_MIN_ANGLE = 65;
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
     private     int             lsv_channel;        // Lazy Susan Victor channel
@@ -264,20 +264,20 @@ public class RRShooter
         //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
         TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
-        TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
+        //TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
         
-        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
-        {
-            if ( TXValue > 0.0 )
-                tiltSpeed = TILT_SPEED;
-            else
-                tiltSpeed = -1.0 * TILT_SPEED;
-        }
-        else
-        {
-            tiltSpeed = 0.0;
-        }
-        
+//        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
+//        {
+//            if ( TXValue > 0.0 )
+//                tiltSpeed = TILT_SPEED;
+//            else
+//                tiltSpeed = -1.0 * TILT_SPEED;
+//        }
+//        else
+//        {
+//            tiltSpeed = 0.0;
+//        }
+//        
         if ( TUState )
         {
             System.out.println("Tilt up");
@@ -306,7 +306,7 @@ public class RRShooter
             else
             {
                 System.out.println("Min tilt angle exceeded!");
-                tiltSpeed = 0.0;              
+                tiltSpeed = 0.0;              // Need to renenable this later@!!!
             }
         }
         else if ( !TUState && !TDState )
@@ -317,27 +317,27 @@ public class RRShooter
         
         LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
         LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
-        LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
+        //LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
         
-        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
-        {
-            if ( LSXValue > 0.0 )
-            {
-                lazySusanSpeed = -1.0 * LS_SPEED;
-            }
-            else
-            {
-                if (LS_SPEED == 0.2)
-                    lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
-                else
-                    lazySusanSpeed = 1.0 * LS_SPEED;
-            }
-            RoboRebels.azimuth_lock = false;         // No azimuth target lock
-        }
-        else
-        {
-            lazySusanSpeed = 0.0;
-        }
+//        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
+//        {
+//            if ( LSXValue > 0.0 )
+//            {
+//                lazySusanSpeed = -1.0 * LS_SPEED;
+//            }
+//            else
+//            {
+//                if (LS_SPEED == 0.2)
+//                    lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
+//                else
+//                    lazySusanSpeed = 1.0 * LS_SPEED;
+//            }
+//            RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//        }
+//        else
+//        {
+//            lazySusanSpeed = 0.0;
+//        }
         
         // Check for lazy susan button left, right 
         //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
@@ -392,13 +392,13 @@ public class RRShooter
                     else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
                     {
                         System.out.println("Auto Lazy susan left"); 
-                        lazySusanSpeed = -0.20;  // was -0.75 * LS_SPEED
+                        lazySusanSpeed = -0.17;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
                     {
                         System.out.println("Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.3;  
+                        lazySusanSpeed = -0.2;      // 0.3
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
@@ -410,13 +410,13 @@ public class RRShooter
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.20  * 1.2;           // Added 20% due to motor slowness
+                        lazySusanSpeed = 0.17;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
                     {
                         System.out.println("Auto Lazy susan right fast"); 
-                        lazySusanSpeed = 0.30;
+                        lazySusanSpeed = 0.20;          // 0.30
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
@@ -556,6 +556,7 @@ public class RRShooter
                 tiltSpeed = -1 * TILT_SPEED * EXP_CONTR_TILT_MULT;
             }
             else if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
+                System.out.println("##### Shooter stop retracting! " + retExpAngle);
                 tiltSpeed = 0;
                 isRetracting = false;
             }
@@ -568,6 +569,8 @@ public class RRShooter
             }
             else if (retExpAngle < EXP_CONT_MIN_ANGLE)
             {
+                System.out.println("##### Shooter stopping expanding! " + retExpAngle);
+
                 tiltSpeed = 0;
                 isExpanding = false;
             }
@@ -685,7 +688,7 @@ public class RRShooter
         }                                               // Finished shooting and now wait before turning off shooting motor.
         else if (RoboRebels.shooter_motor_running)
         {          
-            double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_delivered_ball);
+            double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_after_shooting);
             
             System.out.println("Waiting for shooting motor to spin down"+ RoboRebels.time_started_shooting + " " + time_left);
        
@@ -791,11 +794,13 @@ public class RRShooter
     public void retractShooter()
     {
         isRetracting = true;
+        System.out.println("About to retract...");
     }
     
     public void expandShooter()
     {
         isExpanding = true;
+        System.out.println("About to expand...");
     }
     
     public int check_ls_position()      // Didn't get this working - not used.
@@ -841,7 +846,7 @@ public class RRShooter
         if (!RoboRebels.troubleshooting)
             lock_value =RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
         else
-            lock_value = dipSwitch.getState(2);
+            lock_value = dipSwitch.getState(3);
         
         return lock_value;
     }

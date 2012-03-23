@@ -64,8 +64,9 @@ public class RRTracker
         try
         {
            
-            RoboRebels.tilt_angle = accelAngle();
-            
+             RoboRebels.tilt_angle = accelAngle();
+             RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
+          
             ColorImage image = cam.getImage();     // comment if using stored images
 
             if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
@@ -88,7 +89,8 @@ public class RRTracker
 
             // TODO:  The white object threshold value needs to be tested to get an optimal number
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
-            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
+//            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
+             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // keep only White objects when there is sunlight
 
             // blue value was adjusted (above) because of ambient sunlight
            
@@ -336,15 +338,15 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                angle += correction(distance) + 10.0;      // Correction, i.e. fudge factor based on data.
+                angle += correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
                 
                 // angle = 55;
                     
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
-                RoboRebels.printLCD(4, "T: " + round(RoboRebels.tilt_angle) + " d: " +  round(distance) +  // Get rid of - correction eventually
-                        " c: " + round2(angle - correction(distance) - RoboRebels.tilt_angle) + "              ");
+
+                RoboRebels.printLCD(5, "d: " +  round(distance) + " c: " + round2(angle - correction(distance) - RoboRebels.tilt_angle) + "              ");
                 
                 int x_accuracy;
                 
@@ -493,25 +495,27 @@ public class RRTracker
         ADXL345_I2C.AllAxes axes = accel.getAccelerations();
  //       System.out.println("X Accel: " + axes.XAxis);
         System.out.println("Y Accel: " + axes.YAxis);
- //       System.out.println("Z Accel: " + axes.ZAxis);
+        System.out.println("Z Accel: " + axes.ZAxis);
         
         // Probably should not get reading from accelerometer if if > 1 or < -1 as it is moving too fast.
         
         double yAxis = Math.min(1, axes.YAxis);
         yAxis = Math.max(-1, yAxis);
         
- //       double zAxis = Math.min(1, axes.ZAxis);
- //       zAxis = Math.max(-1, zAxis);
+        double zAxis = Math.min(1, axes.ZAxis);
+        zAxis = Math.max(-1, zAxis);
         
- //       double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
+        double another_angle = (-180.0 * MathUtils.acos(zAxis) / Math.PI);  // Use this angle if angle is greater than 70 degrees
         
- //       System.out.println("Accel Angle from Z Axis:" + round(another_angle));
+        System.out.println("Accel Angle from Z Axis:" + round(another_angle));
         
         // Need to subtract 90 degrees to return correct angle when
         // accelerometer is mounted on back of shooter
 
         double current_angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
         
+        System.out.println("Accel Angle from Y Axis:" + round(current_angle));
+      
         // Updates current moving average sum by subtracing oldest entry and adding in current entry
         
         RoboRebels.current_angle_sum = RoboRebels.current_angle_sum - RoboRebels.previous_angles[RoboRebels.curent_angle_index] + current_angle;
@@ -537,7 +541,7 @@ public class RRTracker
       
     public int x(int raw_x, int target_image_width)
     {   
-        double camera_offset = 10.0;   // camera offset from center of robot in inches.  Positive is to the right side of robot
+        double camera_offset = 9.0;      // 10.0 on practice bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
         double target_width = 24.0;     // width of backboard target in inches   
         int correction;
         
