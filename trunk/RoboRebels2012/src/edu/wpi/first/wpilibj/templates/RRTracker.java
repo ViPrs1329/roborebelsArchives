@@ -111,18 +111,18 @@ public class RRTracker
 
                 BinaryImage filteredImage;
                 BinaryImage convexHullImage;
-                BinaryImage bigObjectsImage;
+ //               BinaryImage bigObjectsImage;
 
-                bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts 
+ //               bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);  // remove small artifacts 
  
-                if (RoboRebels.remove_small_objects_from_image)     // We commented out the removeSmallObjects step very early on.  Now should try it back in again
-                {
-                    convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles after removing small objects   
-                }
-                else
-                {
+ //               if (RoboRebels.remove_small_objects_from_image)     // We commented out the removeSmallObjects step very early on.  Now should try it back in again
+ //               {
+ //                   convexHullImage = bigObjectsImage.convexHull(false);          // fill in occluded rectangles after removing small objects   
+ //               }
+ //               else
+ //               {
                     convexHullImage = thresholdImage.convexHull(false);            // fill in occluded rectangles without removing small objects
-                }
+ //               }
                 
                 filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
 
@@ -295,12 +295,12 @@ public class RRTracker
               
               double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
            
-               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
-                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
-                        " Height: " + r.boundingRectHeight + 
-                        " Aspect: " + round2(aspect_ratio) + 
-                        " Distance: " + round(distance));
-               
+//               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+//                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
+//                        " Height: " + r.boundingRectHeight + 
+//                        " Aspect: " + round2(aspect_ratio) + 
+//                        " Distance: " + round(distance));
+//               
                if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
                {
                                
@@ -458,7 +458,7 @@ public class RRTracker
             
             filteredImage.free();
             convexHullImage.free();       
-            bigObjectsImage.free();     // Still free up even if not used.
+//            bigObjectsImage.free();     // Still free up even if not used.
             thresholdImage.free();
             image.free();
         
