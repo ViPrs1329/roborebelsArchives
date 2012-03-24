@@ -113,6 +113,7 @@ public class RRAutonomous {
                 {
                     System.out.println("Auton Finished Delaying at Start");
                     delay_shooting = false;  
+                    RoboRebels.autonomous_mode_tracking = true;
                 }
              } else
              {
@@ -120,6 +121,7 @@ public class RRAutonomous {
                 {
                     System.out.println("Auton Finished Delaying at Start");
                     delay_shooting = false;  
+                    RoboRebels.autonomous_mode_tracking = true;
                 }
              }
                 

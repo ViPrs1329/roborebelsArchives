@@ -106,7 +106,8 @@ public class RRButtonMap
                     REVERSE_SHOOTING_1 = 20,
                     REVERSE_SHOOTING_2 = 21,
                     LAZY_SUSAN_X = 22,
-                    TILT_X = 23;
+                    TILT_X = 23,
+                    SHOOTER_ALT_ENABLED = 24;
     
     Joystick        lJoystick, rJoystick, xboxController;
     
@@ -163,6 +164,7 @@ public class RRButtonMap
         insertAction(REVERSE_SHOOTING_2, 8, -1, xboxController);
         insertAction(LAZY_SUSAN_X, -1, 4, xboxController);
         insertAction(TILT_X, -1, 5, xboxController);
+        insertAction(SHOOTER_ALT_ENABLED, 8, -1, xboxController);
         
         
         // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top

@@ -72,17 +72,20 @@ public class RRTracker
           
             ColorImage image = cam.getImage();     // comment if using stored images
 
-            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
-            {
-                try {
-                    image.write("/raw.jpg");
-                } catch (Exception e) {
-                    System.out.println("error saving image 1");
-                }
-                System.out.println("Saved raw camera image to cRIO");
+//            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
+//            {
+//                try {
+//                    image.write("/raw.jpg");
+//                } catch (Exception e) {
+//                    System.out.println("error saving image 1");
+//                }
+//    //            System.out.println("Saved raw camera image to cRIO");
+//                
+//                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+//            }
                 
-                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
-            }
+ //               RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+ //           }
 
             /*  
              *   Choose thresholds for white by setting save_camer_image_file variable and FTPing the image off cRIO and examining in PhotoShop
@@ -341,16 +344,23 @@ public class RRTracker
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
-                angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
                 
+               if (RoboRebels.autonomous_mode == true)
+               {
+                angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+               }
+               else
+               {
+                    angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+                
+               }
                 // angle = 55;
                     
                 System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
                         " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
                 
+                RoboRebels.printLCD(5, "d: " +  round(distance) + " C: " + round2(angle - RoboRebels.tilt_angle) + "              ");
 
-                RoboRebels.printLCD(5, "d: " +  round(distance) + " c: " + round2(angle - correction(distance) - RoboRebels.tilt_angle) + "              ");
-                
                 int x_accuracy;
                 
 //                if ((distance > 6.0) && (distance < 25.0))                                    // Adjust pixel accuracy with distance.

@@ -151,7 +151,7 @@ public class RoboRebels extends IterativeRobot {
     static double       angle_position = 0.0;     // Initial position of LS.
     static double       time_last_update = 0;     // Timestamp of last position update       
     
-    final static int    PIXEL_ACCURACY = 16;      // Used by RRTRacker to determne when Locked.
+    final static int    PIXEL_ACCURACY = 20;      // Used by RRTRacker to determne when Locked.
     final static int    ANGLE_ACCURACY = 6;       // Used by RRTRacker to determne when Locked.
     
     final static int    LOWEST_TARGET  = 0;     // Lowest basket target
@@ -208,13 +208,13 @@ public class RoboRebels extends IterativeRobot {
     
       // During match setup, save image file to set image thresholds
 
-    final   static  double      MAX_TRACKING_TIME = 3.0;    // Time before tracking is given up if no lock obtained
+    final   static  double      MAX_TRACKING_TIME = 10.0;    // Time before tracking is given up if no lock obtained
     
     final   static  double      DELAY_AT_START_OF_AUTON = 2.0;  // Delay set by DIP switch in shooting
     final   static  double      MAX_SHOOTING_TIME = 9.0;  // Total time for shooter to give ball to basket
-    final   static  double      DELAY_BETWEEN_SHOTS = 3.0;  // Used for delay between shots in autonomous
+    final   static  double      DELAY_BETWEEN_SHOTS = 2.0;  // Used for delay between shots in autonomous
     final   static  double      DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
-    final   static  double      EXPAND_TIME = 3.0;
+    final   static  double      EXPAND_TIME = 2.0;
     
     final   static  double      SHOOTER_SPINUP_TIME = 1.0;  // Time taken for shooter to get up to speed before we send ball
     final   static  double      SHOOTER_SPINDOWN_TIME = 2.0;  // Time to wait for motor to spin down
@@ -333,7 +333,7 @@ public class RoboRebels extends IterativeRobot {
         autonomous_tracking_failed = false;
         no_balls_shot = true;
         second_ball_started_shoot = false;
-        autonomous_mode_tracking = true;
+        autonomous_mode_tracking = false;       // Don't start tracking until expanded
         
         for (int i = 0; i < NUMBER_OF_PREVIOUS; i++)    // initialize Moving Average values
         {

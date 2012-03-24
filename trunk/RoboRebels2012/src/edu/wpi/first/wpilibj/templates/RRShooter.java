@@ -52,6 +52,7 @@ public class RRShooter
     private     boolean         shootingWheelState;
     
     private     boolean         shootingButtonPressed;
+    private     boolean         shootingAltButtonPressed;
     
     private     boolean         retractionContractionInProgress = false;
             
@@ -190,6 +191,7 @@ public class RRShooter
                TX_DEAD_ZONE = 0.15;
         boolean LSLState, LSRState, TUState, TDState, TTState, CSState, ESState, ECSState, ReverseShootingState1, ReverseShootingState2;
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
+        boolean  shooterAltButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ALT_ENABLED).getButtonState();
         
         RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()));
         //RoboRebels.printLCD(4, "Z:" + RRTracker.round2(this.getTransformedZValue()));
@@ -233,6 +235,25 @@ public class RRShooter
         }
         
  */     
+        if (shooterAltButtonState)
+        {
+            if (!shootingAltButtonPressed)
+            {
+                shootingAltButtonPressed = true;
+                
+                if (RoboRebels.muzzle_velocity == 7.5)
+                    shootingWheelSpeed = 0.85;
+                else if (RoboRebels.muzzle_velocity == 8.0)
+                    shootingWheelSpeed = 1.0;
+                else
+                    shootingWheelSpeed = 0.85;
+            }
+            else
+            {
+                shootingWheelSpeed = 0.0;
+            }
+        }
+        
         if (shooterButtonState)
         {
             if (!shootingButtonPressed)  // Button is pushed for first time
@@ -264,20 +285,21 @@ public class RRShooter
         //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
         TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
         TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
-        //TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
+        TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
+        System.out.println("Tilt Value: " + TXValue);
         
-//        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
-//        {
-//            if ( TXValue > 0.0 )
-//                tiltSpeed = TILT_SPEED;
-//            else
-//                tiltSpeed = -1.0 * TILT_SPEED;
-//        }
-//        else
-//        {
-//            tiltSpeed = 0.0;
-//        }
-//        
+        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
+        {
+            if ( TXValue > 0.0 )
+                tiltSpeed = TILT_SPEED;
+            else
+                tiltSpeed = -1.0 * TILT_SPEED;
+        }
+        else
+        {
+            tiltSpeed = 0.0;
+        }
+        
         if ( TUState )
         {
             System.out.println("Tilt up");
@@ -317,7 +339,8 @@ public class RRShooter
         
         LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
         LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
-        //LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
+        LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
+        System.out.println("Elevate value: " + LSXValue);
         
 //        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
 //        {
