@@ -402,7 +402,7 @@ public class RoboRebels extends IterativeRobot {
        
         if ( teleopStateBroadcasted == true )
         {
-            System.out.println( "Teleop State" );
+ //           System.out.println( "Teleop State" );
             teleopStateBroadcasted = false;
         }
         
