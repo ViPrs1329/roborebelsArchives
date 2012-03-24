@@ -589,9 +589,9 @@ public class RRShooter
             retExpAngle = tracker.accelAngle();
             if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
    //             System.out.println("##### Shooter is expanding! " + retExpAngle);
-                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT;
+                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT * 1.1;         //   Try making this 1.25 Expand a bit faster to give more time during autonomous
             }
-            else if (retExpAngle < EXP_CONT_MIN_ANGLE)
+            else if (retExpAngle < EXP_CONT_MIN_ANGLE)          // Try adding a +10 to this to account for angle lag
             {
      //           System.out.println("##### Shooter stopping expanding! " + retExpAngle);
 
