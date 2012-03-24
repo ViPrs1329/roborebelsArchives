@@ -148,7 +148,7 @@ public class RRDrive implements MotorSafety
         else
         {
            //tank mode
-            System.out.println("RRDrive::drive() - Tank drive has not been implimented yet!!!");
+     //       System.out.println("RRDrive::drive() - Tank drive has not been implimented yet!!!");
         }
     }
     
@@ -190,7 +190,7 @@ public class RRDrive implements MotorSafety
             }
         }
         
-        System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
+  //      System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
         
         //System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
