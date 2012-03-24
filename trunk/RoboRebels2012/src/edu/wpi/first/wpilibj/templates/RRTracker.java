@@ -337,7 +337,7 @@ public class RRTracker
                 }
                 else
                 {
-                    RoboRebels.printLCD(2, "Dist: No Target" ); 
+                    RoboRebels.printLCD(2, "Dist: No Target        " ); 
                 }
                                  
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
@@ -356,8 +356,9 @@ public class RRTracker
                }
                 // angle = 55;
                     
-                System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
-                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
+//                System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
+//                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
+//                
                 
                 RoboRebels.printLCD(5, "d: " +  round(distance) + " C: " + round2(angle - RoboRebels.tilt_angle) + "              ");
 
@@ -432,7 +433,7 @@ public class RRTracker
               {
                   RoboRebels.printLCD(2, "Target Not Valid!          " );
                   
-                  System.out.println("Target Not Valid!         ");
+          //        System.out.println("Target Not Valid!         ");
                   
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
@@ -442,7 +443,7 @@ public class RRTracker
             else
             {
                   RoboRebels.printLCD(2, "No Target Detected!          " );
-                  System.out.println("No Target Detected!         ");
+    //              System.out.println("No Target Detected!         ");
                   
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
@@ -469,7 +470,7 @@ public class RRTracker
             System.err.println("There was an error while tracking a target!");
             ex.printStackTrace();
         }
-        System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*100) + " milleseconds");
+  //      System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*1000.0) + " milliseconds");
     }
 //}       // Just added this now
     
@@ -528,7 +529,7 @@ public class RRTracker
 
         double current_angle = 90.0 - (180.0 * MathUtils.asin(yAxis) / Math.PI);
         
-        System.out.println("Accel Angle from Y Axis:" + round(current_angle));
+ //       System.out.println("Accel Angle from Y Axis:" + round(current_angle));
       
         // Updates current moving average sum by subtracing oldest entry and adding in current entry
         

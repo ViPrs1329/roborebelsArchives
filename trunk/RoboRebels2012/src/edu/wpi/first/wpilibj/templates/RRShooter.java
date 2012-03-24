@@ -420,26 +420,26 @@ public class RRShooter
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
                     {
-                        System.out.println("Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.2;      // 0.3
+             //           System.out.println("Auto Lazy susan left fast"); 
+                        lazySusanSpeed = -0.17;      // 0.3
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
                     {
-                        System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.15 * 1.2;            // Added 20% due to motor slowness
+               //         System.out.println("Auto Lazy susan right slow"); 
+                        lazySusanSpeed = 0.15; // * 1.2;            // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
-                        System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.17 * 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                //        System.out.println("Auto Lazy susan right"); 
+                        lazySusanSpeed = 0.17;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
                     {
-                        System.out.println("Auto Lazy susan right fast"); 
-                        lazySusanSpeed = 0.20 * 1.2;          // 0.30
+               //         System.out.println("Auto Lazy susan right fast"); 
+                        lazySusanSpeed = 0.17;  //* 1.2;          // 0.30
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
