@@ -222,6 +222,7 @@ public class RoboRebels extends IterativeRobot {
     static  boolean     autonomous_mode = true;
     
     static  boolean     troubleshooting = false;  // true;
+    static  boolean     dont_track_azimuth = false;
     
     static double       tilt_angle = 90;        // tilt angle (elevation)
 
@@ -307,6 +308,8 @@ public class RoboRebels extends IterativeRobot {
         muzzle_velocity_lock = false;
         angle_position = 0.0;
         
+        dont_track_azimuth = false; 
+        
         shooter.reset();
     }
 
@@ -330,6 +333,9 @@ public class RoboRebels extends IterativeRobot {
         
         autonomous_mode = true;
         autonomous_complete = false;
+        
+        dont_track_azimuth = true;
+        
         autonomous_tracking_failed = false;
         no_balls_shot = true;
         second_ball_started_shoot = false;
@@ -362,6 +368,8 @@ public class RoboRebels extends IterativeRobot {
         
         isFinishedShooting = false;  
         isShooting = false; 
+        
+        dont_track_azimuth = false; 
         
         shooter.reset();
         

@@ -415,7 +415,7 @@ public class RRShooter
                     else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
                     {
          //               System.out.println("Auto Lazy susan left"); 
-                        lazySusanSpeed = -0.17;         //-0.20;  // was -0.75 * LS_SPEED
+                        lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
@@ -433,7 +433,7 @@ public class RRShooter
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                 //        System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.17;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                        lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
@@ -446,6 +446,9 @@ public class RRShooter
                     {
            //             System.out.println("Auto Lazy susan Lock"); 
                         lazySusanSpeed = 0.0;
+                        
+                        stopLazySusan();
+                        
                         RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
                     } 
                     else              // Must be set to HOLD
@@ -455,6 +458,11 @@ public class RRShooter
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
 
+                    if (RoboRebels.dont_track_azimuth)
+                    {
+                            RoboRebels.azimuth_lock = true;
+                            lazySusanSpeed = 0.0;
+                    }
          //           System.out.println("Tilt value:" + RoboRebels.target_elevation); 
 
                     if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
@@ -589,9 +597,9 @@ public class RRShooter
             retExpAngle = tracker.accelAngle();
             if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
    //             System.out.println("##### Shooter is expanding! " + retExpAngle);
-                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT * 1.1;         //   Try making this 1.25 Expand a bit faster to give more time during autonomous
+                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT * 3.0;         //   Try making this 1.25 Expand a bit faster to give more time during autonomous
             }
-            else if (retExpAngle < EXP_CONT_MIN_ANGLE)          // Try adding a +10 to this to account for angle lag
+            else if (retExpAngle < (EXP_CONT_MIN_ANGLE + 5))          // Try adding a +10 to this to account for angle lag
             {
      //           System.out.println("##### Shooter stopping expanding! " + retExpAngle);
 

@@ -22,7 +22,7 @@ public class RRTracker
     
     RRShooter       shooter;
     RRDIPSwitch     dipSwitch;
-
+    
     public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     {
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
