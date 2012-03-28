@@ -17,27 +17,88 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class RoboRebels extends IterativeRobot {
+public class RoboRebels extends IterativeRobot 
+{
+    private boolean      disabledStateBroadcasted = false;
+    private boolean      teleopStateBroadcasted = false;
+    private boolean      autonomousStateBroadcasted = false;
+    
+    
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    public void robotInit() {
-
+    
+    public RoboRebels()
+    {
+        System.out.println("RoboRebels()");
+    }
+    
+    public void robotInit() 
+    {
+        System.out.println("robotInit()");
+    }
+    
+    public void disabledInit()
+    {
+        System.out.println("disabledInit()");
+        
+        resetBroadcastedFlags();
+    }
+    
+    public void autonomousInit()
+    {
+        System.out.println("autonomousInit()");
+        
+        resetBroadcastedFlags();
+    }
+    
+    public void teleopInit()
+    {
+        System.out.println("teleopInit()");
+        
+        resetBroadcastedFlags();
     }
 
     /**
      * This function is called periodically during autonomous
      */
-    public void autonomousPeriodic() {
-
+    public void autonomousPeriodic() 
+    {
+        if ( !autonomousStateBroadcasted )
+        {
+            System.out.println("Autonomous mode...");
+            autonomousStateBroadcasted = true;
+        }
     }
 
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
-        
+    public void teleopPeriodic() 
+    {
+        if ( !teleopStateBroadcasted )
+        {
+            System.out.println("Teleop mode...");
+            teleopStateBroadcasted = true;
+        }
+    }
+    
+    
+    public void disabledPeriodic()
+    {
+        if ( !disabledStateBroadcasted )
+        {
+            System.out.println("Disabled mode...");
+            disabledStateBroadcasted = true;
+        }
+    }
+    
+    private void resetBroadcastedFlags()
+    {
+        disabledStateBroadcasted = false;
+        teleopStateBroadcasted = false;
+        autonomousStateBroadcasted = false;
     }
     
 }
