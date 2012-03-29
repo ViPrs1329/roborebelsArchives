@@ -235,24 +235,6 @@ public class RRShooter
         }
         
  */     
-        if (shooterAltButtonState)
-        {
-            if (!shootingAltButtonPressed)
-            {
-                shootingAltButtonPressed = true;
-                
-                if (RoboRebels.muzzle_velocity == 7.5)
-                    shootingWheelSpeed = 0.85;
-                else if (RoboRebels.muzzle_velocity == 8.0)
-                    shootingWheelSpeed = 1.0;
-                else
-                    shootingWheelSpeed = 0.85;
-            }
-            else
-            {
-                shootingWheelSpeed = 0.0;
-            }
-        }
         
         if (shooterButtonState)
         {
@@ -607,11 +589,37 @@ public class RRShooter
                 isExpanding = false;
             }
         }
-        ReverseShootingState1 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_1).getButtonState();
-        ReverseShootingState2 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_2).getButtonState();
-        if ((ReverseShootingState1) && (ReverseShootingState2)) {
-            shootingWheelState = false;
-            shootingWheelSpeed = -this.getTransformedZValue();
+        
+//        ReverseShootingState1 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_1).getButtonState();
+//        ReverseShootingState2 = RRButtonMap.getActionObject(RRButtonMap.REVERSE_SHOOTING_2).getButtonState();
+//        if ((ReverseShootingState1) && (ReverseShootingState2)) {
+//            shootingWheelState = false;
+//            shootingWheelSpeed = -this.getTransformedZValue();
+//        }
+        
+        if (shooterAltButtonState)
+        {
+//            System.out.println("Shooter alt button pressed");
+            if (!shootingAltButtonPressed)
+            {
+//                System.out.println("Setting shooter speed");
+                shootingAltButtonPressed = true;
+                
+                if (RoboRebels.muzzle_velocity == 7.5)
+                    shootingWheelSpeed = 0.85;
+                else if (RoboRebels.muzzle_velocity == 8.0)
+                    shootingWheelSpeed = 1.0;
+                else
+                    shootingWheelSpeed = 0.85;
+            }
+            else
+            {
+                shootingWheelSpeed = 0.0;
+            }
+        }
+        else
+        {
+            shootingAltButtonPressed = false;
         }
         
 

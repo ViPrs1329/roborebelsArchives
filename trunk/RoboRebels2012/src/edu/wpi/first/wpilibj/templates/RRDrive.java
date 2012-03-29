@@ -192,7 +192,8 @@ public class RRDrive implements MotorSafety
         
   //      System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
         
-        //System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
+//        System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
+        
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
     }
     

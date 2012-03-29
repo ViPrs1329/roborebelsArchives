@@ -58,14 +58,7 @@ package edu.wpi.first.wpilibj.templates;
 
 import com.sun.squawk.util.MathUtils;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStationLCD;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.ADXL345_I2C;
-import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.*;
 
 
 /**
@@ -83,7 +76,8 @@ public class RoboRebels extends IterativeRobot {
     Joystick            m_rightStick;           // joystick 1 (arcade stick or right tank stick)
     Joystick            m_leftStick;            // joystick 2 (tank left stick)
     Joystick            m_xboxStick;
-    PWM                 currentPWM;
+    Gyro                gyro;
+    Encoder             rightEncoder, leftEncoder;
     RRDrive             drive;
     RRShooter           shooter;
     RRGatherer          gatherer;
@@ -258,6 +252,11 @@ public class RoboRebels extends IterativeRobot {
         m_rightStick    = new Joystick(2);
         m_xboxStick     = new Joystick(3);
         System.out.println("Joysticks set");
+        
+        gyro = new Gyro(1);
+        gyro.reset();
+        rightEncoder = new Encoder(12, 11, false);
+        leftEncoder = new Encoder(14, 13, false);
 
         buttonMap = new RRButtonMap(m_leftStick, m_rightStick, m_xboxStick);
         buttonMap.setControllers();
@@ -427,6 +426,9 @@ public class RoboRebels extends IterativeRobot {
       shooter.shoot();
       gatherer.gather();
       arm.arm();
+      
+//      System.out.println("Gyro: " + gyro.getAngle());
+//      System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());
     }
 
     /**

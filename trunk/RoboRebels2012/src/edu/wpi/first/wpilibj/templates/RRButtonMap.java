@@ -143,7 +143,7 @@ public class RRButtonMap
         insertAction(ARCADE_STICK_Y, -1, 2, xboxController );
 //        insertAction(ARCADE_STICK_X, -1, 1, rJoystick );
 //        insertAction(ARCADE_STICK_Y, -1, 2, rJoystick );
-        insertAction(SHOOTER_ENABLED, 3, -1, xboxController);
+        insertAction(SHOOTER_ENABLED, 8, -1, xboxController);
         //insertAction(SHOOTER_ENABLED, 1,  -1, rJoystick);
         insertAction(SHOOTER_SPEED, -1, -1, rJoystick);
         insertAction(LOADER_UP, 4,  -1, xboxController);
@@ -160,11 +160,11 @@ public class RRButtonMap
         insertAction(EXPAND_CONTRACT_SHOOTER, 10, -1, xboxController);
         //insertAction(EXPAND_SHOOTER, 7, -1, rJoystick);
         insertAction(TRACK_TARGET, 2, -1, xboxController);
-        insertAction(REVERSE_SHOOTING_1, 7, -1, xboxController);
-        insertAction(REVERSE_SHOOTING_2, 8, -1, xboxController);
+//        insertAction(REVERSE_SHOOTING_1, 7, -1, xboxController);
+//        insertAction(REVERSE_SHOOTING_2, 8, -1, xboxController);
         insertAction(LAZY_SUSAN_X, -1, 4, xboxController);
         insertAction(TILT_X, -1, 5, xboxController);
-        insertAction(SHOOTER_ALT_ENABLED, 8, -1, xboxController);
+        insertAction(SHOOTER_ALT_ENABLED, 3, -1, xboxController);
         
         
         // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top

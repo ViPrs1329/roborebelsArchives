@@ -22,11 +22,18 @@ public class RRTracker
     
     RRShooter       shooter;
     RRDIPSwitch     dipSwitch;
+    RRCameraThread  cameraThread;
     
+//    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     {
+        /* ++++++++++++++++++++
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
         cam = AxisCamera.getInstance();
+        +++++++++++++++++++++++ */
+        cameraThread = new RRCameraThread();
+        cameraThread.collectImages();
+        cameraThread.start();
         System.out.println("Camera");
 
         cc = new CriteriaCollection();      // create the criteria for the particle filter
@@ -70,8 +77,12 @@ public class RRTracker
              if ((shooter.tracking) || RoboRebels.continuous_targeting)
              {
           
-            ColorImage image = cam.getImage();     // comment if using stored images
-
+                 /* ++++++++++++++++++++++++++++
+                ColorImage image = cam.getImage();     // comment if using stored images
+                    ++++++++++++++++++++++++++++ */
+                 
+                 ColorImage image = cameraThread.getImage();
+                 
 //            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
 //            {
 //                try {
@@ -474,7 +485,7 @@ public class RRTracker
     }
 //}       // Just added this now
     
-/**  These two are not currently used. 
+/*  These two are not currently used. 
  * 
     public static Target highestTarget() {
         Target highest = null;
