@@ -256,7 +256,11 @@ public class RoboRebels extends IterativeRobot {
         gyro = new Gyro(1);
         gyro.reset();
         rightEncoder = new Encoder(12, 11, false);
-        leftEncoder = new Encoder(14, 13, false);
+        leftEncoder = new Encoder(14, 13, true);
+        rightEncoder.reset();
+        rightEncoder.start();
+        leftEncoder.reset();
+        leftEncoder.start();
 
         buttonMap = new RRButtonMap(m_leftStick, m_rightStick, m_xboxStick);
         buttonMap.setControllers();
@@ -428,7 +432,7 @@ public class RoboRebels extends IterativeRobot {
       arm.arm();
       
 //      System.out.println("Gyro: " + gyro.getAngle());
-//      System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());
+      System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());
     }
 
     /**
