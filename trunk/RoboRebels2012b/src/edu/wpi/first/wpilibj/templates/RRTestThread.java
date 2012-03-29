@@ -14,7 +14,7 @@ public class RRTestThread extends Thread
 {
     private RRDrive drive;
     
-    private double lastTickTime;
+//    private double lastTickTime;
     
     public RRTestThread(RRDrive d)
     {
@@ -25,7 +25,7 @@ public class RRTestThread extends Thread
     {
         drive = new RRDrive(2, 1);
         
-        lastTickTime = Timer.getFPGATimestamp();
+//        lastTickTime = Timer.getFPGATimestamp();
     }
     
     public void run()
@@ -34,17 +34,29 @@ public class RRTestThread extends Thread
         
         while (true)
         {
-            currentTime = Timer.getFPGATimestamp();
+//            currentTime = Timer.getFPGATimestamp();
+//            
+//            if ( currentTime - lastTickTime >= 0.02 )
+//            {
+//                drive.drive(false);
+//                lastTickTime = Timer.getFPGATimestamp();
+//                System.out.println("+++ driving from thread... " + currentTime);
+//            }
+//            else
+//            {
+//                System.out.println("*** not driving at this moment!");
+//            }
             
-            if ( currentTime - lastTickTime >= 0.02 )
-            {
-                drive.drive(false);
-                lastTickTime = Timer.getFPGATimestamp();
-                System.out.println("+++ driving from thread... " + currentTime);
-            }
-            else
-            {
-                System.out.println("*** not driving at this moment!");
+            
+            /*  This method of driving, then sleeping for 20 milliseconds works
+             *  just as well as the above method, and is less complicated.
+             */
+            drive.drive(false);
+            
+            try {
+                RRTestThread.sleep(20);
+            } catch (InterruptedException ex) {
+                System.err.println("RRTestThread::run() - Interrupted Exception!");
             }
         }
     }
