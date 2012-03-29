@@ -8,7 +8,10 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import java.lang.Math;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,9 +22,16 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 public class RoboRebels extends IterativeRobot 
 {
-    private boolean      disabledStateBroadcasted = false;
-    private boolean      teleopStateBroadcasted = false;
-    private boolean      autonomousStateBroadcasted = false;
+    private boolean         disabledStateBroadcasted = false;
+    private boolean         teleopStateBroadcasted = false;
+    private boolean         autonomousStateBroadcasted = false;
+    
+    private Joystick        leftStick, rightStick, xboxController;
+    private ADXL345_I2C     accel;
+    
+    private RRDrive         drive;
+    private RRButtonMap     buttonMap;
+    private RRTestThread    threadTest;
     
     
     /**
@@ -37,6 +47,22 @@ public class RoboRebels extends IterativeRobot
     public void robotInit() 
     {
         System.out.println("robotInit()");
+        
+        leftStick = new Joystick(1);
+        rightStick = new Joystick(2);
+        xboxController = new Joystick(3);
+        
+        accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
+        
+        buttonMap = new RRButtonMap(leftStick, rightStick, xboxController);
+        
+//        drive = new RRDrive(2, 1);
+        
+        threadTest = new RRTestThread();
+        
+        threadTest.start();
+        
+        System.out.println(Thread.MIN_PRIORITY + " | " + Thread.NORM_PRIORITY + " | " + Thread.MAX_PRIORITY);
     }
     
     public void disabledInit()
@@ -82,6 +108,11 @@ public class RoboRebels extends IterativeRobot
             System.out.println("Teleop mode...");
             teleopStateBroadcasted = true;
         }
+        
+        for (int i = 0; i < 100000; i++)
+            Math.sqrt(i);
+        
+//        drive.drive(false);
     }
     
     
@@ -92,6 +123,21 @@ public class RoboRebels extends IterativeRobot
             System.out.println("Disabled mode...");
             disabledStateBroadcasted = true;
         }
+    }
+    
+    public void autonomousContinuous()
+    {
+        
+    }
+    
+    public void teleopContinuous()
+    {
+        
+    }
+    
+    public void disabledContinuous()
+    {
+        
     }
     
     private void resetBroadcastedFlags()

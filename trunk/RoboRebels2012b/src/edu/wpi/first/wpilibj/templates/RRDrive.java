@@ -77,7 +77,7 @@ public class RRDrive implements MotorSafety
         double l_xVal = aoX.getAxisState();
         double l_yVal = aoY.getAxisState();
 
-        //System.out.println("drive()");
+        System.out.println("drive()");
            
         
         if (Math.abs(l_xVal) < .13)
@@ -190,9 +190,9 @@ public class RRDrive implements MotorSafety
             }
         }
         
-  //      System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
+//        System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
         
-        //System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
+        System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
         setLeftRightMotorValue(leftMotorSpeed, rightMotorSpeed);
     }
     
