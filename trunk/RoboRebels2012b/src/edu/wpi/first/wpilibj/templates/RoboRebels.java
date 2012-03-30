@@ -109,8 +109,11 @@ public class RoboRebels extends IterativeRobot
             teleopStateBroadcasted = true;
         }
         
+        System.out.println("Calculating square roots...");
         for (int i = 0; i < 100000; i++)
             Math.sqrt(i);
+        System.out.println("Finished calculating square roots!");
+  
         
 //        drive.drive(false);
     }
