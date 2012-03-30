@@ -4,7 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableGyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -12,18 +13,27 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class RRTestThread extends Thread 
 {
-    private RRDrive drive;
+    private RRDrive                 drive;
+//    private RRDriveSendable         drive;
+//    private SendableGyro            gyro;
     
 //    private double lastTickTime;
     
-    public RRTestThread(RRDrive d)
+    public RRTestThread(RRDriveSendable d)
     {
         drive = d;
+        
     }
     
     public RRTestThread()
     {
-        drive = new RRDrive(2, 1);
+        drive = new RRDrive(2, 1, 14, 13, 12, 11);
+        
+//        drive = new RRDriveSendable(2, 1, 14, 13, 12, 11);
+//        gyro = new SendableGyro(1);
+        
+        
+        
         
 //        lastTickTime = Timer.getFPGATimestamp();
     }
@@ -52,6 +62,9 @@ public class RRTestThread extends Thread
              *  just as well as the above method, and is less complicated.
              */
             drive.drive(false);
+            
+//            SmartDashboard.putData("RRDriveSendable", drive);
+//            SmartDashboard.putData("Gyro", gyro);
             
             try {
                 RRTestThread.sleep(20);

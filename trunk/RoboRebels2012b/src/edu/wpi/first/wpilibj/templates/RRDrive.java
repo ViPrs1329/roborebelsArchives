@@ -13,10 +13,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 
-import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.MotorSafety;
-import edu.wpi.first.wpilibj.MotorSafetyHelper;
+import edu.wpi.first.wpilibj.*;
 
 
 public class RRDrive implements MotorSafety
@@ -28,6 +25,11 @@ public class RRDrive implements MotorSafety
     private     Jaguar                  leftMotor,
                                         rightMotor;
     
+    private     Encoder                 leftEncoder,
+                                        rightEncoder;
+    
+    protected   double                  leftMotorSpeed, rightMotorSpeed;
+    
     public static final double          kDefaultExpirationTime = 0.1;
     
 
@@ -37,11 +39,14 @@ public class RRDrive implements MotorSafety
      * @param leftChannel
      * @param rightChannel 
      */
-    public RRDrive(int leftChannel, int rightChannel)
+    public RRDrive(int leftChannel, int rightChannel, int leftAEncoderChannel, int leftBEncoderChannel, 
+                   int rightAEncoderChannel, int rightBEncoderChannel)
     {
         //System.out.println("RRDrive() " + leftChannel + " " + rightChannel);
         
         setupDrive(leftChannel, rightChannel);
+        
+        setupEncoders(leftAEncoderChannel, leftBEncoderChannel, rightAEncoderChannel, rightBEncoderChannel);
         
         setupMotorSafety();
     }
@@ -56,6 +61,47 @@ public class RRDrive implements MotorSafety
     {
         leftMotor = new Jaguar(lc);
         rightMotor = new Jaguar(rc);
+    }
+    
+    
+    private void setupEncoders(int lac, int lbc, int rac, int rbc)
+    {
+        leftEncoder = new Encoder(lac, lbc, true);
+        rightEncoder = new Encoder(rac, rbc, false);
+        
+        leftEncoder.reset();
+        rightEncoder.reset();
+        
+        leftEncoder.start();
+        rightEncoder.stop();
+        
+    }
+    
+    
+    public int getLeftEncoderValue()
+    {
+        return leftEncoder.get();
+    }
+    
+    public int getRightEncoderValue()
+    {
+        return rightEncoder.get();
+    }
+    
+    public void reset()
+    {
+        resetLeftEncoder();
+        rightEncoder.reset();
+    }
+    
+    public void resetLeftEncoder()
+    {
+        leftEncoder.reset();
+    }
+    
+    public void resetRightEncoder()
+    {
+        rightEncoder.reset();
     }
     
     
@@ -77,7 +123,7 @@ public class RRDrive implements MotorSafety
         double l_xVal = aoX.getAxisState();
         double l_yVal = aoY.getAxisState();
 
-        System.out.println("drive()");
+        System.out.println("drive() " + l_xVal + " | " + l_yVal);
            
         
         if (Math.abs(l_xVal) < .13)
@@ -206,6 +252,10 @@ public class RRDrive implements MotorSafety
     {
         if (leftMotor == null || rightMotor == null)
             throw new NullPointerException("Null motor provided");
+        
+        leftMotorSpeed = left;
+        rightMotorSpeed = right;
+        
         leftMotor.set(left);
         rightMotor.set(right);
         

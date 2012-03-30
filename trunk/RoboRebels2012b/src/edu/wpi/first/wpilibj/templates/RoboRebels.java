@@ -11,6 +11,8 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.ADXL345_I2C;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendablePIDController;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import java.lang.Math;
 
 /**
@@ -26,8 +28,10 @@ public class RoboRebels extends IterativeRobot
     private boolean         teleopStateBroadcasted = false;
     private boolean         autonomousStateBroadcasted = false;
     
-    private Joystick        leftStick, rightStick, xboxController;
-    private ADXL345_I2C     accel;
+    private Joystick                leftStick, rightStick, xboxController;
+    private ADXL345_I2C             accel;
+    private SendablePIDController   SPID;
+    private SmartDashboard          SD;
     
     private RRDrive         drive;
     private RRButtonMap     buttonMap;
@@ -109,6 +113,7 @@ public class RoboRebels extends IterativeRobot
             teleopStateBroadcasted = true;
         }
         
+        // Verified to be threaded correctly
         System.out.println("Calculating square roots...");
         for (int i = 0; i < 100000; i++)
             Math.sqrt(i);
