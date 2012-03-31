@@ -71,7 +71,6 @@ public class RRTracker
         double angle;
         try
         {
-           
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
              
