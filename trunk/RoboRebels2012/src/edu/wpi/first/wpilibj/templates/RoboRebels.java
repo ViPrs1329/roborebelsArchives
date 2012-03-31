@@ -88,6 +88,7 @@ public class RoboRebels extends IterativeRobot {
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
+    RRShooterTrackerThread      shooterTrackerThread;
     RRBallSensor        sensor;
     RRDIPSwitch         dipSwitch;
     RRButtonMap         buttonMap;
@@ -287,8 +288,9 @@ public class RoboRebels extends IterativeRobot {
         
         dipSwitch = new RRDIPSwitch(7, 10);  // These are the values from last year.
         
-        tracker = new RRTracker(accel, dipSwitch);
-        System.out.println("Tracker");
+        // ******************
+//        tracker = new RRTracker(accel, dipSwitch);
+//        System.out.println("Tracker");
         
         // ******************
 //        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, tracker);
@@ -299,12 +301,21 @@ public class RoboRebels extends IterativeRobot {
         sensor = new RRBallSensor();
         sensor.ballSensorInit(5, 4); // These are the values from last year.
         
-        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor, dipSwitch, gatherer);
+        // ********************
+//        shooter = new RRShooter(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
+//                                TILT_LIMIT_SWITCH_CHANNEL, tracker, sensor, dipSwitch, gatherer);
+//        
+//        tracker.setShooter(shooter);
         
-        tracker.setShooter(shooter);
+        shooterTrackerThread = new RRShooterTrackerThread(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
+                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gatherer,
+                                                          accel);
+        shooterTrackerThread.start();
         
-        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
+        // ********************
+//        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
+        autonomous = new RRAutonomous(dipSwitch, shooterTrackerThread.getTracker(), shooterTrackerThread.getShooter(), 
+                                      sensor, gathererThread.getGatherer());
         
         isFinishedShooting = true;  
         
@@ -325,11 +336,14 @@ public class RoboRebels extends IterativeRobot {
         
         dont_track_azimuth = false; 
         
-        shooter.reset();
+        // ****************
+//        shooter.reset();
+        shooterTrackerThread.resetShooter();
         
         driveThread.disableDrive();
         armThread.disableArm();
         gathererThread.disableGatherer();
+        shooterTrackerThread.disable();
     }
 
     public void autonomousInit() {
@@ -366,13 +380,16 @@ public class RoboRebels extends IterativeRobot {
         }
         current_angle_sum = 90.0 * NUMBER_OF_PREVIOUS;  // initialize MA sum
         
-        shooter.reset();
+        // ****************
+//        shooter.reset();
+        shooterTrackerThread.resetShooter();
         
         autonomous.auton_init();
         
         driveThread.disableDrive();
         armThread.disableArm();
         gathererThread.disableGatherer();
+        shooterTrackerThread.disable();
     }
 
     public void teleopInit() {
@@ -388,6 +405,7 @@ public class RoboRebels extends IterativeRobot {
         driveThread.enableDrive();
         armThread.enableArm();
         gathererThread.enableGatherer();
+        shooterTrackerThread.enable();
         
         // Need to fix this!!
         
@@ -398,7 +416,9 @@ public class RoboRebels extends IterativeRobot {
         
         dont_track_azimuth = false; 
         
-        shooter.reset();
+        // ****************
+//        shooter.reset();
+        shooterTrackerThread.resetShooter();
         
         // shooter_motor_running = false;
         
@@ -452,17 +472,18 @@ public class RoboRebels extends IterativeRobot {
 //        }
         //***************
         
-      tracker.trackTarget(RoboRebels.AUTO_TARGET);   
-      shooter.shoot();
+        // ****************
+//      tracker.trackTarget(RoboRebels.AUTO_TARGET);   
+//      shooter.shoot();
       
       //******************
 //      gatherer.gather();
-      
       // ******************
 //      arm.arm();
+      // ******************
       
 //      System.out.println("Gyro: " + gyro.getAngle());
-      System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());
+//      System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());
     }
 
     /**

@@ -39,6 +39,12 @@ public class RRGatherer
                                 middle_ball_sensor_channel,
                                 top_ball_sensor_channel;
     
+    /*   ------- experimental ------ */
+    private     int             elevatorActionDuration = 0;
+    private     int             ELEVATOR_ACTION_SENSITIVITY = 1;
+    private     int             DECELERATION_CURVE = 10;
+    /*   ------- experimental ------ */
+    
     private     double          spinnerSpeed = 0.0;
     private     double          conveyerSpeed = 0.0;
     
@@ -102,15 +108,35 @@ public class RRGatherer
         // Get conveyer button state
         if ( (loader_up && !loader_down) || autoElevateDown )
         {
+            System.out.println("Loader up button pressed!");
+            System.out.flush();
             conveyerSpeed = -1.0 * CONVEYER_SPEED;
+//            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
+            elevatorActionDuration = DECELERATION_CURVE;
         }
         else if ( (loader_down && !loader_up) || autoElevateUp )
         {
+            System.out.println("Loader down button pressed!");
+            System.out.flush();
             conveyerSpeed = CONVEYER_SPEED;
+//            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
+            elevatorActionDuration = DECELERATION_CURVE;
         }
         else if ( !loader_up && !loader_down )
         {
-            conveyerSpeed = 0.0;
+            if ( elevatorActionDuration <= 0 )
+            {
+                System.out.println("** Stopping loader!");
+                System.out.flush();
+                conveyerSpeed = 0.0;
+                elevatorActionDuration = 0;
+            }
+            else
+            {
+                System.out.println("** Decelerating loader!");
+                System.out.flush();
+                elevatorActionDuration--;
+            }
         }
         
         
