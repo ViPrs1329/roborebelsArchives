@@ -79,9 +79,12 @@ public class RoboRebels extends IterativeRobot {
     Gyro                gyro;
     Encoder             rightEncoder, leftEncoder;
     RRDrive             drive;
+    RRDriveThread       driveThread;
     RRShooter           shooter;
     RRGatherer          gatherer;
+    RRGathererThread    gathererThread;
     RRBridgeArm         arm;
+    RRBridgeArmThread   armThread;
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
@@ -269,10 +272,16 @@ public class RoboRebels extends IterativeRobot {
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
         System.out.println("accel");
         
-        drive = new RRDrive(2, 1);
+        // ******************
+//        drive = new RRDrive(2, 1);
+        driveThread = new RRDriveThread();
+        driveThread.start();
         System.out.println("Drive");
         
-        gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
+        // ******************
+        //gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
+        gathererThread = new RRGathererThread(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
+        gathererThread.start();
         System.out.println("Gatherer");
         
         
@@ -281,7 +290,10 @@ public class RoboRebels extends IterativeRobot {
         tracker = new RRTracker(accel, dipSwitch);
         System.out.println("Tracker");
         
-        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, tracker);
+        // ******************
+//        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, tracker);
+        armThread = new RRBridgeArmThread(BRIDGE_ARM_CHANNEL);
+        armThread.start();
         System.out.println("Arm");
         
         sensor = new RRBallSensor();
@@ -292,7 +304,7 @@ public class RoboRebels extends IterativeRobot {
         
         tracker.setShooter(shooter);
         
-        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gatherer);
+        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
         
         isFinishedShooting = true;  
         
@@ -314,6 +326,10 @@ public class RoboRebels extends IterativeRobot {
         dont_track_azimuth = false; 
         
         shooter.reset();
+        
+        driveThread.disableDrive();
+        armThread.disableArm();
+        gathererThread.disableGatherer();
     }
 
     public void autonomousInit() {
@@ -354,7 +370,9 @@ public class RoboRebels extends IterativeRobot {
         
         autonomous.auton_init();
         
-  
+        driveThread.disableDrive();
+        armThread.disableArm();
+        gathererThread.disableGatherer();
     }
 
     public void teleopInit() {
@@ -365,9 +383,15 @@ public class RoboRebels extends IterativeRobot {
         tankDrive = false;
         autonomous_mode = false;
         autonomous_mode_tracking = false;
+        
+        
+        driveThread.enableDrive();
+        armThread.enableArm();
+        gathererThread.enableGatherer();
+        
         // Need to fix this!!
         
-        gatherer.stop();
+//        gatherer.stop();
         
         isFinishedShooting = false;  
         isShooting = false; 
@@ -417,19 +441,25 @@ public class RoboRebels extends IterativeRobot {
             teleopStateBroadcasted = false;
         }
         
-        if ( tankDrive == true ) {
-            drive.drive(true);
-            //System.out.println("Tank Drive");
-        }
-        else{
-            drive.drive(false);
-            //System.out.println("Arcade Drive");
-        }
+        //***************
+//        if ( tankDrive == true ) {
+//            drive.drive(true);
+//            //System.out.println("Tank Drive");
+//        }
+//        else{
+//            drive.drive(false);
+//            //System.out.println("Arcade Drive");
+//        }
+        //***************
         
       tracker.trackTarget(RoboRebels.AUTO_TARGET);   
       shooter.shoot();
-      gatherer.gather();
-      arm.arm();
+      
+      //******************
+//      gatherer.gather();
+      
+      // ******************
+//      arm.arm();
       
 //      System.out.println("Gyro: " + gyro.getAngle());
       System.out.println("RE: " + rightEncoder.get() + " | LE: " + leftEncoder.get());

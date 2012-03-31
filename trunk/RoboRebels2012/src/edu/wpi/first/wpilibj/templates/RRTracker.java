@@ -85,12 +85,12 @@ public class RRTracker
                  
 //            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
 //            {
-//                try {
-//                    image.write("/raw.jpg");
-//                } catch (Exception e) {
-//                    System.out.println("error saving image 1");
-//                }
-//    //            System.out.println("Saved raw camera image to cRIO");
+                try {
+                    image.write("/raw.jpg");
+                } catch (Exception e) {
+                    System.out.println("error saving image 1");
+                }
+                System.out.println("Saved raw camera image to cRIO");
 //                
 //                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
 //            }
@@ -107,18 +107,19 @@ public class RRTracker
             // TODO:  The white object threshold value needs to be tested to get an optimal number
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
-             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // Adjusted for Chaivitz Arena lighting
+//             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // Adjusted for Chaivitz Arena lighting
+              BinaryImage thresholdImage = image.thresholdRGB(0, 0, 235, 255, 0, 0);        // Green LED mask test
 
             // blue value was adjusted (above) because of ambient sunlight
            
             
             // TODO: This image write section should be commented out for the production code
-//            try {
-//                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
-//            } catch (Exception e) {
-//                System.out.println("error saving image 2");
-//            }
-//            System.out.println("WROTE IMAGE2");
+            try {
+                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+            } catch (Exception e) {
+                System.out.println("error saving image 2");
+            }
+            System.out.println("WROTE IMAGE2");
 
                 BinaryImage filteredImage;
                 BinaryImage convexHullImage;

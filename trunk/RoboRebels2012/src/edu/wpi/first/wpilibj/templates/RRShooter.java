@@ -53,6 +53,7 @@ public class RRShooter
     
     private     boolean         shootingButtonPressed;
     private     boolean         shootingAltButtonPressed;
+    private     boolean         shootingAltEnabled;
     
     private     boolean         retractionContractionInProgress = false;
             
@@ -103,7 +104,9 @@ public class RRShooter
         
         shootingWheelState = false;         // start with the shooting wheel off!
         
-        shootingButtonPressed = false;      // indicates if the 
+        shootingButtonPressed = false;      // indicates if the
+        shootingAltButtonPressed = false;
+        shootingAltEnabled = false;
         
         
         
@@ -612,14 +615,11 @@ public class RRShooter
                 else
                     shootingWheelSpeed = 0.85;
             }
-            else
-            {
-                shootingWheelSpeed = 0.0;
-            }
         }
         else
         {
             shootingAltButtonPressed = false;
+            shootingWheelSpeed = 0.0;
         }
         
 

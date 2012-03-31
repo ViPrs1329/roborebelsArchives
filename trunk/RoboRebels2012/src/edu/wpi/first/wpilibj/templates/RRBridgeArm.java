@@ -40,23 +40,24 @@ public class RRBridgeArm
     
     private     Victor      bridgeArmVictor;
     
-    private     RRTracker   tracker;                // used for shooter angle information
+//    private     RRTracker   tracker;                // used for shooter angle information
     
     /**
      * Set's up BridgeArm victor
      * 
      * @param bavc The Victor controlling the BridgeArm
      */
-    public RRBridgeArm(int bavc, RRTracker t)
+//    public RRBridgeArm(int bavc, RRTracker t)
+    public RRBridgeArm(int bavc)
     {
         bav_channel = bavc;
         
-        if ( t != null )
-            this.tracker = t;
-        else
-        {
-            throw new NullPointerException("RRBridgeArm was passed a null RRTracker object (t)! ");
-        }
+//        if ( t != null )
+//            this.tracker = t;
+//        else
+//        {
+//            throw new NullPointerException("RRBridgeArm was passed a null RRTracker object (t)! ");
+//        }
         
         
         bridgeArmVictor = new Victor(bav_channel);
