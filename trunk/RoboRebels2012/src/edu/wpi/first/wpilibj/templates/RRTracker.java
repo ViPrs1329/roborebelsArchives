@@ -27,13 +27,14 @@ public class RRTracker
 //    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
     {
-        /* ++++++++++++++++++++
+        
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
         cam = AxisCamera.getInstance();
-        +++++++++++++++++++++++ */
-        cameraThread = new RRCameraThread();
-        cameraThread.collectImages();
-        cameraThread.start();
+        
+        
+//        cameraThread = new RRCameraThread();
+//        cameraThread.collectImages();
+//        cameraThread.start();
         System.out.println("Camera");
 
         cc = new CriteriaCollection();      // create the criteria for the particle filter
@@ -77,16 +78,21 @@ public class RRTracker
              if ((shooter.tracking) || RoboRebels.continuous_targeting)
              {
           
-                 /* ++++++++++++++++++++++++++++
                 ColorImage image = cam.getImage();     // comment if using stored images
-                    ++++++++++++++++++++++++++++ */
                  
-                 ColorImage image = cameraThread.getImage();
+//                 ColorImage image = cameraThread.getImage();
+                 
+                 System.out.println("RRTracker::trackTarget() " + image);
                  
 //            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
 //            {
                 try {
-                    image.write("/raw.jpg");
+                    if ( image != null )
+                        image.write("/raw.jpg");
+                    else
+                    {
+                        System.out.println("Image is null!!!");
+                    }
                 } catch (Exception e) {
                     System.out.println("error saving image 1");
                 }
@@ -108,14 +114,19 @@ public class RRTracker
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
 //             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // Adjusted for Chaivitz Arena lighting
-              BinaryImage thresholdImage = image.thresholdRGB(0, 0, 235, 255, 0, 0);        // Green LED mask test
+              BinaryImage thresholdImage = image.thresholdRGB(0, 0, 85, 255, 0, 0);        // Green LED mask test
 
             // blue value was adjusted (above) because of ambient sunlight
            
             
             // TODO: This image write section should be commented out for the production code
             try {
-                thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+                if ( thresholdImage != null )
+                    thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+                else
+                {
+                    System.out.println("ThresholdImage is null!!!");
+                }
             } catch (Exception e) {
                 System.out.println("error saving image 2");
             }

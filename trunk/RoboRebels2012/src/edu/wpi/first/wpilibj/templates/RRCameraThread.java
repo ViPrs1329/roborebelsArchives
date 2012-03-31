@@ -7,6 +7,7 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
+import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
@@ -21,6 +22,15 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
  * I'm not sure what is going on....   
  *
  * *hand to forehead*  collected images must be freed!!!!
+ * 
+ * !!!!!!!!!!!!!!!!!!!!!!!!!
+ * !!  N O T E 
+ * !!!!!!!!!!!!!!!!!!!!!!!!!
+ * 
+ * This threading concept for the camera doesn't make sense (at least
+ * the way that it's currently implemented).  The image object is 
+ * collected and freed before it can ever be used.  And, if it's not freed
+ * we will crash the cRIO via a memory leak.  Not sure if this is useful.
  *
  * @author Derek Ward
  */
@@ -73,6 +83,9 @@ public class RRCameraThread extends Thread
                     System.exit(1);
                 }
             }
+            
+//            System.out.println("RRCameraThread::run() cam: " + cam + " | " + currentImage + " | " + cam.freshImage() + " | " + collectImages);
+            
             
             try {
                 RRCameraThread.sleep(IMAGE_CAPTURE_RATE);
