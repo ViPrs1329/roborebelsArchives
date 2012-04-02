@@ -4,6 +4,8 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  *
  * @author dmw
@@ -15,6 +17,8 @@ public class RRGathererThread extends Thread
     private     boolean         run = true;
     private     boolean         isGatherable = false;
     
+    private     double          lastTickTime = Timer.getFPGATimestamp();
+    
     public RRGathererThread(int sc, int bcc, int bbsc, int mbsc, int tbsc)
     {
         if ( gatherer == null )
@@ -23,14 +27,30 @@ public class RRGathererThread extends Thread
     
     public void run()
     {
+        long cycleDuration = 0;
+        
         while (run)
         {
+            lastTickTime = Timer.getFPGATimestamp();
+            
 //            System.out.println("RRGathererThread::run() Running...");
             if ( isGatherable )
             {
 //                System.out.println("RRGathererThread::run() Gathering...");
                 gatherer.gather();
             }
+            
+            cycleDuration = (long) Math.ceil(1000 * (Timer.getFPGATimestamp() - lastTickTime));
+            
+            
+            
+            try {
+                RRGathererThread.sleep(20 - cycleDuration);
+            } catch (InterruptedException ex) {
+                System.err.println("RRGathererThread::run() - Interrupted Exception!");
+            }
+            
+            System.out.println("RRGathererThread::run() time(ms) " + cycleDuration);
         }
     }
     

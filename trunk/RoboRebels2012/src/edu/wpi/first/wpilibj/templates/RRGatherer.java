@@ -30,8 +30,8 @@ import edu.wpi.first.wpilibj.Victor;
  */
 public class RRGatherer 
 {
-    private final double        SPINNER_SPEED = 0.5;
-    private final double        CONVEYER_SPEED = 0.5;
+    private final double        SPINNER_MAX_SPEED = 0.5;
+    private final double        CONVEYER_MAX_SPEED = 0.5;
     
     private     int             spinner_channel;
     private     int             ball_conveyer_channel;
@@ -41,8 +41,8 @@ public class RRGatherer
     
     /*   ------- experimental ------ */
     private     int             elevatorActionDuration = 0;
-    private     int             ELEVATOR_ACTION_SENSITIVITY = 1;
-    private     int             DECELERATION_CURVE = 10;
+    private     int             DECELERATION_CURVE_MAX = 20;
+    private     int             elevatorDecelerationDirection = 0;
     /*   ------- experimental ------ */
     
     private     double          spinnerSpeed = 0.0;
@@ -110,44 +110,55 @@ public class RRGatherer
         {
             System.out.println("Loader up button pressed!");
             System.out.flush();
-            conveyerSpeed = -1.0 * CONVEYER_SPEED;
+            conveyerSpeed = -1.0 * CONVEYER_MAX_SPEED;
 //            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
-            elevatorActionDuration = DECELERATION_CURVE;
+            elevatorActionDuration = DECELERATION_CURVE_MAX;
+            elevatorDecelerationDirection = -1;
         }
         else if ( (loader_down && !loader_up) || autoElevateUp )
         {
             System.out.println("Loader down button pressed!");
             System.out.flush();
-            conveyerSpeed = CONVEYER_SPEED;
+            conveyerSpeed = CONVEYER_MAX_SPEED;
 //            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
-            elevatorActionDuration = DECELERATION_CURVE;
+            elevatorActionDuration = DECELERATION_CURVE_MAX;
+            elevatorDecelerationDirection = 1;
         }
         else if ( !loader_up && !loader_down )
         {
-            if ( elevatorActionDuration <= 0 )
+            if ( elevatorActionDuration-- <= 0 )
             {
-                System.out.println("** Stopping loader!");
-                System.out.flush();
-                conveyerSpeed = 0.0;
+//                System.out.println("** Stopping loader!");
+//                System.out.flush();
+//                conveyerSpeed = 0.0;
                 elevatorActionDuration = 0;
+                elevatorDecelerationDirection = 0;
             }
-            else
-            {
-                System.out.println("** Decelerating loader!");
-                System.out.flush();
-                elevatorActionDuration--;
-            }
+//            else
+//            {
+//                System.out.println("** Decelerating loader " + elevatorActionDuration);
+//                System.out.flush();
+//                elevatorActionDuration--;
+//            }
+            
+            conveyerSpeed = ((double) elevatorActionDuration) / ((double) DECELERATION_CURVE_MAX) * CONVEYER_MAX_SPEED * elevatorDecelerationDirection;
+            
+//            System.out.println("** conveyerSpeed " + conveyerSpeed + " elevatorActionDuration " + elevatorActionDuration);
+            System.out.flush();
+            
+            if ( conveyerSpeed <= 0.1 || conveyerSpeed >= -0.1 )
+                conveyerSpeed = 0.0;
         }
         
         
         if ( spinnerForward <= 1.0 && spinnerForward > 0.0 )
         {
             // Left trigger pushed, spin forward
-            spinnerSpeed = -1.0 * SPINNER_SPEED;
+            spinnerSpeed = -1.0 * SPINNER_MAX_SPEED;
         }
         else if ( spinnerReverse >= -1.0 && spinnerReverse < 0.0 )
         {
-            spinnerSpeed = SPINNER_SPEED;
+            spinnerSpeed = SPINNER_MAX_SPEED;
         }
         else if ( spinnerForward == 0.0 || spinnerReverse == 0.0 )
         {
