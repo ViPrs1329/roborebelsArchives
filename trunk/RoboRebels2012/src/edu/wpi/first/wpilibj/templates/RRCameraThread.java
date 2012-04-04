@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
  * collected and freed before it can ever be used.  And, if it's not freed
  * we will crash the cRIO via a memory leak.  Not sure if this is useful.
  *
+ * 
+ * 
  * @author Derek Ward
  */
 public class RRCameraThread extends Thread
