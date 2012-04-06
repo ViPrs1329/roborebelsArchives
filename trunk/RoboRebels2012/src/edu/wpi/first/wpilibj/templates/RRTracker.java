@@ -83,25 +83,25 @@ public class RRTracker
                  
 //                 System.out.println("RRTracker::trackTarget() " + image);
                  
-//            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
-//            {
-//                try {
-//                    if ( image != null )
-//                        image.write("/raw.jpg");
-//                    else
-//                    {
-//                        System.out.println("Image is null!!!");
-//                    }
-//                } catch (Exception e) {
-//                    System.out.println("error saving image 1");
-//                }
-//                System.out.println("Saved raw camera image to cRIO");
-//                
-//                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
-//            }
+            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
+            {
+                try {
+                    if ( image != null )
+                        image.write("/raw.jpg");
+                    else
+                    {
+                        System.out.println("Image is null!!!");
+                    }
+                } catch (Exception e) {
+                    System.out.println("error saving image 1");
+                }
+                System.out.println("Saved raw camera image to cRIO");
                 
- //               RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
- //           }
+                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+            }
+                
+  //              RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+  //          }
 
             /*  
              *   Choose thresholds for white by setting save_camer_image_file variable and FTPing the image off cRIO and examining in PhotoShop
@@ -149,12 +149,12 @@ public class RRTracker
                 filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
 
             // TODO: This image write section should be commented out for the production code
-            //try {
-                //filteredImage.write("/processed.bmp");     // This seems to work well.
-            //} catch (Exception e) {
-            //    System.out.println("error saving image 3");
-            //}
-            //System.out.println("WROTE IMAGE3");
+   //         try {
+   //             filteredImage.write("/processed.bmp");     // This seems to work well.
+   //         } catch (Exception e) {
+   //             System.out.println("error saving image 3");
+   //         }
+   //         System.out.println("WROTE IMAGE3");
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             
@@ -317,12 +317,15 @@ public class RRTracker
               
               double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
            
-//               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
-//                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
-//                        " Height: " + r.boundingRectHeight + 
-//                        " Aspect: " + round2(aspect_ratio) + 
-//                        " Distance: " + round(distance));
-//               
+              if (RoboRebels.DEBUG_ON)
+              {
+               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
+                        " Height: " + r.boundingRectHeight + 
+                        " Aspect: " + round2(aspect_ratio) + 
+                        " Distance: " + round(distance));
+             
+              }   
                if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
                {
                                
