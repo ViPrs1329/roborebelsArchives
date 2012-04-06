@@ -50,7 +50,7 @@ public class RRGathererThread extends Thread
                 System.err.println("RRGathererThread::run() - Interrupted Exception!");
             }
             
-            System.out.println("RRGathererThread::run() time(ms) " + cycleDuration);
+//            System.out.println("RRGathererThread::run() time(ms) " + cycleDuration);
         }
     }
     

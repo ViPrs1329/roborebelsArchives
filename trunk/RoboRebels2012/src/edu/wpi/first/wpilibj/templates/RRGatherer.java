@@ -108,8 +108,8 @@ public class RRGatherer
         // Get conveyer button state
         if ( (loader_up && !loader_down) || autoElevateDown )
         {
-            System.out.println("Loader up button pressed!");
-            System.out.flush();
+//            System.out.println("Loader up button pressed!");
+//            System.out.flush();
             conveyerSpeed = -1.0 * CONVEYER_MAX_SPEED;
 //            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
             elevatorActionDuration = DECELERATION_CURVE_MAX;
@@ -117,8 +117,8 @@ public class RRGatherer
         }
         else if ( (loader_down && !loader_up) || autoElevateUp )
         {
-            System.out.println("Loader down button pressed!");
-            System.out.flush();
+//            System.out.println("Loader down button pressed!");
+//            System.out.flush();
             conveyerSpeed = CONVEYER_MAX_SPEED;
 //            elevatorActionDuration += ELEVATOR_ACTION_SENSITIVITY;
             elevatorActionDuration = DECELERATION_CURVE_MAX;
@@ -144,7 +144,7 @@ public class RRGatherer
             conveyerSpeed = ((double) elevatorActionDuration) / ((double) DECELERATION_CURVE_MAX) * CONVEYER_MAX_SPEED * elevatorDecelerationDirection;
             
 //            System.out.println("** conveyerSpeed " + conveyerSpeed + " elevatorActionDuration " + elevatorActionDuration);
-            System.out.flush();
+//            System.out.flush();
             
             if ( conveyerSpeed <= 0.1 || conveyerSpeed >= -0.1 )
                 conveyerSpeed = 0.0;

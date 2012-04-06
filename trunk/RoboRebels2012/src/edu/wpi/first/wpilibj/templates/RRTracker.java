@@ -81,21 +81,21 @@ public class RRTracker
                  
 //                 ColorImage image = cameraThread.getImage();
                  
-                 System.out.println("RRTracker::trackTarget() " + image);
+//                 System.out.println("RRTracker::trackTarget() " + image);
                  
 //            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
 //            {
-                try {
-                    if ( image != null )
-                        image.write("/raw.jpg");
-                    else
-                    {
-                        System.out.println("Image is null!!!");
-                    }
-                } catch (Exception e) {
-                    System.out.println("error saving image 1");
-                }
-                System.out.println("Saved raw camera image to cRIO");
+//                try {
+//                    if ( image != null )
+//                        image.write("/raw.jpg");
+//                    else
+//                    {
+//                        System.out.println("Image is null!!!");
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println("error saving image 1");
+//                }
+//                System.out.println("Saved raw camera image to cRIO");
 //                
 //                RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
 //            }
@@ -119,17 +119,17 @@ public class RRTracker
            
             
             // TODO: This image write section should be commented out for the production code
-            try {
-                if ( thresholdImage != null )
-                    thresholdImage.write("/after_thresh.bmp");    // this seems to work well
-                else
-                {
-                    System.out.println("ThresholdImage is null!!!");
-                }
-            } catch (Exception e) {
-                System.out.println("error saving image 2");
-            }
-            System.out.println("WROTE IMAGE2");
+//            try {
+//                if ( thresholdImage != null )
+//                    thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+//                else
+//                {
+//                    System.out.println("ThresholdImage is null!!!");
+//                }
+//            } catch (Exception e) {
+//                System.out.println("error saving image 2");
+//            }
+//            System.out.println("WROTE IMAGE2");
 
                 BinaryImage filteredImage;
                 BinaryImage convexHullImage;

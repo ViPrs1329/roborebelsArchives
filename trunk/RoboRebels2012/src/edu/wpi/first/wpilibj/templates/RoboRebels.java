@@ -308,7 +308,7 @@ public class RoboRebels extends IterativeRobot {
 //        tracker.setShooter(shooter);
         
         shooterTrackerThread = new RRShooterTrackerThread(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gatherer,
+                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gathererThread.getGatherer(),
                                                           accel);
         shooterTrackerThread.start();
         
