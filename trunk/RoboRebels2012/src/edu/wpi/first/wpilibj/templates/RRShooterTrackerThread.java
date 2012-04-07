@@ -1,6 +1,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.ADXL345_I2C;
+import edu.wpi.first.wpilibj.Timer;
 
 /*
  * To change this template, choose Tools | Templates
@@ -37,7 +38,7 @@ public class RRShooterTrackerThread extends Thread
 //            System.out.println("RRShooterTrackerThread::run() Running...");
             if ( shootAndTrack )
             {
-//                System.out.println("RRShooterTrackerThread::run() Shooting and Tracking...");
+                System.out.println("RRShooterTrackerThread::run() Shooting and Tracking... " + Timer.getFPGATimestamp());
                 tracker.trackTarget(RoboRebels.AUTO_TARGET);   
                 shooter.shoot();
             }

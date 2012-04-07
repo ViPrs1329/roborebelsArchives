@@ -384,6 +384,9 @@ public class RRShooter
             
             double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
             
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracking time left: " + tracker.round2(time));
+            
             if ((time > 0))          // If timeout, stop auto tracking
             {          
                 if (!RoboRebels.troubleshooting) // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch

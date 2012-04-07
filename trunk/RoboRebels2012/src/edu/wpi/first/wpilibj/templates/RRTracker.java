@@ -74,6 +74,9 @@ public class RRTracker
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
              
+             if (RoboRebels.DEBUG_ON)
+                 System.out.println("Tracker: Tracking target...");
+             
              if ((shooter.tracking) || RoboRebels.continuous_targeting)
              {
           
