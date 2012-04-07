@@ -319,7 +319,7 @@ public class RRTracker
            
               if (RoboRebels.DEBUG_ON)
               {
-               System.out.println("Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+               System.out.println("Tracker: Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) + 

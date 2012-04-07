@@ -391,54 +391,62 @@ public class RRShooter
                     if (TTState) 
      //                   System.out.println("Track Target Button Pressed");
 
-                    if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
+                    if (RoboRebels.target_azimuth == RoboRebels.LOCK)
                     {
-       //                 System.out.println("Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.15;  
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
-                    {
-         //               System.out.println("Auto Lazy susan left"); 
-                        lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
-                    {
-             //           System.out.println("Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.17;      // 0.3
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
-                    {
-               //         System.out.println("Auto Lazy susan right slow"); 
-                        lazySusanSpeed = 0.15; // * 1.2;            // Added 20% due to motor slowness
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
-                    {
-                //        System.out.println("Auto Lazy susan right"); 
-                        lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
-                    {
-               //         System.out.println("Auto Lazy susan right fast"); 
-                        lazySusanSpeed = 0.17;  //* 1.2;          // 0.30
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.LOCK)
-                    {
-           //             System.out.println("Auto Lazy susan Lock"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan Lock"); 
                         lazySusanSpeed = 0.0;
                         
                         stopLazySusan();
                         
                         RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
                     } 
+                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan left fast"); 
+                        lazySusanSpeed = -0.15;  
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan left"); 
+                        lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan left fast"); 
+                        lazySusanSpeed = -0.17;      // 0.3
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan right slow"); 
+                        lazySusanSpeed = 0.15; // * 1.2;            // Added 20% due to motor slowness
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan right"); 
+                        lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan right fast"); 
+                        lazySusanSpeed = 0.17;  //* 1.2;          // 0.30
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
                     else              // Must be set to HOLD
                     {
-             //           System.out.println("Auto Lazy susan Hold"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan Hold"); 
                         lazySusanSpeed = 0.0;
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
@@ -450,7 +458,13 @@ public class RRShooter
                     }
          //           System.out.println("Tilt value:" + RoboRebels.target_elevation); 
 
-                    if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
+                    if (RoboRebels.target_elevation == RoboRebels.LOCK)
+                    {
+                        tiltSpeed = 0.0;                      // Stop Tilting
+                        RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+          //              System.out.println("Auto Tilt Lock"); 
+                    }
+                    else if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
                     {
            //             System.out.println("Auto Tilt Up"); 
                         tiltSpeed = -1.0 * TILT_SPEED * 0.5;
@@ -461,12 +475,6 @@ public class RRShooter
         //                System.out.println("Auto Tilt Down"); 
                         tiltSpeed = 1.0 * TILT_SPEED * 0.5;
                         RoboRebels.elevation_lock = false;         // No elevation target lock
-                }
-                else if (RoboRebels.target_elevation == RoboRebels.LOCK)
-                {
-                        tiltSpeed = 0.0;                      // Stop Tilting
-                        RoboRebels.elevation_lock = true;     // Indicate elevation target lock
-          //              System.out.println("Auto Tilt Lock"); 
                     }
                     else             // is HOLD
                     {
@@ -803,7 +811,8 @@ public class RRShooter
         lsVictor.set(0.0);
         current_lazySusanSpeed = lazySusanSpeed;
  
-  //      System.out.println("Halting LazySusan!");
+        if (RoboRebels.DEBUG_ON)
+            System.out.println("Shooter: Halting LazySusan!");
         
     }
     
