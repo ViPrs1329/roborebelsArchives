@@ -91,7 +91,7 @@ public class RRShooter
      * @param tltlsc Tilter Limit Switch Channel
      * @param js Joystick to monitor for button/axis events
      */
-    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor, RRDIPSwitch ds, RRGatherer gr)
+    public RRShooter(int  swjc, int lsvc, int tltvc, int tltlsc, RRTracker t, RRBallSensor ballSensor, RRGatherer gr)
     {
         swj_channel = swjc;
         lsv_channel = lsvc;
@@ -99,7 +99,7 @@ public class RRShooter
         tltls_channel = tltlsc;
         
         sensor = ballSensor;
-        dipSwitch = ds; 
+ //       dipSwitch = ds; 
         gatherer = gr;
         
         shootingWheelState = false;         // start with the shooting wheel off!
@@ -404,13 +404,13 @@ public class RRShooter
                         
                         RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
                     } 
-                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Shooter: Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.15;  
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_LEFT)   // Left slow
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Shooter: Auto Lazy susan left fast"); 
+//                        lazySusanSpeed = -0.15;  
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
                     else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
                     {
                         if (RoboRebels.DEBUG_ON)
@@ -418,20 +418,20 @@ public class RRShooter
                         lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Shooter: Auto Lazy susan left fast"); 
-                        lazySusanSpeed = -0.17;      // 0.3
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
-                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Shooter: Auto Lazy susan right slow"); 
-                        lazySusanSpeed = 0.15; // * 1.2;            // Added 20% due to motor slowness
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)   // Left fast
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Shooter: Auto Lazy susan left fast"); 
+//                        lazySusanSpeed = -0.17;      // 0.3
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.CLOSE_RIGHT)     // Right slowly
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Shooter: Auto Lazy susan right slow"); 
+//                        lazySusanSpeed = 0.15; // * 1.2;            // Added 20% due to motor slowness
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         if (RoboRebels.DEBUG_ON)
@@ -439,13 +439,13 @@ public class RRShooter
                         lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Shooter: Auto Lazy susan right fast"); 
-                        lazySusanSpeed = 0.17;  //* 1.2;          // 0.30
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)  // Right fast
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Shooter: Auto Lazy susan right fast"); 
+//                        lazySusanSpeed = 0.17;  //* 1.2;          // 0.30
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
                     else              // Must be set to HOLD
                     {
                         if (RoboRebels.DEBUG_ON)
@@ -898,7 +898,7 @@ public class RRShooter
         if (!RoboRebels.troubleshooting)
             lock_value =RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
         else
-            lock_value = dipSwitch.getState(3);
+            lock_value = true;      //      dipSwitch.getState(3);
         
         return lock_value;
     }

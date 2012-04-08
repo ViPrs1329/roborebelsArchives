@@ -90,7 +90,7 @@ public class RoboRebels extends IterativeRobot {
     RRTracker           tracker;
     RRShooterTrackerThread      shooterTrackerThread;
     RRBallSensor        sensor;
-    RRDIPSwitch         dipSwitch;
+//    RRDIPSwitch         dipSwitch;
     RRButtonMap         buttonMap;
     RRAutonomous        autonomous;
     
@@ -287,7 +287,7 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("Gatherer");
         
         
-        dipSwitch = new RRDIPSwitch(7, 10);  // These are the values from last year.
+//        dipSwitch = new RRDIPSwitch(7, 10);  // These are the values from last year.
         
         // ******************
 //        tracker = new RRTracker(accel, dipSwitch);
@@ -309,13 +309,13 @@ public class RoboRebels extends IterativeRobot {
 //        tracker.setShooter(shooter);
         
         shooterTrackerThread = new RRShooterTrackerThread(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gathererThread.getGatherer(),
+                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, gathererThread.getGatherer(),
                                                           accel);
         shooterTrackerThread.start();
         
         // ********************
 //        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
-        autonomous = new RRAutonomous(dipSwitch, shooterTrackerThread.getTracker(), shooterTrackerThread.getShooter(), 
+        autonomous = new RRAutonomous(shooterTrackerThread.getTracker(), shooterTrackerThread.getShooter(), 
                                       sensor, gathererThread.getGatherer());
         
         isFinishedShooting = true;  

@@ -21,11 +21,11 @@ public class RRTracker
     ADXL345_I2C accel;
     
     RRShooter       shooter;
-    RRDIPSwitch     dipSwitch;
+//    RRDIPSwitch     dipSwitch;
     RRCameraThread  cameraThread;
     
 //    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
-    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
+    public RRTracker(ADXL345_I2C a)
     {
         
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
@@ -45,7 +45,7 @@ public class RRTracker
         //System.out.println("Criteria Collection ownage 3");
         targets = new Target[4];
         
-        dipSwitch = the_dipswitch;
+ //       dipSwitch = the_dipswitch;
         
         System.out.println("Targets");
         //accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
@@ -167,10 +167,10 @@ public class RRTracker
             if ((reports != null) && (reports.length > 0))   // Only do tracking if there is at least one target
             {
                 
-            if ((target_selected == RoboRebels.AUTO_TARGET) ||
-                    (target_selected == RoboRebels.HIGHEST_TARGET)
-                      || (target_selected == RoboRebels.LOWEST_TARGET))
-            {
+//            if ((target_selected == RoboRebels.AUTO_TARGET) ||
+//                    (target_selected == RoboRebels.HIGHEST_TARGET)
+//                      || (target_selected == RoboRebels.LOWEST_TARGET))
+//            {
                 int distance_from_center = 160; // set to maximum
                 boolean lowest = true;          // true if center target is the lowest target in the image
                 int dist;                       // distance of center of target from the center of the image
@@ -184,133 +184,137 @@ public class RRTracker
                         selected_target_index = i;
                     }        
                 } 
-                               
-                if (potential_targets == 1)
-                    lowest = true;
-                else if (potential_targets == 2)
-                {
-                    int other_index;
-                    if (selected_target_index == 0)
-                        other_index = 1;
-                    else
-                        other_index = 0;
-                       
-                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
-                    ParticleAnalysisReport other_target_r = reports[other_index];
-                    
-                    if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) 
-                        lowest = true;
-                    else
-                        lowest = false; 
-                }
-                if (potential_targets == 3)
-                {
-                    int other_index;
-                    int another_index;
-                    
-                    if (selected_target_index == 0)
-                    {
-                        other_index = 1;
-                        another_index = 2;
-                    }
-                    else if (selected_target_index == 1)
-                    {  
-                        other_index = 0;
-                        another_index = 2;
-                    }
-                    else
-                    {
-                        other_index = 0;
-                        another_index = 1;
-                    }
-                       
-                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
-                    ParticleAnalysisReport other_target_r = reports[other_index];
-                    ParticleAnalysisReport another_target_r = reports[another_index];
-                    
-                    if ((y(center_target_r.center_mass_y) < y(other_target_r.center_mass_y)) && 
-                            (y(center_target_r.center_mass_y) < y(another_target_r.center_mass_y))) 
-                        lowest = true;
-                    else
-                        lowest = false; 
-  
-                }
-                if (potential_targets == 4)
-                {
-                    int other_index;
-                    int another_index;
-                    int yet_another_index;
-                    
-                    if (selected_target_index == 0)
-                    {
-                        other_index = 1;
-                        another_index = 2;
-                        yet_another_index = 3;
-                    }
-                    else if (selected_target_index == 1)
-                    {  
-                        other_index = 0;
-                        another_index = 2;
-                        yet_another_index = 3;
-                    }
-                    else if (selected_target_index == 2)
-                    {
-                        other_index = 0;
-                        another_index = 1;
-                        yet_another_index = 3;
-                    }
-                    else   // selected_target_index == 3
-                    {
-                        other_index = 0;
-                        another_index = 1;
-                        yet_another_index = 2;
-                    }
-                       
-                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
-                    ParticleAnalysisReport other_target_r = reports[other_index];
-                    ParticleAnalysisReport another_target_r = reports[another_index];
-                    ParticleAnalysisReport yet_another_target_r = reports[yet_another_index];
-                    
-                    if ((y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) && 
-                            (y(center_target_r.center_mass_y) <= y(another_target_r.center_mass_y)) &&
-                            (y(center_target_r.center_mass_y) <= y(yet_another_target_r.center_mass_y))) 
-                        lowest = true;
-                    else
-                        lowest = false; 
-  
-                }
+//
+//      Removed determination if lowest or highest target
+//                
+//                if (potential_targets == 1)
+//                    lowest = true;
+//                else if (potential_targets == 2)
+//                {
+//                    int other_index;
+//                    if (selected_target_index == 0)
+//                        other_index = 1;
+//                    else
+//                        other_index = 0;
+//                       
+//                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
+//                    ParticleAnalysisReport other_target_r = reports[other_index];
+//                    
+//                    if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) 
+//                        lowest = true;
+//                    else
+//                        lowest = false; 
+//                }
+//                if (potential_targets == 3)
+//                {
+//                    int other_index;
+//                    int another_index;
+//                    
+//                    if (selected_target_index == 0)
+//                    {
+//                        other_index = 1;
+//                        another_index = 2;
+//                    }
+//                    else if (selected_target_index == 1)
+//                    {  
+//                        other_index = 0;
+//                        another_index = 2;
+//                    }
+//                    else
+//                    {
+//                        other_index = 0;
+//                        another_index = 1;
+//                    }
+//                       
+//                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
+//                    ParticleAnalysisReport other_target_r = reports[other_index];
+//                    ParticleAnalysisReport another_target_r = reports[another_index];
+//                    
+//                    if ((y(center_target_r.center_mass_y) < y(other_target_r.center_mass_y)) && 
+//                            (y(center_target_r.center_mass_y) < y(another_target_r.center_mass_y))) 
+//                        lowest = true;
+//                    else
+//                        lowest = false; 
+//  
+//                }
+//                if (potential_targets == 4)
+//                {
+//                    int other_index;
+//                    int another_index;
+//                    int yet_another_index;
+//                    
+//                    if (selected_target_index == 0)
+//                    {
+//                        other_index = 1;
+//                        another_index = 2;
+//                        yet_another_index = 3;
+//                    }
+//                    else if (selected_target_index == 1)
+//                    {  
+//                        other_index = 0;
+//                        another_index = 2;
+//                        yet_another_index = 3;
+//                    }
+//                    else if (selected_target_index == 2)
+//                    {
+//                        other_index = 0;
+//                        another_index = 1;
+//                        yet_another_index = 3;
+//                    }
+//                    else   // selected_target_index == 3
+//                    {
+//                        other_index = 0;
+//                        another_index = 1;
+//                        yet_another_index = 2;
+//                    }
+//                       
+//                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
+//                    ParticleAnalysisReport other_target_r = reports[other_index];
+//                    ParticleAnalysisReport another_target_r = reports[another_index];
+//                    ParticleAnalysisReport yet_another_target_r = reports[yet_another_index];
+//                    
+//                    if ((y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) && 
+//                            (y(center_target_r.center_mass_y) <= y(another_target_r.center_mass_y)) &&
+//                            (y(center_target_r.center_mass_y) <= y(yet_another_target_r.center_mass_y))) 
+//                        lowest = true;
+//                    else
+//                        lowest = false; 
+//  
+//                }
                         // Put it here!
-              }
+//              }
 
-              else if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
-              {
-                 selected_target_index = 0; 
-                 int left_target_index = 0;
-                 int right_target_index = 0;
-                 int left_most_target = 160;
-                 int right_most_target = -160;
-                 
-                 for (int i = 0; ((i < targets.length) && (i < reports.length)); i++) {
-                     
-                     ParticleAnalysisReport r = reports[i];
-                     
-                     if (y(r.center_mass_y) < left_most_target)
-                     {
-                         left_most_target = y(r.center_mass_y);
-                         left_target_index = i;
-                     }
-                     if (y(r.center_mass_y) > right_most_target)
-                     {
-                         right_most_target = y(r.center_mass_y);
-                         right_target_index = i;
-                     }  
-                  }
-                 
-                 if (target_selected == RoboRebels.RIGHT_TARGET)
-                     selected_target_index = right_target_index;
-                 else if (target_selected == RoboRebels.LEFT_TARGET)
-                     selected_target_index = left_target_index;
-               }   
+//
+//         Removed Left and Right Targeting            
+//            else if ((target_selected == RoboRebels.RIGHT_TARGET) || (target_selected == RoboRebels.LEFT_TARGET))
+//              {
+//                 selected_target_index = 0; 
+//                 int left_target_index = 0;
+//                 int right_target_index = 0;
+//                 int left_most_target = 160;
+//                 int right_most_target = -160;
+//                 
+//                 for (int i = 0; ((i < targets.length) && (i < reports.length)); i++) {
+//                     
+//                     ParticleAnalysisReport r = reports[i];
+//                     
+//                     if (y(r.center_mass_y) < left_most_target)
+//                     {
+//                         left_most_target = y(r.center_mass_y);
+//                         left_target_index = i;
+//                     }
+//                     if (y(r.center_mass_y) > right_most_target)
+//                     {
+//                         right_most_target = y(r.center_mass_y);
+//                         right_target_index = i;
+//                     }  
+//                  }
+//                 
+//                 if (target_selected == RoboRebels.RIGHT_TARGET)
+//                     selected_target_index = right_target_index;
+//                 else if (target_selected == RoboRebels.LEFT_TARGET)
+//                     selected_target_index = left_target_index;
+//               }   
               
               // Targeting image processing is now done.
               
@@ -343,45 +347,45 @@ public class RRTracker
                 
                 double display_distance = round(distance);
                 
-                if (target_selected == RoboRebels.HIGHEST_TARGET)
-                {
-                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Highest" );
-                }
-                else if ( target_selected == RoboRebels.LEFT_TARGET)
-                {
-                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Left" );
-                }             
-                else if ( target_selected == RoboRebels.LOWEST_TARGET)
-                {
-                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Lowest" );  
-                }    
-                 else if ( target_selected == RoboRebels.RIGHT_TARGET)
-                {
-                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Right" ); 
-                }
-                 else if ( target_selected == RoboRebels.AUTO_TARGET)
-                {
+//                if (target_selected == RoboRebels.HIGHEST_TARGET)
+//                {
+//                     RoboRebels.printLCD(2, "Dist: " + display_distance + " to Highest" );
+//                }
+//                else if ( target_selected == RoboRebels.LEFT_TARGET)
+//                {
+//                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Left" );
+//                }             
+//                else if ( target_selected == RoboRebels.LOWEST_TARGET)
+//                {
+//                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Lowest" );  
+//                }    
+//                 else if ( target_selected == RoboRebels.RIGHT_TARGET)
+//                {
+//                    RoboRebels.printLCD(2, "Dist: " + display_distance + " to Right" ); 
+//                }
+//                 else if ( target_selected == RoboRebels.AUTO_TARGET)
+//                {
                      RoboRebels.printLCD(2, "Dist: " + display_distance + " to Target" ); 
-                }
-                else
-                {
-                    RoboRebels.printLCD(2, "Dist: No Target        " ); 
-                }
+//                }
+//                else
+//                {
+//                    RoboRebels.printLCD(2, "Dist: No Target        " ); 
+//                }
                                  
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
                 
                 angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
                 
-               if (RoboRebels.autonomous_mode == true)
-               {
+//               if (RoboRebels.autonomous_mode == true)
+//               {
                 angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
-               }
-               else
-               {
-                    angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
-                
-               }
+//               }
+//               else
+//               {
+//                    angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+//                
+//               }
                 // angle = 55;
                     
 //                System.out.println("Muzzle Velocity: " + round(RoboRebels.muzzle_velocity) +
@@ -400,31 +404,40 @@ public class RRTracker
                 
                 int x = x(r.center_mass_x, r.boundingRectWidth);
                 
-                if ((x > x_accuracy/2) && (x < x_accuracy*4))      
-                {
-                        RoboRebels.target_azimuth = RoboRebels.CLOSE_LEFT;  // LazySusan needs to only a little to left
-                }
-                else if ((x >= x_accuracy*4) && (x < x_accuracy*6))
+//                if ((x > x_accuracy/2) && (x < x_accuracy*4))      
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.CLOSE_LEFT;  // LazySusan needs to only a little to left
+//                }
+//                else if ((x >= x_accuracy*4) && (x < x_accuracy*6))
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
+//                }  
+//                else if (x >= x_accuracy*6)
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
+//                }
+//                else if ((x < -x_accuracy/2) && (x > -x_accuracy*4))      
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
+//                }
+//                else if ((x <= -x_accuracy*4) && (x > -x_accuracy*6))
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
+//                }  
+//                else if (x <= -x_accuracy*6)
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
+//                }
+                
+                if (x >= x_accuracy/2)
                 {
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
-                }  
-                else if (x >= x_accuracy*6)
-                {
-                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
                 }
-                else if ((x < -x_accuracy/2) && (x > -x_accuracy*4))      
-                {
-                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
-                }
-                else if ((x <= -x_accuracy*4) && (x > -x_accuracy*6))
+                else if (x <= -x_accuracy/2)      
                 {
                         RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
-                }  
-                else if (x <= -x_accuracy*6)
-                {
-                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
                 }
-                else
+               else
                 {
                     RoboRebels.target_azimuth = RoboRebels.LOCK; 
                     RoboRebels.azimuth_lock = true;                 // Don't move, we are facing target!

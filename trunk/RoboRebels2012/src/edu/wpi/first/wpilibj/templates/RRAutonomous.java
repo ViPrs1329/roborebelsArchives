@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class RRAutonomous {
     
-    int                         target_selected;
-    private     RRDIPSwitch     dipSwitch;
+    int                         target_selected = RoboRebels.AUTO_TARGET;
+//    private     RRDIPSwitch     dipSwitch;
     private     RRTracker       tracker;
     private     RRShooter       shooter;
     private     RRBallSensor    sensor;
@@ -22,9 +22,10 @@ public class RRAutonomous {
     private     boolean         delay_shooting  = true;
     private     boolean         extra_delay_shooting  = false;
     
-    public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr, RRGatherer gr)
+//    public  RRAutonomous(RRDIPSwitch ds, RRTracker tr, RRShooter sh, RRBallSensor sr, RRGatherer gr)
+    public  RRAutonomous(RRTracker tr, RRShooter sh, RRBallSensor sr, RRGatherer gr)
     {
-        dipSwitch = ds; 
+//        dipSwitch = ds; 
         tracker = tr;
         shooter = sh;
         sensor = sr;
@@ -33,37 +34,37 @@ public class RRAutonomous {
     
     void auton_init()   // called once at start of Autonomous period
     {
-        //check dip switches
-        
-        if (dipSwitch.getState(0))
-        {
-            target_selected = RoboRebels.HIGHEST_TARGET;   // Read first DIP Switch
-//            System.out.println("COOLIO! We're locked onto the top target! =)");
-        }   
-        
-        else if (dipSwitch.getState(1) && dipSwitch.getState(2))
-        {
-            target_selected = RoboRebels.LOWEST_TARGET;
-//            System.out.println("We're locked onto the lowest target! =)");
-        }
-        
-        else if (dipSwitch.getState(1))
-        {
-            target_selected = RoboRebels.LEFT_TARGET;
- //           System.out.println("COOLIO! We're locked onto the left target! =)");
-        }
-            
-        else if (dipSwitch.getState(2))
-        {
-            target_selected = RoboRebels.RIGHT_TARGET;
-//            System.out.println("COOLIO! We're locked onto the right target! =)");
-        }
-            
-        if (dipSwitch.getState(3))
-        {
-//            System.out.println("OK! Let's wait for the other team to shoot first...)");
-            extra_delay_shooting = true;
-        }
+        // don't check dip switches
+//        
+//        if (dipSwitch.getState(0))
+//        {
+//            target_selected = RoboRebels.HIGHEST_TARGET;   // Read first DIP Switch
+////            System.out.println("COOLIO! We're locked onto the top target! =)");
+//        }   
+//        
+//        else if (dipSwitch.getState(1) && dipSwitch.getState(2))
+//        {
+//            target_selected = RoboRebels.LOWEST_TARGET;
+////            System.out.println("We're locked onto the lowest target! =)");
+//        }
+//        
+//        else if (dipSwitch.getState(1))
+//        {
+//            target_selected = RoboRebels.LEFT_TARGET;
+// //           System.out.println("COOLIO! We're locked onto the left target! =)");
+//        }
+//            
+//        else if (dipSwitch.getState(2))
+//        {
+//            target_selected = RoboRebels.RIGHT_TARGET;
+////            System.out.println("COOLIO! We're locked onto the right target! =)");
+//        }
+//            
+//        if (dipSwitch.getState(3))
+//        {
+////            System.out.println("OK! Let's wait for the other team to shoot first...)");
+//            extra_delay_shooting = true;
+//        }
             
         RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
 //        }
@@ -72,6 +73,7 @@ public class RRAutonomous {
 //            delay_shooting = false;  // Don't delay shooting at start of autonomous
 //        }
         
+        extra_delay_shooting = false;       
         shooter.expandShooter(); // Works now! :-)
         //RoboRebels.autonomous_complete = true;                  // For now
         
