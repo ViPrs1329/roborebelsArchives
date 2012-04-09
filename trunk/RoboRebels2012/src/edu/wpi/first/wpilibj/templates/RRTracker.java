@@ -69,6 +69,8 @@ public class RRTracker
     {
         double start = Timer.getFPGATimestamp();
         double angle;
+        boolean TTState;
+        
         try
         {
              RoboRebels.tilt_angle = accelAngle();
@@ -502,8 +504,188 @@ public class RRTracker
 //            bigObjectsImage.free();     // Still free up even if not used.
             thresholdImage.free();
             image.free();
-        
+            
+            // Moved from RRShooter
+            
+            TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
+        //if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
+            if ( TTState || RoboRebels.autonomous_mode_tracking)
+            {
+            if (!shooter.tracking)      // Starting tracking - first time through this path
+            {
+                shooter.tracking = true;
+                RoboRebels.time_started_tracking = Timer.getFPGATimestamp();
+   //             System.out.println("Beginning Target Tracking");
+                
+   //             drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
+            }
+            
+            double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
+            
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracking time left: " + round2(time));
+            
+            if ((time > 0))          // If timeout, stop auto tracking
+            {          
+                if (!RoboRebels.troubleshooting) // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch
+                {                   
+                    if (TTState) 
+     //                   System.out.println("Track Target Button Pressed");
+
+                    if (RoboRebels.target_azimuth == RoboRebels.LOCK)
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan Lock"); 
+                        shooter.lazySusanSpeed = 0.0;
+                        
+                        shooter.stopLazySusan();
+                        
+                        RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
+                    } 
+                    else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan left"); 
+                        shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan right"); 
+                        shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else              // Must be set to HOLD
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Shooter: Auto Lazy susan Hold"); 
+                        shooter.lazySusanSpeed = 0.0;
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+
+                    if (RoboRebels.dont_track_azimuth)
+                    {
+                            RoboRebels.azimuth_lock = true;
+                            shooter.lazySusanSpeed = 0.0;
+                    }
+         //           System.out.println("Tilt value:" + RoboRebels.target_elevation); 
+
+                    if (RoboRebels.target_elevation == RoboRebels.LOCK)
+                    {
+                        shooter.tiltSpeed = 0.0;                      // Stop Tilting
+                        RoboRebels.elevation_lock = true;     // Indicate elevation target lock
+          //              System.out.println("Auto Tilt Lock"); 
+                    }
+                    else if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
+                    {
+           //             System.out.println("Auto Tilt Up"); 
+                        shooter.tiltSpeed = -0.2;            //  -1.0 * TILT_SPEED (.4)  * 0.5 
+                        RoboRebels.elevation_lock = false;         // No elevation target lock
+                    }
+                    else if (RoboRebels.target_elevation == RoboRebels.DOWN)
+                    {
+        //                System.out.println("Auto Tilt Down"); 
+                        shooter.tiltSpeed = 0.2;            // 1.0 * TILT_SPEED * 0.5;
+                        RoboRebels.elevation_lock = false;         // No elevation target lock
+                    }
+                    else             // is HOLD
+                    {
+                    shooter.tiltSpeed = 0.0;
+                    RoboRebels.elevation_lock = false;         // No elevation target lock
+    //                System.out.println("Auto Tilt Hold"); 
+                    }
+
+                    if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
+                    {
+      //                  System.out.println("Auto Shooting Speed Up"); 
+                        RoboRebels.muzzle_velocity = 8.0;
+                        RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
+                    }
+                    else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
+                    {
+        //                System.out.println("Auto Shooting Speed Down"); 
+                        RoboRebels.muzzle_velocity = 7.5;
+                        RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
+                    }
+                    else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK)
+                    {
+                        // Muzzle velocity is fine - don't change
+                        RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
+       //                 System.out.println("Auto Shooting Lock"); 
+                    }
+                    else
+                    {
+                        RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
+       //                 System.out.println("Auto Shooting Hold"); 
+                    }
+                }
+                else
+                {
+      //              System.out.println("Auto no tracking due to troubleshooting mode.  Lock by DIP Switch: " + locked());
+                }
+            }  
+            else  // Tracking timeout
+            {
+                shooter.tracking = false;
+                
+                shooter.lazySusanSpeed = 0.0;      // Stop azimuth tracking
+                shooter.tiltSpeed = 0.0;           // Stop elevation tracking
+                                        
+                RoboRebels.target_azimuth = RoboRebels.HOLD;   //  Put hold on tracking until tracking is re-initiated
+                RoboRebels.target_elevation = RoboRebels.HOLD;
+                RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
+                
+      //          System.out.println("Tracking Timeout!"); 
+                RoboRebels.printLCD(6, "Tracking Timeout!                ");
+                
+                if (RoboRebels.autonomous_mode)
+                {
+                    RoboRebels.autonomous_tracking_failed = true;
+        //            System.out.println("End autonomous tracking"); 
+                    
+                }
+
+            }
+        } 
+        else if (shooter.tracking)   // Was tracking target, but now no longer tracking
+        {
+             shooter.tracking = false;
+             
+     //        System.out.println("End of tracking"); 
+             
+             shooter.lazySusanSpeed = 0.0;      // Stop azimuth tracking
+             shooter.tiltSpeed = 0.0;           // Stop elevation tracking
+                                        
+             RoboRebels.target_azimuth = RoboRebels.HOLD;   //  Put hold on tracking until tracking is re-initiated
+             RoboRebels.target_elevation = RoboRebels.HOLD;
+             RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
         }
+            
+       if (shooter.locked())
+       {
+            RoboRebels.printLCD(6, "All Locked!                "); 
+       }
+       else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
+       else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "LS & Angle Locked!          "); 
+       else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Angle & Speed Locked!       "); 
+       else if (RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "Angle Locked!               ");
+       else if (RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Speed Locked!               ");
+       else if (RoboRebels.azimuth_lock)
+            RoboRebels.printLCD(6, "LS Locked!                  ");
+       else if (shooter.tracking) 
+            RoboRebels.printLCD(6, "Tracking Target...          "); 
+       else 
+            RoboRebels.printLCD(6, "                            ");   // Clear the display       
+            
+        }
+             
+        shooter.setTrackerSpeeds();
 
         //    System.out.println("accel angle: " + accelAngle());
 
