@@ -36,9 +36,10 @@ public class RRShooterTrackerThread extends Thread
         while (run)
         {
 //            System.out.println("RRShooterTrackerThread::run() Running...");
-            if ( shootAndTrack )
+            if ( shootAndTrack )        
             {
-                System.out.println("RRShooterTrackerThread::run() Shooting and Tracking... " + Timer.getFPGATimestamp());
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("RRShooterTrackerThread::run() Shooting and Tracking... " + Timer.getFPGATimestamp());
                 tracker.trackTarget(RoboRebels.AUTO_TARGET);   
                 shooter.shoot();
             }

@@ -76,12 +76,13 @@ public class RRTracker
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
              
-             if (RoboRebels.DEBUG_ON)
-                 System.out.println("Tracker: Tracking target...");
              
-             if ((shooter.tracking) || RoboRebels.continuous_targeting)
+             if (shooter.tracking)
              {
-          
+                 
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Tracker: Tracking target...");
+         
                 ColorImage image = cam.getImage();     // comment if using stored images
                  
 //                 ColorImage image = cameraThread.getImage();
@@ -518,6 +519,7 @@ public class RRTracker
    //             System.out.println("Beginning Target Tracking");
                 
    //             drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
+   //               gatherer.disableGatherer();   // Stop gathering
             }
             
             double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
@@ -660,6 +662,9 @@ public class RRTracker
              RoboRebels.target_azimuth = RoboRebels.HOLD;   //  Put hold on tracking until tracking is re-initiated
              RoboRebels.target_elevation = RoboRebels.HOLD;
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
+             
+//             gatherer.enableGatherer();           // Enable gathering again
+//             drive.enableDrive();                  // Enable driving again
         }
             
        if (shooter.locked())

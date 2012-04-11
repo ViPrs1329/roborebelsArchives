@@ -129,12 +129,12 @@ public class RoboRebels extends IterativeRobot {
     double              launcher_speed = 0.0;
     boolean             launcher_button_pressed = false;
     
-    final static int    CLOSE_LEFT = -1;
-    final static int    CLOSE_RIGHT = 1;
+//    final static int    CLOSE_LEFT = -1;
+//    final static int    CLOSE_RIGHT = 1;
     final static int    LEFT = -2;
     final static int    RIGHT = -2;
-    final static int    FAR_LEFT = -3;
-    final static int    FAR_RIGHT = 3;
+//    final static int    FAR_LEFT = -3;
+ //   final static int    FAR_RIGHT = 3;
     final static int    LOCK = 0;
     final static int    UP = 1;
     final static int    DOWN = -1;
@@ -161,7 +161,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
     static boolean      going_for_highest = false;   // Don't change this as we calibrated this this set to false!!
-    static boolean      continuous_targeting = false;    // Targeting all the time or only when button pressed
+//    static boolean      continuous_targeting = false;    // Targeting all the time or only when button pressed
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
     static int          target_elevation = HOLD;  // elevation direction of target:  UP, DOWN, LOCK

@@ -196,6 +196,7 @@ public class RRShooter
         boolean  shooterButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ENABLED).getButtonState();
         boolean  shooterAltButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ALT_ENABLED).getButtonState();
         
+        
         RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()));
         //RoboRebels.printLCD(4, "Z:" + RRTracker.round2(this.getTransformedZValue()));
  //       System.out.println("Shooting Speed: " + RRTracker.round2(shootingWheelJaguar.get()));
@@ -454,6 +455,26 @@ public class RRShooter
         }
         
 
+         
+       if (locked())
+            RoboRebels.printLCD(6, "All Locked!                "); 
+       else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
+       else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "LS & Angle Locked!          "); 
+       else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Angle & Speed Locked!       "); 
+       else if (RoboRebels.elevation_lock)
+            RoboRebels.printLCD(6, "Angle Locked!               ");
+       else if (RoboRebels.muzzle_velocity_lock)
+            RoboRebels.printLCD(6, "Speed Locked!               ");
+       else if (RoboRebels.azimuth_lock)
+            RoboRebels.printLCD(6, "LS Locked!                  ");
+       else if (tracking) 
+            RoboRebels.printLCD(6, "Tracking Target...          "); 
+       else 
+            RoboRebels.printLCD(6, "                            ");   // Clear the display       
+        
     }
     
    
@@ -464,6 +485,10 @@ public class RRShooter
     
     public void shoot()
     {
+        
+ //       if (!tracking)        // Only check for user input and shoot if not tracking target
+ //       {
+        
         // Process input from joystick and other inputs
         //System.out.println("Starting Shoot"); 
         
@@ -554,6 +579,7 @@ public class RRShooter
         setShooterSpeeds();
     }
     
+//    }   // Part of if (!tracking)
     
     /**
      * This private method sets the determined speeds for the various
