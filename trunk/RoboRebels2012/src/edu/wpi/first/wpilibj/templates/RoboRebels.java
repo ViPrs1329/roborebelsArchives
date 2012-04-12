@@ -82,15 +82,15 @@ public class RoboRebels extends IterativeRobot {
     RRDriveThread       driveThread;
     RRShooter           shooter;
     RRGatherer          gatherer;
-    RRGathererThread    gathererThread;
+//    RRGathererThread    gathererThread;
     RRBridgeArm         arm;
-    RRBridgeArmThread   armThread;
+//    RRBridgeArmThread   armThread;
     ADXL345_I2C         accel;
     RobotDrive          m_robotDrive;
     RRTracker           tracker;
     RRShooterTrackerThread      shooterTrackerThread;
     RRBallSensor        sensor;
-//    RRDIPSwitch         dipSwitch;
+    RRDIPSwitch         dipSwitch;
     RRButtonMap         buttonMap;
     RRAutonomous        autonomous;
     
@@ -281,9 +281,9 @@ public class RoboRebels extends IterativeRobot {
         System.out.println("Drive");
         
         // ******************
-        //gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
-        gathererThread = new RRGathererThread(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
-        gathererThread.start();
+        gatherer = new RRGatherer(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
+//        gathererThread = new RRGathererThread(SPINNER_CHANNEL, LOADER_CHANNEL, BOTTOM_BALL_SENSOR_CHANNEL, MIDDLE_BALL_SENSOR_CHANNEL, TOP_BALL_SENSOR_CHANNEL);
+//        gathererThread.start();
         System.out.println("Gatherer");
         
         
@@ -294,9 +294,9 @@ public class RoboRebels extends IterativeRobot {
 //        System.out.println("Tracker");
         
         // ******************
-//        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL, tracker);
-        armThread = new RRBridgeArmThread(BRIDGE_ARM_CHANNEL);
-        armThread.start();
+        arm = new RRBridgeArm(BRIDGE_ARM_CHANNEL);
+//        armThread = new RRBridgeArmThread(BRIDGE_ARM_CHANNEL);
+//        armThread.start();
         System.out.println("Arm");
         
         sensor = new RRBallSensor();
@@ -309,14 +309,14 @@ public class RoboRebels extends IterativeRobot {
 //        tracker.setShooter(shooter);
         
         shooterTrackerThread = new RRShooterTrackerThread(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
-                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, gathererThread.getGatherer(),
+                                                          TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gatherer,
                                                           accel);
         shooterTrackerThread.start();
         
         // ********************
 //        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
         autonomous = new RRAutonomous(shooterTrackerThread.getTracker(), shooterTrackerThread.getShooter(), 
-                                      sensor, gathererThread.getGatherer());
+                                      sensor, gatherer);
         
         isFinishedShooting = true;  
         
@@ -342,8 +342,8 @@ public class RoboRebels extends IterativeRobot {
         shooterTrackerThread.resetShooter();
         
         driveThread.disableDrive();
-        armThread.disableArm();
-        gathererThread.disableGatherer();
+//        armThread.disableArm();
+//        gathererThread.disableGatherer();
         shooterTrackerThread.disable();
     }
 
@@ -388,8 +388,8 @@ public class RoboRebels extends IterativeRobot {
         autonomous.auton_init();
         
         driveThread.disableDrive();
-        armThread.disableArm();
-        gathererThread.disableGatherer();
+//        armThread.disableArm();
+//        gathererThread.disableGatherer();
         shooterTrackerThread.disable();
     }
 
@@ -404,8 +404,8 @@ public class RoboRebels extends IterativeRobot {
         
         
         driveThread.enableDrive();
-        armThread.enableArm();
-        gathererThread.enableGatherer();
+//        armThread.enableArm();
+//        gathererThread.enableGatherer();
         shooterTrackerThread.enable();
         
         // Need to fix this!!
@@ -478,9 +478,9 @@ public class RoboRebels extends IterativeRobot {
 //      shooter.shoot();
       
       //******************
-//      gatherer.gather();
+      gatherer.gather();
       // ******************
-//      arm.arm();
+      arm.arm();
       // ******************
       
 //      System.out.println("Gyro: " + gyro.getAngle());

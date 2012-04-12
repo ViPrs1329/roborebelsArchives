@@ -23,10 +23,10 @@ public class RRShooterTrackerThread extends Thread
     private     boolean         shootAndTrack = false;
     
     public RRShooterTrackerThread(int  swjc, int lsvc, int tltvc, int tltlsc, 
-                                  RRBallSensor ballSensor, RRGatherer gr,
+                                  RRBallSensor ballSensor, RRDIPSwitch d, RRGatherer gr,
                                   ADXL345_I2C a)
     {
-        tracker = new RRTracker(a);
+        tracker = new RRTracker(a, d);
         shooter = new RRShooter(swjc, lsvc, tltvc, tltlsc, tracker, ballSensor, gr);
         tracker.setShooter(shooter);
     }
