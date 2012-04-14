@@ -892,7 +892,7 @@ public class RRTracker
       
     public int x(int raw_x, int target_image_width)
     {   
-        final double camera_offset = 10.0;      // 9.0 on comp bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
+        final double camera_offset = 9.0;      // 10.0 on practice bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
         final double target_width = 24.0;     // width of backboard target in inches   
         int correction = (int)(((camera_offset/target_width) * target_image_width) + 0.5);
         
