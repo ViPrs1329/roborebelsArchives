@@ -293,7 +293,8 @@ public class RRShooter
 
             if ( TUState )
             {
-    //          System.out.println("Tilt up");
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Tilt up");
                 RoboRebels.elevation_lock = false;         // No elevation target lock
 
                 tiltSpeed = -1.0 * TILT_SPEED;
@@ -303,7 +304,8 @@ public class RRShooter
             {
                 if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
                 {        
-    //             System.out.println("Tilt down");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Tilt down");
 
                     /*if (!tiltLimitSwitch.get())
                     {
@@ -395,13 +397,15 @@ public class RRShooter
             retExpAngle = tracker.accelAngle();
             if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
                 if (!isRetracting ) {
-       //             System.out.println("##### Shooter will expand now! " + retExpAngle);
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("hooter: Shooter will expand now! " + retExpAngle);
                     isExpanding = true;
                 }
             }
             else if (retExpAngle < EXP_CONT_MAX_ANGLE) {
                 if (!isExpanding) {
-         //           System.out.println("##### Shooter will contract now" + retExpAngle );
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Shooter will contract now" + retExpAngle );
                     isRetracting = true;
                 }
             }
@@ -411,11 +415,13 @@ public class RRShooter
         if (isRetracting) {
             retExpAngle = tracker.accelAngle();
             if (retExpAngle < EXP_CONT_MAX_ANGLE) {
-    //            System.out.println("##### Shooter is retracting! " + retExpAngle);
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Shooter is retracting! " + retExpAngle);
                 tiltSpeed = -1 * TILT_SPEED * EXP_CONTR_TILT_MULT;
             }
             else if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
-    //            System.out.println("##### Shooter stop retracting! " + retExpAngle);
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Shooter stop retracting! " + retExpAngle);
                 tiltSpeed = 0;
                 isRetracting = false;
             }
@@ -423,12 +429,14 @@ public class RRShooter
         if (isExpanding) {
             retExpAngle = tracker.accelAngle();
             if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
-   //             System.out.println("##### Shooter is expanding! " + retExpAngle);
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Shooter is expanding! " + retExpAngle);
                 tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT * 3.0;         //   Try making this 1.25 Expand a bit faster to give more time during autonomous
             }
             else if (retExpAngle < (EXP_CONT_MIN_ANGLE + 5))          // Try adding a +10 to this to account for angle lag
             {
-     //           System.out.println("##### Shooter stopping expanding! " + retExpAngle);
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Shooter stopping expanding! " + retExpAngle);
 
                 tiltSpeed = 0;
                 isExpanding = false;
@@ -447,7 +455,8 @@ public class RRShooter
 //            System.out.println("Shooter alt button pressed");
             if (!shootingAltButtonPressed)
             {
-//                System.out.println("Setting shooter speed");
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Setting shooter speed");
                 shootingAltButtonPressed = true;
                 
                 if (RoboRebels.muzzle_velocity == 7.5)
@@ -463,10 +472,8 @@ public class RRShooter
             shootingAltButtonPressed = false;
             shootingWheelSpeed = 0.0;
         }
-        
-
          
-       if (locked())
+       if (locked())        // (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
        {
             RoboRebels.printLCD(6, "All Locked!                ");
             if (RoboRebels.DEBUG_ON)
@@ -630,7 +637,9 @@ public class RRShooter
     
     private void setShooterSpeeds()
     {
-        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
+         if (RoboRebels.DEBUG_ON)
+             System.out.println("Shooter: setShooterSpeeds()");
+         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
      //   System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
         
@@ -698,6 +707,9 @@ public class RRShooter
     
     public void shootBall()
     {
+        if (RoboRebels.DEBUG_ON)
+            System.out.println("Shooter: Shooting Ball!");
+        
         RoboRebels.isShooting = true; 
         RoboRebels.shooter_motor_running = true;
         RoboRebels.time_started_shooting = Timer.getFPGATimestamp();
@@ -709,6 +721,9 @@ public class RRShooter
     
     public void stopShootingBall()
     {
+        if (RoboRebels.DEBUG_ON)
+            System.out.println("Shooter: Stop Shooting Ball!");
+        
         RoboRebels.isShooting = false;
         RoboRebels.isFinishedShooting = true; 
         RoboRebels.time_after_shooting = Timer.getFPGATimestamp();
@@ -776,12 +791,17 @@ public class RRShooter
             lock_value = RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
 //        else
 //            lock_value = true;      //      dipSwitch.getState(3);
-        
+        if (RoboRebels.DEBUG_ON)
+            System.out.println("Shooter: locked() " + lock_value);
+            
         return lock_value;
     }
     
     public void auton_shoot()
     {
+        if (RoboRebels.DEBUG_ON)
+            System.out.println("Shooter: auton_shoot()");
+        
         if (RoboRebels.muzzle_velocity == 7.5)
             shootingWheelSpeed = 0.85;
         else if (RoboRebels.muzzle_velocity == 8.0)
