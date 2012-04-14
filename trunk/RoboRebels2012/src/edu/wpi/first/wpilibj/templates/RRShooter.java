@@ -72,6 +72,8 @@ public class RRShooter
     private     RRDIPSwitch     dipSwitch;
     
     public      boolean         tracking = false; // Indicates if robot is tracking target  // was private, changed to public
+    public      boolean         tracking_complete = false; // Indicates if robot has finished tracking
+    public      boolean         tracking_timeout = false;
     //private     boolean         elevation_tracking = false;  // I don't think we need separate tracking
                                                                // for azimuth and elevation.
     
@@ -269,6 +271,11 @@ public class RRShooter
         
         // Check for tilting button up, down 
         //if ( shootingJoystick.getRawButton(RRButtonMap.TILT_UP) )
+        
+        if (!tracking)
+        {
+
+        
         TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
         TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
         TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
@@ -322,7 +329,10 @@ public class RRShooter
             tiltSpeed = 0.0;
         }
         
+        }
         
+        if (!tracking)
+        {
         LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
         LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
         LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
@@ -350,7 +360,8 @@ public class RRShooter
         
         // Check for lazy susan button left, right 
         //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
-        if ( LSLState )
+        
+         if ( LSLState )
         {
  //          System.out.println("Lazy susan Right");
            RoboRebels.azimuth_lock = false;         // No azimuth target lock
@@ -370,7 +381,7 @@ public class RRShooter
         {
             lazySusanSpeed = 0.0;
         }
-              
+        }      
 
         
    //     System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
@@ -457,21 +468,54 @@ public class RRShooter
 
          
        if (locked())
-            RoboRebels.printLCD(6, "All Locked!                "); 
+       {
+            RoboRebels.printLCD(6, "All Locked!                ");
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: All Locked!");
+ 
+       }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
+       {
+            RoboRebels.printLCD(6, "LS & Speed Locked!          ");
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: LS & Speed Locked!");
+       }
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
+       {
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: LS & Angle Locked!");
             RoboRebels.printLCD(6, "LS & Angle Locked!          "); 
+       }
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Angle & Speed Locked!       "); 
+       {
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Angle & Speed Locked!");
+           RoboRebels.printLCD(6, "Angle & Speed Locked!       ");
+       } 
        else if (RoboRebels.elevation_lock)
-            RoboRebels.printLCD(6, "Angle Locked!               ");
+       {     
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Angle Locked!");
+           RoboRebels.printLCD(6, "Angle Locked!               ");
+       }
        else if (RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Speed Locked!               ");
+       {    
+             if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Speed Locked!");
+           RoboRebels.printLCD(6, "Speed Locked!               ");
+       }
        else if (RoboRebels.azimuth_lock)
+       {
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: LS Locked!");
             RoboRebels.printLCD(6, "LS Locked!                  ");
+       }
        else if (tracking) 
-            RoboRebels.printLCD(6, "Tracking Target...          "); 
+       {
+           if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Tracking");
+           RoboRebels.printLCD(6, "Tracking Target...          ");
+       } 
        else 
             RoboRebels.printLCD(6, "                            ");   // Clear the display       
         
@@ -610,6 +654,9 @@ public class RRShooter
     
     public void setTrackerSpeeds()
     {
+         if (RoboRebels.DEBUG_ON)
+             System.out.println("Shooter: setTrackerSpeeds()");
+        
          tiltVictor.set(tiltSpeed);     
          lsVictor.set(lazySusanSpeed);
     }

@@ -24,6 +24,8 @@ public class RRTracker
 //    RRDIPSwitch     dipSwitch;
     RRCameraThread  cameraThread;
     
+    int    i = 0;
+    
     public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
 //    public RRTracker(ADXL345_I2C a)
     {
@@ -75,13 +77,14 @@ public class RRTracker
         {
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
-             
+                        
+ //            System.out.println("Tracker: tracking:" + shooter.tracking);
              
              if (shooter.tracking)
              {
                  
-                if (RoboRebels.DEBUG_ON)
-                    System.out.println("Tracker: Tracking target...");
+//                if (RoboRebels.DEBUG_ON)
+//                    System.out.println("Tracker: Tracking target...");
          
                 ColorImage image = cam.getImage();     // comment if using stored images
                  
@@ -90,10 +93,11 @@ public class RRTracker
 //                 System.out.println("RRTracker::trackTarget() " + image);
                  
             if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
-            {
+ //               if (i < 10)
+                {
                 try {
                     if ( image != null )
-                        image.write("/raw.jpg");
+                        image.write("/raw" + i + ".jpg");
                     else
                     {
                         System.out.println("Image is null!!!");
@@ -119,15 +123,17 @@ public class RRTracker
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
 //             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // Adjusted for Chaivitz Arena lighting
-              BinaryImage thresholdImage = image.thresholdRGB(0, 0, 85, 255, 0, 0);        // Green LED mask test
+              BinaryImage thresholdImage = image.thresholdRGB(0, 10, 65, 255, 0, 10);        // Green LED mask test
 
             // blue value was adjusted (above) because of ambient sunlight
            
             
             // TODO: This image write section should be commented out for the production code
+//            if (i < 10)
+//            {
 //            try {
 //                if ( thresholdImage != null )
-//                    thresholdImage.write("/after_thresh.bmp");    // this seems to work well
+//                    thresholdImage.write("/after_thresh" + i + ".bmp");    // this seems to work well
 //                else
 //                {
 //                    System.out.println("ThresholdImage is null!!!");
@@ -135,8 +141,8 @@ public class RRTracker
 //            } catch (Exception e) {
 //                System.out.println("error saving image 2");
 //            }
-//            System.out.println("WROTE IMAGE2");
-
+//            System.out.println("WROTE IMAGE 2");
+//            }
                 BinaryImage filteredImage;
                 BinaryImage convexHullImage;
  //               BinaryImage bigObjectsImage;
@@ -155,12 +161,18 @@ public class RRTracker
                 filteredImage = convexHullImage.particleFilter(cc);           // find filled in rectangles
 
             // TODO: This image write section should be commented out for the production code
-   //         try {
-   //             filteredImage.write("/processed.bmp");     // This seems to work well.
-   //         } catch (Exception e) {
-   //             System.out.println("error saving image 3");
-   //         }
-   //         System.out.println("WROTE IMAGE3");
+            
+//            if (i < 10)
+//            {
+//            try {
+//                filteredImage.write("/processed" + i + ".bmp");     // This seems to work well.
+//            } catch (Exception e) {
+//                System.out.println("error saving image 3");
+//            }
+//            System.out.println("WROTE IMAGE 3");
+//            }
+//            
+//            i++;
 
             ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
             
@@ -415,24 +427,24 @@ public class RRTracker
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
 //                }  
-//                else if (x >= x_accuracy*6)
-//                {
-//                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
-//                }
+                if (x >= x_accuracy*4)
+                {
+                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
+                }
 //                else if ((x < -x_accuracy/2) && (x > -x_accuracy*4))      
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
 //                }
-//                else if ((x <= -x_accuracy*4) && (x > -x_accuracy*6))
-//                {
-//                        RoboRebels.target_azimuth = RoboRebels.RIGHT;  // LazySusan needs to move right
-//                }  
+                else if (x <= -x_accuracy*4)
+                {
+                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
+                }  
 //                else if (x <= -x_accuracy*6)
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
 //                }
                 
-                if (x >= x_accuracy/2)
+                else if (x >= x_accuracy/2)
                 {
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
                 }
@@ -511,20 +523,27 @@ public class RRTracker
             image.free();
             
             // Moved from RRShooter
-            
+             }    
             TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
+            
+//            System.out.println("Tracker: TTState " + TTState);
+                    
         //if (shootingJoystick.getRawButton(RRButtonMap.TRACK_TARGET))  // Target Tracking when joystick button 11 is pressed and held 
             if ( TTState || RoboRebels.autonomous_mode_tracking)
             {
-            if (!shooter.tracking)      // Starting tracking - first time through this path
+            if (!shooter.tracking && !shooter.tracking_complete && !shooter.tracking_timeout)      // Starting tracking - first time through this path
             {
                 shooter.tracking = true;
                 RoboRebels.time_started_tracking = Timer.getFPGATimestamp();
-   //             System.out.println("Beginning Target Tracking");
+                if (TTState && RoboRebels.DEBUG_ON) 
+                    System.out.println("Beginning Target Tracking");
                 
    //             drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
    //               gatherer.disableGatherer();   // Stop gathering
             }
+            
+            if (shooter.tracking)
+            {
             
             double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
             
@@ -535,8 +554,7 @@ public class RRTracker
             {          
  //               if (!RoboRebels.troubleshooting) // If troubleshooting, don't auto track target.  Lock is determined by delay DIP Switch
  //               {                   
-                    if (TTState && RoboRebels.DEBUG_ON) 
-                        System.out.println("Track Target Button Pressed");
+  //                      System.out.println("Track Target Button Pressed");
 
                     if (RoboRebels.target_azimuth == RoboRebels.LOCK)
                     {
@@ -555,11 +573,25 @@ public class RRTracker
                         shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
+                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)       // Left fast
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Tracker: Auto Lazy susan left fast"); 
+                        shooter.lazySusanSpeed = -0.2;         //-0.20;  // was -0.75 * LS_SPEED
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         if (RoboRebels.DEBUG_ON)
                             System.out.println("Tracker: Auto Lazy susan right"); 
                         shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    }
+                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)     // Right fast
+                    {
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Tracker: Auto Lazy susan right fast"); 
+                        shooter.lazySusanSpeed = 0.2;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
                     else              // Must be set to HOLD
@@ -575,42 +607,50 @@ public class RRTracker
                             RoboRebels.azimuth_lock = true;
                             shooter.lazySusanSpeed = 0.0;
                     }
-         //           System.out.println("Tilt value:" + RoboRebels.target_elevation); 
+                    
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Tilt value:" + RoboRebels.target_elevation); 
 
                     if (RoboRebels.target_elevation == RoboRebels.LOCK)
                     {
                         shooter.tiltSpeed = 0.0;                      // Stop Tilting
                         RoboRebels.elevation_lock = true;     // Indicate elevation target lock
-          //              System.out.println("Auto Tilt Lock"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Tilt Lock"); 
                     }
                     else if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
                     {
-           //             System.out.println("Auto Tilt Up"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Tilt Up"); 
                         shooter.tiltSpeed = -0.2;            //  -1.0 * TILT_SPEED (.4)  * 0.5 
                         RoboRebels.elevation_lock = false;         // No elevation target lock
                     }
                     else if (RoboRebels.target_elevation == RoboRebels.DOWN)
                     {
-        //                System.out.println("Auto Tilt Down"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Tilt Down"); 
                         shooter.tiltSpeed = 0.2;            // 1.0 * TILT_SPEED * 0.5;
                         RoboRebels.elevation_lock = false;         // No elevation target lock
                     }
                     else             // is HOLD
                     {
-                    shooter.tiltSpeed = 0.0;
-                    RoboRebels.elevation_lock = false;         // No elevation target lock
-    //                System.out.println("Auto Tilt Hold"); 
+                        shooter.tiltSpeed = 0.0;
+                        RoboRebels.elevation_lock = false;         // No elevation target lock
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Tilt Hold"); 
                     }
 
                     if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
                     {
-      //                  System.out.println("Auto Shooting Speed Up"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Shooting Speed Up"); 
                         RoboRebels.muzzle_velocity = 8.0;
                         RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                     }
                     else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
                     {
-        //                System.out.println("Auto Shooting Speed Down"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Shooting Speed Down"); 
                         RoboRebels.muzzle_velocity = 7.5;
                         RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                     }
@@ -618,7 +658,8 @@ public class RRTracker
                     {
                         // Muzzle velocity is fine - don't change
                         RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
-       //                 System.out.println("Auto Shooting Lock"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Shooting Lock"); 
                     }
                     else
                     {
@@ -630,10 +671,13 @@ public class RRTracker
 //                {
       //              System.out.println("Auto no tracking due to troubleshooting mode.  Lock by DIP Switch: " + locked());
 //                }
-            }  
-            else  // Tracking timeout
-            {
+                    
+              } 
+              else // Tracking timeout
+              {
                 shooter.tracking = false;
+                shooter.tracking_complete = false;
+                shooter.tracking_timeout = true;
                 
                 shooter.lazySusanSpeed = 0.0;      // Stop azimuth tracking
                 shooter.tiltSpeed = 0.0;           // Stop elevation tracking
@@ -654,11 +698,16 @@ public class RRTracker
                     
                 }
 
-            }
+              }
+            //  end of if (tracking)
+            }  
+
         } 
-        else if (shooter.tracking)   // Was tracking target, but now no longer tracking
+        else                                   // Was tracking target, but now no longer tracking
         {
              shooter.tracking = false;
+             shooter.tracking_complete = false;
+             shooter.tracking_timeout = false;
              
              if (RoboRebels.DEBUG_ON)
                  System.out.println("Tracker: End of tracking"); 
@@ -677,26 +726,57 @@ public class RRTracker
        if (shooter.locked())
        {
             RoboRebels.printLCD(6, "All Locked!                ");
-            System.out.println("Tracker: All Locked!"); 
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: All Locked!"); 
+            shooter.tracking = false;
+            shooter.tracking_complete = true;
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "LS & Speed Locked!          "); 
+       {
+            RoboRebels.printLCD(6, "LS & Speed Locked!          ");
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: LS & Speed Locked!");
+       }
        else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock)
+       {
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: LS & Angle Locked!");
             RoboRebels.printLCD(6, "LS & Angle Locked!          "); 
+       }
        else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Angle & Speed Locked!       "); 
+       {
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: Angle & Speed Locked!");
+           RoboRebels.printLCD(6, "Angle & Speed Locked!       ");
+       } 
        else if (RoboRebels.elevation_lock)
-            RoboRebels.printLCD(6, "Angle Locked!               ");
+       {     
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: Angle Locked!");
+           RoboRebels.printLCD(6, "Angle Locked!               ");
+       }
        else if (RoboRebels.muzzle_velocity_lock)
-            RoboRebels.printLCD(6, "Speed Locked!               ");
+       {    
+             if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: Speed Locked!");
+           RoboRebels.printLCD(6, "Speed Locked!               ");
+       }
        else if (RoboRebels.azimuth_lock)
-            RoboRebels.printLCD(6, "LS Locked!                  ");
+       {
+              if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: LS Locked!");
+         RoboRebels.printLCD(6, "LS Locked!                  ");
+       }
        else if (shooter.tracking) 
-            RoboRebels.printLCD(6, "Tracking Target...          "); 
+       {
+           if (RoboRebels.DEBUG_ON)
+                System.out.println("Tracker: Tracking");
+           RoboRebels.printLCD(6, "Tracking Target...          ");
+       } 
        else 
             RoboRebels.printLCD(6, "                            ");   // Clear the display       
             
-        }
+ //       }   // Old if (shooting)
              
         shooter.setTrackerSpeeds();
 
@@ -707,6 +787,7 @@ public class RRTracker
             ex.printStackTrace();
         }
   //      System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*1000.0) + " milliseconds");
+   //   }  // remove
     }
 //}       // Just added this now
     
@@ -792,7 +873,7 @@ public class RRTracker
       
     public int x(int raw_x, int target_image_width)
     {   
-        final double camera_offset = 9.0;      // 10.0 on practice bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
+        final double camera_offset = 10.0;      // 9.0 on comp bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
         final double target_width = 24.0;     // width of backboard target in inches   
         int correction = (int)(((camera_offset/target_width) * target_image_width) + 0.5);
         

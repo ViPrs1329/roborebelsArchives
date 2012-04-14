@@ -132,15 +132,15 @@ public class RoboRebels extends IterativeRobot {
 //    final static int    CLOSE_LEFT = -1;
 //    final static int    CLOSE_RIGHT = 1;
     final static int    LEFT = -2;
-    final static int    RIGHT = -2;
-//    final static int    FAR_LEFT = -3;
- //   final static int    FAR_RIGHT = 3;
+    final static int    RIGHT = 2;
+    final static int    FAR_LEFT = -3;
+    final static int    FAR_RIGHT = 3;
     final static int    LOCK = 0;
     final static int    UP = 1;
     final static int    DOWN = -1;
     final static int    FASTER = 1;
     final static int    SLOWER = -1;
-    final static int    HOLD = -3; 
+    final static int    HOLD = -4; 
     final static int    MIN_TILT_ANGLE = 46; 
     
     final static int    AT_RIGHT_LIMIT = 1;
