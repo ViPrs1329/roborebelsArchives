@@ -79,7 +79,12 @@ public class RRTracker
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
              
              if (RoboRebels.DEBUG_ON)
+             {
                  System.out.println("Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
+                 
+                 System.out.println("Tracking: tracker " + shooter.tracking + " complete " +
+                         shooter.tracking_complete + " timeout " + shooter.tracking_timeout);                
+             }
                         
  //            System.out.println("Tracker: tracking:" + shooter.tracking);
              
@@ -430,7 +435,7 @@ public class RRTracker
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
 //                }  
-                if (x >= x_accuracy*4)
+                if (x >= x_accuracy*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
                 }
@@ -438,7 +443,7 @@ public class RRTracker
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
 //                }
-                else if (x <= -x_accuracy*4)
+                else if (x <= -x_accuracy*6)
                 {
                         RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
                 }  
@@ -703,7 +708,7 @@ public class RRTracker
               }
             }  
         } 
-        else if (shooter.tracking)                                  // Was tracking target, but now no longer tracking
+        else                //  if (shooter.tracking)                                  // Was tracking target, but button released
         {
              shooter.tracking = false;
              shooter.tracking_complete = false;
@@ -722,6 +727,14 @@ public class RRTracker
 //             gatherer.enableGatherer();           // Enable gathering again
 //             drive.enableDrive();                  // Enable driving again
         }
+//        else            // Tracking completed successfully and button released.
+//        {
+//            shooter.tracking_timeout = false;
+//            shooter.tracking_complete = false;
+//            
+//            if (RoboRebels.DEBUG_ON)
+//                 System.out.println("Tracker: Finishing tracking"); 
+//        }
             
        if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
        {
@@ -730,6 +743,7 @@ public class RRTracker
                 System.out.println("Tracker: All Locked!"); 
             shooter.tracking = false;
             shooter.tracking_complete = true;
+            shooter.tracking_timeout = true;
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
        {

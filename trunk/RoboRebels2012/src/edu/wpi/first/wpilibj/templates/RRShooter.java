@@ -473,7 +473,7 @@ public class RRShooter
             shootingWheelSpeed = 0.0;
         }
          
-       if (locked())        // (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
+       if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)    // locked())
        {
             RoboRebels.printLCD(6, "All Locked!                ");
             if (RoboRebels.DEBUG_ON)

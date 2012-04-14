@@ -169,7 +169,7 @@ public class RRDrive implements MotorSafety
             {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = Math.max(moveValue, rotateValue);
-            } 
+             } 
             else 
             {
                 leftMotorSpeed = Math.max(moveValue, -rotateValue);
@@ -190,6 +190,9 @@ public class RRDrive implements MotorSafety
             }
         }
         
+        if ((moveValue != 0.0) || (rotateValue != 0.0))
+              RoboRebels.elevation_lock = false;                      // remove lock if robot is driven.
+       
   //      System.out.println("%%%% arcadeDrive() mv: " + RRTracker.round2(moveValue) + " rv: " + RRTracker.round2(rotateValue) + " lms: " + RRTracker.round2(leftMotorSpeed) + " rms: " + RRTracker.round2(rightMotorSpeed));
         
 //        System.out.println("Left Motor Speed: " + leftMotorSpeed + "RMS: " + rightMotorSpeed);
@@ -210,7 +213,6 @@ public class RRDrive implements MotorSafety
         leftMotor.set(left);
         rightMotor.set(right);
         
-        RoboRebels.elevation_lock = false;      // Not sure if this is the right place, but somewhere we need to remove lock if robot is driven.
         
         motorSafetyHelper.feed();
     }
