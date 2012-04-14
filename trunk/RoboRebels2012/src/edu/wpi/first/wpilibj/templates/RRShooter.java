@@ -274,114 +274,113 @@ public class RRShooter
         
         if (!tracking)
         {
+            TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
+            TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
+            TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
+    //      System.out.println("Tilt Value: " + TXValue);
 
-        
-        TUState = RRButtonMap.getActionObject(RRButtonMap.TILT_UP).getButtonState();
-        TDState = RRButtonMap.getActionObject(RRButtonMap.TILT_DOWN).getButtonState();
-        TXValue = RRButtonMap.getActionObject(RRButtonMap.TILT_X).getAxisState();
-  //      System.out.println("Tilt Value: " + TXValue);
-        
-        if ( Math.abs(TXValue) > TX_DEAD_ZONE )
-        {
-            if ( TXValue > 0.0 )
-                tiltSpeed = TILT_SPEED;
-            else
-                tiltSpeed = -1.0 * TILT_SPEED;
-        }
-        else
-        {
-            tiltSpeed = 0.0;
-        }
-        
-        if ( TUState )
-        {
-  //          System.out.println("Tilt up");
-            RoboRebels.elevation_lock = false;         // No elevation target lock
- 
-            tiltSpeed = -1.0 * TILT_SPEED;
-            
-        }
-        else if ( TDState )
-        {
-            if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
-            {        
-   //             System.out.println("Tilt down");
-
-                /*if (!tiltLimitSwitch.get())
-                {
+            if ( Math.abs(TXValue) > TX_DEAD_ZONE )
+            {
+                if ( TXValue > 0.0 )
                     tiltSpeed = TILT_SPEED;
-                } else {
-    //                System.out.println("Tilter limit switch pressed!");
-                    tiltSpeed = 0.0;
-                }*/
-                RoboRebels.elevation_lock = false;         // No elevation target lock
- 
-                tiltSpeed = TILT_SPEED;
+                else
+                    tiltSpeed = -1.0 * TILT_SPEED;
             }
             else
             {
-  //              System.out.println("Min tilt angle exceeded!");
-                tiltSpeed = 0.0;              // Need to renenable this later@!!!
+                tiltSpeed = 0.0;
             }
-        }
-        else if ( !TUState && !TDState )
-        {
-            tiltSpeed = 0.0;
-        }
-        
-        }
-        
-        if (!tracking)
-        {
-        LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
-        LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
-        LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
-    //    System.out.println("Elevate value: " + LSXValue);
-        
-//        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
-//        {
-//            if ( LSXValue > 0.0 )
-//            {
-//                lazySusanSpeed = -1.0 * LS_SPEED;
-//            }
-//            else
-//            {
-//                if (LS_SPEED == 0.2)
-//                    lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
-//                else
-//                    lazySusanSpeed = 1.0 * LS_SPEED;
-//            }
-//            RoboRebels.azimuth_lock = false;         // No azimuth target lock
-//        }
-//        else
-//        {
-//            lazySusanSpeed = 0.0;
-//        }
-        
-        // Check for lazy susan button left, right 
-        //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
-        
-         if ( LSLState )
-        {
- //          System.out.println("Lazy susan Right");
-           RoboRebels.azimuth_lock = false;         // No azimuth target lock
-           if (LS_SPEED == 0.2)
-                lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
-            else
-                lazySusanSpeed = 1.0 * LS_SPEED;
 
-        }
-        else if ( LSRState )
-        {
-            RoboRebels.azimuth_lock = false;         // No azimuth target lock
-            lazySusanSpeed = -1.0 * LS_SPEED;
- //           System.out.println("Lazy susan Left"); 
-         }
-        else if ( !LSLState && !LSRState )
-        {
-            lazySusanSpeed = 0.0;
-        }
-        }      
+            if ( TUState )
+            {
+    //          System.out.println("Tilt up");
+                RoboRebels.elevation_lock = false;         // No elevation target lock
+
+                tiltSpeed = -1.0 * TILT_SPEED;
+
+            }
+            else if ( TDState )
+            {
+                if (RoboRebels.tilt_angle > RoboRebels.MIN_TILT_ANGLE)   // Check to make sure accel tilt angle isn't too low
+                {        
+    //             System.out.println("Tilt down");
+
+                    /*if (!tiltLimitSwitch.get())
+                    {
+                        tiltSpeed = TILT_SPEED;
+                    } else {
+        //                System.out.println("Tilter limit switch pressed!");
+                        tiltSpeed = 0.0;
+                    }*/
+                    RoboRebels.elevation_lock = false;         // No elevation target lock
+
+                    tiltSpeed = TILT_SPEED;
+                }
+                else
+                {
+    //              System.out.println("Min tilt angle exceeded!");
+                    tiltSpeed = 0.0;              // Need to renenable this later@!!!
+                }
+            }
+            else if ( !TUState && !TDState )
+            {
+                tiltSpeed = 0.0;
+            }
+
+            }
+
+            if (!tracking)
+            {
+                LSLState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_LEFT).getButtonState();
+                LSRState = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_RIGHT).getButtonState();
+                LSXValue = RRButtonMap.getActionObject(RRButtonMap.LAZY_SUSAN_X).getAxisState();
+            //    System.out.println("Elevate value: " + LSXValue);
+
+        //        if ( Math.abs(LSXValue) > LSX_DEAD_ZONE )
+        //        {
+        //            if ( LSXValue > 0.0 )
+        //            {
+        //                lazySusanSpeed = -1.0 * LS_SPEED;
+        //            }
+        //            else
+        //            {
+        //                if (LS_SPEED == 0.2)
+        //                    lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
+        //                else
+        //                    lazySusanSpeed = 1.0 * LS_SPEED;
+        //            }
+        //            RoboRebels.azimuth_lock = false;         // No azimuth target lock
+        //        }
+        //        else
+        //        {
+        //            lazySusanSpeed = 0.0;
+        //        }
+
+                // Check for lazy susan button left, right 
+                //if ( shootingJoystick.getRawButton(RRButtonMap.LAZY_SUSAN_LEFT) )
+
+                if ( LSLState )
+                {
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Lazy susan Right");
+                    RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    if (LS_SPEED == 0.2)
+                            lazySusanSpeed = 1.0 * LS_SPEED * 1.2;  // Motor runs more slowly to left at this speed;; 
+                    else
+                            lazySusanSpeed = 1.0 * LS_SPEED;
+                }
+                else if ( LSRState )
+                {
+                    RoboRebels.azimuth_lock = false;         // No azimuth target lock
+                    lazySusanSpeed = -1.0 * LS_SPEED;
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Lazy susan Left"); 
+                }
+                else if ( !LSLState && !LSRState )
+                {
+                    lazySusanSpeed = 0.0;
+                }
+            }      
 
         
    //     System.out.println("Target_Azimuth:" + RRTracker.round(RoboRebels.target_azimuth) + " Targeting: " +
@@ -472,7 +471,6 @@ public class RRShooter
             RoboRebels.printLCD(6, "All Locked!                ");
             if (RoboRebels.DEBUG_ON)
                 System.out.println("Shooter: All Locked!");
- 
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
        {
@@ -774,10 +772,10 @@ public class RRShooter
     {
         boolean lock_value;
         
-        if (!RoboRebels.troubleshooting)
-            lock_value =RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
-        else
-            lock_value = true;      //      dipSwitch.getState(3);
+//        if (!RoboRebels.troubleshooting)
+            lock_value = RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
+//        else
+//            lock_value = true;      //      dipSwitch.getState(3);
         
         return lock_value;
     }

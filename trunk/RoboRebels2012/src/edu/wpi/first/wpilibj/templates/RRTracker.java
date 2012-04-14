@@ -77,6 +77,9 @@ public class RRTracker
         {
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
+             
+             if (RoboRebels.DEBUG_ON)
+                 System.out.println("Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
                         
  //            System.out.println("Tracker: tracking:" + shooter.tracking);
              
@@ -92,7 +95,7 @@ public class RRTracker
                  
 //                 System.out.println("RRTracker::trackTarget() " + image);
                  
-            if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
+                if (RoboRebels.save_camera_image_file)  // Only do this durng initial competition setup to adjust levels
  //               if (i < 10)
                 {
                 try {
@@ -341,7 +344,7 @@ public class RRTracker
            
               if (RoboRebels.DEBUG_ON)
               {
-               System.out.println("Tracker: Target " + selected_target_index + "/" + potential_targets + " Center: (x,y)  (" +
+               System.out.println("Tracker: Target " + (selected_target_index + 1) + "/" + potential_targets + " Center: (x,y)  (" +
                         x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
                         " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) + 
@@ -495,7 +498,7 @@ public class RRTracker
                   
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
-                  RoboRebels.target_elevation = RoboRebels.HOLD;
+                  RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
               }             
             }
             else
@@ -507,7 +510,7 @@ public class RRTracker
                   
                   RoboRebels.target_azimuth = RoboRebels.HOLD;
                   RoboRebels.target_elevation = RoboRebels.HOLD;
-                  RoboRebels.target_elevation = RoboRebels.HOLD;
+                  RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
 
             }
             /**
@@ -608,27 +611,27 @@ public class RRTracker
                             shooter.lazySusanSpeed = 0.0;
                     }
                     
-                    if (RoboRebels.DEBUG_ON)
-                        System.out.println("Tilt value:" + RoboRebels.target_elevation); 
+//                    if (RoboRebels.DEBUG_ON)
+//                        System.out.println("Tilt value:" + RoboRebels.target_elevation); 
 
                     if (RoboRebels.target_elevation == RoboRebels.LOCK)
                     {
                         shooter.tiltSpeed = 0.0;                      // Stop Tilting
                         RoboRebels.elevation_lock = true;     // Indicate elevation target lock
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Tilt Lock"); 
+                            System.out.println("Tracker: Auto Tilt Lock"); 
                     }
                     else if (RoboRebels.target_elevation == RoboRebels.UP)  // Track target elevation (up/down)
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Tilt Up"); 
+                            System.out.println("Tracker: Auto Tilt Up"); 
                         shooter.tiltSpeed = -0.2;            //  -1.0 * TILT_SPEED (.4)  * 0.5 
                         RoboRebels.elevation_lock = false;         // No elevation target lock
                     }
                     else if (RoboRebels.target_elevation == RoboRebels.DOWN)
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Tilt Down"); 
+                            System.out.println("Tracker: Auto Tilt Down"); 
                         shooter.tiltSpeed = 0.2;            // 1.0 * TILT_SPEED * 0.5;
                         RoboRebels.elevation_lock = false;         // No elevation target lock
                     }
@@ -637,20 +640,20 @@ public class RRTracker
                         shooter.tiltSpeed = 0.0;
                         RoboRebels.elevation_lock = false;         // No elevation target lock
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Tilt Hold"); 
+                            System.out.println("Tracker: Auto Tilt Hold"); 
                     }
 
                     if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER)
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Shooting Speed Up"); 
+                            System.out.println("Tracker: Auto Shooting Speed Up"); 
                         RoboRebels.muzzle_velocity = 8.0;
                         RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                     }
                     else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER)
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Shooting Speed Down"); 
+                            System.out.println("Tracker: Auto Shooting Speed Down"); 
                         RoboRebels.muzzle_velocity = 7.5;
                         RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                     }
@@ -659,12 +662,13 @@ public class RRTracker
                         // Muzzle velocity is fine - don't change
                         RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Auto Shooting Lock"); 
+                            System.out.println("Tracker: Auto Shooting Lock"); 
                     }
                     else
                     {
                         RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
-       //                 System.out.println("Auto Shooting Hold"); 
+                        if (RoboRebels.DEBUG_ON)
+                            System.out.println("Auto Shooting Hold"); 
                     }
 //                }
 //                else
@@ -694,16 +698,12 @@ public class RRTracker
                 {
                     RoboRebels.autonomous_tracking_failed = true;
                     if (RoboRebels.DEBUG_ON)
-                        System.out.println("Tracker: End autonomous tracking"); 
-                    
+                        System.out.println("Tracker: End autonomous tracking");                     
                 }
-
               }
-            //  end of if (tracking)
             }  
-
         } 
-        else                                   // Was tracking target, but now no longer tracking
+        else if (shooter.tracking)                                  // Was tracking target, but now no longer tracking
         {
              shooter.tracking = false;
              shooter.tracking_complete = false;
@@ -723,7 +723,7 @@ public class RRTracker
 //             drive.enableDrive();                  // Enable driving again
         }
             
-       if (shooter.locked())
+       if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
        {
             RoboRebels.printLCD(6, "All Locked!                ");
             if (RoboRebels.DEBUG_ON)
@@ -783,7 +783,7 @@ public class RRTracker
         //    System.out.println("accel angle: " + accelAngle());
 
         } catch (Exception ex) {
-            System.err.println("There was an error while tracking a target!");
+            System.err.println("Tracker: There was an error while tracking a target!");
             ex.printStackTrace();
         }
   //      System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*1000.0) + " milliseconds");
