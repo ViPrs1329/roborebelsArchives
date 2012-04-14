@@ -398,7 +398,7 @@ public class RRShooter
             if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
                 if (!isRetracting ) {
                     if (RoboRebels.DEBUG_ON)
-                        System.out.println("hooter: Shooter will expand now! " + retExpAngle);
+                        System.out.println("Shooter: Shooter will expand now! " + retExpAngle);
                     isExpanding = true;
                 }
             }
@@ -452,7 +452,9 @@ public class RRShooter
         
         if (shooterAltButtonState)
         {
-//            System.out.println("Shooter alt button pressed");
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Alt button pressed");
+            
             if (!shootingAltButtonPressed)
             {
                 if (RoboRebels.DEBUG_ON)
@@ -469,8 +471,13 @@ public class RRShooter
         }
         else
         {
+            if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Alt Button Not Pressed isShooting: " + RoboRebels.isShooting );
+            
             shootingAltButtonPressed = false;
-            shootingWheelSpeed = 0.0;
+            
+            if (!RoboRebels.shooter_motor_running)
+                shootingWheelSpeed = 0.0;               // Think this is causing the problem
         }
          
        if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)    // locked())
@@ -552,7 +559,8 @@ public class RRShooter
             if ((time_left - RoboRebels.time_started_shooting) <=  RoboRebels.SHOOTER_SPINUP_TIME)
             {
                 // Waiting for motor to spinup
- //               System.out.println("Waiting for shooting motor to spinup" + RoboRebels.time_started_shooting + " " + time_left);
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Waiting for shooting motor to spinup" + RoboRebels.time_started_shooting + " " + time_left);
             }
             
             else if (((time_left - RoboRebels.time_started_shooting) >= RoboRebels.SHOOTER_SPINUP_TIME) 
@@ -561,22 +569,27 @@ public class RRShooter
                  // Motor is up to speed.  Sense ball and run gatherer.
                 boolean ball = sensor.getShootSensor(); 
 
-   //             System.out.println("Ball Sensor: " + ball);  // True if ball is there, false if no ball
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Shooter: Ball Sensor: " + ball);  // True if ball is there, false if no ball
 
                 if (ball)
                 {
                     ball_present = true; 
-     //               System.out.println("Ball is Present");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Ball is Present");
                     gatherer.descend();                       // Turn on gatherer motor
-       //             System.out.println("Gatherer Motor is On!");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Gatherer Motor is On!");
                 }
                 else if (!ball && ball_present)
                 {
                     // load motor stop
-         //           System.out.println("Ball has been shot!");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Ball has been shot!");
 
                     gatherer.stop();
-   //                 System.out.println("Gatherer Motor is Off!");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Gatherer Motor is Off!");
 
                     ball_present = false;
                     
@@ -587,7 +600,8 @@ public class RRShooter
                 {
 
                     gatherer.descend();                          // Turn on gatherer motor
-  //                  System.out.println("Gatherer Motor is On!");
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Gatherer Motor is On!");
                 }
                 
   //              if ((time_left - RoboRebels.time_after_shooting) <=  RoboRebels.DELAY_BETWEEN_SHOTS)
@@ -600,10 +614,12 @@ public class RRShooter
                     
                // too much time has elapsed
             {                               
-    //                System.out.println("Ball Shooting Timeout!");
+                    if (RoboRebels.DEBUG_ON)System.out.println("Shooter: Ball Shooting Timeout!");
 
                     gatherer.stop();
-      //              System.out.println("Gatherer Motor is Off!");
+                    
+                    if (RoboRebels.DEBUG_ON)
+                        System.out.println("Shooter: Gatherer Motor is Off!");
 
                     ball_present = false;
                     
@@ -615,12 +631,14 @@ public class RRShooter
         {          
             double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_after_shooting);
             
-//            System.out.println("Waiting for shooting motor to spin down"+ RoboRebels.time_started_shooting + " " + time_left);
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Shooter: Waiting for shooting motor to spin down"+ RoboRebels.time_started_shooting + " " + time_left);
        
             if (time_left <  0.0)
             {
                 RoboRebels.shooter_motor_running = false;
                 shootingWheelSpeed = 0.0;
+  //              RoboRebels.isShooting = false;      // Don't do this in stopShootingBall or else motor shuts off too soon.
             }          
         }
         
@@ -639,7 +657,11 @@ public class RRShooter
     {
          if (RoboRebels.DEBUG_ON)
              System.out.println("Shooter: setShooterSpeeds()");
+         
+ //        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.6);        // Slower shooter speed for indoors
+         
          shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
+         
      //   System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);
         

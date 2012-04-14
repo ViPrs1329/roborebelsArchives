@@ -38,7 +38,7 @@ public class RRShooterTrackerThread extends Thread
 //            System.out.println("RRShooterTrackerThread::run() Running...");
             if ( shootAndTrack )        
             {
-                if (RoboRebels.DEBUG_ON)
+//                if (RoboRebels.DEBUG_ON)
                     System.out.println("RRShooterTrackerThread::run() Shooting and Tracking... " + Timer.getFPGATimestamp());
                 tracker.trackTarget(RoboRebels.AUTO_TARGET);   
                 shooter.shoot();

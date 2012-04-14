@@ -708,7 +708,7 @@ public class RRTracker
               }
             }  
         } 
-        else                //  if (shooter.tracking)                                  // Was tracking target, but button released
+        else if (shooter.tracking)                                  // Was tracking target, but button released
         {
              shooter.tracking = false;
              shooter.tracking_complete = false;
@@ -727,14 +727,19 @@ public class RRTracker
 //             gatherer.enableGatherer();           // Enable gathering again
 //             drive.enableDrive();                  // Enable driving again
         }
-//        else            // Tracking completed successfully and button released.
-//        {
-//            shooter.tracking_timeout = false;
-//            shooter.tracking_complete = false;
-//            
-//            if (RoboRebels.DEBUG_ON)
-//                 System.out.println("Tracker: Finishing tracking"); 
-//        }
+        else            // Tracking completed successfully and button released.
+        {
+             shooter.tracking = false;
+             shooter.tracking_complete = false;
+             shooter.tracking_timeout = false;
+             
+             RoboRebels.target_azimuth = RoboRebels.HOLD;   //  Put hold on tracking until tracking is re-initiated
+             RoboRebels.target_elevation = RoboRebels.HOLD;
+             RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
+
+             if (RoboRebels.DEBUG_ON)
+                 System.out.println("Tracker: Not tracking"); 
+        }
             
        if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
        {
