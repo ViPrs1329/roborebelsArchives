@@ -738,7 +738,7 @@ public class RRTracker
              
             startThreads();
         }
-        else            // Tracking completed successfully and button released.
+        else            // Currently not tracking
         {
              shooter.tracking = false;
              shooter.tracking_complete = false;
@@ -751,7 +751,7 @@ public class RRTracker
              if (RoboRebels.DEBUG_ON)
                  System.out.println("Tracker: Not tracking"); 
              
-             startThreads();
+             //  startThreads();        // Don't need to do 
         }
             
        if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
@@ -763,7 +763,7 @@ public class RRTracker
             shooter.tracking_complete = true;
             shooter.tracking_timeout = true;
             
-            startThreads();
+            // startThreads();              // Don't start threads when it locks or robot may move again suddenly
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
        {
@@ -958,15 +958,20 @@ public class RRTracker
             
      public void stopThreads()
      {
-                 drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
-                 driveThread.disableDrive();          // Stop driving
+        if (!RoboRebels.autonomous_mode)
+        {
+            drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
+            driveThread.disableDrive();          // Stop driving
+        }
   
      }
      
      public void startThreads()
      {
-                  driveThread.enableDrive();         // Enable driving
-
+         if (!RoboRebels.autonomous_mode)
+        {
+                 driveThread.enableDrive();         // Enable driving
+        }
      }
    
   }
