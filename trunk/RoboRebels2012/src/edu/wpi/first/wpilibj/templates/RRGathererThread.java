@@ -37,7 +37,8 @@ public class RRGathererThread extends Thread
             if ( isGatherable )
             {
 //                System.out.println("RRGathererThread::run() Gathering...");
-                gatherer.gather();
+//                if (!shooter.shooting)
+                    gatherer.gather();
             }
             
             cycleDuration = (long) Math.ceil(1000 * (Timer.getFPGATimestamp() - lastTickTime));

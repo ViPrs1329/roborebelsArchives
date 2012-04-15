@@ -51,4 +51,9 @@ public class RRDriveThread extends Thread
         catch (InterruptedException e) {}
         drive = null;
     }
+    
+        public RRDrive getDrive()
+    {
+        return drive;
+    }
 }

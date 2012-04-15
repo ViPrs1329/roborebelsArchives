@@ -18,17 +18,20 @@ public class RRShooterTrackerThread extends Thread
 {
     private     RRShooter       shooter;
     private     RRTracker       tracker;
+    private     RRDriveThread         driveThread;
+    private     RRDrive         drive;
     
     private     boolean         run = true;
     private     boolean         shootAndTrack = false;
     
     public RRShooterTrackerThread(int  swjc, int lsvc, int tltvc, int tltlsc, 
                                   RRBallSensor ballSensor, RRDIPSwitch d, RRGatherer gr,
-                                  ADXL345_I2C a)
+                                  ADXL345_I2C a, RRDriveThread dr, RRDrive drv)
     {
-        tracker = new RRTracker(a, d);
+        tracker = new RRTracker(a, d, dr, drv);
         shooter = new RRShooter(swjc, lsvc, tltvc, tltlsc, tracker, ballSensor, gr);
         tracker.setShooter(shooter);
+        
     }
     
     public void run()
@@ -38,10 +41,11 @@ public class RRShooterTrackerThread extends Thread
 //            System.out.println("RRShooterTrackerThread::run() Running...");
             if ( shootAndTrack )        
             {
-//                if (RoboRebels.DEBUG_ON)
+                if (RoboRebels.MIN_DEBUG_ON)
                     System.out.println("RRShooterTrackerThread::run() Shooting and Tracking... " + Timer.getFPGATimestamp());
                 tracker.trackTarget(RoboRebels.AUTO_TARGET);   
-                shooter.shoot();
+                if (!shooter.tracking)                          // Don't check for user input or shoot if we are tracking target.
+                    shooter.shoot();
             }
         }
     }
@@ -76,4 +80,5 @@ public class RRShooterTrackerThread extends Thread
     {
         return tracker;
     }
+    
 }

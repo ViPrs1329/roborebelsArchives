@@ -23,15 +23,21 @@ public class RRTracker
     RRShooter       shooter;
 //    RRDIPSwitch     dipSwitch;
     RRCameraThread  cameraThread;
+    RRDriveThread driveThread;
+    RRDrive     drive;
     
     int    i = 0;
     
-    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch)
+    public RRTracker(ADXL345_I2C a, RRDIPSwitch the_dipswitch, RRDriveThread dr, RRDrive d)
 //    public RRTracker(ADXL345_I2C a)
     {
         
         Timer.delay(10.0);       // This delay is recommended as the camera takes some time to start up
         cam = AxisCamera.getInstance();
+        
+        driveThread = dr;
+        
+        drive = d;
         
         
 //        cameraThread = new RRCameraThread();
@@ -546,11 +552,14 @@ public class RRTracker
             {
                 shooter.tracking = true;
                 RoboRebels.time_started_tracking = Timer.getFPGATimestamp();
-                if (TTState && RoboRebels.DEBUG_ON) 
+                if (RoboRebels.MIN_DEBUG_ON) 
                     System.out.println("Beginning Target Tracking");
-                
-   //             drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
-   //               gatherer.disableGatherer();   // Stop gathering
+                    
+                 stopThreads();
+                    
+
+//                drive.disableDrive();
+   //             gatherer.disableGatherer();   // Stop gathering
             }
             
             if (shooter.tracking)
@@ -727,8 +736,7 @@ public class RRTracker
              RoboRebels.target_elevation = RoboRebels.HOLD;
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
              
-//             gatherer.enableGatherer();           // Enable gathering again
-//             drive.enableDrive();                  // Enable driving again
+            startThreads();
         }
         else            // Tracking completed successfully and button released.
         {
@@ -742,6 +750,8 @@ public class RRTracker
 
              if (RoboRebels.DEBUG_ON)
                  System.out.println("Tracker: Not tracking"); 
+             
+             startThreads();
         }
             
        if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock)
@@ -752,6 +762,8 @@ public class RRTracker
             shooter.tracking = false;
             shooter.tracking_complete = true;
             shooter.tracking_timeout = true;
+            
+            startThreads();
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
        {
@@ -808,7 +820,8 @@ public class RRTracker
             System.err.println("Tracker: There was an error while tracking a target!");
             ex.printStackTrace();
         }
-  //      System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*1000.0) + " milliseconds");
+        if (RoboRebels.MIN_DEBUG_ON)
+            System.out.println("Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start)*1000.0) + " milliseconds");
    //   }  // remove
     }
 //}       // Just added this now
@@ -943,6 +956,17 @@ public class RRTracker
 
     }
             
-            
+     public void stopThreads()
+     {
+                 drive.stopMotor();        // Need to stop drive motors when button is pressed since user input will not be polled.
+                 driveThread.disableDrive();          // Stop driving
+  
+     }
+     
+     public void startThreads()
+     {
+                  driveThread.enableDrive();         // Enable driving
+
+     }
    
   }

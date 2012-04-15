@@ -118,6 +118,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    TILT_LIMIT_SWITCH_CHANNEL = 4;
     
     final static boolean    DEBUG_ON = false;       // true;
+    final static boolean    MIN_DEBUG_ON = false;       // true;
     
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;
@@ -278,6 +279,9 @@ public class RoboRebels extends IterativeRobot {
 //        drive = new RRDrive(2, 1);
         driveThread = new RRDriveThread();
         driveThread.start();
+        
+        drive = driveThread.getDrive();
+        
         System.out.println("Drive");
         
         // ******************
@@ -310,8 +314,10 @@ public class RoboRebels extends IterativeRobot {
         
         shooterTrackerThread = new RRShooterTrackerThread(SHOOTER_CHANNEL, LAZY_SUSAN_CHANNEL, TILT_CHANNEL, 
                                                           TILT_LIMIT_SWITCH_CHANNEL, sensor, dipSwitch, gatherer,
-                                                          accel);
+                                                          accel, driveThread, drive);
         shooterTrackerThread.start();
+        
+        shooter = shooterTrackerThread.getShooter();
         
         // ********************
 //        autonomous = new RRAutonomous(dipSwitch, tracker, shooter, sensor, gathererThread.getGatherer());
@@ -478,9 +484,13 @@ public class RoboRebels extends IterativeRobot {
 //      shooter.shoot();
       
       //******************
-      gatherer.gather();
-      // ******************
-      arm.arm();
+      
+        if (!shooter.tracking)     
+        {
+            gatherer.gather();
+            // ******************
+            arm.arm();
+        }
       // ******************
       
 //      System.out.println("Gyro: " + gyro.getAngle());

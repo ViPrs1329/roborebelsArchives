@@ -560,7 +560,7 @@ public class RRShooter
             {
                 // Waiting for motor to spinup
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Waiting for shooting motor to spinup");
+                    System.out.println("Shooter: Waiting for shooting motor to spinup" + RoboRebels.time_started_shooting + " " + time_left);
             }
             
             else if (((time_left - RoboRebels.time_started_shooting) >= RoboRebels.SHOOTER_SPINUP_TIME) 
