@@ -106,7 +106,7 @@ public class RRAutonomous {
         if (delay_shooting)
         {
              if (RoboRebels.DEBUG_ON)
-                 System.out.println("Autonous: Delaying Delaying at Start");
+                 System.out.println("Autonmous: Delaying Delaying at Start");
              
              double time_current = Timer.getFPGATimestamp();
             

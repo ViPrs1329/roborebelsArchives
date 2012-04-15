@@ -416,7 +416,10 @@ public class RRTracker
 //                
                 
                 RoboRebels.printLCD(5, "d: " +  round(distance) + " C: " + round2(angle - RoboRebels.tilt_angle) + "              ");
-
+                
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("distance: " +  round(distance) + " Correction: " + round2(angle - RoboRebels.tilt_angle));
+                
                 int x_accuracy;
                 
 //                if ((distance > 6.0) && (distance < 25.0))                                    // Adjust pixel accuracy with distance.
