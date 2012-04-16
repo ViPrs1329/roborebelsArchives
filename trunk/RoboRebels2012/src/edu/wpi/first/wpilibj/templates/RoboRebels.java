@@ -81,6 +81,7 @@ public class RoboRebels extends IterativeRobot {
     RRDrive             drive;
     RRDriveThread       driveThread;
     RRShooter           shooter;
+    RRSlider            slider;
     RRGatherer          gatherer;
 //    RRGathererThread    gathererThread;
     RRBridgeArm         arm;
@@ -109,6 +110,12 @@ public class RoboRebels extends IterativeRobot {
     final static int    LAZY_SUSAN_CHANNEL = 8;
     final static int    LOADER_CHANNEL = 5;
     final static int    SPINNER_CHANNEL = 4;
+    /*
+    final static int    FRONT_SLIDER_LEFT_CHANNEL = 5;
+    final static int    BACK_SLIDER_LEFT_CHANNEL = 4;
+    final static int    FRONT_SLIDER_RIGHT_CHANNEL = 9;
+    final static int    BACK_SLIDER_RIGHT_CHANNEL = 10;
+     */
     final static int    BRIDGE_ARM_CHANNEL = 6;
     
     // Digital I/O constants
@@ -326,6 +333,9 @@ public class RoboRebels extends IterativeRobot {
         
         isFinishedShooting = true;  
         
+        // *****************
+        //slider = new RRSlider(FRONT_SLIDER_LEFT_CHANNEL, BACK_SLIDER_LEFT_CHANNEL);
+        
         time_last_update = Timer.getFPGATimestamp();
          
         System.out.println("Robot Ready");
@@ -490,6 +500,8 @@ public class RoboRebels extends IterativeRobot {
             gatherer.gather();
             // ******************
             arm.arm();
+            // ******************
+            //slider.slide();
         }
       // ******************
       
