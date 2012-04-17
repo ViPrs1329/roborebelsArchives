@@ -111,7 +111,8 @@ public class RRButtonMap
                     FRONT_SLIDER_IN = 25,
                     FRONT_SLIDER_OUT = 26,
                     BACK_SLIDER_IN = 27,
-                    BACK_SLIDER_OUT = 28;
+                    BACK_SLIDER_OUT = 28,
+                    TOGGLE_SPEED = 29;
     
     Joystick        lJoystick, rJoystick, xboxController;
     
@@ -173,6 +174,7 @@ public class RRButtonMap
         insertAction(FRONT_SLIDER_OUT, 3, -1, lJoystick);
         insertAction(BACK_SLIDER_IN, 4, -1, lJoystick);
         insertAction(BACK_SLIDER_IN, 5, -1, lJoystick);
+        insertAction(TOGGLE_SPEED, 7, -1, xboxController);
         
         
         // Didn't insert Tilt/Rotate Cannon because it used the DPad. The comment at the top

@@ -27,6 +27,7 @@ public class RRDrive implements MotorSafety
     
     private     Jaguar                  leftMotor,
                                         rightMotor;
+    private     boolean                 backbuttonpressed;
     
     public static final double          kDefaultExpirationTime = 0.1;
     
@@ -210,6 +211,19 @@ public class RRDrive implements MotorSafety
     {
         if (leftMotor == null || rightMotor == null)
             throw new NullPointerException("Null motor provided");
+        RRAction me = RRButtonMap.getActionObject(RRButtonMap.TOGGLE_SPEED);
+        boolean toggledspeed = me.getButtonState();
+        if (toggledspeed){
+            left = left*0.5;
+            right = right*0.5;
+            backbuttonpressed=true;
+        }
+        else{
+            /*if (backbuttonpressed=false){
+                left = left*2;
+                right= right*2;
+            }*/
+        }
         leftMotor.set(left);
         rightMotor.set(right);
         
