@@ -398,7 +398,7 @@ public class RoboRebels extends IterativeRobot {
         autonomous_mode = true;
         autonomous_complete = false;
         
-        dont_track_azimuth = true;
+        dont_track_azimuth = false;                 // true;        // Only make this true if robot fails to lock during autonomous.
         
         autonomous_tracking_failed = false;
         no_balls_shot = true;
