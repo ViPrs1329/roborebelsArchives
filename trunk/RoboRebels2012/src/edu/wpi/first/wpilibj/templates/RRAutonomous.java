@@ -30,44 +30,35 @@ public class RRAutonomous {
         gatherer = gr;
     }
 
-    void auton_init() // called once at start of Autonomous period
-    {
+    /*
+     * called once at start of Autonomous period
+     */
+    void auton_init() {
+        RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+
         // don't check dip switches
 //        
-//        if (dipSwitch.getState(0))
-//        {
+//        if (dipSwitch.getState(0)) {
 //            target_selected = RoboRebels.HIGHEST_TARGET;   // Read first DIP Switch
-////            RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the top target! =)");
-//        }   
-//        
-//        else if (dipSwitch.getState(1) && dipSwitch.getState(2))
-//        {
+//            RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the top target! =)");
+//
+//        }  else if (dipSwitch.getState(1) && dipSwitch.getState(2)) {
 //            target_selected = RoboRebels.LOWEST_TARGET;
-////            RRLogger.logDebug(this.getClass(),"auton_init()","We're locked onto the lowest target! =)");
-//        }
-//        
-//        else if (dipSwitch.getState(1))
-//        {
+//            RRLogger.logDebug(this.getClass(),"auton_init()","We're locked onto the lowest target! =)");
+//
+//        } else if (dipSwitch.getState(1)) {
 //            target_selected = RoboRebels.LEFT_TARGET;
-// //           RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the left target! =)");
-//        }
-//            
-//        else if (dipSwitch.getState(2))
-//        {
+//            RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the left target! =)");
+//
+//        } else if (dipSwitch.getState(2)) {
 //            target_selected = RoboRebels.RIGHT_TARGET;
-////            RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the right target! =)");
+//            RRLogger.logDebug(this.getClass(),"auton_init()","COOLIO! We're locked onto the right target! =)");
+//
 //        }
-//            
-//        if (dipSwitch.getState(3))
-//        {
-////            RRLogger.logDebug(this.getClass(),"auton_init()","OK! Let's wait for the other team to shoot first...)");
+//        if (dipSwitch.getState(3)) {
+//            RRLogger.logDebug(this.getClass(),"auton_init()","OK! Let's wait for the other team to shoot first...)");
 //            extra_delay_shooting = true;
-//        }
-
-        RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
-//        }
-//        else
-//        {
+//        } else {
 //            delay_shooting = false;  // Don't delay shooting at start of autonomous
 //        }
 
@@ -80,7 +71,9 @@ public class RRAutonomous {
 
     }
 
-     // called repeatedly suring Autonomous period
+    /*
+     * called repeatedly suring Autonomous period
+     */
     void auton_periodic() {
 
 //        RRLogger.logDebug(this.getClass(),"auton_periodic()","Periodic State: " + RoboRebels.azimuth_lock + " " + RoboRebels.elevation_lock + " " + shooter.locked() + " " +
@@ -99,16 +92,17 @@ public class RRAutonomous {
 
         tracker.trackTarget(target_selected);
 
-        //      if (RoboRebels.DEBUG_ON)
-        //          RRLogger.logDebug(this.getClass(),"auton_periodic()","Autonomous: auton_periodic running " + tracker.round2(Timer.getFPGATimestamp()));
+        //if (RoboRebels.DEBUG_ON) {
+        //   RRLogger.logDebug(this.getClass(),"auton_periodic()","Autonomous: auton_periodic running " + tracker.round2(Timer.getFPGATimestamp()));
+        //}
 
         if (!shooter.tracking) {
             shooter.shoot();
             gatherer.gather();
         }
 
-        if (RoboRebels.autonomous_tracking_failed) // If tracking failed, end shooting
-        {
+        if (RoboRebels.autonomous_tracking_failed) {
+            // If tracking failed, end shooting
             RoboRebels.autonomous_complete = true;   // TODO: Make robot still drive towards bridge to get balls
         }
         if (delay_shooting) {
