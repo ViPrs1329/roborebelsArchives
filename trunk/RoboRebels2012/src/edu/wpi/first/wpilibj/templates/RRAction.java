@@ -10,39 +10,34 @@ import edu.wpi.first.wpilibj.Joystick;
  *
  * @author dmw
  */
+public class RRAction {
 
+    int rrActionID;
+    int buttonID;
+    int axisID;
+    Joystick js;
 
-
-public class RRAction
-{
-    int         rrActionID;
-    int         buttonID;
-    int         axisID;
-    Joystick    js;
-    
-    public RRAction(int rraid, int bid, int aid, Joystick j)
-    {
+    public RRAction(int rraid, int bid, int aid, Joystick j) {
         rrActionID = rraid;
         buttonID = bid;
         axisID = aid;
-        
-        if ( j != null )
+
+        if (j != null) {
             js = j;
-        else
+        } else {
             throw new NullPointerException("RRAction was passed a null Joystick object (j)! ");
+        }
     }
-    
+
     public boolean valueOf() {
         return js.getRawButton(buttonID);
     }
-    
-    public boolean getButtonState()
-    {
+
+    public boolean getButtonState() {
         return js.getRawButton(buttonID);
     }
-    
-    public double getAxisState()
-    {
+
+    public double getAxisState() {
         return js.getRawAxis(axisID);
     }
 }

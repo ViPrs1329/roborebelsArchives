@@ -3,19 +3,20 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 
 public class Target {
+
     private ParticleAnalysisReport report;
-    private     RRTracker       tracker;
+    private RRTracker tracker;
 
     Target(ParticleAnalysisReport report) {
         this.report = report;
     }
- 
+
     public double shootingAngle() {
         return 0;
     }
 
     public double distance() {
-        return 801.4/report.boundingRectWidth;
+        return 801.4 / report.boundingRectWidth;
     }
 
     public int height() {
@@ -27,7 +28,7 @@ public class Target {
     }
 
     public int posY() {
- //       return report.center_mass_y;
+        //       return report.center_mass_y;
         return tracker.y(report.center_mass_y);
     }
 

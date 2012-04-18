@@ -36,34 +36,29 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
  * 
  * @author Derek Ward
  */
-public class RRCameraThread extends Thread
-{
-    AxisCamera      cam = null;
-    ColorImage      currentImage = null;
-    boolean         collectImages;
-    final int       IMAGE_CAPTURE_RATE = 100;
-    
-    public RRCameraThread()
-    {
+public class RRCameraThread extends Thread {
+
+    AxisCamera cam = null;
+    ColorImage currentImage = null;
+    boolean collectImages;
+    final int IMAGE_CAPTURE_RATE = 100;
+
+    public RRCameraThread() {
         Timer.delay(10.0);
-        
+
         cam = AxisCamera.getInstance();
         cam.writeMaxFPS(5);
         cam.writeResolution(AxisCamera.ResolutionT.k320x240);
         cam.writeExposurePriority(AxisCamera.ExposurePriorityT.imageQuality);
         cam.writeColorLevel(100);       // Sets the camera to black and white
-        
+
         collectImages = false;
     }
-    
-    public void run()
-    {
-        while(true)
-        {
-            if ( cam != null && cam.freshImage() && collectImages )
-            {
-                if ( currentImage != null )
-                {
+
+    public void run() {
+        while (true) {
+            if (cam != null && cam.freshImage() && collectImages) {
+                if (currentImage != null) {
                     try {
                         currentImage.free();
                         currentImage = null;
@@ -71,45 +66,39 @@ public class RRCameraThread extends Thread
                         ex.printStackTrace();
                     }
                 }
-                
-//                System.out.println("RRCameraThread::run() Trying to collect an image!");
+
+//                RRLogger.logDebug(this.getClass(),"run()","Trying to collect an image!");
                 try {
                     currentImage = cam.getImage();
                 } catch (AxisCameraException ex) {
-                    ex.printStackTrace();
-                    System.err.println("RRCameraThread::run() There was an AxisCameraException thrown!");
-                    System.exit(1);
+                    RRLogger.logError(this.getClass(),"run()",ex);
+                    //System.exit(1);
                 } catch (NIVisionException ex) {
-                    ex.printStackTrace();
-                    System.err.println("RRCameraThread::run() There was a NIVisionException thrown!");
-                    System.exit(1);
+                    RRLogger.logError(this.getClass(),"run()",ex);
+                    //System.exit(1);
                 }
             }
-            
-//            System.out.println("RRCameraThread::run() cam: " + cam + " | " + currentImage + " | " + cam.freshImage() + " | " + collectImages);
-            
-            
+
+//            RRLogger.logDebug(this.getClass(),"","cam: " + cam + " | " + currentImage + " | " + cam.freshImage() + " | " + collectImages);
+
             try {
                 RRCameraThread.sleep(IMAGE_CAPTURE_RATE);
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
-                System.exit(1);
+                RRLogger.logError(this.getClass(),"run()",ex);
+                //System.exit(1);
             }
         }
     }
-    
-    public ColorImage getImage()
-    {
+
+    public ColorImage getImage() {
         return currentImage;
     }
-    
-    public void collectImages()
-    {
+
+    public void collectImages() {
         collectImages = true;
     }
-    
-    public void stopCollectingImages()
-    {
+
+    public void stopCollectingImages() {
         collectImages = false;
     }
 }
