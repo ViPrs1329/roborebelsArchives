@@ -35,9 +35,7 @@ public class RRShooterTrackerThread extends Thread {
         while (run) {
 //            RRLogger.logDebug(this.getClass(),"run()","Running...");
             if (shootAndTrack) {
-                if (RoboRebels.MIN_DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"run()","Shooting and Tracking... " + Timer.getFPGATimestamp());
-                }
+                RRLogger.logDebug(this.getClass(),"run()","Shooting and Tracking... " + Timer.getFPGATimestamp());
                 tracker.trackTarget(RoboRebels.AUTO_TARGET);
                 if (!shooter.tracking) // Don't check for user input or shoot if we are tracking target.
                 {

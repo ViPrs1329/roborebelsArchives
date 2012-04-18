@@ -80,19 +80,14 @@ public class RRTracker {
             RoboRebels.tilt_angle = accelAngle();
             RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
 
-//             if (RoboRebels.DEBUG_ON)
-//             {
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
-//                 
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking: tracker " + shooter.tracking + " complete " +
 //                         shooter.tracking_complete + " timeout " + shooter.tracking_timeout);                
-//             }
 
-            //            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: tracking:" + shooter.tracking);
+            //RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: tracking:" + shooter.tracking);
 
             if (shooter.tracking) {
 
-//                if (RoboRebels.DEBUG_ON)
 //                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking target...");
 
                 ColorImage image = cam.getImage();     // comment if using stored images
@@ -137,19 +132,17 @@ public class RRTracker {
 
 
                 // TODO: This image write section should be commented out for the production code
-//            if (i < 10)
-//            {
-//            try {
-//                if ( thresholdImage != null )
-//                    thresholdImage.write("/after_thresh" + i + ".bmp");    // this seems to work well
-//                else
-//                {
-//                    RRLogger.logDebug(this.getClass(),"trackTarget()","ThresholdImage is null!!!");
+//            if (i < 10) {
+//                try {
+//                    if ( thresholdImage != null ) {
+//                        thresholdImage.write("/after_thresh" + i + ".bmp");    // this seems to work well
+//                    } else {
+//                        RRLogger.logDebug(this.getClass(),"trackTarget()","ThresholdImage is null!!!");
+//                    }
+//                } catch (Exception e) {
+//                    RRLogger.logError(this.getClass(),"trackTarget()",e);
 //                }
-//            } catch (Exception e) {
-//                RRLogger.logError(this.getClass(),"trackTarget()",e);
-//            }
-//            RRLogger.logDebug(this.getClass(),"trackTarget()","WROTE IMAGE 2");
+//                RRLogger.logDebug(this.getClass(),"trackTarget()","WROTE IMAGE 2");
 //            }
                 BinaryImage filteredImage;
                 BinaryImage convexHullImage;
@@ -170,14 +163,13 @@ public class RRTracker {
 
                 // TODO: This image write section should be commented out for the production code
 
-//            if (i < 10)
-//            {
-//            try {
-//                filteredImage.write("/processed" + i + ".bmp");     // This seems to work well.
-//            } catch (Exception e) {
-//                RRLogger.logDebug(this.getClass(),"trackTarget()","error saving image 3");
-//            }
-//            RRLogger.logDebug(this.getClass(),"trackTarget()","WROTE IMAGE 3");
+//            if (i < 10) {
+//              try {
+//                  filteredImage.write("/processed" + i + ".bmp");     // This seems to work well.
+//              } catch (Exception e) {
+//                  RRLogger.logDebug(this.getClass(),"trackTarget()","error saving image 3");
+//              }
+//              RRLogger.logDebug(this.getClass(),"trackTarget()","WROTE IMAGE 3");
 //            }
 //            
 //            i++;
@@ -209,41 +201,36 @@ public class RRTracker {
 //
 //      Removed determination if lowest or highest target
 //                
-//                if (potential_targets == 1)
+//                if (potential_targets == 1) {
 //                    lowest = true;
-//                else if (potential_targets == 2)
-//                {
+//                } else if (potential_targets == 2) {
 //                    int other_index;
-//                    if (selected_target_index == 0)
+//                    if (selected_target_index == 0) {
 //                        other_index = 1;
-//                    else
+//                    } else {
 //                        other_index = 0;
+//                    }
 //                       
 //                    ParticleAnalysisReport center_target_r = reports[selected_target_index];
 //                    ParticleAnalysisReport other_target_r = reports[other_index];
 //                    
-//                    if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) 
+//                    if (y(center_target_r.center_mass_y) <= y(other_target_r.center_mass_y)) {
 //                        lowest = true;
-//                    else
-//                        lowest = false; 
+//                    } else {
+//                        lowest = false;
+//                    }
 //                }
-//                if (potential_targets == 3)
-//                {
+//                if (potential_targets == 3) {
 //                    int other_index;
 //                    int another_index;
 //                    
-//                    if (selected_target_index == 0)
-//                    {
+//                    if (selected_target_index == 0) {
 //                        other_index = 1;
 //                        another_index = 2;
-//                    }
-//                    else if (selected_target_index == 1)
-//                    {  
+//                    } else if (selected_target_index == 1) {  
 //                        other_index = 0;
 //                        another_index = 2;
-//                    }
-//                    else
-//                    {
+//                    } else {
 //                        other_index = 0;
 //                        another_index = 1;
 //                    }
@@ -531,9 +518,7 @@ public class RRTracker {
                 {
                     shooter.tracking = true;
                     RoboRebels.time_started_tracking = Timer.getFPGATimestamp();
-                    if (RoboRebels.MIN_DEBUG_ON) {
-                        RRLogger.logDebug(this.getClass(),"trackTarget()","Beginning Target Tracking");
-                    }
+                    RRLogger.logDebug(this.getClass(),"trackTarget()","Beginning Target Tracking");
 
                     stopThreads();
 
@@ -546,9 +531,7 @@ public class RRTracker {
 
                     double time = RoboRebels.MAX_TRACKING_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_started_tracking);
 
-                    if (RoboRebels.DEBUG_ON) {
-                        RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking time left: " + round2(time));
-                    }
+                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking time left: " + round2(time));
 
                     if ((time > 0)) // If timeout, stop auto tracking
                     {
@@ -557,47 +540,30 @@ public class RRTracker {
                         //                      RRLogger.logDebug(this.getClass(),"","Track Target Button Pressed");
 
                         if (RoboRebels.target_azimuth == RoboRebels.LOCK) {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Lock");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Lock");
                             shooter.lazySusanSpeed = 0.0;
 
                             shooter.stopLazySusan();
 
                             RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
-                        } else if (RoboRebels.target_azimuth == RoboRebels.LEFT) // Left normal
-                        {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Left");
-                            }
+                        } else if (RoboRebels.target_azimuth == RoboRebels.LEFT) { // Left normal
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Left");
                             shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                             RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                        } //                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)       // Left fast
-                        //                    {
-                        //                        if (RoboRebels.DEBUG_ON)
-                        //                            RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan left fast");
+                        //                   } else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT) {      // Left fast
+                        //                        RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan left fast");
                         //                        shooter.lazySusanSpeed = -0.2;         //-0.20;  // was -0.75 * LS_SPEED
                         //                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                        //                    }
-                        else if (RoboRebels.target_azimuth == RoboRebels.RIGHT) // Right normal
-                        {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Right");
-                            }
+                        }  else if (RoboRebels.target_azimuth == RoboRebels.RIGHT) { // Right normal
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Right");
                             shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                             RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                        } //                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)     // Right fast
-                        //                    {
-                        //                        if (RoboRebels.DEBUG_ON)
-                        //                            RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan right fast");
+                        //                   } else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT) {    // Right fast
+                        //                        RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan right fast");
                         //                        shooter.lazySusanSpeed = 0.2;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         //                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                        //                    }
-                        else // Must be set to HOLD
-                        {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Hold");
-                            }
+                        } else {// Must be set to HOLD
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Hold");
                             shooter.lazySusanSpeed = 0.0;
                             RoboRebels.azimuth_lock = false;         // No azimuth target lock
                         }
@@ -607,65 +573,44 @@ public class RRTracker {
                             shooter.lazySusanSpeed = 0.0;
                         }
 
-//                    if (RoboRebels.DEBUG_ON)
 //                        RRLogger.logDebug(this.getClass(),"","Tilt value:" + RoboRebels.target_elevation);
 
                         if (RoboRebels.target_elevation == RoboRebels.LOCK) {
                             shooter.tiltSpeed = 0.0;                      // Stop Tilting
                             RoboRebels.elevation_lock = true;     // Indicate elevation target lock
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Lock");
-                            }
-                        } else if (RoboRebels.target_elevation == RoboRebels.UP) // Track target elevation (up/down)
-                        {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Up");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Lock");
+                        } else if (RoboRebels.target_elevation == RoboRebels.UP) { // Track target elevation (up/down)
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Up");
                             shooter.tiltSpeed = -0.2;            //  -1.0 * TILT_SPEED (.4)  * 0.5
                             RoboRebels.elevation_lock = false;         // No elevation target lock
                         } else if (RoboRebels.target_elevation == RoboRebels.DOWN) {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Down");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Down");
                             shooter.tiltSpeed = 0.2;            // 1.0 * TILT_SPEED * 0.5;
                             RoboRebels.elevation_lock = false;         // No elevation target lock
-                        } else // is HOLD
-                        {
+                        } else { // is HOLD
                             shooter.tiltSpeed = 0.0;
                             RoboRebels.elevation_lock = false;         // No elevation target lock
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Hold");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Hold");
                         }
 
                         if (RoboRebels.target_muzzle_velocity == RoboRebels.FASTER) {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Speed Up");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Speed Up");
                             RoboRebels.muzzle_velocity = 8.0;
                             RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                         } else if (RoboRebels.target_muzzle_velocity == RoboRebels.SLOWER) {
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Speed Down");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Speed Down");
                             RoboRebels.muzzle_velocity = 7.5;
                             RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
                         } else if (RoboRebels.target_muzzle_velocity == RoboRebels.LOCK) {
                             // Muzzle velocity is fine - don't change
                             RoboRebels.muzzle_velocity_lock = true;     // muzzle velocity target lock
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Lock");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Shooting Lock");
                         } else {
                             RoboRebels.muzzle_velocity_lock = false;         // No muzzle velocity target lock
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Auto Shooting Hold");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Auto Shooting Hold");
                         }
-//                }
-//                else
-//                {
-                        //              RRLogger.logDebug(this.getClass(),"trackTarget()","Auto no tracking due to troubleshooting mode.  Lock by DIP Switch: " + locked());
+//                } else {
+                        //RRLogger.logDebug(this.getClass(),"trackTarget()","Auto no tracking due to troubleshooting mode.  Lock by DIP Switch: " + locked());
 //                }
 
                     } else // Tracking timeout
@@ -681,16 +626,12 @@ public class RRTracker {
                         RoboRebels.target_elevation = RoboRebels.HOLD;
                         RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
 
-                        if (RoboRebels.DEBUG_ON) {
-                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking Timeout!");
-                        }
+                        RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking Timeout!");
                         RoboRebels.printLCD(6, "Tracking Timeout!                ");
 
                         if (RoboRebels.autonomous_mode) {
                             RoboRebels.autonomous_tracking_failed = true;
-                            if (RoboRebels.DEBUG_ON) {
-                                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: End autonomous tracking");
-                            }
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: End autonomous tracking");
                         }
                     }
                 }
@@ -700,9 +641,7 @@ public class RRTracker {
                 shooter.tracking_complete = false;
                 shooter.tracking_timeout = false;
 
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: End of tracking");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: End of tracking");
 
                 shooter.lazySusanSpeed = 0.0;      // Stop azimuth tracking
                 shooter.tiltSpeed = 0.0;           // Stop elevation tracking
@@ -712,8 +651,8 @@ public class RRTracker {
                 RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
 
                 startThreads();
-            } else // Currently not tracking
-            {
+
+            } else {  // Currently not tracking
                 shooter.tracking = false;
                 shooter.tracking_complete = false;
                 shooter.tracking_timeout = false;
@@ -722,7 +661,6 @@ public class RRTracker {
                 RoboRebels.target_elevation = RoboRebels.HOLD;
                 RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
 
-//             if (RoboRebels.DEBUG_ON)
 //                 RRLogger.logDebug(this.getClass(),"","Tracker: Not tracking");
 
                 //  startThreads();        // Don't need to do
@@ -730,9 +668,7 @@ public class RRTracker {
 
             if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock) {
                 RoboRebels.printLCD(6, "All Locked!                ");
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: All Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: All Locked!");
                 shooter.tracking = false;
                 shooter.tracking_complete = true;
                 shooter.tracking_timeout = true;
@@ -752,38 +688,24 @@ public class RRTracker {
                 }
             } else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock) {
                 RoboRebels.printLCD(6, "LS & Speed Locked!          ");
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS & Speed Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS & Speed Locked!");
             } else if (RoboRebels.azimuth_lock && RoboRebels.elevation_lock) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS & Angle Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS & Angle Locked!");
                 RoboRebels.printLCD(6, "LS & Angle Locked!          ");
             } else if (RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Angle & Speed Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Angle & Speed Locked!");
                 RoboRebels.printLCD(6, "Angle & Speed Locked!       ");
             } else if (RoboRebels.elevation_lock) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Angle Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Angle Locked!");
                 RoboRebels.printLCD(6, "Angle Locked!               ");
             } else if (RoboRebels.muzzle_velocity_lock) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Speed Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Speed Locked!");
                 RoboRebels.printLCD(6, "Speed Locked!               ");
             } else if (RoboRebels.azimuth_lock) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS Locked!");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS Locked!");
                 RoboRebels.printLCD(6, "LS Locked!                  ");
             } else if (shooter.tracking) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking");
-                }
+                RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking");
                 RoboRebels.printLCD(6, "Tracking Target...          ");
             } else {
                 RoboRebels.printLCD(6, "                            ");   // Clear the display
@@ -797,9 +719,7 @@ public class RRTracker {
         } catch (Exception ex) {
             RRLogger.logError(this.getClass(), "trackTarget()", ex);
         }
-        if (RoboRebels.MIN_DEBUG_ON) {
-            RRLogger.logDebug(this.getClass(),"trackTarget()","Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start) * 1000.0) + " milliseconds");
-        }
+        RRLogger.logDebug(this.getClass(),"trackTarget()","Track Target Execution Time: " + round((Timer.getFPGATimestamp() - start) * 1000.0) + " milliseconds");
         //   }  // remove
     }
 //}       // Just added this now
