@@ -126,6 +126,7 @@ public class RoboRebels extends IterativeRobot {
     
     final static boolean    DEBUG_ON = false;       // true;
     final static boolean    MIN_DEBUG_ON = false;       // true;
+    final static boolean    TRACKER_DEBUG_ON = true;   
     
     static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean      disabledStateBroadcasted = false;

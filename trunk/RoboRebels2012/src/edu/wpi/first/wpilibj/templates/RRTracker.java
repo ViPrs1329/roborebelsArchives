@@ -78,12 +78,12 @@ public class RRTracker
         double start = Timer.getFPGATimestamp();
         double angle;
         boolean TTState;
-        ParticleAnalysisReport r;
-        double aspect_ratio;
-        double distance;
+        ParticleAnalysisReport r = null;
+        double aspect_ratio = 1.0;
+        double distance = 12.0;
         ParticleAnalysisReport[] reports;
-        int selected_target_index;     
-        int potential_targets;
+        int selected_target_index = 0;     
+        int potential_targets = 0;
         
         try
         {
@@ -770,7 +770,7 @@ public class RRTracker
             
             // startThreads();              // Don't start threads when it locks or robot may move again suddenly
             
-            if (RoboRebels.MIN_DEBUG_ON)
+            if (RoboRebels.TRACKER_DEBUG_ON)
             {
                 System.out.println(" ");
                 
