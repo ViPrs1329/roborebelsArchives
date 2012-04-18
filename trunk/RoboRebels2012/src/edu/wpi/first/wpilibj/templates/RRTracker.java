@@ -360,7 +360,6 @@ public class RRTracker
                         " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) + 
                         " Distance: " + round(distance));
-             
               }   
                if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
                {
@@ -403,12 +402,12 @@ public class RRTracker
                                  
                 // TODO:  Probably only need to do the rest of this if active tracking is happening.
                 
-                angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
+                double calc_angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
                 
                 
 //               if (RoboRebels.autonomous_mode == true)
 //               {
-                angle = angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+                angle = calc_angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
 //               }
 //               else
 //               {
@@ -421,10 +420,10 @@ public class RRTracker
 //                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
 //                
                 
-                RoboRebels.printLCD(5, "d: " +  round(distance) + " C: " + round2(angle - RoboRebels.tilt_angle) + "              ");
+                RoboRebels.printLCD(5, "d: " +  round(distance) + " C: " + round2(calc_angle - RoboRebels.tilt_angle) + "              ");
                 
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("distance: " +  round(distance) + " Correction: " + round2(angle - RoboRebels.tilt_angle));
+                    System.out.println("distance: " +  round(distance) + " Correction: " + round2(calc_angle - RoboRebels.tilt_angle));
                 
                 int x_accuracy;
                 

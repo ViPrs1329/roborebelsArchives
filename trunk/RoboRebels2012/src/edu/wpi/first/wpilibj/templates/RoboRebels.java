@@ -168,7 +168,7 @@ public class RoboRebels extends IterativeRobot {
     final static int    RIGHT_TARGET = 4;      // Right Middle target
     final static int    AUTO_TARGET = 5;       // trackTarget chooses target automatically
     
-    static boolean      going_for_highest = false;   // Don't change this as we calibrated this this set to false!!
+    static boolean      going_for_highest = true;       //  was false in old calibration
 //    static boolean      continuous_targeting = false;    // Targeting all the time or only when button pressed
     
     static int          target_azimuth = HOLD;  // -1 if target is to left, 0 if on target, 1 if target is the right
@@ -337,6 +337,20 @@ public class RoboRebels extends IterativeRobot {
         //slider = new RRSlider(FRONT_SLIDER_LEFT_CHANNEL, BACK_SLIDER_LEFT_CHANNEL);
         
         time_last_update = Timer.getFPGATimestamp();
+        
+        System.out.println("-- Configuration Data --");
+        System.out.println("DEBUG_ON: " + DEBUG_ON + " MIN_DEBUG_ON: " + MIN_DEBUG_ON);
+        if (DEBUG_ON)
+        {
+            System.out.println(" Pixel Accuracy: +/- " + tracker.round(PIXEL_ACCURACY/2) +
+                    "Angle Accuracy: +/- " + tracker.round(ANGLE_ACCURACY/2));
+            System.out.println(" Max Tracking Time: " + MAX_TRACKING_TIME + " Shooter Spinup Time: " 
+                    + SHOOTER_SPINUP_TIME + " Shooter Spindown Time: " + SHOOTER_SPINDOWN_TIME + 
+                    "Max Shooting Time: " + MAX_SHOOTING_TIME);
+            System.out.println("Autonomous Config.  Expand Time: " + EXPAND_TIME + " Delay at Start: " + DELAY_AT_START_OF_AUTON
+                    + " Delay Between Shots: " + DELAY_BETWEEN_SHOTS + " Drive Time to Bridge: " + DRIVE_TIME_TO_BRIDGE);
+            System.out.println(" ");
+        }
          
         System.out.println("Robot Ready");
     }
