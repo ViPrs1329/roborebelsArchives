@@ -73,7 +73,10 @@ public class RRAutonomous {
 //            delay_shooting = false;  // Don't delay shooting at start of autonomous
 //        }
         
-        extra_delay_shooting = false;       
+        extra_delay_shooting = false;  
+        target_selected = RoboRebels.AUTO_TARGET;
+        delay_shooting  = true;
+                
         shooter.expandShooter(); // Works now! :-)
         //RoboRebels.autonomous_complete = true;                  // For now
         

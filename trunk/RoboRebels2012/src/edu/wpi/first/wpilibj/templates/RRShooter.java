@@ -803,6 +803,14 @@ public class RRShooter
         isExpanding = false;
         ball_present = false;
         
+        shootingWheelSpeed = 0.0;
+        lazySusanSpeed = 0.0;
+        current_lazySusanSpeed = 0.0;
+        tiltSpeed = 0.0;
+        
+        tracking_complete = false; // Indicates if robot has finished tracking
+        tracking_timeout = false;
+        
     }
     
     public boolean locked()
