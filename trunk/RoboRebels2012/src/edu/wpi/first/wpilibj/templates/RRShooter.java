@@ -35,7 +35,7 @@ public class RRShooter
     private final double        TILT_SPEED = 0.4;
     private final double        EXP_CONTR_TILT_MULT = 0.75;
     private final double        EXP_CONT_MAX_ANGLE = 85,
-                                EXP_CONT_MIN_ANGLE = 65;
+                                EXP_CONT_MIN_ANGLE = 60;        // 55 got in the way of tracking
     
     private     int             swj_channel;        // Shooter Wheel Jaguar channel
     private     int             lsv_channel;        // Lazy Susan Victor channel
@@ -431,7 +431,7 @@ public class RRShooter
             if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
                 if (RoboRebels.DEBUG_ON)
                     System.out.println("Shooter: Shooter is expanding! " + retExpAngle);
-                tiltSpeed = TILT_SPEED * EXP_CONTR_TILT_MULT * 3.0;         //   Try making this 1.25 Expand a bit faster to give more time during autonomous
+                tiltSpeed = 1.0;    // TILT_SPEED * EXP_CONTR_TILT_MULT * 4.0;     //3.5; //   3.0 Try making this 1.25 Expand a bit faster to give more time during autonomous
             }
             else if (retExpAngle < (EXP_CONT_MIN_ANGLE + 5))          // Try adding a +10 to this to account for angle lag
             {
@@ -658,9 +658,9 @@ public class RRShooter
          if (RoboRebels.DEBUG_ON)
              System.out.println("Shooter: setShooterSpeeds()");
          
- //        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.6);        // Slower shooter speed for indoors
+         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.58);        // 0.58 is a speed to shoot lowest basket for indoors
          
-         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
+ //        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
          
      //   System.out.println("s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);

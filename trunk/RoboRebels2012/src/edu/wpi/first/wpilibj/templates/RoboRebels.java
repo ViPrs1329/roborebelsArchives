@@ -158,8 +158,8 @@ public class RoboRebels extends IterativeRobot {
     static double       angle_position = 0.0;     // Initial position of LS.
     static double       time_last_update = 0;     // Timestamp of last position update       
     
-    final static int    PIXEL_ACCURACY = 16;    //20;      // Used by RRTRacker to determne when Locked.
-    final static int    ANGLE_ACCURACY = 4;     //6;       // Used by RRTRacker to determne when Locked.
+    final static int    PIXEL_ACCURACY = 12;    // 10; barely worked    // 16; worked   //20; worked     // Used by RRTRacker to determne when Locked.
+    final static int    ANGLE_ACCURACY = 2;     // 4; worked     //6;       // Used by RRTRacker to determne when Locked.
     
     final static int    LOWEST_TARGET  = 0;     // Lowest basket target
     //    final static int    MIDDLE = 1;     // Middle basket target
@@ -365,7 +365,7 @@ public class RoboRebels extends IterativeRobot {
 
     public void autonomousInit() {
         System.out.println("autonomousInit()");
-
+        
         disabledStateBroadcasted = false;
         teleopStateBroadcasted = false;
 

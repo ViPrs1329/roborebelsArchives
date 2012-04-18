@@ -444,24 +444,24 @@ public class RRTracker
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
 //                }  
-                if (x >= x_accuracy*6)
-                {
-                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
-                }
+//                if (x >= x_accuracy*6)
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.FAR_LEFT;  // LazySusan needs to move far left
+//                }
 //                else if ((x < -x_accuracy/2) && (x > -x_accuracy*4))      
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.CLOSE_RIGHT;  // LazySusan needs to only a little to right
 //                }
-                else if (x <= -x_accuracy*6)
-                {
-                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
-                }  
+//                else if (x <= -x_accuracy*6)
+//                {
+//                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
+//                }  
 //                else if (x <= -x_accuracy*6)
 //                {
 //                        RoboRebels.target_azimuth = RoboRebels.FAR_RIGHT;  // LazySusan needs to move far right
 //                }
                 
-                else if (x >= x_accuracy/2)
+                if (x >= x_accuracy/2)                  // need to add back in else if add FAR_LEFT and FAR_RIGHT
                 {
                         RoboRebels.target_azimuth = RoboRebels.LEFT;  // LazySusan needs to move left
                 }
@@ -593,13 +593,13 @@ public class RRTracker
                         shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)       // Left fast
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan left fast"); 
-                        shooter.lazySusanSpeed = -0.2;         //-0.20;  // was -0.75 * LS_SPEED
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT)       // Left fast
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Tracker: Auto Lazy susan left fast"); 
+//                        shooter.lazySusanSpeed = -0.2;         //-0.20;  // was -0.75 * LS_SPEED
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         if (RoboRebels.DEBUG_ON)
@@ -607,13 +607,13 @@ public class RRTracker
                         shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
-                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)     // Right fast
-                    {
-                        if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan right fast"); 
-                        shooter.lazySusanSpeed = 0.2;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
-                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
-                    }
+//                    else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT)     // Right fast
+//                    {
+//                        if (RoboRebels.DEBUG_ON)
+//                            System.out.println("Tracker: Auto Lazy susan right fast"); 
+//                        shooter.lazySusanSpeed = 0.2;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+//                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
+//                    }
                     else              // Must be set to HOLD
                     {
                         if (RoboRebels.DEBUG_ON)
