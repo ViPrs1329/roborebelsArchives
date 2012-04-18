@@ -66,7 +66,7 @@ public class RRDrive implements MotorSafety {
         double l_xVal = aoX.getAxisState();
         double l_yVal = aoY.getAxisState();
 
-        //RRLogger.logDebug(this.getClass(),"","drive()");
+        //RRLogger.logDebug(this.getClass(),"drive()","");
 
 
         if (Math.abs(l_xVal) < .13) {
