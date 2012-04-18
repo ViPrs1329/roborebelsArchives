@@ -78,6 +78,12 @@ public class RRTracker
         double start = Timer.getFPGATimestamp();
         double angle;
         boolean TTState;
+        ParticleAnalysisReport r;
+        double aspect_ratio;
+        double distance;
+        ParticleAnalysisReport[] reports;
+        int selected_target_index;     
+        int potential_targets;
         
         try
         {
@@ -188,10 +194,10 @@ public class RRTracker
 //            
 //            i++;
 
-            ParticleAnalysisReport[] reports = filteredImage.getOrderedParticleAnalysisReports();
+            reports = filteredImage.getOrderedParticleAnalysisReports();
             
-            int selected_target_index = 0;    // initialize to zero 
-            int potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
+            selected_target_index = 0;    // initialize to zero 
+            potential_targets = Math.min(reports.length, 4);    // number of potential targets from image processing
           
             if ((reports != null) && (reports.length > 0))   // Only do tracking if there is at least one target
             {
@@ -206,8 +212,8 @@ public class RRTracker
  
                 for (int i = 0; i < potential_targets; i++) 
                 {
-                    ParticleAnalysisReport r = reports[i];
-                    if ((dist = Math.abs(x(r.center_mass_x, 0))) < distance_from_center)  // This does not have camera offset calculation built in
+                    ParticleAnalysisReport rp = reports[i];
+                    if ((dist = Math.abs(x(rp.center_mass_x, 0))) < distance_from_center)  // This does not have camera offset calculation built in
                     {
                         distance_from_center = dist;
                         selected_target_index = i;
@@ -347,19 +353,19 @@ public class RRTracker
               
               // Targeting image processing is now done.
               
-              ParticleAnalysisReport r = reports[selected_target_index];
+              r = reports[selected_target_index];
            
-              double aspect_ratio = ((double)r.boundingRectWidth)/((double)r.boundingRectHeight);
+              aspect_ratio = ((double)r.boundingRectWidth)/((double)r.boundingRectHeight);
               
-              double distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
+              distance = 801.4/r.boundingRectWidth;  // Calculate distance to target based on rectangle width
            
               if (RoboRebels.DEBUG_ON)
               {
-               System.out.println("Tracker: Target " + (selected_target_index + 1) + "/" + potential_targets + " Center: (x,y)  (" +
-                        x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + ") Width: " + r.boundingRectWidth + 
-                        " Height: " + r.boundingRectHeight + 
-                        " Aspect: " + round2(aspect_ratio) + 
-                        " Distance: " + round(distance));
+               System.out.println("Tracker: Target " + (selected_target_index + 1) + "/" + potential_targets + 
+                        " Center: (x,y)  (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
+                        ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth +  " Height: " + r.boundingRectHeight + 
+                        " Aspect: " + round2(aspect_ratio) +  " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle +
+                        " Speed: " + RoboRebels.muzzle_velocity);
               }   
                if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1))  // Check aspect ratio of target to make sure it is valid.
                {
@@ -763,6 +769,19 @@ public class RRTracker
             shooter.tracking_timeout = true;
             
             // startThreads();              // Don't start threads when it locks or robot may move again suddenly
+            
+            if (RoboRebels.MIN_DEBUG_ON)
+            {
+                System.out.println(" ");
+                
+                System.out.println("Locked Target " + (selected_target_index + 1) + "/" + potential_targets + 
+                        " Center: (x,y)  (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
+                        ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth +  " Height: " + r.boundingRectHeight + 
+                        " Aspect: " + round2(aspect_ratio) +  " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle +
+                        " Speed: " + RoboRebels.muzzle_velocity);
+                
+                System.out.println(" ");
+            }
        }
        else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock)
        {
