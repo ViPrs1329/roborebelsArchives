@@ -416,12 +416,12 @@ public class RRShooter
             retExpAngle = tracker.accelAngle();
             if (retExpAngle < EXP_CONT_MAX_ANGLE) {
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Shooter is retracting! " + retExpAngle);
+                    System.out.println("Shooter: Shooter is retracting! " + tracker.round(retExpAngle));
                 tiltSpeed = -1 * TILT_SPEED * EXP_CONTR_TILT_MULT;
             }
             else if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Shooter stop retracting! " + retExpAngle);
+                    System.out.println("Shooter: Shooter stop retracting! " + tracker.round(retExpAngle));
                 tiltSpeed = 0;
                 isRetracting = false;
             }
@@ -430,13 +430,13 @@ public class RRShooter
             retExpAngle = tracker.accelAngle();
             if (retExpAngle >= EXP_CONT_MIN_ANGLE) {
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Shooter is expanding! " + retExpAngle);
+                    System.out.println("Shooter: Shooter is expanding! " + tracker.round(retExpAngle));
                 tiltSpeed = 1.0;    // TILT_SPEED * EXP_CONTR_TILT_MULT * 4.0;     //3.5; //   3.0 Try making this 1.25 Expand a bit faster to give more time during autonomous
             }
             else if (retExpAngle < (EXP_CONT_MIN_ANGLE + 5))          // Try adding a +10 to this to account for angle lag
             {
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Shooter stopping expanding! " + retExpAngle);
+                    System.out.println("Shooter: Shooter stopping expanding! " + tracker.round(retExpAngle));
 
                 tiltSpeed = 0;
                 isExpanding = false;
@@ -471,8 +471,8 @@ public class RRShooter
         }
         else
         {
-            if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Alt Button Not Pressed isShooting: " + RoboRebels.isShooting );
+//            if (RoboRebels.DEBUG_ON)
+//                    System.out.println("Shooter: Alt Button Not Pressed isShooting: " + RoboRebels.isShooting );
             
             shootingAltButtonPressed = false;
             
@@ -560,7 +560,7 @@ public class RRShooter
             {
                 // Waiting for motor to spinup
                 if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Waiting for shooting motor to spinup" + RoboRebels.time_started_shooting + " " + time_left);
+                    System.out.println("Shooter: Waiting for Shooting Motor to Spinup " + tracker.round(time_left -RoboRebels.time_started_shooting));
             }
             
             else if (((time_left - RoboRebels.time_started_shooting) >= RoboRebels.SHOOTER_SPINUP_TIME) 
@@ -569,8 +569,8 @@ public class RRShooter
                  // Motor is up to speed.  Sense ball and run gatherer.
                 boolean ball = sensor.getShootSensor(); 
 
-                if (RoboRebels.DEBUG_ON)
-                    System.out.println("Shooter: Ball Sensor: " + ball);  // True if ball is there, false if no ball
+//                if (RoboRebels.DEBUG_ON)
+//                    System.out.println("Shooter: Ball Sensor: " + ball);  // True if ball is there, false if no ball
 
                 if (ball)
                 {
@@ -632,7 +632,7 @@ public class RRShooter
             double time_left = RoboRebels.SHOOTER_SPINDOWN_TIME - (Timer.getFPGATimestamp() - RoboRebels.time_after_shooting);
             
             if (RoboRebels.DEBUG_ON)
-                System.out.println("Shooter: Waiting for shooting motor to spin down"+ RoboRebels.time_started_shooting + " " + time_left);
+                System.out.println("Shooter: Waiting for Shooting Motor to Spin Down "+ tracker.round(time_left));
        
             if (time_left <  0.0)
             {
@@ -655,8 +655,8 @@ public class RRShooter
     
     private void setShooterSpeeds()
     {
-         if (RoboRebels.DEBUG_ON)
-             System.out.println("Shooter: setShooterSpeeds()");
+//         if (RoboRebels.DEBUG_ON)
+//             System.out.println("Shooter: setShooterSpeeds()");
          
          shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.58);        // 0.58 is a speed to shoot lowest basket for indoors
          
@@ -683,8 +683,8 @@ public class RRShooter
     
     public void setTrackerSpeeds()
     {
-         if (RoboRebels.DEBUG_ON)
-             System.out.println("Shooter: setTrackerSpeeds()");
+//         if (RoboRebels.DEBUG_ON)
+//             System.out.println("Shooter: setTrackerSpeeds()");
         
          tiltVictor.set(tiltSpeed);     
          lsVictor.set(lazySusanSpeed);
@@ -821,8 +821,8 @@ public class RRShooter
             lock_value = RoboRebels.azimuth_lock && RoboRebels.elevation_lock && RoboRebels.muzzle_velocity_lock;
 //        else
 //            lock_value = true;      //      dipSwitch.getState(3);
-        if (RoboRebels.DEBUG_ON)
-            System.out.println("Shooter: locked() " + lock_value);
+//        if (RoboRebels.DEBUG_ON)
+//            System.out.println("Shooter: locked() " + lock_value);
             
         return lock_value;
     }

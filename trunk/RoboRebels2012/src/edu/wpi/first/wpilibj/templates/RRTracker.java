@@ -90,13 +90,13 @@ public class RRTracker
              RoboRebels.tilt_angle = accelAngle();
              RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
              
-             if (RoboRebels.DEBUG_ON)
-             {
-                 System.out.println("Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
-                 
-                 System.out.println("Tracking: tracker " + shooter.tracking + " complete " +
-                         shooter.tracking_complete + " timeout " + shooter.tracking_timeout);                
-             }
+//             if (RoboRebels.DEBUG_ON)
+//             {
+//                 System.out.println("Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
+//                 
+//                 System.out.println("Tracking: tracker " + shooter.tracking + " complete " +
+//                         shooter.tracking_complete + " timeout " + shooter.tracking_timeout);                
+//             }
                         
  //            System.out.println("Tracker: tracking:" + shooter.tracking);
              
@@ -362,7 +362,7 @@ public class RRTracker
               if (RoboRebels.DEBUG_ON)
               {
                System.out.println("Tracker: Target " + (selected_target_index + 1) + "/" + potential_targets + 
-                        " Center: (x,y)  (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
+                        " Center: (x,y) (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
                         ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth +  " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) +  " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle +
                         " Speed: " + RoboRebels.muzzle_velocity);
@@ -584,7 +584,7 @@ public class RRTracker
                     if (RoboRebels.target_azimuth == RoboRebels.LOCK)
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan Lock"); 
+                            System.out.println("Tracker: Auto Lazy Susan Lock"); 
                         shooter.lazySusanSpeed = 0.0;
                         
                         shooter.stopLazySusan();
@@ -594,7 +594,7 @@ public class RRTracker
                     else if (RoboRebels.target_azimuth == RoboRebels.LEFT)       // Left normal
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan left"); 
+                            System.out.println("Tracker: Auto Lazy Susan Left"); 
                         shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
@@ -608,7 +608,7 @@ public class RRTracker
                     else if (RoboRebels.target_azimuth == RoboRebels.RIGHT)     // Right normal
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan right"); 
+                            System.out.println("Tracker: Auto Lazy Susan Right"); 
                         shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
@@ -622,7 +622,7 @@ public class RRTracker
                     else              // Must be set to HOLD
                     {
                         if (RoboRebels.DEBUG_ON)
-                            System.out.println("Tracker: Auto Lazy susan Hold"); 
+                            System.out.println("Tracker: Auto Lazy Susan Hold"); 
                         shooter.lazySusanSpeed = 0.0;
                         RoboRebels.azimuth_lock = false;         // No azimuth target lock
                     }
@@ -753,8 +753,8 @@ public class RRTracker
              RoboRebels.target_elevation = RoboRebels.HOLD;
              RoboRebels.target_muzzle_velocity = RoboRebels.HOLD;
 
-             if (RoboRebels.DEBUG_ON)
-                 System.out.println("Tracker: Not tracking"); 
+//             if (RoboRebels.DEBUG_ON)
+//                 System.out.println("Tracker: Not tracking"); 
              
              //  startThreads();        // Don't need to do 
         }
@@ -775,7 +775,7 @@ public class RRTracker
                 System.out.println(" ");
                 
                 System.out.println("Locked Target " + (selected_target_index + 1) + "/" + potential_targets + 
-                        " Center: (x,y)  (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
+                        " Center: (x,y) (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y) + 
                         ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth +  " Height: " + r.boundingRectHeight + 
                         " Aspect: " + round2(aspect_ratio) +  " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle +
                         " Speed: " + RoboRebels.muzzle_velocity);

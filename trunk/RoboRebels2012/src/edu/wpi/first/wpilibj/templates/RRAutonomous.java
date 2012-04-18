@@ -101,8 +101,8 @@ public class RRAutonomous {
         
         tracker.trackTarget(target_selected);
         
-        if (RoboRebels.DEBUG_ON)
-            System.out.println("Autonomous: running " + Timer.getFPGATimestamp());
+  //      if (RoboRebels.DEBUG_ON)
+  //          System.out.println("Autonomous: auton_periodic running " + tracker.round2(Timer.getFPGATimestamp()));
         
         if (!shooter.tracking)
         {
@@ -116,7 +116,7 @@ public class RRAutonomous {
         if (delay_shooting)
         {
              if (RoboRebels.DEBUG_ON)
-                 System.out.println("Autonous: Delaying Delaying at Start");
+                 System.out.println("Autonomous: Delaying at Start");
              
              double time_current = Timer.getFPGATimestamp();
             
@@ -242,7 +242,8 @@ public class RRAutonomous {
        
         // drive towards bridge.
            
-  //          System.out.println("Auton Driving to bridge...");
+            if (RoboRebels.DEBUG_ON)
+                System.out.println("Autonomous: Could be Driving to bridge...");
             
             // Drive, drive!
            
@@ -260,6 +261,11 @@ public class RRAutonomous {
                     System.out.println("Autonomous: Now complete!");
                 RoboRebels.autonomous_complete = true;
              }     
+       }
+        else
+       {
+                if (RoboRebels.DEBUG_ON)
+                    System.out.println("Autonomous: Idle");
        }
         // drive backwards about 5-10 feet (to be closer than other robots to the balls on the bridge)
         
