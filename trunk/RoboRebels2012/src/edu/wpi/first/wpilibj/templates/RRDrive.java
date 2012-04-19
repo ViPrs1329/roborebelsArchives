@@ -20,8 +20,10 @@ public class RRDrive implements MotorSafety {
 
     private MotorSafetyHelper motorSafetyHelper;
     private boolean arcade;
+    private boolean slowDriveMode;
+    private double SLOW_DRIVE_CONSTANT = 0.5;
     private Jaguar leftMotor,
-            rightMotor;
+                   rightMotor;
     private boolean backbuttonpressed;
     public static final double kDefaultExpirationTime = 0.1;
 
@@ -32,8 +34,10 @@ public class RRDrive implements MotorSafety {
      * @param rightChannel 
      */
     public RRDrive(int leftChannel, int rightChannel) {
-        //RRLogger.logDebug(this.getClass(),"RRDrive()","" + leftChannel + " " + rightChannel);
+        RRLogger.logDebug(this.getClass(),"RRDrive()","" + leftChannel + " " + rightChannel);
 
+        slowDriveMode = false;
+        
         setupDrive(leftChannel, rightChannel);
 
         setupMotorSafety();
@@ -61,10 +65,19 @@ public class RRDrive implements MotorSafety {
 //        double r_yVal  = leftJoystick.getRawAxis(5);
 
         RRAction aoX = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_X),
-                aoY = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_Y);
+                aoY = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_Y),
+                aoSlowDrive = RRButtonMap.getActionObject(RRButtonMap.TOGGLE_SPEED);
 
         double l_xVal = aoX.getAxisState();
         double l_yVal = aoY.getAxisState();
+        boolean aoSDButtonState = aoSlowDrive.getButtonState();
+        
+        if ( aoSDButtonState )
+        {
+            //System.our.println("RRDrive::drive() switching drive state to " + )
+            slowDriveMode = !slowDriveMode;
+        }
+            
 
         //RRLogger.logDebug(this.getClass(),"drive()","");
 
@@ -176,20 +189,32 @@ public class RRDrive implements MotorSafety {
         if (leftMotor == null || rightMotor == null) {
             throw new NullPointerException("Null motor provided");
         }
-        RRAction me = RRButtonMap.getActionObject(RRButtonMap.TOGGLE_SPEED);
-        boolean toggledspeed = me.getButtonState();
-        if (toggledspeed) {
-            left = left * 0.5;
-            right = right * 0.5;
-            backbuttonpressed = true;
-        } else {
-            /*if (backbuttonpressed=false){
-            left = left*2;
-            right= right*2;
-            }*/
+        
+//        RRAction me = RRButtonMap.getActionObject(RRButtonMap.TOGGLE_SPEED);
+//        boolean toggledspeed = me.getButtonState();
+//        if (toggledspeed) {
+//            left = left * 0.5;
+//            right = right * 0.5;
+//            backbuttonpressed = true;
+//        } else {
+//            /*if (backbuttonpressed=false){
+//            left = left*2;
+//            right= right*2;
+//            }*/
+//        }
+        
+//        if ( !slowDriveMode )
+        {
+            System.out.println("RRDrive() Regular mode " + left + " | " + right);
+            leftMotor.set(left);
+            rightMotor.set(right);
         }
-        leftMotor.set(left);
-        rightMotor.set(right);
+//        else
+//        {
+//            System.out.println("RRDrive() Regular mode " + SLOW_DRIVE_CONSTANT * left + " | " + SLOW_DRIVE_CONSTANT * right);
+//            leftMotor.set(SLOW_DRIVE_CONSTANT * left);
+//            rightMotor.set(SLOW_DRIVE_CONSTANT * right);
+//        }
 
 
         motorSafetyHelper.feed();
