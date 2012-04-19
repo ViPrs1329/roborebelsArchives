@@ -388,6 +388,7 @@ public class RRShooter {
                     RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Shooter is retracting! " + tracker.round(retExpAngle));
                 }
                 tiltSpeed = -1 * TILT_SPEED * EXP_CONTR_TILT_MULT;
+                RoboRebels.elevation_lock = false;                  // No tilt lock
             } else if (retExpAngle >= EXP_CONT_MAX_ANGLE) {
                 if (RoboRebels.DEBUG_ON) {
                     RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Shooter stop retracting! " + tracker.round(retExpAngle));
@@ -403,6 +404,7 @@ public class RRShooter {
                     RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Shooter is expanding! " + tracker.round(retExpAngle));
                 }
                 tiltSpeed = 1.0;    // TILT_SPEED * EXP_CONTR_TILT_MULT * 4.0;     //3.5; //   3.0 Try making this 1.25 Expand a bit faster to give more time during autonomous
+                RoboRebels.elevation_lock = false;                  // No tilt lock
             } else if (retExpAngle < (EXP_CONT_MIN_ANGLE + 5)) // Try adding a +10 to this to account for angle lag
             {
                 if (RoboRebels.DEBUG_ON) {
