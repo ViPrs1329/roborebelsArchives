@@ -147,6 +147,7 @@ public class RoboRebels extends IterativeRobot {
     final static int OK = 0;
     static double angle_position = 0.0;     // Initial position of LS.
     static double calc_angle = 0.0;
+    static double old_c = 0.0;
     static double distance = 0.0;
     static double time_last_update = 0;     // Timestamp of last position update
     final static int PIXEL_ACCURACY = 12;    // 10; barely worked    // 16; worked   //20; worked     // Used by RRTRacker to determne when Locked.

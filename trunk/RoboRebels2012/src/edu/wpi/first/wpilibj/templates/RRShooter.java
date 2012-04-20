@@ -229,7 +229,7 @@ public class RRShooter {
                 shootingButtonPressed = true;
                 //               first_time = false
 
-                //RRLogger.logDebug(this.getClass(),"gatherInputStates()","Trigger Joystick Button Pressed");
+                RRLogger.logDebug(this.getClass(),"gatherInputStates()","Trigger Joystick Button Pressed, setting speed");
 
                 // Set shooter wheel to speed set by tracking calculations
 
@@ -424,13 +424,13 @@ public class RRShooter {
 //        }
 
         if (shooterAltButtonState) {
-            if (RoboRebels.DEBUG_ON) {
-                RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Alt button pressed");
-            }
+//            if (RoboRebels.DEBUG_ON) {
+//                RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Alt button pressed");
+//            }
 
             if (!shootingAltButtonPressed) {
                 if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Setting shooter speed");
+                    RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Alt button pressed, setting speed");
                 }
                 shootingAltButtonPressed = true;
 

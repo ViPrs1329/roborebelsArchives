@@ -79,7 +79,8 @@ public class RRTracker {
         try {
             RoboRebels.tilt_angle = accelAngle();
             RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + " Calc Tilt: " + round(RoboRebels.calc_angle) +
-                    " c: " + round(RoboRebels.calc_angle - RoboRebels.tilt_angle) + " d: " + round(RoboRebels.distance));
+                    " c: " + round(RoboRebels.calc_angle - RoboRebels.tilt_angle) + " d: " + round(RoboRebels.distance) +
+                    " old c: " + round(RoboRebels.old_c));
 
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking: tracker " + shooter.tracking + " complete " +
@@ -387,7 +388,8 @@ public class RRTracker {
 
 //               if (RoboRebels.autonomous_mode == true)
 //               {
-                        angle = RoboRebels.calc_angle + correction(RoboRebels.distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+                        RoboRebels.old_c = correction(RoboRebels.distance) - 10.0;  // Correction, i.e. fudge factor based on data.
+                        angle = RoboRebels.calc_angle + RoboRebels.old_c;      
 //               }
 //               else
 //               {
@@ -403,7 +405,9 @@ public class RRTracker {
                         RoboRebels.printLCD(5, "d: " + round(RoboRebels.distance) + " C: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle) + "              ");
 
                         if (RoboRebels.DEBUG_ON) {
-                            RRLogger.logDebug(this.getClass(),"trackTarget()","distance: " + round(RoboRebels.distance) + " Correction: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle));
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","distance: " + round(RoboRebels.distance) + 
+                                    " actual c: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle) + 
+                                    " old c: " + round(RoboRebels.old_c));
                         }
 
                         int x_accuracy;
