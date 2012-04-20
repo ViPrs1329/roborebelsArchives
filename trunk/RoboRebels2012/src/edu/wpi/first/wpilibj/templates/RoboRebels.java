@@ -118,9 +118,9 @@ public class RoboRebels extends IterativeRobot {
     final static int MIDDLE_BALL_SENSOR_CHANNEL = 2;
     final static int TOP_BALL_SENSOR_CHANNEL = 3;
     final static int TILT_LIMIT_SWITCH_CHANNEL = 4;
-    final static boolean DEBUG_ON = true;       // true;
+    final static boolean DEBUG_ON = true;  //true;       // true;
     final static boolean MIN_DEBUG_ON = false;       // true;
-    final static boolean TRACKER_DEBUG_ON = true;
+    final static boolean TRACKER_DEBUG_ON = false;      //true;
     static final int NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean disabledStateBroadcasted = false;
     static boolean teleopStateBroadcasted = false;
@@ -146,6 +146,8 @@ public class RoboRebels extends IterativeRobot {
     final static int AT_LEFT_LIMIT = -1;
     final static int OK = 0;
     static double angle_position = 0.0;     // Initial position of LS.
+    static double calc_angle = 0.0;
+    static double distance = 0.0;
     static double time_last_update = 0;     // Timestamp of last position update
     final static int PIXEL_ACCURACY = 12;    // 10; barely worked    // 16; worked   //20; worked     // Used by RRTRacker to determne when Locked.
     final static int ANGLE_ACCURACY = 2;     // 4; worked     //6;       // Used by RRTRacker to determne when Locked.
@@ -410,13 +412,13 @@ public class RoboRebels extends IterativeRobot {
 //        gatherer.stop();
 
         isFinishedShooting = false;
-        isShooting = false;
+//        isShooting = false;
 
         dont_track_azimuth = false;
 
         // ****************
 //        shooter.reset();
-        shooterTrackerThread.resetShooter();
+        shooterTrackerThread.resetShooterAfterAuton();
 
         // shooter_motor_running = false;
 

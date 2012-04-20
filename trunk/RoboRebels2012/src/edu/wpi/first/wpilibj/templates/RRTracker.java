@@ -71,14 +71,15 @@ public class RRTracker {
         boolean TTState;
         ParticleAnalysisReport r = null;
         double aspect_ratio = 1.0;
-        double distance = 12.0;
+//        double distance = 12.0;
         ParticleAnalysisReport[] reports;
         int selected_target_index = 0;
         int potential_targets = 0;
 
         try {
             RoboRebels.tilt_angle = accelAngle();
-            RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + "    ");
+            RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + " Calc Tilt: " + round(RoboRebels.calc_angle) +
+                    " c: " + round(RoboRebels.calc_angle - RoboRebels.tilt_angle) + " d: " + round(RoboRebels.distance));
 
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking: tracker " + shooter.tracking + " complete " +
@@ -331,13 +332,13 @@ public class RRTracker {
 
                     aspect_ratio = ((double) r.boundingRectWidth) / ((double) r.boundingRectHeight);
 
-                    distance = 801.4 / r.boundingRectWidth;  // Calculate distance to target based on rectangle width
+                    RoboRebels.distance = 801.4 / r.boundingRectWidth;  // Calculate distance to target based on rectangle width
 
                     if (RoboRebels.DEBUG_ON) {
                         RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Target " + (selected_target_index + 1) + "/" + potential_targets
                                 + " Center: (x,y) (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y)
                                 + ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth + " Height: " + r.boundingRectHeight
-                                + " Aspect: " + round2(aspect_ratio) + " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle
+                                + " Aspect: " + round2(aspect_ratio) + " Distance: " + round(RoboRebels.distance) + " Tilt: " + round(RoboRebels.tilt_angle)
                                 + " Speed: " + RoboRebels.muzzle_velocity);
                     }
                     if ((aspect_ratio < 1.5) && (aspect_ratio > 1.1)) // Check aspect ratio of target to make sure it is valid.
@@ -352,7 +353,7 @@ public class RRTracker {
 
                         //       double display_distance = ((int)(distance * 100))/100.0;
 
-                        double display_distance = round(distance);
+                        double display_distance = round(RoboRebels.distance);
 
 //                if (target_selected == RoboRebels.HIGHEST_TARGET)
 //                {
@@ -381,12 +382,12 @@ public class RRTracker {
 
                         // TODO:  Probably only need to do the rest of this if active tracking is happening.
 
-                        double calc_angle = RRShooter.determineAngle(distance, RoboRebels.muzzle_velocity, target_selected);
+                        RoboRebels.calc_angle = RRShooter.determineAngle(RoboRebels.distance, RoboRebels.muzzle_velocity, target_selected);
 
 
 //               if (RoboRebels.autonomous_mode == true)
 //               {
-                        angle = calc_angle + correction(distance) - 10.0;      // Correction, i.e. fudge factor based on data.
+                        angle = RoboRebels.calc_angle + correction(RoboRebels.distance) - 10.0;      // Correction, i.e. fudge factor based on data.
 //               }
 //               else
 //               {
@@ -399,10 +400,10 @@ public class RRTracker {
 //                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
 //                
 
-                        RoboRebels.printLCD(5, "d: " + round(distance) + " C: " + round2(calc_angle - RoboRebels.tilt_angle) + "              ");
+                        RoboRebels.printLCD(5, "d: " + round(RoboRebels.distance) + " C: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle) + "              ");
 
                         if (RoboRebels.DEBUG_ON) {
-                            RRLogger.logDebug(this.getClass(),"trackTarget()","distance: " + round(distance) + " Correction: " + round2(calc_angle - RoboRebels.tilt_angle));
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","distance: " + round(RoboRebels.distance) + " Correction: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle));
                         }
 
                         int x_accuracy;
@@ -674,18 +675,7 @@ public class RRTracker {
                 shooter.tracking_timeout = true;
 
                 // startThreads();              // Don't start threads when it locks or robot may move again suddenly
-
-                if (RoboRebels.TRACKER_DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","");
-
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Locked Target " + (selected_target_index + 1) + "/" + potential_targets
-                            + " Center: (x,y) (" + x(r.center_mass_x, r.boundingRectWidth) + "," + y(r.center_mass_y)
-                            + ") Raw x: " + (r.center_mass_x - 160) + " Width: " + r.boundingRectWidth + " Height: " + r.boundingRectHeight
-                            + " Aspect: " + round2(aspect_ratio) + " Distance: " + round(distance) + " Tilt: " + RoboRebels.tilt_angle
-                            + " Speed: " + RoboRebels.muzzle_velocity);
-
-                    RRLogger.logDebug(this.getClass(),""," ");
-                }
+                
             } else if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock) {
                 RoboRebels.printLCD(6, "LS & Speed Locked!          ");
                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: LS & Speed Locked!");
@@ -805,7 +795,7 @@ public class RRTracker {
         final double camera_offset = 9.0;      // 10.0 on practice bot;   // camera offset from center of robot in inches.  Positive is to the right side of robot
         final double target_width = 24.0;     // width of backboard target in inches   
         int correction = (int) (((camera_offset / target_width) * target_image_width) + 0.5);
-
+ 
         //    RRLogger.logDebug(this.getClass(),"","x: " + raw_x + "correction: " + correction);
 
         return (raw_x - 160 + correction);

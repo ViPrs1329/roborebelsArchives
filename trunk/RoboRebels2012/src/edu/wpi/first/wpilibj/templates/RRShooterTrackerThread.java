@@ -62,6 +62,12 @@ public class RRShooterTrackerThread extends Thread {
             shooter.reset();
         }
     }
+    
+    public void resetShooterAfterAuton() {
+        if (shooter != null) {
+            shooter.reset_after_auton();
+        }
+    }
 
     public RRShooter getShooter() {
         return shooter;

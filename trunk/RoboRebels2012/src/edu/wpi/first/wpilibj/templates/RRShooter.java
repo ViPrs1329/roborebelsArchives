@@ -554,7 +554,12 @@ public class RRShooter {
                     ball_present = false;
 
                     stopShootingBall();
-
+                    
+                    if (RoboRebels.DEBUG_ON) {
+                        RRLogger.logDebug(this.getClass(),"shoot()","Shot Ball Info: Tilt: " + tracker.round(RoboRebels.tilt_angle) + 
+                                " Calc Tilt: " + tracker.round(RoboRebels.calc_angle) +
+                                " c: " + tracker.round(RoboRebels.calc_angle - RoboRebels.tilt_angle) + " d: " + tracker.round(RoboRebels.distance));
+                    }
                 } else {
 
                     gatherer.descend();                          // Turn on gatherer motor
@@ -613,7 +618,7 @@ public class RRShooter {
 //         if (RoboRebels.DEBUG_ON)
 //             RRLogger.logDebug(this.getClass(),"setShooterSpeeds()","Shooter: setShooterSpeeds()");
 
-        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.58);        // 0.58 is a speed to shoot lowest basket for indoors
+        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.56);      //0.58);        // 0.58 is a speed to shoot lowest basket for indoors
 
         //        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
 
@@ -757,6 +762,23 @@ public class RRShooter {
 
         tracking_complete = false; // Indicates if robot has finished tracking
         tracking_timeout = false;
+
+    }
+    
+    public void reset_after_auton() {
+        
+        tracking = false;
+        isRetracting = false;
+        isExpanding = false;
+ //       ball_present = false;
+
+ //       shootingWheelSpeed = 0.0;
+ //       lazySusanSpeed = 0.0;
+ //       current_lazySusanSpeed = 0.0;
+ //       tiltSpeed = 0.0;
+
+ //       tracking_complete = false; // Indicates if robot has finished tracking
+ //       tracking_timeout = false;
 
     }
 

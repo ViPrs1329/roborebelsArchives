@@ -205,7 +205,7 @@ public class RRDrive implements MotorSafety {
         
 //        if ( !slowDriveMode )
         {
-            System.out.println("RRDrive() Regular mode " + left + " | " + right);
+ //           System.out.println("RRDrive() Regular mode " + left + " | " + right);
             leftMotor.set(left);
             rightMotor.set(right);
         }
