@@ -13,7 +13,7 @@ public class RRLogger {
 
     private RRLogger() {
         // Do not allow anyone to create an instance
-    }
+     }
 
     static void logInfo(Class c, String methodName, String msg) {
         logMsg("INFO",c,methodName,msg);
@@ -95,6 +95,8 @@ public class RRLogger {
         if (msg != null) {
             sb.append(msg);
         }
-        System.out.println(sb.toString());
+        synchronized(RRLogger.class) {
+            System.out.println(sb.toString());
+        }
     }
 }
