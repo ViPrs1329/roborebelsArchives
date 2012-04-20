@@ -314,8 +314,8 @@ public class RoboRebels extends IterativeRobot {
 
         RRLogger.logInfo(this.getClass(),"robotInit()","-- Configuration Data --");
         RRLogger.logInfo(this.getClass(),"robotInit()","DEBUG_ON: " + DEBUG_ON + " MIN_DEBUG_ON: " + MIN_DEBUG_ON);
-        RRLogger.logInfo(this.getClass(),"robotInit()"," Pixel Accuracy: +/- " + (PIXEL_ACCURACY / 2)
-                + "Angle Accuracy: +/- " + (ANGLE_ACCURACY / 2));
+        RRLogger.logInfo(this.getClass(),"robotInit()"," Pixel Accuracy: +/-" + (PIXEL_ACCURACY / 2)
+                + "pixels Angle Accuracy: +/-" + (ANGLE_ACCURACY / 2) + " degrees");
         RRLogger.logInfo(this.getClass(),"robotInit()"," Max Tracking Time: " + MAX_TRACKING_TIME + " Shooter Spinup Time: "
                 + SHOOTER_SPINUP_TIME + " Shooter Spindown Time: " + SHOOTER_SPINDOWN_TIME
                 + "Max Shooting Time: " + MAX_SHOOTING_TIME);
@@ -395,7 +395,6 @@ public class RoboRebels extends IterativeRobot {
     }
 
     public void teleopInit() {
-        RRLogger.logDebug(this.getClass(),"teleopInit()","");
 
         disabledStateBroadcasted = false;
         autonomousStateBroadcasted = false;
@@ -427,6 +426,8 @@ public class RoboRebels extends IterativeRobot {
         /* Drive station code */
         //m_ds = DriverStation.getInstance();
         //m_dsLCD = DriverStationLCD.getInstance();
+        RRLogger.logDebug(this.getClass(),"teleopInit()","Initialization Complete!");
+
 
     }
 

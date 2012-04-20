@@ -681,7 +681,7 @@ public class RRTracker {
             if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock) {
                 RoboRebels.printLCD(6, "All Locked!                ");
                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: All Locked!");
-                shooter.tracking = false;
+//                shooter.tracking = false;
                 shooter.tracking_complete = true;
                 shooter.tracking_timeout = true;
 
