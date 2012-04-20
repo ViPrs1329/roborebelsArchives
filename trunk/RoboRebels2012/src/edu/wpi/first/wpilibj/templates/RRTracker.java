@@ -101,18 +101,25 @@ public class RRTracker {
                 if (RoboRebels.save_camera_image_file) // Only do this durng initial competition setup to adjust levels
                 //               if (i < 10)
                 {
-                    try {
+                    if (RoboRebels.save_pic_next_time)  {
+                        try {
                         if (image != null) {
-                            image.write("/raw" + i + ".jpg");
+                            image.write("/raw.jpg");
                         } else {
                             RRLogger.logDebug(this.getClass(),"trackTarget()","Image is null!!!");
                         }
-                    } catch (Exception e) {
-                        RRLogger.logDebug(this.getClass(),"trackTarget()","error saving image 1");
-                    }
-                    RRLogger.logDebug(this.getClass(),"trackTarget()","Saved raw camera image to cRIO");
+                        } catch (Exception e) {
+                            RRLogger.logDebug(this.getClass(),"trackTarget()","error saving image 1");
+                        }
+                        RRLogger.logDebug(this.getClass(),"trackTarget()","Saved raw camera image to cRIO");
 
-                    RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+                        RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
+                        RoboRebels.save_pic_next_time = false;
+                    }
+                    else
+                    {
+                        RoboRebels.save_pic_next_time = true;
+                    }
                 }
 
                 //              RoboRebels.save_camera_image_file = false;      // Only save one image at start of match.
