@@ -314,14 +314,14 @@ public class RoboRebels extends IterativeRobot {
 
         RRLogger.logInfo(this.getClass(),"robotInit()","-- Configuration Data --");
         RRLogger.logInfo(this.getClass(),"robotInit()","DEBUG_ON: " + DEBUG_ON + " MIN_DEBUG_ON: " + MIN_DEBUG_ON);
-        RRLogger.logDebug(this.getClass(),"robotInit()"," Pixel Accuracy: +/- " + tracker.round(PIXEL_ACCURACY / 2)
-                + "Angle Accuracy: +/- " + tracker.round(ANGLE_ACCURACY / 2));
-        RRLogger.logDebug(this.getClass(),"robotInit()"," Max Tracking Time: " + MAX_TRACKING_TIME + " Shooter Spinup Time: "
+        RRLogger.logInfo(this.getClass(),"robotInit()"," Pixel Accuracy: +/- " + (PIXEL_ACCURACY / 2)
+                + "Angle Accuracy: +/- " + (ANGLE_ACCURACY / 2));
+        RRLogger.logInfo(this.getClass(),"robotInit()"," Max Tracking Time: " + MAX_TRACKING_TIME + " Shooter Spinup Time: "
                 + SHOOTER_SPINUP_TIME + " Shooter Spindown Time: " + SHOOTER_SPINDOWN_TIME
                 + "Max Shooting Time: " + MAX_SHOOTING_TIME);
-        RRLogger.logDebug(this.getClass(),"robotInit()","Autonomous Config.  Expand Time: " + EXPAND_TIME + " Delay at Start: " + DELAY_AT_START_OF_AUTON
+        RRLogger.logInfo(this.getClass(),"robotInit()","Autonomous Config.  Expand Time: " + EXPAND_TIME + " Delay at Start: " + DELAY_AT_START_OF_AUTON
                 + " Delay Between Shots: " + DELAY_BETWEEN_SHOTS + " Drive Time to Bridge: " + DRIVE_TIME_TO_BRIDGE);
-        RRLogger.logDebug(this.getClass(),"robotInit()"," ");
+        RRLogger.logInfo(this.getClass(),"robotInit()"," ");
 
         RRLogger.logInfo(this.getClass(),"robotInit()","Robot Ready");
     }
