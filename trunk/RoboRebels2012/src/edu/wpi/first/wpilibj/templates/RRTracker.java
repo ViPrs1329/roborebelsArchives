@@ -398,7 +398,7 @@ public class RRTracker {
 
 //               if (RoboRebels.autonomous_mode == true)
 //               {
-                        RoboRebels.old_c = 0.0;             // correction(RoboRebels.distance) - 10.0;  // Correction, i.e. fudge factor based on data.
+                        RoboRebels.old_c = correction(RoboRebels.distance) - 10.0;  // Correction, i.e. fudge factor based on data.
                         angle = RoboRebels.calc_angle + RoboRebels.old_c;      
 //               }
 //               else
@@ -596,6 +596,7 @@ public class RRTracker {
 
                         if (RoboRebels.target_elevation == RoboRebels.LOCK) {
                             shooter.tiltSpeed = 0.0;                      // Stop Tilting
+                            shooter.setTrackerSpeeds();
                             RoboRebels.elevation_lock = true;     // Indicate elevation target lock
                             RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Tilt Lock");
                         } else if (RoboRebels.target_elevation == RoboRebels.UP) { // Track target elevation (up/down)

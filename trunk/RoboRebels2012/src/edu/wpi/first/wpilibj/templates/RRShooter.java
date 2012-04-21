@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.*;
 public class RRShooter {
 
     private final double MAX_SHOOTING_SPEED = 1.0;
-    private final double STARTING_SHOOTING_SPEED = 0.85;
+    private final double STARTING_SHOOTING_SPEED = 0.60;
     private final double LS_SPEED = 0.20;
     private final double TILT_SPEED = 0.4;
     private final double EXP_CONTR_TILT_MULT = 0.75;
