@@ -78,10 +78,11 @@ public class RRTracker {
 
         try {
             RoboRebels.tilt_angle = accelAngle();
-            RoboRebels.printLCD(4, "Tilt: " + round(RoboRebels.tilt_angle) + " Calc Tilt: " + round(RoboRebels.calc_angle) +
-                    " c: " + round(RoboRebels.calc_angle - RoboRebels.tilt_angle) + " d: " + round(RoboRebels.distance) +
-                    " old c: " + round(RoboRebels.old_c));
+            RoboRebels.printLCD(4, "t: " + round(RoboRebels.tilt_angle) + 
+                    " e: " + round(RoboRebels.tilt_angle - RoboRebels.calc_angle - RoboRebels.old_c));
 
+            // 
+            
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tilt Angle "+ round(RoboRebels.tilt_angle));
 //                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracking: tracker " + shooter.tracking + " complete " +
 //                         shooter.tracking_complete + " timeout " + shooter.tracking_timeout);                
@@ -89,6 +90,8 @@ public class RRTracker {
             //RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: tracking:" + shooter.tracking);
 
             if (shooter.tracking) {
+                RoboRebels.printLCD(4, "t: " + round(RoboRebels.tilt_angle) + 
+                    " e: " + round(RoboRebels.tilt_angle - RoboRebels.calc_angle - RoboRebels.old_c));
 
 //                    RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking target...");
 
@@ -409,7 +412,7 @@ public class RRTracker {
 //                        " Theta: " + round(angle) + " Tilt_angle: " + round(RoboRebels.tilt_angle));
 //                
 
-                        RoboRebels.printLCD(5, "d: " + round(RoboRebels.distance) + " C: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle) + "              ");
+                        RoboRebels.printLCD(5, "d: " + round(RoboRebels.distance) + " c: " + round2(RoboRebels.calc_angle - RoboRebels.tilt_angle) + "              ");
 
                         if (RoboRebels.DEBUG_ON) {
                             RRLogger.logDebug(this.getClass(),"trackTarget()","distance: " + round(RoboRebels.distance) + 
@@ -519,6 +522,10 @@ public class RRTracker {
                 image.free();
 
                 // Moved from RRShooter
+            } else
+            {
+                   RoboRebels.printLCD(4, "t: " + round(RoboRebels.tilt_angle) + "                    ");
+
             }
             TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
 
@@ -675,13 +682,14 @@ public class RRTracker {
 
 //                 RRLogger.logDebug(this.getClass(),"","Tracker: Not tracking");
 
-                //  startThreads();        // Don't need to do
+                if (!((shooter.tracking_complete == false) && (shooter.tracking_timeout == true)))   
+                    startThreads();        // Start threads if not timeout
             }
 
             if (RoboRebels.azimuth_lock && RoboRebels.muzzle_velocity_lock && RoboRebels.elevation_lock) {
                 RoboRebels.printLCD(6, "All Locked!                ");
                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: All Locked!");
-//                shooter.tracking = false;
+                shooter.tracking = false;
                 shooter.tracking_complete = true;
                 shooter.tracking_timeout = true;
 
@@ -708,9 +716,10 @@ public class RRTracker {
             } else if (shooter.tracking) {
                 RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Tracking");
                 RoboRebels.printLCD(6, "Tracking Target...          ");
-            } else {
-                RoboRebels.printLCD(6, "                            ");   // Clear the display
-            }
+            } else if (shooter.tracking_timeout){
+                RoboRebels.printLCD(6, "Tracking Timeout!            ");  
+            } else
+                RoboRebels.printLCD(6, "                            ");  // Clear the display 
             //       }   // Old if (shooting)
 
             shooter.setTrackerSpeeds();

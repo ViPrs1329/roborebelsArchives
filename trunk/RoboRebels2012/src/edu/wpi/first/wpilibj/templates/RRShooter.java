@@ -618,9 +618,9 @@ public class RRShooter {
 //         if (RoboRebels.DEBUG_ON)
 //             RRLogger.logDebug(this.getClass(),"setShooterSpeeds()","Shooter: setShooterSpeeds()");
 
-        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.56);      //0.58);        // 0.58 is a speed to shoot lowest basket for indoors
+//        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.56);      //0.58);        // 0.58 is a speed to shoot lowest basket for indoors
 
-        //        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
+        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
 
         //   RRLogger.logDebug(this.getClass(),"setShooterSpeeds()","s: " + RRTracker.round2(tiltSpeed));
         tiltVictor.set(tiltSpeed);

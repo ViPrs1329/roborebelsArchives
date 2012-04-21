@@ -118,7 +118,7 @@ public class RoboRebels extends IterativeRobot {
     final static int MIDDLE_BALL_SENSOR_CHANNEL = 2;
     final static int TOP_BALL_SENSOR_CHANNEL = 3;
     final static int TILT_LIMIT_SWITCH_CHANNEL = 4;
-    final static boolean DEBUG_ON = true;  //true;       // true;
+    final static boolean DEBUG_ON = false;  //true;       // true;
     final static boolean MIN_DEBUG_ON = false;       // true;
     final static boolean TRACKER_DEBUG_ON = false;      //true;
     static final int NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
