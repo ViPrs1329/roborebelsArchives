@@ -70,7 +70,20 @@ public class RRShooter {
     private boolean isRetracting = false;
     private boolean isExpanding = false;
     private boolean ball_present = false;
-
+    
+    // Shooter calibration data
+    final static double d0 = 11.0;
+    final static double a0 = 58.0;  
+    
+    final static double d1 = 12.0;
+    final static double a1 = 56.0; 
+    
+    final static double d2 = 13.0;
+    final static double a2 = 54.0; 
+    
+    final static double s2 = (a2 - a1)/(d2 - d1);
+    final static double s1 = (a1 - a0)/(d1 - d0);
+    
     //int target_direction = 1;
     /**
      * Sets up the speed controllers for the shooter
@@ -108,6 +121,18 @@ public class RRShooter {
         tiltVictor = new Victor(tltv_channel);
         lsVictor = new Victor(lsv_channel);
         //tiltLimitSwitch = new DigitalInput(tltls_channel);
+        
+        if (RoboRebels.DEBUG_ON) 
+        {            
+                double dtest1 = (d0 + d1)/2.0;
+                double dtest2 = (d2 + d1)/2.0;
+                 
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Test Angle: " + tracker.round(determineAngle2(d0)) + " Distance: " + tracker.round(d0));
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Test Angle: " + tracker.round(determineAngle2(dtest1)) + " Distance: " + tracker.round(dtest1));
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Test Angle: " + tracker.round(determineAngle2(d1)) + " Distance: " + tracker.round(d1));
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Test Angle: " + tracker.round(determineAngle2(dtest2)) + " Distance: " + tracker.round(dtest2));
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Test Angle: " + tracker.round(determineAngle2(d2)) + " Distance: " + tracker.round(d2));   
+        }
     }
 
     /**
@@ -820,4 +845,24 @@ public class RRShooter {
             shootingWheelSpeed = 0.85;
         }
     }
+    
+   public double determineAngle2(double d) {
+        
+            double angle = 0.0;
+            
+            if (d <= d1) {
+                
+                angle = a1 + s1 * (d - d1);     // Use slope#1
+                
+            } else  {
+                
+                angle = a1 + s2 * (d - d1);     // use slope#2
+                
+            }
+            
+            if (RoboRebels.DEBUG_ON) 
+                RRLogger.logDebug(this.getClass(),"determineAngle2()","Angle: " + tracker.round(angle) + " Distance: " + tracker.round(d));
+                          
+            return angle;
+        }
 }
