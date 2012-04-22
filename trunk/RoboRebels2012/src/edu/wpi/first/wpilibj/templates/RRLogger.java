@@ -95,8 +95,8 @@ public class RRLogger {
         if (msg != null) {
             sb.append(msg);
         }
-        synchronized(RRLogger.class) {
+//        synchronized(RRLogger.class) {
             System.out.println(sb.toString());
-        }
+//        }
     }
 }
