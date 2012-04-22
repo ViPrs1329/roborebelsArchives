@@ -229,8 +229,6 @@ public class RRShooter {
                 shootingButtonPressed = true;
                 //               first_time = false
 
-                RRLogger.logDebug(this.getClass(),"gatherInputStates()","Trigger Joystick Button Pressed, setting speed");
-
                 // Set shooter wheel to speed set by tracking calculations
 
                 if (RoboRebels.muzzle_velocity == 7.5) {
@@ -240,6 +238,12 @@ public class RRShooter {
                 } else {
                     shootingWheelSpeed = 0.85;
                 }
+                
+                shootingWheelSpeed = this.getTransformedZValue();       // Set shooter wheel to speed set by joystick Z control
+                
+                if (RoboRebels.DEBUG_ON) {
+                    RRLogger.logDebug(this.getClass(),"gatherInputStates()","Trigger joystick button pressed, setting speed to "
+                            + tracker.round2(shootingWheelSpeed));
 
                 shootBall();
             }
@@ -429,9 +433,7 @@ public class RRShooter {
 //            }
 
             if (!shootingAltButtonPressed) {
-                if (RoboRebels.DEBUG_ON) {
-                    RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Alt button pressed, setting speed");
-                }
+
                 shootingAltButtonPressed = true;
 
                 if (RoboRebels.muzzle_velocity == 7.5) {
@@ -441,6 +443,14 @@ public class RRShooter {
                 } else {
                     shootingWheelSpeed = 0.85;
                 }
+                
+                shootingWheelSpeed = this.getTransformedZValue();       // Set shooter wheel to speed set by joystick Z control
+                
+                if (RoboRebels.DEBUG_ON) {
+                    RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooter: Alt button pressed, setting speed to "
+                            + tracker.round2(shootingWheelSpeed));
+                }
+                
             }
         } else {
 //            if (RoboRebels.DEBUG_ON)
@@ -797,7 +807,7 @@ public class RRShooter {
 
     public void auton_shoot() {
         if (RoboRebels.DEBUG_ON) {
-            RRLogger.logDebug(this.getClass(),"auton_shoot()","Shooter: auton_shoot()");
+            RRLogger.logDebug(this.getClass(),"auton_shoot()","Shooter: auton_shoot() speed: " + RoboRebels.muzzle_velocity);
         }
 
         if (RoboRebels.muzzle_velocity == 7.5) {
