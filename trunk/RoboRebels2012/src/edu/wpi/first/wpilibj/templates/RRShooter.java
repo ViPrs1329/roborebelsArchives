@@ -244,6 +244,7 @@ public class RRShooter {
                 if (RoboRebels.DEBUG_ON) {
                     RRLogger.logDebug(this.getClass(),"gatherInputStates()","Trigger joystick button pressed, setting speed to "
                             + tracker.round2(shootingWheelSpeed));
+                }
 
                 shootBall();
             }
@@ -507,6 +508,7 @@ public class RRShooter {
         } else {
             RoboRebels.printLCD(6, "                            ");   // Clear the display
         }
+      
     }
 
     /**
