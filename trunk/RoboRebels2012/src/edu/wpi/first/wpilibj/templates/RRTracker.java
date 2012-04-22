@@ -524,7 +524,8 @@ public class RRTracker {
                 // Moved from RRShooter
             } else
             {
-                   RoboRebels.printLCD(4, "t: " + round(RoboRebels.tilt_angle) + "                    ");
+                   RoboRebels.printLCD(4, "t: " + round(RoboRebels.tilt_angle)  + 
+                    " e: " + round(RoboRebels.tilt_angle - RoboRebels.calc_angle - RoboRebels.old_c));
 
             }
             TTState = RRButtonMap.getActionObject(RRButtonMap.TRACK_TARGET).getButtonState();
