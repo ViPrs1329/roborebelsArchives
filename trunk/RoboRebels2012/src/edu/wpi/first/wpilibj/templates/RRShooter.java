@@ -30,12 +30,12 @@ import edu.wpi.first.wpilibj.*;
 public class RRShooter {
 
     private final double MAX_SHOOTING_SPEED = 1.0;
-    private final double STARTING_SHOOTING_SPEED = 0.60;
+    private final double STARTING_SHOOTING_SPEED = 0.80;
     private final double LS_SPEED = 0.20;
     private final double TILT_SPEED = 0.4;
     private final double EXP_CONTR_TILT_MULT = 0.75;
-    private final double EXP_CONT_MAX_ANGLE = 85,
-            EXP_CONT_MIN_ANGLE = 60;        // 55 got in the way of tracking
+    private final double EXP_CONT_MAX_ANGLE = 85;
+    private final double EXP_CONT_MIN_ANGLE = 50;        // 55 got in the way of tracking
     private int swj_channel;        // Shooter Wheel Jaguar channel
     private int lsv_channel;        // Lazy Susan Victor channel
     private int tltv_channel;       // Tilter Victor channel
@@ -142,8 +142,6 @@ public class RRShooter {
      * @return Returns the angle for which to move the shooter at
      */
     static double determineAngle(double distance, double muzzleVelocity, int targetID) {
-//      double muzzleVelocity = 8.1; //meters per second
-//      double muzzleVelocity = 7.1; //meters per second
 
         double gravity = 9.81;  //meters per (second)^2
         double yLower = 0.7112;         // .466953;
@@ -154,40 +152,40 @@ public class RRShooter {
         double y = yHigher; // determined by targetID (see below)
         double theta = 0;
 
-        xDistance = distance / 3.28; // converts feet into meters
-
-        if (targetID == RoboRebels.LOWEST_TARGET) {
-            y = yLower;
-        } else if ((targetID == RoboRebels.LEFT_TARGET) && (targetID == RoboRebels.RIGHT_TARGET)) {
-            y = yMiddle;
-        } else if (targetID == RoboRebels.HIGHEST_TARGET) {
-            y = yHigher;
-        } else if (targetID == RoboRebels.AUTO_TARGET) {
-            if (RoboRebels.going_for_highest) {
-                y = yHigher;
-            } else {
-                y = yLower;
-            }
-        }
-
-        y -= Math.max(shooterHeight, 0);
-
-        //     RRLogger.logDebug(this.getClass(),"determineAngle()","d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
-        //            "y: " + y + "x: " + xDistance);
-
-        double tempSqrtEquation = (muzzleVelocity * muzzleVelocity * muzzleVelocity * muzzleVelocity)
-                - (2 * gravity * muzzleVelocity * muzzleVelocity * y) - (gravity * gravity * xDistance * xDistance);
-
-        if (tempSqrtEquation > 0) {
-            //     RRLogger.logDebug(this.getClass(),"determineAngle()","tempSqrtEq: " + RRTracker.round2(tempSqrtEquation));
-            theta = MathUtils.atan(((muzzleVelocity * muzzleVelocity) + (Math.sqrt(tempSqrtEquation))) / (gravity * xDistance));
-        } else {
-            theta = 0;    // There is no angle for this muzzle velocity
-        }
-        theta = theta * (180.0 / 3.14159265); // converts radians to degreese
-
-        //theta -= 10;    // Fudge factor to make theta correct.
-
+//        xDistance = distance / 3.28; // converts feet into meters
+//
+//        if (targetID == RoboRebels.LOWEST_TARGET) {
+//            y = yLower;
+//        } else if ((targetID == RoboRebels.LEFT_TARGET) && (targetID == RoboRebels.RIGHT_TARGET)) {
+//            y = yMiddle;
+//        } else if (targetID == RoboRebels.HIGHEST_TARGET) {
+//            y = yHigher;
+//        } else if (targetID == RoboRebels.AUTO_TARGET) {
+//            if (RoboRebels.going_for_highest) {
+//                y = yHigher;
+//            } else {
+//                y = yLower;
+//            }
+//        }
+//
+//        y -= Math.max(shooterHeight, 0);
+//
+//        //     RRLogger.logDebug(this.getClass(),"determineAngle()","d: " + RRTracker.round(distance) + "v: " + RRTracker.round(muzzleVelocity) +
+//        //            "y: " + y + "x: " + xDistance);
+//
+//        double tempSqrtEquation = (muzzleVelocity * muzzleVelocity * muzzleVelocity * muzzleVelocity)
+//                - (2 * gravity * muzzleVelocity * muzzleVelocity * y) - (gravity * gravity * xDistance * xDistance);
+//
+//        if (tempSqrtEquation > 0) {
+//            //     RRLogger.logDebug(this.getClass(),"determineAngle()","tempSqrtEq: " + RRTracker.round2(tempSqrtEquation));
+//            theta = MathUtils.atan(((muzzleVelocity * muzzleVelocity) + (Math.sqrt(tempSqrtEquation))) / (gravity * xDistance));
+//        } else {
+//            theta = 0;    // There is no angle for this muzzle velocity
+//        }
+//        theta = theta * (180.0 / 3.14159265); // converts radians to degreese
+        
+        theta = 45.2;
+        
         return theta;
     }
 
@@ -204,7 +202,7 @@ public class RRShooter {
         boolean shooterAltButtonState = RRButtonMap.getActionObject(RRButtonMap.SHOOTER_ALT_ENABLED).getButtonState();
 
 
-        RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()));
+        RoboRebels.printLCD(3, "SS: " + RRTracker.round2(shootingWheelJaguar.get()) + " Z: " + RRTracker.round2(this.getTransformedZValue()) + "    ");
         //RoboRebels.printLCD(4, "Z:" + RRTracker.round2(this.getTransformedZValue()));
         //RRLogger.logDebug(this.getClass(),"gatherInputStates()","Shooting Speed: " + RRTracker.round2(shootingWheelJaguar.get()));
         //RRLogger.logDebug(this.getClass(),"gatherInputStates()","Z: " + RRTracker.round2(this.getTransformedZValue()));
@@ -654,8 +652,9 @@ public class RRShooter {
     private void setShooterSpeeds() {
 //         if (RoboRebels.DEBUG_ON)
 //             RRLogger.logDebug(this.getClass(),"setShooterSpeeds()","Shooter: setShooterSpeeds()");
+        
 
-//        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed * 0.56);      //0.58);        // 0.58 is a speed to shoot lowest basket for indoors
+//        shootingWheelJaguar.set(-1.0 * shootingWheelSpeed); // * 0.56);      //0.58);        // 0.58 is a speed to shoot lowest basket for indoors
 
         shootingWheelJaguar.set(-1.0 * shootingWheelSpeed);
 
@@ -837,13 +836,15 @@ public class RRShooter {
             RRLogger.logDebug(this.getClass(),"auton_shoot()","Shooter: auton_shoot() speed: " + RoboRebels.muzzle_velocity);
         }
 
-        if (RoboRebels.muzzle_velocity == 7.5) {
-            shootingWheelSpeed = 0.85;
-        } else if (RoboRebels.muzzle_velocity == 8.0) {
-            shootingWheelSpeed = 1.0;
-        } else {
-            shootingWheelSpeed = 0.85;
-        }
+//        if (RoboRebels.muzzle_velocity == 7.5) {
+//            shootingWheelSpeed = 0.85;
+//        } else if (RoboRebels.muzzle_velocity == 8.0) {
+//            shootingWheelSpeed = 1.0;
+//        } else {
+//            shootingWheelSpeed = 0.85;
+//        }
+        
+        shootingWheelSpeed = 0.75;
     }
     
    public double determineAngle2(double d) {

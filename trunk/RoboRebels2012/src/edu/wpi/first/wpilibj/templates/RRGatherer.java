@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.Victor;
 public class RRGatherer {
 
     private final double SPINNER_MAX_SPEED = 0.5;
-    private final double CONVEYER_MAX_SPEED = 0.5;
+    private final double CONVEYER_MAX_SPEED = 0.4;  // 0.5;
     private int spinner_channel;
     private int ball_conveyer_channel;
     private int bottom_ball_sensor_channel,

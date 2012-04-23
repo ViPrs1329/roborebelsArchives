@@ -138,7 +138,8 @@ public class RRTracker {
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 175, 255);   // keep only White objects
 //            BinaryImage thresholdImage = image.thresholdRGB(225, 255, 225, 255, 205, 255);   // keep only White objects when there is sunlight
 //             BinaryImage thresholdImage = image.thresholdRGB(235, 255, 235, 255, 235, 255);   // Adjusted for Chaivitz Arena lighting
-                BinaryImage thresholdImage = image.thresholdRGB(0, 10, 65, 255, 0, 10);        // Green LED mask test
+//               BinaryImage thresholdImage = image.thresholdRGB(0, 10, 65, 255, 0, 10);        // Green LED mask test
+               BinaryImage thresholdImage = image.thresholdRGB(0, 60, 65, 255, 0, 60);        // Green LED mask test
 
                 // blue value was adjusted (above) because of ambient sunlight
 
@@ -398,8 +399,8 @@ public class RRTracker {
 
 //               if (RoboRebels.autonomous_mode == true)
 //               {
-                        RoboRebels.old_c = correction(RoboRebels.distance) - 10.0;  // Correction, i.e. fudge factor based on data.
-                        angle = RoboRebels.calc_angle + RoboRebels.old_c;      
+//                        RoboRebels.old_c = correction(RoboRebels.distance) - 10.0;  // Correction, i.e. fudge factor based on data.
+                        angle = RoboRebels.calc_angle;  //  + RoboRebels.old_c;      
 //               }
 //               else
 //               {
@@ -466,14 +467,14 @@ public class RRTracker {
                             shooter.stopLazySusan();                        // Immediately stop LazySusan to prevent overshoot
                         }
 
-                        if (angle <= 45.0) // Check to see if there is a valid angle
-                        {
-                            RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
-                            RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
-                        } else if (angle > 80.0) {
-                            RoboRebels.target_muzzle_velocity = RoboRebels.SLOWER; // Muzzel velocity needs to be slower
-                            RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
-                        } else // The angle is valid, so adjust tilt angle
+//                        if (angle <= 45.0) // Check to see if there is a valid angle
+//                        {
+//                            RoboRebels.target_muzzle_velocity = RoboRebels.FASTER; // Muzzle velocity needs to be faster
+//                            RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
+//                        } else if (angle > 80.0) {
+//                            RoboRebels.target_muzzle_velocity = RoboRebels.SLOWER; // Muzzel velocity needs to be slower
+//                            RoboRebels.target_elevation = RoboRebels.HOLD;         // Wait for correct muzzle velocity before tilting
+//                        } else // The angle is valid, so adjust tilt angle
                         {
                             RoboRebels.target_muzzle_velocity = RoboRebels.LOCK; // Muzzle velocity is fine.
 

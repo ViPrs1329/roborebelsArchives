@@ -136,12 +136,13 @@ public class RoboRebels extends IterativeRobot {
     final static int FAR_LEFT = -3;
     final static int FAR_RIGHT = 3;
     final static int LOCK = 0;
+    
     final static int UP = 1;
     final static int DOWN = -1;
     final static int FASTER = 1;
     final static int SLOWER = -1;
     final static int HOLD = -4;
-    final static int MIN_TILT_ANGLE = 46;
+    final static int MIN_TILT_ANGLE = 40;
     final static int AT_RIGHT_LIMIT = 1;
     final static int AT_LEFT_LIMIT = -1;
     final static int OK = 0;
@@ -201,7 +202,7 @@ public class RoboRebels extends IterativeRobot {
     final static double MAX_SHOOTING_TIME = 9.0;  // Total time for shooter to give ball to basket
     final static double DELAY_BETWEEN_SHOTS = 2.0;  // Used for delay between shots in autonomous
     final static double DRIVE_TIME_TO_BRIDGE = 2.0; // Drive to bridge for 2 seconds
-    final static double EXPAND_TIME = 2.0;
+    final static double EXPAND_TIME = 3.0;
     final static double SHOOTER_SPINUP_TIME = 1.0;  // Time taken for shooter to get up to speed before we send ball
     final static double SHOOTER_SPINDOWN_TIME = 2.0;  // Time to wait for motor to spin down
     static boolean autonomous_mode = true;
@@ -369,7 +370,7 @@ public class RoboRebels extends IterativeRobot {
         autonomous_mode = true;
         autonomous_complete = false;
 
-        dont_track_azimuth = false;                 // true;        // Only make this true if robot fails to lock during autonomous.
+        dont_track_azimuth = true;                 // true;        // Only make this true if robot fails to lock during autonomous.
 
         autonomous_tracking_failed = false;
         no_balls_shot = true;
