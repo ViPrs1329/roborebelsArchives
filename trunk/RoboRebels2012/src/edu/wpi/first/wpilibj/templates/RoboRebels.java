@@ -187,7 +187,7 @@ public class RoboRebels extends IterativeRobot {
     static boolean autonomous_mode_tracking = false;
     static boolean autonomous_tracking_failed = false;
     static boolean shooter_motor_running = false;
-    static boolean save_camera_image_file = true;
+    static boolean save_camera_image_file = false;  // true;
     static double time_started_waiting;           // Time variables
     static double time_started_shooting;
     static double time_started_shooter_motor;
