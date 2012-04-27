@@ -35,7 +35,7 @@ public class RRShooter {
     private final double TILT_SPEED = 0.4;
     private final double EXP_CONTR_TILT_MULT = 0.75;
     private final double EXP_CONT_MAX_ANGLE = 85;
-    private final double EXP_CONT_MIN_ANGLE = 50;        // 55 got in the way of tracking
+    private final double EXP_CONT_MIN_ANGLE = 65;   // 50; was        // 55 got in the way of tracking
     private int swj_channel;        // Shooter Wheel Jaguar channel
     private int lsv_channel;        // Lazy Susan Victor channel
     private int tltv_channel;       // Tilter Victor channel
@@ -184,7 +184,7 @@ public class RRShooter {
 //        }
 //        theta = theta * (180.0 / 3.14159265); // converts radians to degreese
         
-        theta = 45.2;
+        theta = 60.0; // 45.2;
         
         return theta;
     }
@@ -844,7 +844,7 @@ public class RRShooter {
 //            shootingWheelSpeed = 0.85;
 //        }
         
-        shootingWheelSpeed = 0.75;
+        shootingWheelSpeed = 1.0;  // 0.75;
     }
     
    public double determineAngle2(double d) {

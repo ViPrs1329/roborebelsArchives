@@ -569,7 +569,7 @@ public class RRTracker {
                             RoboRebels.azimuth_lock = true;         // Indicate azimuth target lock
                         } else if (RoboRebels.target_azimuth == RoboRebels.LEFT) { // Left normal
                             RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Left");
-                            shooter.lazySusanSpeed = -0.15;         //-0.20;  // was -0.75 * LS_SPEED
+                            shooter.lazySusanSpeed = -0.10; //5;         //-0.20;  // was -0.75 * LS_SPEED
                             RoboRebels.azimuth_lock = false;         // No azimuth target lock
                         //                   } else if (RoboRebels.target_azimuth == RoboRebels.FAR_LEFT) {      // Left fast
                         //                        RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan left fast");
@@ -577,7 +577,7 @@ public class RRTracker {
                         //                        RoboRebels.azimuth_lock = false;         // No azimuth target lock
                         }  else if (RoboRebels.target_azimuth == RoboRebels.RIGHT) { // Right normal
                             RRLogger.logDebug(this.getClass(),"trackTarget()","Tracker: Auto Lazy Susan Right");
-                            shooter.lazySusanSpeed = 0.15;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
+                            shooter.lazySusanSpeed = 0.10; // 5;  //* 1.2;      //  0.20  * 1.2;           // Added 20% due to motor slowness
                             RoboRebels.azimuth_lock = false;         // No azimuth target lock
                         //                   } else if (RoboRebels.target_azimuth == RoboRebels.FAR_RIGHT) {    // Right fast
                         //                        RRLogger.logDebug(this.getClass(),"","Tracker: Auto Lazy susan right fast");
