@@ -1,0 +1,13 @@
+Divisions of code:
+
+*  Drive
+  - This code can be developed within the teleop methods and related methods
+
+*  React to DriveStation input
+  - This code can be developed within the teleop methods and related methods
+
+*  Kicker
+  - It might be a good idea to develop a "Kicker" object
+
+*  Pulley
+  - It might be a good idea to develop a "Pulley" object

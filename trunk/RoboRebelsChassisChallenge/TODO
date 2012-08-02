@@ -1,0 +1,16 @@
+¥	Sensing number of balls in elevator
+¥	Sensing when a ball gets collected
+¥	Locking on to/tracking target
+¥	Keeping track of lazy suzan position via software
+¥	Bridge traversal mode (ie. Move in one axis)
+¥	Bridge balancing software
+¥	
+
+
+Feedback
+
+¥	For autonomous mode (ie. Found target)
+¥	States of motors/objects
+¥	Sensor decision (ie. Target acquired)
+¥	Sending custom image to drive station (ie. Camera/mask hybrid)
+¥	
