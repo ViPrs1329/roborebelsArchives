@@ -34,11 +34,8 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Jaguar;
-import java.lang.Math;
 import edu.wpi.first.wpilibj.Joystick;
-import java.util.Enumeration;
 import com.sun.squawk.util.MathUtils;
-import edu.wpi.first.wpilibj.Encoder;
 
 /**
  *
@@ -257,7 +254,7 @@ public class RRMecanumDrive {
          *
          */
 
-        RRLogger.logDebug(this.getClass(),"drive()","");
+        RRLogger.logDebug(this.getClass(), "drive()", "");
 
         double l_xVal = m_xboxStick.getRawAxis(1);
         double l_yVal = m_xboxStick.getRawAxis(2);
@@ -306,14 +303,10 @@ public class RRMecanumDrive {
             r_yVal = (r_yVal + .13) / (1 - .13);
         }
 
-
         l_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(1), -m_xboxStick.getRawAxis(2)));
         l_magnitude = Math.sqrt((m_xboxStick.getRawAxis(1) * m_xboxStick.getRawAxis(1)) + (m_xboxStick.getRawAxis(2) * m_xboxStick.getRawAxis(2)));
         r_angle = Math.toDegrees(MathUtils.atan2(-m_xboxStick.getRawAxis(4), -m_xboxStick.getRawAxis(5)));
         r_magnitude = Math.sqrt((m_xboxStick.getRawAxis(4) * m_xboxStick.getRawAxis(4)) + (m_xboxStick.getRawAxis(5) * m_xboxStick.getRawAxis(5)));
-
-
-
 
         if (l_magnitude < .28) {
             l_magnitude = 0;
@@ -383,10 +376,6 @@ public class RRMecanumDrive {
             }
 
         }
-
-
-
-
 
         // Toggle Through Drive Modes with Start Button
         if (m_xboxStick.getRawButton(8) && !controlModeSwitched) {

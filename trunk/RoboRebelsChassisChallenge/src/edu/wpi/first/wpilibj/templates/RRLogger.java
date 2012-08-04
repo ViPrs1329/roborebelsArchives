@@ -41,9 +41,6 @@ public class RRLogger {
         if (c.equals(RoboRebels.class)) {
             print(level, "RoboRebels", methodName, msg);
 
-        } else if (c.equals(RRAction.class)) {
-            print(level, "RRAction", methodName, msg);
-
         } else if (c.equals(RRAutonomous.class)) {
             print(level, "RRAutonomous", methodName, msg);
 

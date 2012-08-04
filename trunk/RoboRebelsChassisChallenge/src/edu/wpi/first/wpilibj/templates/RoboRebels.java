@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.*;
 public class RoboRebels extends IterativeRobot {
 
     public static boolean DEBUG_ON = true;
+
     // Declare custom object vars
     RRDrive drive;
     RRAutonomous autonomous;
@@ -30,11 +31,11 @@ public class RoboRebels extends IterativeRobot {
     // in more than one location
     Joystick m_xboxStick;
     // Declare a variable to use to access the driver station object
-    DriverStation m_ds;                   // driver station object
-    static DriverStationLCD m_dsLCD;                // driver station LCD object
+    DriverStation m_ds;  // driver station object
+
+    static DriverStationLCD m_dsLCD; // driver station LCD object
 
     // Misc variable declarations
-    static final int NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
     static boolean disabledStateBroadcasted = false;
     static boolean teleopStateBroadcasted = false;
     static boolean autonomousStateBroadcasted = false;
