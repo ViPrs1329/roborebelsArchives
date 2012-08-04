@@ -64,13 +64,8 @@ public class RRGatherer {
      * @param tbsc Top ball sensor channel
      * @param j Joystick
      */
-    RRGatherer(int sc, int bcc, int bbsc, int mbsc, int tbsc) {
+    RRGatherer(int sc) {
         spinner_channel = sc;
-        ball_conveyer_channel = bcc;
-        bottom_ball_sensor_channel = bbsc;
-        middle_ball_sensor_channel = mbsc;
-        top_ball_sensor_channel = tbsc;
-
 
         spinnerVictor = new Victor(spinner_channel);
         ballConveyerVictor = new Victor(ball_conveyer_channel);

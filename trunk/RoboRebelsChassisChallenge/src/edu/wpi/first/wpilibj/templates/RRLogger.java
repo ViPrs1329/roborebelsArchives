@@ -56,9 +56,6 @@ public class RRLogger {
 
         } else if (c.equals(RRMecanumDrive.class)) {
             print(level,"RRMecanumDrive",methodName,msg);
-
-        } else if (c.equals(RRGathererThread.class)) {
-            print(level,"RRGathererThread",methodName,msg);
         }
     }
 
