@@ -18,39 +18,29 @@ import edu.wpi.first.wpilibj.MotorSafetyHelper;
 
 public class RRDrive implements MotorSafety {
 
+    private static final int ARCADE_STICK_X = 1;
+    private static final int ARCADE_STICK_Y = 2;
     private MotorSafetyHelper motorSafetyHelper;
-    private boolean arcade;
-    private boolean slowDriveMode;
-    private double SLOW_DRIVE_CONSTANT = 0.5;
-    private Jaguar leftMotor,
-                   rightMotor;
-    private boolean backbuttonpressed;
-    public static final double kDefaultExpirationTime = 0.1;
+    private Jaguar leftMotor;
+    private Jaguar rightMotor;
+    private Joystick m_xboxStick;
+    static final double kDefaultExpirationTime = 0.1;
 
     /**
-     * 
-     * @param js
+     * @param j Joystick to get inputs from
      * @param leftChannel
      * @param rightChannel 
      */
-    public RRDrive(int leftChannel, int rightChannel) {
-        RRLogger.logDebug(this.getClass(),"RRDrive()","" + leftChannel + " " + rightChannel);
+    RRDrive(Joystick j, int leftChannel, int rightChannel) {
+        if (j == null || leftChannel <= 0 || rightChannel <= 0) {
+            throw new NullPointerException("Invalid argument provided to RRDrive constructor");
+        }
 
-        slowDriveMode = false;
-        
-        setupDrive(leftChannel, rightChannel);
-
+        RRLogger.logDebug(this.getClass(), "RRDrive()", "" + leftChannel + " " + rightChannel);
+        m_xboxStick = j;
+        leftMotor  = new Jaguar(leftChannel);
+        rightMotor = new Jaguar(rightChannel);
         setupMotorSafety();
-    }
-
-    /**
-     * 
-     * @param lc
-     * @param rc 
-     */
-    private void setupDrive(int lc, int rc) {
-        leftMotor = new Jaguar(lc);
-        rightMotor = new Jaguar(rc);
     }
 
     /**
@@ -58,30 +48,10 @@ public class RRDrive implements MotorSafety {
      * @param tankDrive 
      */
     public void drive(boolean tankDrive) {
-//        double l_xVal  = leftJoystick.getRawAxis(1);
-//        double l_yVal  = leftJoystick.getRawAxis(2);
-//
-//        double r_xVal  = leftJoystick.getRawAxis(4);
-//        double r_yVal  = leftJoystick.getRawAxis(5);
+        double l_xVal = m_xboxStick.getRawAxis(ARCADE_STICK_X);
+        double l_yVal = m_xboxStick.getRawAxis(ARCADE_STICK_Y);
 
-        RRAction aoX = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_X),
-                aoY = RRButtonMap.getActionObject(RRButtonMap.ARCADE_STICK_Y),
-                aoSlowDrive = RRButtonMap.getActionObject(RRButtonMap.TOGGLE_SPEED);
-
-        double l_xVal = aoX.getAxisState();
-        double l_yVal = aoY.getAxisState();
-        boolean aoSDButtonState = aoSlowDrive.getButtonState();
-        
-        if ( aoSDButtonState )
-        {
-            //System.our.println("RRDrive::drive() switching drive state to " + )
-            slowDriveMode = !slowDriveMode;
-        }
-            
-
-        //RRLogger.logDebug(this.getClass(),"drive()","");
-
-
+        RRLogger.logDebug(this.getClass(), "drive()", "xVal=" + l_xVal + ", yVal=" + l_yVal);
         if (Math.abs(l_xVal) < .13) {
             l_xVal = 0;
         }
@@ -89,19 +59,6 @@ public class RRDrive implements MotorSafety {
         if (Math.abs(l_yVal) < .13) {
             l_yVal = 0;
         }
-
-//        if (Math.abs(r_xVal) < .13)
-//        {
-//            r_xVal = 0;
-//        }
-//
-//        if (Math.abs(r_yVal) < .13)
-//        {
-//            r_yVal = 0;
-//        }
-
-
-
 
         //Change the range of the joystick values to account for the dead zone
         if (l_xVal > 0) {
@@ -116,30 +73,10 @@ public class RRDrive implements MotorSafety {
             l_yVal = (l_yVal + .13) / (1 - .13);
         }
 
-//        if (r_xVal > 0)
-//        {
-//            r_xVal = (r_xVal-.13)/(1-.13);
-//        }
-//        else if (r_xVal < 0)
-//        {
-//            r_xVal = (r_xVal+.13)/(1-.13);
-//        }
-//
-//        if (r_yVal > 0)
-//        {
-//            r_yVal = (r_yVal-.13)/(1-.13);
-//        }
-//        else if (r_yVal < 0)
-//        {
-//            r_yVal = (r_yVal+.13)/(1-.13);
-//        }
-
-
         if (!tankDrive) {
             arcadeDrive(l_yVal, l_xVal);
         } else {
-            //tank mode
-            //RRLogger.logDebug(this.getClass(),"drive()","Tank drive has not been implimented yet!!!");
+            RRLogger.logDebug(this.getClass(), "drive()", "Tank drive has not been implimented yet!!!");
         }
     }
 
@@ -179,23 +116,9 @@ public class RRDrive implements MotorSafety {
      * @param right 
      */
     public void setLeftRightMotorValue(double left, double right) {
-        if (leftMotor == null || rightMotor == null) {
-            throw new NullPointerException("Null motor provided");
-        }
-                
-//        if ( !slowDriveMode )
-        {
- //           System.out.println("RRDrive() Regular mode " + left + " | " + right);
-            leftMotor.set(left);
-            rightMotor.set(right);
-        }
-//        else
-//        {
-//            System.out.println("RRDrive() Regular mode " + SLOW_DRIVE_CONSTANT * left + " | " + SLOW_DRIVE_CONSTANT * right);
-//            leftMotor.set(SLOW_DRIVE_CONSTANT * left);
-//            rightMotor.set(SLOW_DRIVE_CONSTANT * right);
-//        }
-
+        System.out.println("RRDrive() Regular mode " + left + " | " + right);
+        leftMotor.set(left);
+        rightMotor.set(right);
 
         motorSafetyHelper.feed();
     }

@@ -5,58 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-/*
- * Joystick (xbox) button map
- * 0
- * 1 A
- * 2 B
- * 3 X
- * 4 Y
- * 5 L Bumper
- * 6 R Bumper
- * 7 Back
- * 8 Start
- * 9 L Stick Click
- * 10 R Stick Click
- * 
- * Axis
- * 
- *  ´1: Left Stick X Axis
--Left:Negative ; Right: Positive
-´2: Left Stick Y Axis
--Up: Negative ; Down: Positive
-´3: Triggers
--Left: Positive ; Right: Negative
-´4: Right Stick X Axis
--Left: Negative ; Right: Positive
-´5: Right Stick Y Axis
--Up: Negative ; Down: Positive
-´6: Directional Pad (Not recommended, buggy)
-
- * 
- */
-
-/*
- * 
-
-
- * NOTES:
- *
- *
- * - I have decided to clean up our code base a bit. - Derek W.
- * 
- * 
- * TODO:
- * 
- * - Migrate code out of RoboRebels.java into their respective classes
- * 
- * - All classees that depend on a Joystick should be passed joystick object(s)
- *   and handled within their classes
- * 
- */
 package edu.wpi.first.wpilibj.templates;
-
-import com.sun.squawk.util.MathUtils;
 
 import edu.wpi.first.wpilibj.*;
 
@@ -70,34 +19,31 @@ import edu.wpi.first.wpilibj.*;
 public class RoboRebels extends IterativeRobot {
 
     public static boolean DEBUG_ON = true;
-
     // Declare custom object vars
     RRDrive drive;
     RRAutonomous autonomous;
     RRGatherer gatherer;
     ADXL345_I2C accel;
     RobotDrive m_robotDrive;
-
+    
     // Declare objects needed for the robot that might be used
     // in more than one location
-
     Joystick m_xboxStick;
-
     // Declare a variable to use to access the driver station object
-    DriverStation       m_ds;                   // driver station object
-    static DriverStationLCD    m_dsLCD;                // driver station LCD object
+    DriverStation m_ds;                   // driver station object
+    static DriverStationLCD m_dsLCD;                // driver station LCD object
 
     // Misc variable declarations
-    static final int    NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
-    static boolean      disabledStateBroadcasted = false;
-    static boolean      teleopStateBroadcasted = false;
-    static boolean      autonomousStateBroadcasted = false;
+    static final int NUM_JOYSTICK_BUTTONS = 16;  // how many joystick buttons exist?
+    static boolean disabledStateBroadcasted = false;
+    static boolean teleopStateBroadcasted = false;
+    static boolean autonomousStateBroadcasted = false;
 
     /**
      * Constructor
      */
     public void RoboRebels() {
-        RRLogger.logDebug(this.getClass(), "", "RoboRebels()");
+        RRLogger.logDebug(this.getClass(), "RoboRebels()", "");
     }
 
     /**
@@ -105,26 +51,28 @@ public class RoboRebels extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-
         RRLogger.logDebug(this.getClass(), "robotInit()", "");
-       m_dsLCD = DriverStationLCD.getInstance();
+        m_dsLCD = DriverStationLCD.getInstance();
+
         m_xboxStick = new Joystick(3);
         RRLogger.logDebug(this.getClass(), "robotInit()", "Joysticks set");
 
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
-        RRLogger.logDebug(this.getClass(), "robotInit()", "accel");
+        RRLogger.logDebug(this.getClass(), "robotInit()", "new ADXL345_I2C()");
 
         // ******************
-        drive = new RRDrive(2, 1);
-        RRLogger.logDebug(this.getClass(), "robotInit()", "Drive");
+        int leftMotorChannel  = 2;
+        int rightMotorChannel = 1;
+        drive = new RRDrive(m_xboxStick, leftMotorChannel, rightMotorChannel);
+        RRLogger.logDebug(this.getClass(), "robotInit()", "new RRDrive()");
 
         // ******************
-        gatherer = new RRGatherer(3);
-        RRLogger.logDebug(this.getClass(), "robotInit()", "Gatherer");
+        int spinnerMotorChannel = 3;
+        gatherer = new RRGatherer(m_xboxStick, spinnerMotorChannel);
+        RRLogger.logDebug(this.getClass(), "robotInit()", "new RRGatherer()");
 
         // ********************
         autonomous = new RRAutonomous();
-
         RRLogger.logInfo(this.getClass(), "robotInit()", "Robot Ready");
     }
 
@@ -150,9 +98,6 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * This function is called periodically during autonomous
-     *
-     * Notes:
-     *
      */
     public void autonomousPeriodic() {
         autonomous.auton_periodic();
@@ -160,10 +105,6 @@ public class RoboRebels extends IterativeRobot {
 
     /**
      * This function is called periodically during operator control
-     *
-     * ---------------------
-     * This is the most important method in this class
-     * ---------------------
      */
     public void teleopPeriodic() {
         if (teleopStateBroadcasted == true) {
@@ -186,7 +127,7 @@ public class RoboRebels extends IterativeRobot {
      */
     public void disabledPeriodic() {
         // The code below prevents a spam of "Disabled State" messages on the console
-        if ( disabledStateBroadcasted == true ) {
+        if (disabledStateBroadcasted == true) {
             RRLogger.logDebug(this.getClass(), "disabledPeriodic()", "Disabled State");
             disabledStateBroadcasted = false;
         }
