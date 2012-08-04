@@ -19,17 +19,13 @@ public class RRAutonomous {
      * called once at start of Autonomous period
      */
     void auton_init() {
-        RoboRebels.time_started_waiting = Timer.getFPGATimestamp();
+        // do nothing
     }
 
     /*
      * called repeatedly suring Autonomous period
      */
     void auton_periodic() {
-
-        if (RoboRebels.autonomous_tracking_failed) {
-            // If tracking failed, end shooting
-            RoboRebels.autonomous_complete = true;   // TODO: Make robot still drive towards bridge to get balls
-        }
+        // do nothing
     }
 }
