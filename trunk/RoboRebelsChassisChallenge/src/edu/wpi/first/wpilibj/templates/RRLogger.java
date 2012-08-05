@@ -50,6 +50,9 @@ public class RRLogger {
         } else if (c.equals(RRGatherer.class)) {
             print(level, "RRGatherer", methodName, msg);
 
+        } else if (c.equals(RRXboxController.class)) {
+            print(level, "RRXboxController", methodName, msg);
+
         } else if (c.equals(RRMecanumDrive.class)) {
             print(level, "RRMecanumDrive", methodName, msg);
         }
