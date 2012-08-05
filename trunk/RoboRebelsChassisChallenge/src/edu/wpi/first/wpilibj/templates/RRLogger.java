@@ -5,8 +5,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 /**
- *
- * @author dfuglsan
+ * Class for logging messages
  */
 public class RRLogger {
 
