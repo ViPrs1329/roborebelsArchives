@@ -4,8 +4,6 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Victor;
 
 /**
@@ -30,40 +28,32 @@ import edu.wpi.first.wpilibj.Victor;
  */
 public class RRGatherer {
 
-    private final double SPINNER_MAX_SPEED = 0.5;
-    private final static int SPINNER_FORWARD = 3;
-    private final static int SPINNER_REVERSED = 3;
     private int spinner_channel;
     private double spinnerSpeed = 0.0;
+    private double directionMultiplier = 1.0;
     private Victor spinnerVictor;
-    private Joystick m_xboxStick;
+    private RRXboxController xboxController;
 
     /**
-     * @param j Joystick to get inputs from
+     * @param xbc XBox controller
      * @param sc Spinner channel
      */
-    RRGatherer(Joystick j, int spinnerChannel) {
-        if (j == null || spinnerChannel <= 0) {
+    RRGatherer(RRXboxController xbc, int spinnerChannel) {
+        if (xbc == null || spinnerChannel <= 0) {
             throw new NullPointerException("Invalid argument provided to RRGatherer constructor");
         }
-        m_xboxStick = j;
+        xboxController = xbc;
         spinner_channel = spinnerChannel;
         spinnerVictor = new Victor(spinner_channel);
     }
 
     private void gatherInputStates() {
-        double spinnerForward = m_xboxStick.getRawAxis(SPINNER_FORWARD);
-        double spinnerReverse = m_xboxStick.getRawAxis(SPINNER_REVERSED);
-        RRLogger.logDebug(this.getClass(), "gatherInputStates()", "Fwd Spinner=" + spinnerForward + ", Rev Spinner=" + spinnerReverse);
-
-        if (spinnerForward <= 1.0 && spinnerForward > 0.0) {
-            // Left trigger pushed, spin forward
-            spinnerSpeed = -1.0 * SPINNER_MAX_SPEED;
-        } else if (spinnerReverse >= -1.0 && spinnerReverse < 0.0) {
-            spinnerSpeed = SPINNER_MAX_SPEED;
-        } else if (spinnerForward == 0.0 || spinnerReverse == 0.0) {
-            spinnerSpeed = 0.0;
+        boolean toggleDirection = xboxController.getButtonState_A();
+        if (toggleDirection) {
+            directionMultiplier = -1.0 * directionMultiplier;
         }
+        spinnerSpeed = directionMultiplier * xboxController.getYAxisState_RightStick();
+        RRLogger.logDebug(this.getClass(), "gatherInputStates()", "directionMultiplier="+directionMultiplier+", spinnerSpeed=" + spinnerSpeed);
     }
 
     public void gather() {

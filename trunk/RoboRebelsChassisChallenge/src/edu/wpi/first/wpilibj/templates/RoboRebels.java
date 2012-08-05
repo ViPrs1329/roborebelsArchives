@@ -30,6 +30,7 @@ public class RoboRebels extends IterativeRobot {
     // Declare objects needed for the robot that might be used
     // in more than one location
     Joystick m_xboxStick;
+    RRXboxController xboxController;
     // Declare a variable to use to access the driver station object
     DriverStation m_ds;  // driver station object
 
@@ -56,6 +57,7 @@ public class RoboRebels extends IterativeRobot {
         m_dsLCD = DriverStationLCD.getInstance();
 
         m_xboxStick = new Joystick(3);
+        xboxController = new RRXboxController(m_xboxStick);
         RRLogger.logDebug(this.getClass(), "robotInit()", "Joysticks set");
 
         accel = new ADXL345_I2C(1, ADXL345_I2C.DataFormat_Range.k2G); // slot number is actually module number
@@ -64,12 +66,12 @@ public class RoboRebels extends IterativeRobot {
         // ******************
         int leftMotorChannel  = 2;
         int rightMotorChannel = 1;
-        drive = new RRDrive(m_xboxStick, leftMotorChannel, rightMotorChannel);
+        drive = new RRDrive(xboxController, leftMotorChannel, rightMotorChannel);
         RRLogger.logDebug(this.getClass(), "robotInit()", "new RRDrive()");
 
         // ******************
         int spinnerMotorChannel = 3;
-        gatherer = new RRGatherer(m_xboxStick, spinnerMotorChannel);
+        gatherer = new RRGatherer(xboxController, spinnerMotorChannel);
         RRLogger.logDebug(this.getClass(), "robotInit()", "new RRGatherer()");
 
         // ********************

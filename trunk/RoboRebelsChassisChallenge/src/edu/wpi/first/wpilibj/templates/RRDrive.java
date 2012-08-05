@@ -12,32 +12,29 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 
 public class RRDrive implements MotorSafety {
 
-    private static final int ARCADE_STICK_X = 1;
-    private static final int ARCADE_STICK_Y = 2;
     private MotorSafetyHelper motorSafetyHelper;
     private Jaguar leftMotor;
     private Jaguar rightMotor;
-    private Joystick m_xboxStick;
+    private RRXboxController xboxController;
     static final double kDefaultExpirationTime = 0.1;
 
     /**
-     * @param j Joystick to get inputs from
+     * @param xbc XBox controller
      * @param leftChannel
      * @param rightChannel 
      */
-    RRDrive(Joystick j, int leftChannel, int rightChannel) {
-        if (j == null || leftChannel <= 0 || rightChannel <= 0) {
+    RRDrive(RRXboxController xbc, int leftChannel, int rightChannel) {
+        if (xbc == null || leftChannel <= 0 || rightChannel <= 0) {
             throw new NullPointerException("Invalid argument provided to RRDrive constructor");
         }
 
         RRLogger.logDebug(this.getClass(), "RRDrive()", "" + leftChannel + " " + rightChannel);
-        m_xboxStick = j;
+        xboxController = xbc;
         leftMotor  = new Jaguar(leftChannel);
         rightMotor = new Jaguar(rightChannel);
         setupMotorSafety();
@@ -48,8 +45,8 @@ public class RRDrive implements MotorSafety {
      * @param tankDrive 
      */
     public void drive(boolean tankDrive) {
-        double l_xVal = m_xboxStick.getRawAxis(ARCADE_STICK_X);
-        double l_yVal = m_xboxStick.getRawAxis(ARCADE_STICK_Y);
+        double l_xVal = xboxController.getXAxisState_LeftStick();
+        double l_yVal = xboxController.getYAxisState_LeftStick();
 
         RRLogger.logDebug(this.getClass(), "drive()", "xVal=" + l_xVal + ", yVal=" + l_yVal);
         if (Math.abs(l_xVal) < .13) {
