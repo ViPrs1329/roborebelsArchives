@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.*;
  */
 public class RoboRebels extends IterativeRobot {
 
-    public static boolean DEBUG_ON = true;
+    public static boolean DEBUG_ON = false;
 
     // Declare custom object vars
     RRDrive drive;
