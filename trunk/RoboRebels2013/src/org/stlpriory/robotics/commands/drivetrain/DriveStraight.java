@@ -21,25 +21,43 @@ public class DriveStraight extends CommandBase {
         this.timeout = timeout;
     }
 
+    /**
+     * Command initialization logic
+     */
     protected void initialize() {
         setTimeout(timeout);
         Debug.print("[" + this.getName() + "] Speed: " + this.speed);
         Debug.print("\tTimeout: " + timeout);
     }
 
+    /**
+     * Called repeatedly while the command is running
+     */
     protected void execute() {
         drivetrain.straight(speed);
     }
 
+    /**
+     * Called repeatedly to determine if the command is
+     * finished executing
+     * @return true if the command execution is finished
+     */
     protected boolean isFinished() {
         return isTimedOut();
     }
 
+    /**
+     * Called one after isFinished() returns true
+     */
     protected void end() {
         Debug.println("\t\tDONE");
         drivetrain.stop();
     }
 
+    /**
+     * Called if the command is preempted or
+     * canceled
+     */
     protected void interrupted() {
         Debug.println("\t[interrupted] " + getName());
         drivetrain.stop();

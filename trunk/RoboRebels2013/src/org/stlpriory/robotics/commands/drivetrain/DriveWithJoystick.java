@@ -17,24 +17,41 @@ public class DriveWithJoystick extends CommandBase implements Constants {
         requires(drivetrain); // reserve the drivetrain subsystem
     }
 
+    /**
+     * Command initialization logic
+     */
     protected void initialize() {
         Debug.println("[" + this.getName() + "] initialized");
     }
 
-    protected void execute() { // called repeatedly while the command is running
+    /**
+     * Called repeatedly while the command is running
+     */
+    protected void execute() {
         drivetrain.driveWithJoystick(oi.getJoystick());
     }
 
-    protected boolean isFinished() { // called repeatedly and determines if the
-        return false; // command is finished executing
+    /**
+     * Called repeatedly to determine if the command is
+     * finished executing
+     * @return true if the command execution is finished
+     */
+    protected boolean isFinished() {
+        return false;
     }
 
-    // Called once after isFinished returns true
+    /**
+     * Called one after isFinished() returns true
+     */
     protected void end() {
         drivetrain.stop();
     }
 
-    protected void interrupted() { // called if the command is preempted or canceled
+    /**
+     * Called if the command is preempted or
+     * canceled
+     */
+    protected void interrupted() {
     }
 
 }

@@ -35,6 +35,9 @@ public class DriveTrain extends Subsystem implements Constants {
         drive.setSafetyEnabled(false);
     }
 
+    /**
+     * Initialize and set default command
+     */
     public void initDefaultCommand() {
         setDefaultCommand(new DriveWithJoystick());
     }
