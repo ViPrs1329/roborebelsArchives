@@ -7,6 +7,7 @@ package org.stlpriory.robotics.subsystems;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
@@ -30,6 +31,8 @@ public class DriveTrain extends Subsystem implements Constants {
         rightJag = new Jaguar(RobotMap.DRIVE_RIGHT_MOTOR);
 
         drive = new RobotDrive(leftJag, rightJag);
+        //drive = new RobotDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor,
+        //    SpeedController frontRightMotor, SpeedController rearRightMotor);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         drive.setSafetyEnabled(false);
