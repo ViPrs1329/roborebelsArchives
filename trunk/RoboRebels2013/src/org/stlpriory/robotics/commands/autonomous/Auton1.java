@@ -9,12 +9,11 @@ import edu.wpi.first.wpilibj.command.PrintCommand;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.stlpriory.robotics.commands.drivetrain.DriveStraight;
 import org.stlpriory.robotics.commands.drivetrain.Turn;
-import org.stlpriory.robotics.misc.Constants;
 
 /**
  *
  */
-public class Auton1 extends CommandGroup implements Constants {
+public class Auton1 extends CommandGroup {
 
     private static double forwards = -1;
     private static double backwards = 1;

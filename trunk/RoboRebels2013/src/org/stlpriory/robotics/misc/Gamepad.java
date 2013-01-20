@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Joystick;
 /**
  *
  */
-public class Gamepad extends Joystick implements Constants {
+public class Gamepad extends Joystick {
 
     /**
      * Gamepad contructor
@@ -119,14 +119,14 @@ public class Gamepad extends Joystick implements Constants {
      * @param x The joystick value that needs to be rounded up.
      */
     private double scale(double x) {
-        if (Math.abs(x) < JOYSTICK_THRESHOLD) {
+        if (Math.abs(x) < Constants.JOYSTICK_THRESHOLD) {
             return 0;
         }
         if (x > 0) {
-            return (x - JOYSTICK_THRESHOLD) / (1 - JOYSTICK_THRESHOLD);
+            return (x - Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
         }
         if (x < 0) {
-            return (x + JOYSTICK_THRESHOLD) / (1 - JOYSTICK_THRESHOLD);
+            return (x + Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
         }
         return 0;
     }

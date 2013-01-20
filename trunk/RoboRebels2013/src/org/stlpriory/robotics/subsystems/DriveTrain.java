@@ -7,17 +7,15 @@ package org.stlpriory.robotics.subsystems;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
-import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
  *
  */
-public class DriveTrain extends Subsystem implements Constants {
+public class DriveTrain extends Subsystem {
 
     private RobotDrive drive;
     private Jaguar leftFrontJag;

@@ -5,27 +5,34 @@
 package org.stlpriory.robotics.commands.shooter;
 
 import org.stlpriory.robotics.commands.CommandBase;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
- *
+ *  Command use to load frisbee disc into shooter
  */
 public class LoadDisc extends CommandBase {
 
-    public LoadDisc() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    private double timeout;
+
+    public LoadDisc(double timeout) {
+        requires(shooter);
+        this.timeout = timeout;
     }
 
     /**
      * Called just before this Command runs the first time
      */
     protected void initialize() {
+        setTimeout(timeout);
+        Debug.print("[" + getName() + "]");
+        Debug.print("\tTimeout: " + timeout);
     }
 
     /**
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
+        shooter.loadDisc();
     }
 
     /**
@@ -33,13 +40,15 @@ public class LoadDisc extends CommandBase {
      * @return finished state
      */
     protected boolean isFinished() {
-        return false;
+        return isTimedOut();
     }
 
     /**
      * Called once after isFinished returns true
      */
     protected void end() {
+        Debug.println("\t\tDONE");
+        shooter.resetLoader();
     }
 
     /**
@@ -47,5 +56,7 @@ public class LoadDisc extends CommandBase {
      * the same subsystems is scheduled to run
      */
     protected void interrupted() {
+        Debug.println("\t[interrupted] " + getName());
+        shooter.resetLoader();
     }
 }

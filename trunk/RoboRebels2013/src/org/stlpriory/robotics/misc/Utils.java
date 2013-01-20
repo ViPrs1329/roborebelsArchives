@@ -7,7 +7,7 @@ package org.stlpriory.robotics.misc;
 /**
  * Utility class
  */
-public class Utils implements Constants {
+public class Utils {
 
     /**
      * Rounds a double to specified number of decimal places.
@@ -69,14 +69,14 @@ public class Utils implements Constants {
      * @param x The joystick value that needs to be rounded up.
      */
     public static double scale(double x) {
-        if (Math.abs(x) < JOYSTICK_THRESHOLD) {
+        if (Math.abs(x) < Constants.JOYSTICK_THRESHOLD) {
             return 0;
         }
         if (x > 0) {
-            return (x - JOYSTICK_THRESHOLD) / (1 - JOYSTICK_THRESHOLD);
+            return (x - Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
         }
         if (x < 0) {
-            return (x + JOYSTICK_THRESHOLD) / (1 - JOYSTICK_THRESHOLD);
+            return (x + Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
         }
         return 0;
     }
