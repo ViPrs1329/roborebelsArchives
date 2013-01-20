@@ -5,7 +5,6 @@
 package org.stlpriory.robotics.commands.drivetrain;
 
 import org.stlpriory.robotics.commands.CommandBase;
-import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
