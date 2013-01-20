@@ -19,10 +19,10 @@ public class Shooter extends Subsystem {
 
     public Shooter() {
         super("Shooter");
-        Debug.println("[Shooter] Initializing loader servo on channel " + RobotMap.LOADER_CHANNEL);
+        Debug.println("[Shooter] Initializing loader servo on channel " + RobotMap.DISC_LOADER_CHANNEL);
         // Set the servo to the PWM channel on the digital module
         // to which the servo is attached.
-        servo = new Servo(RobotMap.LOADER_CHANNEL);
+        servo = new Servo(RobotMap.DISC_LOADER_CHANNEL);
     }
 
     private boolean canLoadDisc() {
