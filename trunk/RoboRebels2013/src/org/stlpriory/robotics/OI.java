@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.commands.drivetrain.DriveInASquare;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -48,11 +49,13 @@ public class OI {
     private JoystickButton trigger;
 
     public OI() {
+        Debug.println("[OI] Initializing Joystick to port " + RobotMap.JOYSTICK1);
         this.joystick = new Joystick(RobotMap.JOYSTICK1);
-        this.trigger = new JoystickButton(this.joystick, Joystick.ButtonType.kTop.value);
 
+        Debug.println("[OI] Initializing Joystick button to load disc when pressed ");
+        this.trigger = new JoystickButton(this.joystick, Joystick.ButtonType.kTop.value);
         this.trigger.whenPressed(new LoadDisc(0.5));
-        
+
         // associate the DriveInSquare command group with the
         // trigger button on the right joystick. Whenever the
         // joystick is pressed, the robot will drive
@@ -75,4 +78,3 @@ public class OI {
     }
 
 }
-

@@ -58,6 +58,7 @@ public class DriveTrain extends Subsystem {
     }
 
     public void stop() {
+        Debug.println("[DriveTrain.stop]");
         drive.tankDrive(0.0, 0.0);
     }
 
@@ -69,6 +70,7 @@ public class DriveTrain extends Subsystem {
         leftValue *= direction;
         rightValue *= direction;
         if (canDrive()) {
+            Debug.println("[DriveTrain.tankDrive] leftValue = "+leftValue+", rightValue = "+rightValue);
             drive.tankDrive(leftValue, rightValue);
         }
     }
@@ -77,6 +79,7 @@ public class DriveTrain extends Subsystem {
         moveValue *= direction;
         rotateValue *= direction;
         if (canDrive()) {
+            Debug.println("[DriveTrain.arcadeDrive] moveValue = "+moveValue+", rotateValue = "+rotateValue);
             drive.arcadeDrive(moveValue, rotateValue);
         }
     }
@@ -99,6 +102,7 @@ public class DriveTrain extends Subsystem {
      */
     public void mecanumDrive(double xSpeed, double ySpeed, double rotation, double gyroAngle) {
         if (canDrive()) {
+            Debug.println("[DriveTrain.mecanumDrive] x-speed = "+xSpeed+", y-speed = "+ySpeed);
             drive.mecanumDrive_Cartesian(xSpeed, ySpeed, rotation, gyroAngle);
         }
     }
@@ -106,15 +110,18 @@ public class DriveTrain extends Subsystem {
     public void straight(double speed) {
         speed *= direction;
         if (canDrive()) {
+            Debug.println("[DriveTrain.straight] speed = "+speed);
             drive.tankDrive(speed, speed * 0.75);
         }
     }
 
     public void turnLeft() { // sets the motor speeds to start a left turn
+        Debug.println("[DriveTrain.turnLeft]");
         arcadeDrive(0.0, 1.0);
     }
 
     public void driveWithJoystick(Joystick stick) {
-        drive.arcadeDrive(stick);
+        drive.mecanumDrive_Cartesian(stick.getX(), stick.getY(), 0, 0);
+        //drive.arcadeDrive(stick);
     }
 }

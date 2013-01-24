@@ -3,6 +3,8 @@ package org.stlpriory.robotics.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stlpriory.robotics.OI;
+import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.DriveTrain;
 import org.stlpriory.robotics.subsystems.Shooter;
 
@@ -25,6 +27,7 @@ public abstract class CommandBase extends Command {
         // which commands extend), subsystems are not guaranteed to be
         // yet. Thus, their requires() statements may grab null pointers. Bad
         // news. Don't move it.
+        Debug.println("[CommandBase.init] Instantiating OI class");
         oi = new OI();
 
         // Show what command your subsystem is running on the SmartDashboard
