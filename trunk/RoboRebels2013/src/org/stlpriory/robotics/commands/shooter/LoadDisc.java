@@ -32,6 +32,7 @@ public class LoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
+        Debug.println("LoadDisc.execute()");
         shooter.loadDisc();
     }
 
