@@ -35,29 +35,31 @@ public class RoboRebels extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
-        Debug.println("[robotInit] Initializing...");
-        //autonomousCommand = new Auton1();
+        Debug.println("[RoboRebels.robotInit()] Initializing...");
+        timer.start();
+
+        // Initialize all subsystems and the operator interface
+        CommandBase.init();
+
+        SmartDashboard.putData(Scheduler.getInstance());
 
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveInASquare();
+        //autonomousCommand = new Auton1();
 
-        timer.start();
-
-        // Initialize all subsystems
-        CommandBase.init();
         timer.stop();
-
-        SmartDashboard.putData(Scheduler.getInstance());
-        Debug.println("[robotInit] Done in " + timer.get() * 1e6 + " ms");
-    }
+        Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
+   }
 
     public void autonomousInit() {
         Debug.println("[mode] Autonomous");
         //commonInit();
 
         // schedule the autonomous command (example)
-        autonomousCommand.start();
-    }
+        if (autonomousCommand != null)  {
+            autonomousCommand.start();
+        }
+     }
 
     /**
      * This function is called periodically during autonomous

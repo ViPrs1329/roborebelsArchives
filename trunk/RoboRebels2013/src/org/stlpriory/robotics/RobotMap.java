@@ -24,7 +24,10 @@ public class RobotMap {
     public static final int JOYSTICK4 = 4;	// Port 4
 
     // Motors/sensors used by the shooter
-    public static final int DISC_LOADER_CHANNEL = 5;	// PWM OUT Port 1
+    public static final int SHOOTER_SERVO_OUTPUT_MODULE   = 1;	// Output module (Digital)
+    public static final int SHOOTER_SERVO_OUTPUT_CHANNEL  = 3;	// PWM OUT Port 1
+    public static final int SHOOTER_VICTOR_OUTPUT_MODULE  = 1;	// Output module (Digital)
+    public static final int SHOOTER_VICTOR_OUTPUT_CHANNEL = 1;	// PWM OUT Port 1
 
     // Motors/sensors used by the arm
 //    public static final int kArmChannel = 5;	// PWM 5

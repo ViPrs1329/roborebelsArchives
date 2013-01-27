@@ -14,6 +14,10 @@ public class LoadDisc extends CommandBase {
 
     private double timeout;
 
+    public LoadDisc() {
+        this(0.5);
+    }
+
     public LoadDisc(double timeout) {
         requires(shooter);
         this.timeout = timeout;

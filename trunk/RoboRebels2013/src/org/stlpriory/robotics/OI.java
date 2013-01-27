@@ -3,8 +3,12 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.stlpriory.robotics.commands.autonomous.Auton1;
 import org.stlpriory.robotics.commands.drivetrain.DriveInASquare;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
+import org.stlpriory.robotics.commands.shooter.ShootDisc;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -46,15 +50,24 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
-    private JoystickButton trigger;
+    private JoystickButton shooterButton;
 
     public OI() {
+        Debug.println("[OI] Instantiating ...");
+
         Debug.println("[OI] Initializing Joystick to port " + RobotMap.JOYSTICK1);
         this.joystick = new Joystick(RobotMap.JOYSTICK1);
 
-        Debug.println("[OI] Initializing Joystick button to load disc when pressed ");
-        this.trigger = new JoystickButton(this.joystick, Joystick.ButtonType.kTop.value);
-        this.trigger.whenPressed(new LoadDisc(0.5));
+        Debug.println("[OI] Initializing Joystick button to load disc when trigger is pressed ");
+        this.shooterButton = new JoystickButton(this.joystick, Joystick.ButtonType.kTrigger.value);
+        this.shooterButton.whenPressed(new LoadDisc(0.5));
+
+        // SmartDashboard Buttons
+        SmartDashboard.putData("Autonomous Command", new Auton1());
+        SmartDashboard.putData("DriveInASquare", new DriveInASquare());
+        SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
+        SmartDashboard.putData("LoadDisc", new LoadDisc());
+        SmartDashboard.putData("ShootDisc", new ShootDisc());
 
         // associate the DriveInSquare command group with the
         // trigger button on the right joystick. Whenever the
@@ -64,6 +77,7 @@ public class OI {
         // run - DriveViaJoysticks
  //       this.trigger.whenPressed(new DriveInASquare());
 
+        Debug.println("[OI] Instantiation complete.");
     }
 
     public static OI getInstance() {
