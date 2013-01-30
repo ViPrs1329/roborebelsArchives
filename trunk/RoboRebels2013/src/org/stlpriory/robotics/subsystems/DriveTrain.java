@@ -4,13 +4,12 @@
  */
 package org.stlpriory.robotics.subsystems;
 
-import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
-import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
 
@@ -75,7 +74,8 @@ public class DriveTrain extends Subsystem {
      * Initialize and set default command
      */
     public void initDefaultCommand() {
-        setDefaultCommand(new DriveWithJoystick());
+        Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to "+DriveWithGamepad.class.getName());
+        setDefaultCommand(new DriveWithGamepad());
     }
 
     public void setForwards() {
@@ -131,73 +131,26 @@ public class DriveTrain extends Subsystem {
          * z= -1 corresponds to full speed spin CCW,
          * z= +1 corresponds to full speed spin CW
          *
-         * When the joystick is pushed forward, its Y output should be positive.
-         * When the joystick is pushed to the right, its X output should be positive.
-         * When the joystick is twisted clockwise, its Z output should be positive.
-         * If not, add code to invert the sign if necessary.
-         *
-         * Let w1, w2, w3, and w4 be the commands to send to each of the 4 wheels,
-         * where w1 is front left, w2 is front right, w3 is rear left, w4 is rear right,
-         * as viewed from the top.
-         *
-         * Let Kf, Ks, and Kt be tuning parameters (0 to +1) for the fwd/rev, strafe,
-         * and spin joystick sensitivities, respectively.
-         *
-         * set the four wheel speed commands as follows:
-         *   w1 = Kf*y + Ks*x + Kt*z
-         *   w2 = Kf*y - Ks*x - Kt*z
-         *   w3 = Kf*y - Ks*x + Kt*z
-         *   w4 = Kf*y + Ks*x - Kt*z
-         *
-         * Next, normalize the above commands so that their range is -1 to +1. Proceed as follows:
-         * look at the magnitude (absolute value) of each of the four commands, and select the MAXIMUM.
-         * For sake of discussion, call this maximum value Wmax
-         * if Wmax is less than or equal to 1, no scaling is required. Just use the four w commands as-is
-         * if Wmax is greater than 1, then divide EACH of the four w values by Wmax.
-         *
-         * That's all there is to it. Send each w command to the corresponding wheel
-         * (where -1 means 100% reverse, and +1 means 100% forward).
-         *
-         * Set Kf, Ks, and Kt to +1 initially, then adjust each one down (but not less than zero)
-         * individually as required to obtain the desired joystick sensitivity to the three motions.
-         *
-         * One note of caution: make sure the polarity of the motors on each side of the bot is wired
-         * correctly (each wheel must be spinning in the "forward" direction when it gets a "+" command).
-         * An easy way to observe this is to elevate the bot and push the joystick forward; all four
-         * wheels should be spinning forward.
+         * Axis indexes:
+         * 1 - LeftX
+         * 2 - LeftY
+         * 3 - Triggers (Each trigger = 0 to 1, axis value = right - left)
+         * 4 - RightX
+         * 5 - RightY
+         * 6 - DPad Left/Right
          */
-        double kF = 1;
-        double kS = 1;
-        double kT = 1;
 
         double rawLeftX  = joystick.getRawAxis(1);
         double rawLeftY  = joystick.getRawAxis(2);
         double rawZ      = joystick.getRawAxis(3);
-        double rawRightX = joystick.getRawAxis(4);
-        double rawRightY = joystick.getRawAxis(5);
 
-        double leftX  = Utils.scale(rawLeftX);
-        double leftY  = Utils.scale(rawLeftY);
-        double rightX = Utils.scale(rawRightX);
-        double rightY = Utils.scale(rawRightY);
+        double scaledLeftX  = Utils.scale(rawLeftX);
+        double scaledLeftY  = Utils.scale(rawLeftY);
 
-        double l_angle     = Math.toDegrees(MathUtils.atan2(-rawLeftX, -rawLeftY));
-        double l_magnitude = Math.sqrt((rawLeftX * rawLeftX) + (rawLeftY * rawLeftY));
-        double r_angle     = Math.toDegrees(MathUtils.atan2(-rawRightX, -rawRightY));
-        double r_magnitude = Math.sqrt((rawRightX * rawRightX) + (rawRightY * rawRightY));
-
-        if (l_magnitude < .28) {
-            l_magnitude = 0;
-        }
-
-        if (r_magnitude < .28) {
-            r_magnitude = 0;
-        }
-
+        double right     = -scaledLeftX;
+        double forward   =  scaledLeftY;
         double rotation  = -rawZ;
-        double forward   = leftY;
-        double right     = -leftX;
-        double clockwise = rawZ;
+        double clockwise =  rawZ;
 
         Debug.println("[DriveTrain.mecanumDrive] x-speed = " + right + ", y-speed = " + forward);
         drive.mecanumDrive_Cartesian(right, forward, rotation, clockwise);
@@ -217,7 +170,10 @@ public class DriveTrain extends Subsystem {
     }
 
     public void driveWithJoystick(Joystick joystick) {
+        drive.arcadeDrive(joystick);
+    }
+
+    public void driveWithGamepad(Joystick joystick) {
         mecanumDrive(joystick);
-        //drive.arcadeDrive(stick);
     }
 }
