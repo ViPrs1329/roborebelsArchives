@@ -14,13 +14,14 @@ public class DriveWithJoystick extends CommandBase {
     public DriveWithJoystick() {
         super("DriveWithJoystick");
         requires(drivetrain); // reserve the drivetrain subsystem
+        Debug.println("[DriveWithJoystick] instantiation done.");
     }
 
     /**
      * Command initialization logic
      */
     protected void initialize() {
-        Debug.println("[" + this.getName() + "] initialized");
+        Debug.println("[DriveWithJoystick] initialized");
     }
 
     /**

@@ -24,15 +24,15 @@ public class Shooter extends Subsystem {
         super("Shooter");
         Debug.println("[Shooter] Instantiating...");
 
-        // Set the servo to the PWM channel on the digital module
+        // Set the servo and victor to the PWM channels on the digital module
         // to which the servo is attached.
-        Debug.println("[Shooter] Initializing shooter victor to slot " + RobotMap.SHOOTER_VICTOR_OUTPUT_MODULE
-                + " and channel " + RobotMap.SHOOTER_VICTOR_OUTPUT_CHANNEL);
-        shooterVictor = new Victor(RobotMap.SHOOTER_VICTOR_OUTPUT_MODULE, RobotMap.SHOOTER_VICTOR_OUTPUT_CHANNEL);
+        Debug.println("[Shooter] Initializing shooter motor speed controller to PWM channel "
+                + RobotMap.SHOOTER_VICTOR_PWM_CHANNEL + " on the digital module.");
+        shooterVictor = new Victor(RobotMap.SHOOTER_VICTOR_PWM_CHANNEL);
 
-        Debug.println("[Shooter] Initializing shooter servo to slot " + RobotMap.SHOOTER_SERVO_OUTPUT_MODULE
-                + " and channel " + RobotMap.SHOOTER_SERVO_OUTPUT_CHANNEL);
-        shooterServo = new Servo(RobotMap.SHOOTER_SERVO_OUTPUT_MODULE, RobotMap.SHOOTER_SERVO_OUTPUT_CHANNEL);
+        Debug.println("[Shooter] Initializing shooter disc loader servo to PWM channel "
+                + RobotMap.SHOOTER_SERVO_PWM_CHANNEL + " on the digital module.");
+        shooterServo = new Servo(RobotMap.SHOOTER_SERVO_PWM_CHANNEL);
 
         Debug.println("[Shooter] Instantiation complete.");
     }

@@ -79,8 +79,8 @@ public class OI {
     public OI() {
         Debug.println("[OI] Instantiating ...");
 
-        Debug.println("[OI] Initializing Joystick to port " + RobotMap.JOYSTICK1);
-        this.joystick = new Joystick(RobotMap.JOYSTICK1);
+        Debug.println("[OI] Initializing Joystick to port " + RobotMap.DRIVER_STATION_USB_PORT1);
+        this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
 
         Debug.println("[OI] Initializing Joystick button to load disc when trigger is pressed ");
         this.shooterButton = new JoystickButton(this.joystick, Joystick.ButtonType.kTrigger.value);

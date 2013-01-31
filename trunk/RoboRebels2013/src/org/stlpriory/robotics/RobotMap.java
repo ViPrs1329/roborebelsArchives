@@ -18,41 +18,20 @@ public class RobotMap {
     // public static final int rangefinderModule = 1;
 
     // Joysticks
-    public static final int JOYSTICK1 = 1;	// Port 1
-    public static final int JOYSTICK2 = 2;	// Port 2
-    public static final int JOYSTICK3 = 3;	// Port 3
-    public static final int JOYSTICK4 = 4;	// Port 4
+    public static final int DRIVER_STATION_USB_PORT1 = 1;	// USB Port 1 on Driver station PC
+    public static final int DRIVER_STATION_USB_PORT2 = 2;	// USB Port 2 on Driver station PC
+    public static final int DRIVER_STATION_USB_PORT3 = 3;	// USB Port 3 on Driver station PC
+    public static final int DRIVER_STATION_USB_PORT4 = 4;	// USB Port 4 on Driver station PC
 
     // Motors/sensors used by the shooter
-    public static final int SHOOTER_SERVO_OUTPUT_MODULE   = 1;	// Output module (Digital)
-    public static final int SHOOTER_SERVO_OUTPUT_CHANNEL  = 5;	// PWM OUT Port 1
-    public static final int SHOOTER_VICTOR_OUTPUT_MODULE  = 1;	// Output module (Digital)
-    public static final int SHOOTER_VICTOR_OUTPUT_CHANNEL = 6;	// PWM OUT Port 1
-
-    // Motors/sensors used by the arm
-//    public static final int kArmChannel = 5;	// PWM 5
-//    public static final int kArmLatchChannel = 7;	// PWM 7
-//    public static final int kArmSensorExtracted = 5;	// Digital IO 5
-//    public static final int kArmSensorRetracted = 2;	// Digital IO 2
-//    public static final int kArmSensorLatch = 3;	// Digital IO 3
-
-    // Motor used by the ball grabber
-//    public static final int kGrabberChannel = 6;	// PWM 6
-
-    // Motor used by the shooter
-//    public static final int kShooterFlyWheelChannel = 4;	// PWM 4
-//    public static final int kShooterFeederChannel = 3;	// PWM 3
-//    public static final int kShooterAnglerChannel = 1;	// Relay 1
-
-    // Drive motors (2 motor drive)
-    public static final int DRIVE_LEFT_MOTOR = 2;	// PWM 2
-    public static final int DRIVE_RIGHT_MOTOR = 1;	// PWM 1
+    public static final int SHOOTER_SERVO_PWM_CHANNEL  = 5;	// PWM OUT Port 1
+    public static final int SHOOTER_VICTOR_PWM_CHANNEL = 6;	// PWM OUT Port 1
 
     // Drive motors (4 motor mechanum drive)
-    public static final int DRIVE_FRONT_LEFT_MOTOR  = 2;	// PWM 1
-    public static final int DRIVE_FRONT_RIGHT_MOTOR = 3;	// PWM 2
-    public static final int DRIVE_BACK_LEFT_MOTOR   = 1;	// PWM 3
-    public static final int DRIVE_BACK_RIGHT_MOTOR  = 4;	// PWM 4
+    public static final int LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL  = 2;	// PWM 1
+    public static final int LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL   = 1;	// PWM 3
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 3;	// PWM 2
+    public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;	// PWM 4
 
     // Sonar slot
 //    public static final int kSonarChannel = 2;	// Analog 2

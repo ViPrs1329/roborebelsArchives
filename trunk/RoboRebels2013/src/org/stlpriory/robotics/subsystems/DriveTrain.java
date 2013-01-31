@@ -31,17 +31,17 @@ public class DriveTrain extends Subsystem {
         super("DriveTrain");
         Debug.println("[DriveTrain] Instantiating...");
 
-        Debug.println("[DriveTrain] Initializing left front jaguar on channel " + RobotMap.DRIVE_FRONT_LEFT_MOTOR);
-        leftFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_LEFT_MOTOR);
+        Debug.println("[DriveTrain] Initializing left front jaguar to PWM channel " + RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        leftFrontJag = new Jaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing right front jaguar on channel " + RobotMap.DRIVE_FRONT_RIGHT_MOTOR);
-        rightFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_RIGHT_MOTOR);
+        Debug.println("[DriveTrain] Initializing left rear jaguar to PWM channel " + RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        leftRearJag = new Jaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing left rear jaguar on channel " + RobotMap.DRIVE_BACK_LEFT_MOTOR);
-        leftRearJag = new Jaguar(RobotMap.DRIVE_BACK_LEFT_MOTOR);
+        Debug.println("[DriveTrain] Initializing right front jaguar to PWM channel " + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        rightFrontJag = new Jaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing right rear jaguar on channel " + RobotMap.DRIVE_BACK_RIGHT_MOTOR);
-        rightRearJag = new Jaguar(RobotMap.DRIVE_BACK_RIGHT_MOTOR);
+        Debug.println("[DriveTrain] Initializing right rear jaguar to PWM channel " + RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        rightRearJag = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing RobotDrive");
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
@@ -62,12 +62,7 @@ public class DriveTrain extends Subsystem {
      */
     public void initDefaultCommand() {
         Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-        Command command = new DriveWithGamepad();
-        setDefaultCommand(command);
-        ITable table = command.getTable();
-        if (table == null) {
-            System.out.println("command table is NULL");
-        }
+        setDefaultCommand(new DriveWithGamepad());
     }
 
     public void setForwards() {
@@ -91,7 +86,6 @@ public class DriveTrain extends Subsystem {
         leftValue *= direction;
         rightValue *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.tankDrive] leftValue = " + leftValue + ", rightValue = " + rightValue);
             drive.tankDrive(leftValue, rightValue);
         }
     }
@@ -100,7 +94,6 @@ public class DriveTrain extends Subsystem {
         moveValue *= direction;
         rotateValue *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.arcadeDrive] moveValue = " + moveValue + ", rotateValue = " + rotateValue);
             drive.arcadeDrive(moveValue, rotateValue);
         }
     }
@@ -150,13 +143,11 @@ public class DriveTrain extends Subsystem {
     public void straight(double speed) {
         speed *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.straight] speed = " + speed);
             drive.tankDrive(speed, speed * 0.75);
         }
     }
 
     public void turnLeft() { // sets the motor speeds to start a left turn
-        Debug.println("[DriveTrain.turnLeft]");
         arcadeDrive(0.0, 1.0);
     }
 
