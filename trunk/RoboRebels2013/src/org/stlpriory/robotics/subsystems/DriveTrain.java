@@ -32,31 +32,16 @@ public class DriveTrain extends Subsystem {
         Debug.println("[DriveTrain] Instantiating...");
 
         Debug.println("[DriveTrain] Initializing left front jaguar on channel " + RobotMap.DRIVE_FRONT_LEFT_MOTOR);
-        try {
-            leftFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_LEFT_MOTOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        leftFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_LEFT_MOTOR);
+
         Debug.println("[DriveTrain] Initializing right front jaguar on channel " + RobotMap.DRIVE_FRONT_RIGHT_MOTOR);
-        try {
-            rightFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_RIGHT_MOTOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        rightFrontJag = new Jaguar(RobotMap.DRIVE_FRONT_RIGHT_MOTOR);
 
         Debug.println("[DriveTrain] Initializing left rear jaguar on channel " + RobotMap.DRIVE_BACK_LEFT_MOTOR);
-        try {
-            leftRearJag = new Jaguar(RobotMap.DRIVE_BACK_LEFT_MOTOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        leftRearJag = new Jaguar(RobotMap.DRIVE_BACK_LEFT_MOTOR);
 
         Debug.println("[DriveTrain] Initializing right rear jaguar on channel " + RobotMap.DRIVE_BACK_RIGHT_MOTOR);
-        try {
-            rightRearJag = new Jaguar(RobotMap.DRIVE_BACK_RIGHT_MOTOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        rightRearJag = new Jaguar(RobotMap.DRIVE_BACK_RIGHT_MOTOR);
 
         Debug.println("[DriveTrain] Initializing RobotDrive");
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
