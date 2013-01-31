@@ -7,7 +7,9 @@ package org.stlpriory.robotics.subsystems;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.tables.ITable;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.misc.Debug;
@@ -74,8 +76,13 @@ public class DriveTrain extends Subsystem {
      * Initialize and set default command
      */
     public void initDefaultCommand() {
-        Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to "+DriveWithGamepad.class.getName());
-        setDefaultCommand(new DriveWithGamepad());
+        Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
+        Command command = new DriveWithGamepad();
+        setDefaultCommand(command);
+        ITable table = command.getTable();
+        if (table == null) {
+            System.out.println("command table is NULL");
+        }
     }
 
     public void setForwards() {
@@ -99,7 +106,7 @@ public class DriveTrain extends Subsystem {
         leftValue *= direction;
         rightValue *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.tankDrive] leftValue = "+leftValue+", rightValue = "+rightValue);
+            Debug.println("[DriveTrain.tankDrive] leftValue = " + leftValue + ", rightValue = " + rightValue);
             drive.tankDrive(leftValue, rightValue);
         }
     }
@@ -108,12 +115,12 @@ public class DriveTrain extends Subsystem {
         moveValue *= direction;
         rotateValue *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.arcadeDrive] moveValue = "+moveValue+", rotateValue = "+rotateValue);
+            Debug.println("[DriveTrain.arcadeDrive] moveValue = " + moveValue + ", rotateValue = " + rotateValue);
             drive.arcadeDrive(moveValue, rotateValue);
         }
     }
 
-   /**
+    /**
      * Drive method for Mecanum wheeled robots.
      */
     public void mecanumDrive(Joystick joystick) {
@@ -140,26 +147,25 @@ public class DriveTrain extends Subsystem {
          * 6 - DPad Left/Right
          */
 
-        double rawLeftX  = joystick.getRawAxis(1);
-        double rawLeftY  = joystick.getRawAxis(2);
-        double rawZ      = joystick.getRawAxis(3);
+        double rawLeftX = joystick.getRawAxis(1);
+        double rawLeftY = joystick.getRawAxis(2);
+        double rawZ = joystick.getRawAxis(3);
 
-        double scaledLeftX  = Utils.scale(rawLeftX);
-        double scaledLeftY  = Utils.scale(rawLeftY);
+        double scaledLeftX = Utils.scale(rawLeftX);
+        double scaledLeftY = Utils.scale(rawLeftY);
 
         double right     = -scaledLeftX;
         double forward   =  scaledLeftY;
         double rotation  = -rawZ;
         double clockwise =  rawZ;
 
-        Debug.println("[DriveTrain.mecanumDrive] x-speed = " + right + ", y-speed = " + forward);
-        drive.mecanumDrive_Cartesian(right, forward, rotation, clockwise);
+         drive.mecanumDrive_Cartesian(right, forward, rotation, clockwise);
     }
 
     public void straight(double speed) {
         speed *= direction;
         if (canDrive()) {
-            Debug.println("[DriveTrain.straight] speed = "+speed);
+            Debug.println("[DriveTrain.straight] speed = " + speed);
             drive.tankDrive(speed, speed * 0.75);
         }
     }

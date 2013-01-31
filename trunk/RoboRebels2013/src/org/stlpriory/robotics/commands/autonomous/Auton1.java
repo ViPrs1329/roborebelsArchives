@@ -30,36 +30,36 @@ public class Auton1 extends CommandGroup {
 
     public Auton1() {
         super("Auton1");
-        /*
-         * Drive forwards to the fender at 0.7 speed for 3 seconds
-         */
-        addSequential(new PrintCommand("[auton1] Driving straight at speed: " + DRIVE_SPEED + " and timeout: " + DRIVE_TIMEOUT));
-        addSequential(new DriveStraight(forwards * DRIVE_SPEED, DRIVE_TIMEOUT));
-        /*
-         * Turn to the left at 0.5 speed for 1 seconds
-         */
-        addSequential(new PrintCommand("[auton1] Turning left at speed: " + TURN1_SPEED + " and timeout: " + TURN1_TIMEOUT));
-        addParallel(new Turn(forwards * TURN1_SPEED, TURN1_TIMEOUT));
-        /*
-         * Wait for 5 seconds for something else to happen
-         */
-        addSequential(new PrintCommand("[auton1] Waiting " + WAIT_TIMEOUT + " seconds for the robot"));
-        addSequential(new WaitCommand(WAIT_TIMEOUT));
-        /*
-         * Turn to the right at 0.5 speed for 2 seconds
-         */
-        addSequential(new PrintCommand("[auton1] Turning right at speed: " + TURN2_SPEED + " and timeout: " + TURN2_TIMEOUT));
-        addParallel(new Turn(backwards * TURN2_SPEED, TURN2_TIMEOUT));
-        /*
-         * Drive back as far as it can (time up)
-         * TODO: Why doesn't the DriveStraight command stop after timeout?
-         */
-        addSequential(new PrintCommand("[auton1] Driving back at speed: " + DRIVE_BACK_SPEED + " and timeout: " + DRIVE_BACK_TIMEOUT));
-        addSequential(new DriveStraight(backwards * DRIVE_BACK_SPEED, DRIVE_BACK_TIMEOUT));
-        /*
-         * Maybe helps stop the previous command?
-         */
-        addSequential(new PrintCommand("[auton1] Waiting " + WAIT_ONE_SECOND + " second(s)"));
-        addSequential(new WaitCommand(WAIT_ONE_SECOND));
+//        /*
+//         * Drive forwards to the fender at 0.7 speed for 3 seconds
+//         */
+//        addSequential(new PrintCommand("[auton1] Driving straight at speed: " + DRIVE_SPEED + " and timeout: " + DRIVE_TIMEOUT));
+//        addSequential(new DriveStraight(forwards * DRIVE_SPEED, DRIVE_TIMEOUT));
+//        /*
+//         * Turn to the left at 0.5 speed for 1 seconds
+//         */
+//        addSequential(new PrintCommand("[auton1] Turning left at speed: " + TURN1_SPEED + " and timeout: " + TURN1_TIMEOUT));
+//        addParallel(new Turn(forwards * TURN1_SPEED, TURN1_TIMEOUT));
+//        /*
+//         * Wait for 5 seconds for something else to happen
+//         */
+//        addSequential(new PrintCommand("[auton1] Waiting " + WAIT_TIMEOUT + " seconds for the robot"));
+//        addSequential(new WaitCommand(WAIT_TIMEOUT));
+//        /*
+//         * Turn to the right at 0.5 speed for 2 seconds
+//         */
+//        addSequential(new PrintCommand("[auton1] Turning right at speed: " + TURN2_SPEED + " and timeout: " + TURN2_TIMEOUT));
+//        addParallel(new Turn(backwards * TURN2_SPEED, TURN2_TIMEOUT));
+//        /*
+//         * Drive back as far as it can (time up)
+//         * TODO: Why doesn't the DriveStraight command stop after timeout?
+//         */
+//        addSequential(new PrintCommand("[auton1] Driving back at speed: " + DRIVE_BACK_SPEED + " and timeout: " + DRIVE_BACK_TIMEOUT));
+//        addSequential(new DriveStraight(backwards * DRIVE_BACK_SPEED, DRIVE_BACK_TIMEOUT));
+//        /*
+//         * Maybe helps stop the previous command?
+//         */
+//        addSequential(new PrintCommand("[auton1] Waiting " + WAIT_ONE_SECOND + " second(s)"));
+//        addSequential(new WaitCommand(WAIT_ONE_SECOND));
     }
 }

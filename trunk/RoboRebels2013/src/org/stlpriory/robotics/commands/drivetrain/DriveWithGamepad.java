@@ -14,6 +14,7 @@ public class DriveWithGamepad extends CommandBase {
     public DriveWithGamepad() {
         super("DriveWithGamepad");
         requires(drivetrain); // reserve the drivetrain subsystem
+        Debug.println("[DriveWithGamepad] instantiation done");
     }
 
     /**
@@ -27,6 +28,7 @@ public class DriveWithGamepad extends CommandBase {
      * Called repeatedly while the command is running
      */
     protected void execute() {
+        Debug.println("[DriveWithGamepad.execute()]");
         drivetrain.driveWithGamepad(oi.getJoystick());
     }
 

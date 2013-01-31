@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.drivetrain.DriveInASquare;
 import org.stlpriory.robotics.misc.Debug;
@@ -38,17 +38,18 @@ public class RoboRebels extends IterativeRobot {
         Debug.println("[RoboRebels.robotInit()] Initializing...");
         timer.start();
 
-        // Initialize all subsystems and the operator interface
-        CommandBase.init();
-
-        SmartDashboard.putData(Scheduler.getInstance());
-
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveInASquare();
         //autonomousCommand = new Auton1();
 
+        // Initialize all subsystems and the operator interface
+        CommandBase.init();
+
+        //SmartDashboard.putData(Scheduler.getInstance());
+
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
+        Debug.println("Robot ready!");
    }
 
     public void autonomousInit() {
@@ -95,6 +96,13 @@ public class RoboRebels extends IterativeRobot {
         if (firstTime) {
             firstTime = false;
         }
+    }
+
+    /**
+     * This function called periodically during test mode
+     */
+    public void testPeriodic() {
+        LiveWindow.run();
     }
 
 }
