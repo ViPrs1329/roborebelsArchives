@@ -49,9 +49,9 @@ public class RobotMap {
     public static final int DRIVE_RIGHT_MOTOR = 1;	// PWM 1
 
     // Drive motors (4 motor mechanum drive)
-    public static final int DRIVE_FRONT_LEFT_MOTOR  = 1;	// PWM 1
-    public static final int DRIVE_FRONT_RIGHT_MOTOR = 2;	// PWM 2
-    public static final int DRIVE_BACK_LEFT_MOTOR   = 3;	// PWM 3
+    public static final int DRIVE_FRONT_LEFT_MOTOR  = 2;	// PWM 1
+    public static final int DRIVE_FRONT_RIGHT_MOTOR = 3;	// PWM 2
+    public static final int DRIVE_BACK_LEFT_MOTOR   = 1;	// PWM 3
     public static final int DRIVE_BACK_RIGHT_MOTOR  = 4;	// PWM 4
 
     // Sonar slot
