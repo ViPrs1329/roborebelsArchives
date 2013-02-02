@@ -8,10 +8,9 @@ import org.stlpriory.robotics.commands.CommandBase;
 
 /**
  *
- * @author William
  */
 public class StopShooting extends CommandBase {
-    
+
     public StopShooting() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
