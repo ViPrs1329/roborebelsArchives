@@ -30,7 +30,7 @@ public class RobotMap {
     public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
 
     // Shooter speed controller and server mappings to PWM channels on the digital sidecar module
-    public static final int SHOOTER_SERVO_PWM_CHANNEL  = 5;	 // PWM channel
-    public static final int SHOOTER_VICTOR_PWM_CHANNEL = 6;	 // PWM channel
+    public static final int SHOOTER_SERVO_PWM_CHANNEL  = 6;	 // PWM channel
+    public static final int SHOOTER_VICTOR_PWM_CHANNEL = 5;	 // PWM channel
 
 }

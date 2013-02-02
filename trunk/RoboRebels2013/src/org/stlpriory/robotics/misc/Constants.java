@@ -21,7 +21,8 @@ public class Constants {
      * In other words, if the servo has a range of (X degrees to Y degrees) than angles of less than X
      * result in an angle of X being set and angles of more than Y degrees result in an angle of Y being set.
      */
-    public static final double MIN_LOADER_SERVO_ANGLE = 0.0;
-    public static final double MAX_LOADER_SERVO_ANGLE = 45.0;
+    public static final double MIN_LOADER_SERVO_ANGLE = -45.0;
+    public static final double MAX_LOADER_SERVO_ANGLE = 65.0;
+    public static final double SHOOTER_SPEED = .7;
 
 }

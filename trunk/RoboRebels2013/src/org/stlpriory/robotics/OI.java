@@ -10,6 +10,7 @@ import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
 import org.stlpriory.robotics.commands.shooter.ShootDisc;
+import org.stlpriory.robotics.commands.shooter.StopShooting;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -74,7 +75,9 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
-    private JoystickButton shooterButton;
+    private JoystickButton loaderButton;
+    private JoystickButton shooterStartButton;
+    private JoystickButton shooterStopButton;
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -83,8 +86,12 @@ public class OI {
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
 
         Debug.println("[OI] Initializing Joystick button to load disc when trigger is pressed ");
-        this.shooterButton = new JoystickButton(this.joystick, Joystick.ButtonType.kTrigger.value);
-        this.shooterButton.whenPressed(new LoadDisc(0.25));
+        this.loaderButton = new JoystickButton(this.joystick, 6);
+        this.loaderButton.whenPressed(new LoadDisc(0.45));
+        this.shooterStartButton = new JoystickButton(this.joystick, 8);
+        this.shooterStartButton.whenPressed(new ShootDisc());
+        this.shooterStopButton = new JoystickButton(this.joystick, 7);
+        this.shooterStopButton.whenPressed(new StopShooting());
 
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new Auton1());

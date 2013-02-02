@@ -6,6 +6,7 @@ package org.stlpriory.robotics.commands.shooter;
 
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
+import org.stlpriory.robotics.misc.Constants;
 
 /**
  *  Command use to load frisbee disc into shooter
@@ -30,6 +31,7 @@ public class LoadDisc extends CommandBase {
         setTimeout(timeout);
         Debug.print("[" + getName() + "]");
         Debug.print("\tTimeout: " + timeout);
+        shooter.setAngle(Constants.MIN_LOADER_SERVO_ANGLE);
     }
 
     /**

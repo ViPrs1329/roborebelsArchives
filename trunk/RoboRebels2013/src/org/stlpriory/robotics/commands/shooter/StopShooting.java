@@ -5,15 +5,14 @@
 package org.stlpriory.robotics.commands.shooter;
 
 import org.stlpriory.robotics.commands.CommandBase;
-import org.stlpriory.robotics.misc.Constants;
 
 /**
  *
- * @author dfuglsan
+ * @author William
  */
-public class ShootDisc extends CommandBase {
+public class StopShooting extends CommandBase {
     
-    public ShootDisc() {
+    public StopShooting() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -24,8 +23,7 @@ public class ShootDisc extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        System.out.println("Is shooting");
-        shooter.startShooter(Constants.SHOOTER_SPEED);
+        shooter.stopShooter();
     }
 
     // Make this return true when this Command no longer needs to run execute()

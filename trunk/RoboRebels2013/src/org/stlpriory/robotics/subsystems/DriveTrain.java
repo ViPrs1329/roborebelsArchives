@@ -132,12 +132,12 @@ public class DriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = scaledLeftX;
-        double forward   =  -scaledLeftY;
-        double rotation  = rawZ;
-        double clockwise =  -rawZ;
+        double right     = -scaledLeftX;
+        double forward   =  scaledLeftY;
+        double rotation  = -rawZ;
+        double clockwise =  rawZ;
 
-         drive.mecanumDrive_Cartesian(right, forward, rotation, clockwise);
+         drive.mecanumDrive_Cartesian(-right, -forward, -rotation, -clockwise);
     }
 
     public void straight(double speed) {
