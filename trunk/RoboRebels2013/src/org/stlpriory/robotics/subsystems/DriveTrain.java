@@ -49,8 +49,8 @@ public class DriveTrain extends Subsystem {
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
         drive.setMaxOutput(1.0);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         //drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         //drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
@@ -132,10 +132,10 @@ public class DriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = -scaledLeftX;
-        double forward   =  scaledLeftY;
-        double rotation  = -rawZ;
-        double clockwise =  rawZ;
+        double right     = scaledLeftX;
+        double forward   =  -scaledLeftY;
+        double rotation  = rawZ;
+        double clockwise =  -rawZ;
 
          drive.mecanumDrive_Cartesian(right, forward, rotation, clockwise);
     }
