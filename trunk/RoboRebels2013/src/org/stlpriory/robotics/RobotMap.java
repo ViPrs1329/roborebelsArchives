@@ -33,4 +33,7 @@ public class RobotMap {
     public static final int SHOOTER_SERVO_PWM_CHANNEL  = 6;	 // PWM channel
     public static final int SHOOTER_VICTOR_PWM_CHANNEL = 5;	 // PWM channel
 
+    public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A = 2;
+    public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B = 3;
+
 }

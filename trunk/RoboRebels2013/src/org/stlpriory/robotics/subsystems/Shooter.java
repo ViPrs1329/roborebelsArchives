@@ -4,7 +4,6 @@
  */
 package org.stlpriory.robotics.subsystems;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
@@ -62,11 +61,14 @@ public class Shooter extends Subsystem {
         System.out.println("Servo Anlge :" +shooterServo.getAngle());
         System.out.println("done reseting");
     }
-    
-    
-        
-       
 
+    public void startShooter(double speed) {
+        shooterVictor.set(speed);
+    }
+
+    public void stopShooter() {
+        shooterVictor.set(0);
+    }
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -74,11 +76,5 @@ public class Shooter extends Subsystem {
     }
     public void setAngle(double angle) {
         shooterServo.setAngle(angle);
-    }
-    public void startShooter(double speed) {
-        shooterVictor.set(speed);
-    }
-    public void stopShooter() {
-        shooterVictor.set(0);
     }
 }
