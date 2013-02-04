@@ -4,6 +4,7 @@ package org.stlpriory.robotics;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
+import org.stlpriory.robotics.commands.shooter.Shoot;
 import org.stlpriory.robotics.commands.shooter.StartShooting;
 import org.stlpriory.robotics.commands.shooter.StopShooting;
 import org.stlpriory.robotics.misc.Debug;
@@ -77,16 +78,24 @@ public class OI {
     public OI() {
         Debug.println("[OI] Instantiating ...");
 
-        Debug.println("[OI] Initializing Joystick to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
+        Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
 
-        Debug.println("[OI] Initializing Joystick button to load disc when trigger is pressed ");
+        Debug.println("[OI] Initializing gamepad to load a disc when the right bumper pressed");
         this.loaderButton = new JoystickButton(this.joystick, 6);
         this.loaderButton.whenPressed(new LoadDisc());
+
+        Debug.println("[OI] Initializing gamepad to start the shooter motor when the start button is pressed");
         this.shooterStartButton = new JoystickButton(this.joystick, 8);
         this.shooterStartButton.whenPressed(new StartShooting());
+
+        Debug.println("[OI] Initializing gamepad to stop the shooter motor when the stop button is pressed");
         this.shooterStopButton = new JoystickButton(this.joystick, 7);
         this.shooterStopButton.whenPressed(new StopShooting());
+
+        Debug.println("[OI] Initializing gamepad to execute the shooting sequence when the A button is pressed");
+        this.shooterStopButton = new JoystickButton(this.joystick, 1);
+        this.shooterStopButton.whenPressed(new Shoot());
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
