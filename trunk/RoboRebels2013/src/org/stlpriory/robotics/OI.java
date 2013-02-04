@@ -3,13 +3,8 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.stlpriory.robotics.commands.autonomous.Auton1;
-import org.stlpriory.robotics.commands.drivetrain.DriveInASquare;
-import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
-import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
-import org.stlpriory.robotics.commands.shooter.ShootDisc;
+import org.stlpriory.robotics.commands.shooter.StartShooting;
 import org.stlpriory.robotics.commands.shooter.StopShooting;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -87,19 +82,19 @@ public class OI {
 
         Debug.println("[OI] Initializing Joystick button to load disc when trigger is pressed ");
         this.loaderButton = new JoystickButton(this.joystick, 6);
-        this.loaderButton.whenPressed(new LoadDisc(0.45));
+        this.loaderButton.whenPressed(new LoadDisc());
         this.shooterStartButton = new JoystickButton(this.joystick, 8);
-        this.shooterStartButton.whenPressed(new ShootDisc());
+        this.shooterStartButton.whenPressed(new StartShooting());
         this.shooterStopButton = new JoystickButton(this.joystick, 7);
         this.shooterStopButton.whenPressed(new StopShooting());
 
         // SmartDashboard Buttons
-        SmartDashboard.putData("Autonomous Command", new Auton1());
-        SmartDashboard.putData("DriveInASquare", new DriveInASquare());
-        SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
-        SmartDashboard.putData("DriveWithGamepad", new DriveWithGamepad());
-        SmartDashboard.putData("LoadDisc", new LoadDisc());
-        SmartDashboard.putData("ShootDisc", new ShootDisc());
+//        SmartDashboard.putData("Autonomous Command", new Auton1());
+//        SmartDashboard.putData("DriveInASquare", new DriveInASquare());
+//        SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
+//        SmartDashboard.putData("DriveWithGamepad", new DriveWithGamepad());
+//        SmartDashboard.putData("LoadDisc", new LoadDisc());
+//        SmartDashboard.putData("ShootDisc", new ShootDisc());
 
         // associate the DriveInSquare command group with the
         // trigger button on the right joystick. Whenever the

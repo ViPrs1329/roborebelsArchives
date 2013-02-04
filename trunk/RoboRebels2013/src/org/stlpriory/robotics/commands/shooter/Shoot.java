@@ -12,23 +12,26 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  * @author William
  */
 public class Shoot extends CommandGroup {
-    
+
     public Shoot() {
+        super("Shoot");
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
         // these will run in order.
-        addSequential(new ShootDisc(.1));
+
+        addSequential(new StartShooting(0.2));
         addSequential(new WaitCommand(1));
-        addSequential(new LoadDisc());
+        addSequential(new LoadDisc(2));
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc());
+        addSequential(new LoadDisc(2));
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc());
+        addSequential(new LoadDisc(2));
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc());
+        addSequential(new LoadDisc(2));
         addSequential(new WaitCommand(.25));
         addSequential(new StopShooting());
+        
         // To run multiple commands at the same time,
         // use addParallel()
         // e.g. addParallel(new Command1());

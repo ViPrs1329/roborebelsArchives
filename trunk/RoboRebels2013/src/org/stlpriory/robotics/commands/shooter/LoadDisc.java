@@ -9,17 +9,19 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Constants;
 
 /**
- *  Command use to load frisbee disc into shooter
+ * Command use to load frisbee disc into shooter
  */
 public class LoadDisc extends CommandBase {
 
+    private static final double DEFAULT_TIME_OUT = 2;
     private double timeout;
 
     public LoadDisc() {
-        this(0.5);
+        this(DEFAULT_TIME_OUT);
     }
 
     public LoadDisc(double timeout) {
+        super("LoadDisc");
         requires(shooter);
         this.timeout = timeout;
     }
@@ -29,20 +31,20 @@ public class LoadDisc extends CommandBase {
      */
     protected void initialize() {
         setTimeout(timeout);
-        Debug.print("[" + getName() + "]");
+        Debug.print("[" + getName() + "] initialize");
         Debug.print("\tTimeout: " + timeout);
-        shooter.setAngle(Constants.MIN_LOADER_SERVO_ANGLE);
     }
 
     /**
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.loadDisc();
+        shooter.loadDisc(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**
      * Make this return true when this Command no longer needs to run execute()
+     *
      * @return finished state
      */
     protected boolean isFinished() {
@@ -53,16 +55,15 @@ public class LoadDisc extends CommandBase {
      * Called once after isFinished returns true
      */
     protected void end() {
-        Debug.println("\t\tDONE");
-        shooter.resetLoader();
+        Debug.print("[" + getName() + "] end");
+        shooter.resetLoader(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**
-     * Called when another command which requires one or more of
-     * the same subsystems is scheduled to run
+     * Called when another command which requires one or more of the same subsystems is scheduled to run
      */
     protected void interrupted() {
-        Debug.println("\t[interrupted] " + getName());
-        shooter.resetLoader();
+        Debug.print("[" + getName() + "] interrupted");
+        shooter.resetLoader(Constants.LOADER_MOTOR_SPEED);
     }
 }

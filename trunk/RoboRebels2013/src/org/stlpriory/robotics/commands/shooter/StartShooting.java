@@ -11,17 +11,17 @@ import org.stlpriory.robotics.misc.Debug;
 /**
  *
  */
-public class ShootDisc extends CommandBase {
+public class StartShooting extends CommandBase {
 
-    private static final double DEFAULT_TIME_OUT = 1;
+    private static final double DEFAULT_TIME_OUT = 0.2;
     private double timeout;
 
-    public ShootDisc() {
+    public StartShooting() {
         this(DEFAULT_TIME_OUT);
     }
 
-    public ShootDisc(double timeout) {
-        super("ShootDisc");
+    public StartShooting(double timeout) {
+        super("StartShooting");
         requires(shooter);
         this.timeout = timeout;
     }
@@ -40,14 +40,12 @@ public class ShootDisc extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-//        return false;
         return isTimedOut();
     }
 
     // Called once after isFinished returns true
     protected void end() {
         Debug.print("[" + getName() + "] end");
-        shooter.stopShooter();
     }
 
     // Called when another command which requires one or more of the same
