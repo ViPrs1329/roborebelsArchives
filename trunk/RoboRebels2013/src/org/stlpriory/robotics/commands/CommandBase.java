@@ -30,8 +30,8 @@ public abstract class CommandBase extends Command {
         oi = new OI();
 
         // Show what command your subsystem is running on the SmartDashboard
-        SmartDashboard.putData(drivetrain);
-        
+        //SmartDashboard.putData(drivetrain);
+
         Debug.println("[CommandBase.init()] Done.");
     }
 

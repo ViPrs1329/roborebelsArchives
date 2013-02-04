@@ -4,6 +4,10 @@
  */
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Encoder.PIDSourceParameter;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
@@ -19,8 +23,10 @@ public class Shooter extends Subsystem {
 
     private static Servo shooterServo = null;
     private static SpeedController shooterVictor = null;
-    boolean button;
-    private double servoAngle;
+    // Quadrature encoder used to measure shoot motor speed
+    private static Encoder shooterEncoder;
+
+    private static DigitalInput shooterDigitalInput1;
 
     public Shooter() {
         super("Shooter");
@@ -36,6 +42,18 @@ public class Shooter extends Subsystem {
                 + RobotMap.SHOOTER_SERVO_PWM_CHANNEL + " on the digital module.");
         shooterServo = new Servo(RobotMap.SHOOTER_SERVO_PWM_CHANNEL);
 
+//        Debug.println("[Shooter] Initializing shooter motor encoder to channels "
+//                + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A
+//                + " and " + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B);
+//        shooterEncoder = new Encoder(1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A,
+//                1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B, true, EncodingType.k1X);
+//        shooterEncoder.setDistancePerPulse(1.0);
+//        shooterEncoder.setPIDSourceParameter(PIDSourceParameter.kRate);
+
+        Debug.println("[Shooter] Initializing shooter proximity sensor to channel "
+                + RobotMap.PROXY_SENSOR_IO_CHANNEL);
+        shooterDigitalInput1 = new DigitalInput(1, RobotMap.PROXY_SENSOR_IO_CHANNEL);
+
         Debug.println("[Shooter] Instantiation complete.");
     }
 
@@ -45,25 +63,28 @@ public class Shooter extends Subsystem {
 
     public void loadDisc() {
         if (canLoadDisc()) {
-            System.out.println("Is loading");
-            System.out.println("Servo Angle: " + shooterServo.getAngle());
-            servoAngle = shooterServo.getAngle();
-            shooterServo.setAngle(Constants.MAX_LOADER_SERVO_ANGLE);
-            System.out.println("Servo Angle: " + shooterServo.getAngle());
-            System.out.println("done loading");        }
+            setAngle(Constants.MAX_LOADER_SERVO_ANGLE);
+        }
     }
 
     public void resetLoader() {
-        System.out.println("is reseting");
-        System.out.println("Servo Angle: " + shooterServo.getAngle());
-        servoAngle = shooterServo.getAngle();
-        shooterServo.setAngle(Constants.MIN_LOADER_SERVO_ANGLE);
-        System.out.println("Servo Anlge :" +shooterServo.getAngle());
-        System.out.println("done reseting");
+        setAngle(Constants.MIN_LOADER_SERVO_ANGLE);
+    }
+
+    public void startEncoder() {
+//        shooterEncoder.start();
+//        Debug.println("[Shooter] encoder started.");
+    }
+
+    public void stopEncoder() {
+//        shooterEncoder.stop();
+//        Debug.println("[Shooter] encoder stopped.");
     }
 
     public void startShooter(double speed) {
         shooterVictor.set(speed);
+        //System.out.println(shooterEncoder.getRate());
+        System.out.println(shooterDigitalInput1.get());
     }
 
     public void stopShooter() {
@@ -74,6 +95,7 @@ public class Shooter extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
+
     public void setAngle(double angle) {
         shooterServo.setAngle(angle);
     }

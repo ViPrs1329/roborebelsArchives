@@ -1,5 +1,7 @@
 package org.stlpriory.robotics;
 
+import edu.wpi.first.wpilibj.Encoder;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -35,5 +37,7 @@ public class RobotMap {
 
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A = 2;
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B = 3;
+
+    public static final int PROXY_SENSOR_IO_CHANNEL = 4;
 
 }

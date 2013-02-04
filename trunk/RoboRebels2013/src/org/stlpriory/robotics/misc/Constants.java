@@ -24,5 +24,5 @@ public class Constants {
     public static final double MIN_LOADER_SERVO_ANGLE = -45.0;
     public static final double MAX_LOADER_SERVO_ANGLE = 65.0;
 
-    public static final double SHOOTER_SPEED = 0.7;
+    public static final double SHOOTER_SPEED = 0.5;
 }
