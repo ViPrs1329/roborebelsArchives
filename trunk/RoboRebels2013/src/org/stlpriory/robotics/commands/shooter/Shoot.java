@@ -20,18 +20,31 @@ public class Shoot extends CommandGroup {
         //      addSequential(new Command2());
         // these will run in order.
 
-        addSequential(new StartShooting(0.2));
-        addSequential(new WaitCommand(1));
-        addSequential(new LoadDisc(2));
+        addSequential(new StartShooting());
+        addSequential(new WaitCommand(2));
+
+        addSequential(new LoadDisc());
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc(2));
+        addSequential(new ResetLoadDisc());
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc(2));
+
+        addSequential(new LoadDisc());
         addSequential(new WaitCommand(.25));
-        addSequential(new LoadDisc(2));
+        addSequential(new ResetLoadDisc());
         addSequential(new WaitCommand(.25));
+
+        addSequential(new LoadDisc());
+        addSequential(new WaitCommand(.25));
+        addSequential(new ResetLoadDisc());
+        addSequential(new WaitCommand(.25));
+
+        addSequential(new LoadDisc());
+        addSequential(new WaitCommand(.25));
+        addSequential(new ResetLoadDisc());
+        addSequential(new WaitCommand(2));
+
         addSequential(new StopShooting());
-        
+
         // To run multiple commands at the same time,
         // use addParallel()
         // e.g. addParallel(new Command1());

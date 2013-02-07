@@ -4,6 +4,7 @@ package org.stlpriory.robotics;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
+import org.stlpriory.robotics.commands.shooter.ResetLoadDisc;
 import org.stlpriory.robotics.commands.shooter.Shoot;
 import org.stlpriory.robotics.commands.shooter.StartShooting;
 import org.stlpriory.robotics.commands.shooter.StopShooting;
@@ -80,6 +81,10 @@ public class OI {
 
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
+
+        Debug.println("[OI] Initializing gamepad to reset disc loader when the left bumper pressed");
+        this.loaderButton = new JoystickButton(this.joystick, 5);
+        this.loaderButton.whenPressed(new ResetLoadDisc());
 
         Debug.println("[OI] Initializing gamepad to load a disc when the right bumper pressed");
         this.loaderButton = new JoystickButton(this.joystick, 6);

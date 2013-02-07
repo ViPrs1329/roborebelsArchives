@@ -9,12 +9,12 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Constants;
 
 /**
- * Command use to load frisbee disc into shooter
+ * Command use to unload frisbee disc into shooter
  */
-public class LoadDisc extends CommandBase {
+public class ResetLoadDisc extends CommandBase {
 
-    public LoadDisc() {
-        super("LoadDisc");
+    public ResetLoadDisc() {
+        super("ResetLoadDisc");
         requires(shooter);
     }
 
@@ -29,7 +29,7 @@ public class LoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.loadDisc(Constants.LOADER_MOTOR_SPEED);
+        shooter.resetLoader(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**
@@ -38,7 +38,7 @@ public class LoadDisc extends CommandBase {
      * @return finished state
      */
     protected boolean isFinished() {
-        return shooter.isLoadDiscFinished();
+        return shooter.isResetLoaderFinished();
     }
 
     /**

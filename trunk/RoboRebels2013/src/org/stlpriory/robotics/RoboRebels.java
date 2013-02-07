@@ -49,7 +49,9 @@ public class RoboRebels extends IterativeRobot {
 
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
-        Debug.println("Robot ready!");
+        Debug.println("------------------------------------------");
+        Debug.println("           Robot ready!");
+        Debug.println("------------------------------------------");
    }
 
     public void autonomousInit() {

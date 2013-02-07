@@ -4,16 +4,12 @@
  */
 package org.stlpriory.robotics.subsystems;
 
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Encoder.PIDSourceParameter;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
-import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -71,27 +67,40 @@ public class Shooter extends Subsystem {
     private boolean canLoadDisc() {
         // If the start position limit switch is triggered then
         // the loader arm is retracted and ready to load another disc
-        return startLimitSwitch.get();
+        return true;
+        //return startLimitSwitch.get();
     }
 
     public void loadDisc(double speed) {
         if (canLoadDisc()) {
             // Until the stop position limit switch is triggered
             // the value returned will be false
-            while (!stopLimitSwitch.get()) {
-                loaderVictor.set(speed);
+            while ( !stopLimitSwitch.get() ) {
+                loaderVictor.set(-speed);
             }
             loaderVictor.set(0);
         }
+    }
+
+    public boolean isLoadDiscFinished() {
+        return stopLimitSwitch.get();
     }
 
     public void resetLoader(double speed) {
         // Until the start position limit switch is triggered
         // the value returned will be false
         while (!startLimitSwitch.get()) {
-            loaderVictor.set(-speed);
+            loaderVictor.set(speed);
         }
         loaderVictor.set(0);
+    }
+
+    public boolean isResetLoaderFinished() {
+        return startLimitSwitch.get();
+    }
+
+    public void printLimitSwitchValues() {
+        System.out.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
     }
 
     public void startEncoder() {
