@@ -4,12 +4,14 @@
  */
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.can.CANNotInitializedException;
+import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.tables.ITable;
+import edu.wpi.first.wpilibj.communication.UsageReporting;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.misc.Debug;
@@ -136,8 +138,11 @@ public class DriveTrain extends Subsystem {
         double forward   =  scaledLeftY;
         double rotation  = -rawZ;
         double clockwise =  rawZ;
-
-         drive.mecanumDrive_Cartesian(-right, -forward, -rotation, -clockwise);
+        drive.mecanumDrive_Cartesian(right, -forward, rotation, clockwise);
+        System.out.println("LR: " + leftRearJag.get());
+        System.out.println("LF: " + leftFrontJag.get());
+        System.out.println("RR: " + rightRearJag.get());
+        System.out.println("RF: " + rightFrontJag.get());
     }
 
     public void straight(double speed) {
@@ -158,4 +163,42 @@ public class DriveTrain extends Subsystem {
     public void driveWithGamepad(Joystick joystick) {
         mecanumDrive(joystick);
     }
+//    public void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle)
+//    {
+//        
+//        double xIn = x;
+//        double yIn = y;
+//        // Negate y for the joystick.
+//        yIn = -yIn;
+//        // Compenstate for gyro angle.
+//        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
+//        xIn = rotated[0];
+//        yIn = rotated[1];
+//
+//        double wheelSpeeds[] = new double[4];
+//        wheelSpeeds[RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] = xIn + yIn + rotation;
+//        wheelSpeeds[RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL] = -xIn + yIn - rotation;
+//        wheelSpeeds[RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] = -xIn + yIn + rotation;
+//        wheelSpeeds[RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL] = xIn + yIn - rotation;
+//
+//        normalize(wheelSpeeds);
+//
+//        byte syncGroup = (byte)0x80;
+//
+//        leftFrontJag.set(wheelSpeeds[RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] * m_invertedMotors[RobotDrive.MotorType.kFrontLeft_val] * m_maxOutput, syncGroup);
+//        m_frontRightMotor.set(wheelSpeeds[RobotDrive.MotorType.kFrontRight_val] * m_invertedMotors[RobotDrive.MotorType.kFrontRight_val] * m_maxOutput, syncGroup);
+//        m_rearLeftMotor.set(wheelSpeeds[RobotDrive.MotorType.kRearLeft_val] * m_invertedMotors[RobotDrive.MotorType.kRearLeft_val] * m_maxOutput, syncGroup);
+//        m_rearRightMotor.set(wheelSpeeds[RobotDrive.MotorType.kRearRight_val] * m_invertedMotors[RobotDrive.MotorType.kRearRight_val] * m_maxOutput, syncGroup);
+//
+//        if (m_isCANInitialized) {
+//            try {
+//                CANJaguar.updateSyncGroup(syncGroup);
+//            } catch (CANNotInitializedException e) {
+//                m_isCANInitialized = false;
+//            } catch (CANTimeoutException e) {}
+//        }
+//
+//        if (m_safetyHelper != null) m_safetyHelper.feed();
+//    }
+
 }
