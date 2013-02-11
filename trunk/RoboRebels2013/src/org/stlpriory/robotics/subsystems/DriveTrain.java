@@ -7,11 +7,11 @@ package org.stlpriory.robotics.subsystems;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.can.CANNotInitializedException;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.communication.UsageReporting;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.misc.Debug;
@@ -28,6 +28,9 @@ public class DriveTrain extends Subsystem {
     private static Jaguar leftRearJag;
     private static Jaguar rightRearJag;
     private static double direction = 1;
+
+    private boolean m_isCANInitialized = true;
+
 
     public DriveTrain() {
         super("DriveTrain");
@@ -138,11 +141,8 @@ public class DriveTrain extends Subsystem {
         double forward   =  scaledLeftY;
         double rotation  = -rawZ;
         double clockwise =  rawZ;
+
         drive.mecanumDrive_Cartesian(right, -forward, rotation, clockwise);
-        System.out.println("LR: " + leftRearJag.get());
-        System.out.println("LF: " + leftFrontJag.get());
-        System.out.println("RR: " + rightRearJag.get());
-        System.out.println("RF: " + rightFrontJag.get());
     }
 
     public void straight(double speed) {
@@ -163,42 +163,95 @@ public class DriveTrain extends Subsystem {
     public void driveWithGamepad(Joystick joystick) {
         mecanumDrive(joystick);
     }
-//    public void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle)
-//    {
-//        
-//        double xIn = x;
-//        double yIn = y;
-//        // Negate y for the joystick.
-//        yIn = -yIn;
-//        // Compenstate for gyro angle.
-//        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
-//        xIn = rotated[0];
-//        yIn = rotated[1];
-//
-//        double wheelSpeeds[] = new double[4];
-//        wheelSpeeds[RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] = xIn + yIn + rotation;
-//        wheelSpeeds[RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL] = -xIn + yIn - rotation;
-//        wheelSpeeds[RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] = -xIn + yIn + rotation;
-//        wheelSpeeds[RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL] = xIn + yIn - rotation;
-//
-//        normalize(wheelSpeeds);
-//
-//        byte syncGroup = (byte)0x80;
-//
-//        leftFrontJag.set(wheelSpeeds[RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL] * m_invertedMotors[RobotDrive.MotorType.kFrontLeft_val] * m_maxOutput, syncGroup);
-//        m_frontRightMotor.set(wheelSpeeds[RobotDrive.MotorType.kFrontRight_val] * m_invertedMotors[RobotDrive.MotorType.kFrontRight_val] * m_maxOutput, syncGroup);
-//        m_rearLeftMotor.set(wheelSpeeds[RobotDrive.MotorType.kRearLeft_val] * m_invertedMotors[RobotDrive.MotorType.kRearLeft_val] * m_maxOutput, syncGroup);
-//        m_rearRightMotor.set(wheelSpeeds[RobotDrive.MotorType.kRearRight_val] * m_invertedMotors[RobotDrive.MotorType.kRearRight_val] * m_maxOutput, syncGroup);
-//
-//        if (m_isCANInitialized) {
-//            try {
-//                CANJaguar.updateSyncGroup(syncGroup);
-//            } catch (CANNotInitializedException e) {
-//                m_isCANInitialized = false;
-//            } catch (CANTimeoutException e) {}
+
+    //--------------------------------------------------------------------------------------------------
+    //     Mecanum drive implementation code copied from the RobotDrive class.
+    //     We should avoid trying to use this logic if possible since not all
+    //     the RobotDrive code could be ported over into this class.
+    //--------------------------------------------------------------------------------------------------
+
+    private void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle) {
+
+        double xIn = x;
+        double yIn = y;
+        // Negate y for the joystick.
+        yIn = -yIn;
+        // Compenstate for gyro angle.
+        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
+        xIn = rotated[0];
+        yIn = rotated[1];
+
+        double wheelSpeeds[] = new double[4];
+        int kFrontLeft_val = 0;
+        int kFrontRight_val = 1;
+        int kRearLeft_val = 2;
+        int kRearRight_val = 3;
+        wheelSpeeds[kFrontLeft_val]  = xIn + yIn + rotation;
+        wheelSpeeds[kFrontRight_val] = -xIn + yIn - rotation;
+        wheelSpeeds[kRearLeft_val]   = -xIn + yIn + rotation;
+        wheelSpeeds[kRearRight_val]  = xIn + yIn - rotation;
+
+        normalize(wheelSpeeds);
+
+        byte syncGroup = (byte) 0x80;
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        // Must be consistent with the inverted motor settings
+        // used when constructing RobotDrive in this class
+        int m_invertedMotors[] = new int[4];
+        m_invertedMotors[kFrontLeft_val]  = 1;
+        m_invertedMotors[kRearLeft_val]   = 1;
+        m_invertedMotors[kFrontRight_val] = -1;
+        m_invertedMotors[kRearRight_val]  = -1;
+
+        double m_maxOutput = 1.0;
+
+        leftFrontJag.set(wheelSpeeds[kFrontLeft_val] * m_invertedMotors[kFrontLeft_val] * m_maxOutput, syncGroup);
+        rightFrontJag.set(wheelSpeeds[kFrontRight_val] * m_invertedMotors[kFrontRight_val] * m_maxOutput, syncGroup);
+        leftRearJag.set(wheelSpeeds[kRearLeft_val] * m_invertedMotors[kRearLeft_val] * m_maxOutput, syncGroup);
+        rightRearJag.set(wheelSpeeds[kRearRight_val] * m_invertedMotors[kRearRight_val] * m_maxOutput, syncGroup);
+
+        if (m_isCANInitialized) {
+            try {
+                CANJaguar.updateSyncGroup(syncGroup);
+            } catch (CANNotInitializedException e) {
+                m_isCANInitialized = false;
+            } catch (CANTimeoutException e) {
+            }
+        }
+
+//        if (m_safetyHelper != null) {
+//            m_safetyHelper.feed();
 //        }
-//
-//        if (m_safetyHelper != null) m_safetyHelper.feed();
-//    }
+    }
+
+    /**
+     * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
+     */
+    private static void normalize(double wheelSpeeds[]) {
+        double maxMagnitude = Math.abs(wheelSpeeds[0]);
+        int i;
+        for (i=1; i<4; i++) {
+            double temp = Math.abs(wheelSpeeds[i]);
+            if (maxMagnitude < temp) maxMagnitude = temp;
+        }
+        if (maxMagnitude > 1.0) {
+            for (i=0; i<4; i++) {
+                wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+            }
+        }
+    }
+
+    /**
+     * Rotate a vector in Cartesian space.
+     */
+    private static double[] rotateVector(double x, double y, double angle) {
+        double cosA = Math.cos(angle * (3.14159 / 180.0));
+        double sinA = Math.sin(angle * (3.14159 / 180.0));
+        double out[] = new double[2];
+        out[0] = x * cosA - y * sinA;
+        out[1] = x * sinA + y * cosA;
+        return out;
+    }
 
 }
