@@ -31,37 +31,57 @@ public class CANDriveTrain extends Subsystem {
         Debug.println("[CANDriveTrain] Instantiating...");
 
         CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPercentVbus;
-        Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "
-                + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kCurrent;
+        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kSpeed;
+        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPosition;
+        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kVoltage;
+
+        // The proportional gain of the Jaguar's PID controller.
+        double p = 30;
+        // The integral gain of the Jaguar's PID controller.
+        double i = 0.005;
+        // The differential gain of the Jaguar's PID controller.
+        double d = 0.25;
+
         try {
+            Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "
+                    + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftFrontJag = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
+            //leftFrontJag.setPID(p, i, d);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
 
-        Debug.println("[CANDriveTrain] Initializing left rear CANJaguar to CAN bus address "
-                + RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
         try {
+            Debug.println("[CANDriveTrain] Initializing left rear CANJaguar to CAN bus address "
+                    + RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftRearJag = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
+            //leftRearJag.setPID(p, i, d);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
 
-        Debug.println("[CANDriveTrain] Initializing right front CANJaguar to CAN bus address "
-                + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
         try {
+            Debug.println("[CANDriveTrain] Initializing right front CANJaguar to CAN bus address "
+                    + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightFrontJag = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
+            //rightFrontJag.setPID(p, i, d);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
 
-        Debug.println("[CANDriveTrain] Initializing right rear CANJaguar to CAN bus address "
-                + RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
         try {
+            Debug.println("[CANDriveTrain] Initializing right rear CANJaguar to CAN bus address "
+                    + RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightRearJag = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
+            //rightRearJag.setPID(p, i, d);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
+
+        // References for CAN programming:
+        // http://forums.usfirst.org/showthread.php?t=14709
+        //
 
         Debug.println("[CANDriveTrain] Initializing RobotDrive");
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
