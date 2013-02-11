@@ -80,7 +80,11 @@ public class CANDriveTrain extends Subsystem {
         }
 
         // References for CAN programming:
-        // http://forums.usfirst.org/showthread.php?t=14709
+        // http://e2e.ti.com/support/microcontrollers/stellaris_arm/f/471/t/93723.aspx
+        // http://e2e.ti.com/support/microcontrollers/stellaris_arm/f/471/t/159475.aspx
+        // http://e2e.ti.com/support/microcontrollers/stellaris_arm/f/471/p/91181/770069.aspx#770069
+        // http://content.vexrobotics.com/docs/217-3367-VEXpro_Jaguar_GettingStartedGuide_20130125.pdf
+        // http://content.vexrobotics.com/docs/217-3367-VEXpro_Jaguar_FAQ.pdf
         //
 
         Debug.println("[CANDriveTrain] Initializing RobotDrive");
