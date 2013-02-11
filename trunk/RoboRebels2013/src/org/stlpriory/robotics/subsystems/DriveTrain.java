@@ -31,21 +31,20 @@ public class DriveTrain extends Subsystem {
 
     private boolean m_isCANInitialized = true;
 
-
     public DriveTrain() {
         super("DriveTrain");
         Debug.println("[DriveTrain] Instantiating...");
 
-        Debug.println("[DriveTrain] Initializing left front jaguar to PWM channel " + RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        Debug.println("[DriveTrain] Initializing left front Jaguar to PWM channel " + RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
         leftFrontJag = new Jaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing left rear jaguar to PWM channel " + RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        Debug.println("[DriveTrain] Initializing left rear Jaguar to PWM channel " + RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
         leftRearJag = new Jaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing right front jaguar to PWM channel " + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        Debug.println("[DriveTrain] Initializing right front Jaguar to PWM channel " + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
         rightFrontJag = new Jaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
-        Debug.println("[DriveTrain] Initializing right rear jaguar to PWM channel " + RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        Debug.println("[DriveTrain] Initializing right rear Jaguar to PWM channel " + RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
         rightRearJag = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing RobotDrive");
@@ -56,8 +55,6 @@ public class DriveTrain extends Subsystem {
         drive.setMaxOutput(1.0);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        //drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-        //drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
         Debug.println("[DriveTrain] Instantiation complete.");
     }

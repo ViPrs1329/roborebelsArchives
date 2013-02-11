@@ -29,6 +29,12 @@ public class RobotMap {
     public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 3;  // PWM channel
     public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
 
+    // Drive train speed controller mappings to the addresses of the Jaguars on the CAN bus
+    public static final int LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 2;  // DEV channel
+    public static final int LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS   = 3;  // PWM channel
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS = 4;  // PWM channel
+    public static final int RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 5;  // PWM channel
+
     // Loader and shooter speed controllers mappings to PWM channels on the digital sidecar module
     public static final int LOADER_MOTOR_PWM_CHANNEL = 8;	         // PWM channel
     public static final int SHOOTER_WHEEL_MOTOR_PWM_CHANNEL = 5;	 // PWM channel
