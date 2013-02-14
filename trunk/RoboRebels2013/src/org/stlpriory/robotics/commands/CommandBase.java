@@ -1,10 +1,9 @@
 package org.stlpriory.robotics.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
-import org.stlpriory.robotics.subsystems.DriveTrain;
+import org.stlpriory.robotics.subsystems.CANDriveTrain;
 import org.stlpriory.robotics.subsystems.Shooter;
 
 /**
@@ -17,7 +16,8 @@ public abstract class CommandBase extends Command {
 
     public static OI oi;
     // Create a single static instance of all of your subsystems
-    public static DriveTrain drivetrain = new DriveTrain();
+//    public static DriveTrain drivetrain = new DriveTrain();
+    public static CANDriveTrain drivetrain = new CANDriveTrain();
     public static Shooter shooter = new Shooter();
 
     public static void init() {

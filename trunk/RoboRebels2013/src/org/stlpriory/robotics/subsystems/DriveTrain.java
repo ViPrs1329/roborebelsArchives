@@ -167,88 +167,88 @@ public class DriveTrain extends Subsystem {
     //     the RobotDrive code could be ported over into this class.
     //--------------------------------------------------------------------------------------------------
 
-    private void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle) {
-
-        double xIn = x;
-        double yIn = y;
-        // Negate y for the joystick.
-        yIn = -yIn;
-        // Compenstate for gyro angle.
-        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
-        xIn = rotated[0];
-        yIn = rotated[1];
-
-        double wheelSpeeds[] = new double[4];
-        int kFrontLeft_val = 0;
-        int kFrontRight_val = 1;
-        int kRearLeft_val = 2;
-        int kRearRight_val = 3;
-        wheelSpeeds[kFrontLeft_val]  = xIn + yIn + rotation;
-        wheelSpeeds[kFrontRight_val] = -xIn + yIn - rotation;
-        wheelSpeeds[kRearLeft_val]   = -xIn + yIn + rotation;
-        wheelSpeeds[kRearRight_val]  = xIn + yIn - rotation;
-
-        normalize(wheelSpeeds);
-
-        byte syncGroup = (byte) 0x80;
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        // Must be consistent with the inverted motor settings
-        // used when constructing RobotDrive in this class
-        int m_invertedMotors[] = new int[4];
-        m_invertedMotors[kFrontLeft_val]  = 1;
-        m_invertedMotors[kRearLeft_val]   = 1;
-        m_invertedMotors[kFrontRight_val] = -1;
-        m_invertedMotors[kRearRight_val]  = -1;
-
-        double m_maxOutput = 1.0;
-
-        leftFrontJag.set(wheelSpeeds[kFrontLeft_val] * m_invertedMotors[kFrontLeft_val] * m_maxOutput, syncGroup);
-        rightFrontJag.set(wheelSpeeds[kFrontRight_val] * m_invertedMotors[kFrontRight_val] * m_maxOutput, syncGroup);
-        leftRearJag.set(wheelSpeeds[kRearLeft_val] * m_invertedMotors[kRearLeft_val] * m_maxOutput, syncGroup);
-        rightRearJag.set(wheelSpeeds[kRearRight_val] * m_invertedMotors[kRearRight_val] * m_maxOutput, syncGroup);
-
-        if (m_isCANInitialized) {
-            try {
-                CANJaguar.updateSyncGroup(syncGroup);
-            } catch (CANNotInitializedException e) {
-                m_isCANInitialized = false;
-            } catch (CANTimeoutException e) {
-            }
-        }
-
-//        if (m_safetyHelper != null) {
-//            m_safetyHelper.feed();
+//    private void mecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle) {
+//
+//        double xIn = x;
+//        double yIn = y;
+//        // Negate y for the joystick.
+//        yIn = -yIn;
+//        // Compenstate for gyro angle.
+//        double rotated[] = rotateVector(xIn, yIn, gyroAngle);
+//        xIn = rotated[0];
+//        yIn = rotated[1];
+//
+//        double wheelSpeeds[] = new double[4];
+//        int kFrontLeft_val = 0;
+//        int kFrontRight_val = 1;
+//        int kRearLeft_val = 2;
+//        int kRearRight_val = 3;
+//        wheelSpeeds[kFrontLeft_val]  = xIn + yIn + rotation;
+//        wheelSpeeds[kFrontRight_val] = -xIn + yIn - rotation;
+//        wheelSpeeds[kRearLeft_val]   = -xIn + yIn + rotation;
+//        wheelSpeeds[kRearRight_val]  = xIn + yIn - rotation;
+//
+//        normalize(wheelSpeeds);
+//
+//        byte syncGroup = (byte) 0x80;
+//        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+//        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+//        // Must be consistent with the inverted motor settings
+//        // used when constructing RobotDrive in this class
+//        int m_invertedMotors[] = new int[4];
+//        m_invertedMotors[kFrontLeft_val]  = 1;
+//        m_invertedMotors[kRearLeft_val]   = 1;
+//        m_invertedMotors[kFrontRight_val] = -1;
+//        m_invertedMotors[kRearRight_val]  = -1;
+//
+//        double m_maxOutput = 1.0;
+//
+//        leftFrontJag.set(wheelSpeeds[kFrontLeft_val] * m_invertedMotors[kFrontLeft_val] * m_maxOutput, syncGroup);
+//        rightFrontJag.set(wheelSpeeds[kFrontRight_val] * m_invertedMotors[kFrontRight_val] * m_maxOutput, syncGroup);
+//        leftRearJag.set(wheelSpeeds[kRearLeft_val] * m_invertedMotors[kRearLeft_val] * m_maxOutput, syncGroup);
+//        rightRearJag.set(wheelSpeeds[kRearRight_val] * m_invertedMotors[kRearRight_val] * m_maxOutput, syncGroup);
+//
+//        if (m_isCANInitialized) {
+//            try {
+//                CANJaguar.updateSyncGroup(syncGroup);
+//            } catch (CANNotInitializedException e) {
+//                m_isCANInitialized = false;
+//            } catch (CANTimeoutException e) {
+//            }
 //        }
-    }
-
-    /**
-     * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
-     */
-    private static void normalize(double wheelSpeeds[]) {
-        double maxMagnitude = Math.abs(wheelSpeeds[0]);
-        int i;
-        for (i=1; i<4; i++) {
-            double temp = Math.abs(wheelSpeeds[i]);
-            if (maxMagnitude < temp) maxMagnitude = temp;
-        }
-        if (maxMagnitude > 1.0) {
-            for (i=0; i<4; i++) {
-                wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
-            }
-        }
-    }
-
-    /**
-     * Rotate a vector in Cartesian space.
-     */
-    private static double[] rotateVector(double x, double y, double angle) {
-        double cosA = Math.cos(angle * (3.14159 / 180.0));
-        double sinA = Math.sin(angle * (3.14159 / 180.0));
-        double out[] = new double[2];
-        out[0] = x * cosA - y * sinA;
-        out[1] = x * sinA + y * cosA;
-        return out;
-    }
+//
+////        if (m_safetyHelper != null) {
+////            m_safetyHelper.feed();
+////        }
+//    }
+//
+//    /**
+//     * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
+//     */
+//    private static void normalize(double wheelSpeeds[]) {
+//        double maxMagnitude = Math.abs(wheelSpeeds[0]);
+//        int i;
+//        for (i=1; i<4; i++) {
+//            double temp = Math.abs(wheelSpeeds[i]);
+//            if (maxMagnitude < temp) maxMagnitude = temp;
+//        }
+//        if (maxMagnitude > 1.0) {
+//            for (i=0; i<4; i++) {
+//                wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Rotate a vector in Cartesian space.
+//     */
+//    private static double[] rotateVector(double x, double y, double angle) {
+//        double cosA = Math.cos(angle * (3.14159 / 180.0));
+//        double sinA = Math.sin(angle * (3.14159 / 180.0));
+//        double out[] = new double[2];
+//        out[0] = x * cosA - y * sinA;
+//        out[1] = x * sinA + y * cosA;
+//        return out;
+//    }
 
 }
