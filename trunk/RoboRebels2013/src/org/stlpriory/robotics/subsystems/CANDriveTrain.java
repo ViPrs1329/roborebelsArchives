@@ -224,7 +224,7 @@ public class CANDriveTrain extends Subsystem {
     public void straight(double speed) {
         speed *= direction;
         if (canDrive()) {
-            drive.tankDrive(speed, speed * 0.75);
+            drive.mecanumDrive_Cartesian(0, speed, 0, 0);
         }
     }
 

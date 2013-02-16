@@ -14,17 +14,19 @@ import org.stlpriory.robotics.commands.drivetrain.Turn;
  *
  */
 public class Auton1 extends CommandGroup {
-
+    private static final double DRIVING_SPEED = .01;
+    private static final double TURNING_SPEED = .01;
+    
     private static double forwards = -1;
     private static double backwards = 1;
-    private double DRIVE_SPEED = 0.7;
+    private double DRIVE_SPEED = DRIVING_SPEED;
     private double DRIVE_TIMEOUT = 3.0;
-    private double TURN1_SPEED = 0.5;
+    private double TURN1_SPEED = TURNING_SPEED;
     private double TURN1_TIMEOUT = 1.0;
     private double WAIT_TIMEOUT = 5.0;
-    private double TURN2_SPEED = 1.0;
+    private double TURN2_SPEED = TURNING_SPEED;
     private double TURN2_TIMEOUT = 1.0;
-    private double DRIVE_BACK_SPEED = 0.9;
+    private double DRIVE_BACK_SPEED = DRIVING_SPEED;
     private double DRIVE_BACK_TIMEOUT = 3.0;
     private double WAIT_ONE_SECOND = 1.0;
 
@@ -33,6 +35,7 @@ public class Auton1 extends CommandGroup {
         /*
          * Drive forwards to the fender at 0.7 speed for 3 seconds
          */
+        
         addSequential(new PrintCommand("[auton1] Driving straight at speed: " + DRIVE_SPEED + " and timeout: " + DRIVE_TIMEOUT));
         addSequential(new DriveStraight(forwards * DRIVE_SPEED, DRIVE_TIMEOUT));
         /*
