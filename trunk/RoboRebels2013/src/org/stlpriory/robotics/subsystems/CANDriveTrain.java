@@ -234,7 +234,7 @@ public class CANDriveTrain extends Subsystem {
     }
 
     public void turnLeft() { // sets the motor speeds to start a left turn
-        arcadeDrive(0.0, 1.0);
+        arcadeDrive(0.0, .3);
     }
 
     public void driveWithJoystick(Joystick joystick) {
