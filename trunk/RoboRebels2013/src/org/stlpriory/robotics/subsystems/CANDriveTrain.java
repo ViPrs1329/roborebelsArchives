@@ -183,7 +183,42 @@ public class CANDriveTrain extends Subsystem {
         double rotation  = -rawZ;
         double clockwise =  rawZ;
 
-        drive.mecanumDrive_Cartesian(right, -forward, rotation, clockwise);
+        drive.mecanumDrive_Cartesian(-right, forward, rotation, clockwise);
+
+        printJaguarOutputCurrent();
+    }
+
+    private void printJaguarOutputCurrent() {
+        try {
+            System.out.println("LF " + leftFrontJag.getOutputCurrent()
+                    + ", LR " + leftRearJag.getOutputCurrent()
+                    + ", RF " + rightFrontJag.getOutputCurrent()
+                    + ", RR " + rightRearJag.getOutputCurrent());
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printJaguarOutputVoltage() {
+        try {
+            System.out.println("LF " + leftFrontJag.getOutputVoltage()
+                    + ", LR " + leftRearJag.getOutputVoltage()
+                    + ", RF " + rightFrontJag.getOutputVoltage()
+                    + ", RR " + rightRearJag.getOutputVoltage());
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void printJaguarSpeed() {
+        try {
+            System.out.println("LF " + leftFrontJag.getSpeed()
+                    + ", LR " + leftRearJag.getSpeed()
+                    + ", RF " + rightFrontJag.getSpeed()
+                    + ", RR " + rightRearJag.getSpeed());
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public void straight(double speed) {
