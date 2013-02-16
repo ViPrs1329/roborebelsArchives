@@ -30,11 +30,10 @@ public class CANDriveTrain extends Subsystem {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain] Instantiating...");
 
-        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPercentVbus;
-        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kCurrent;
+        // CAN Jaguar configuration properties
         CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kSpeed;
-        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPosition;
-        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kVoltage;
+        CANJaguar.NeutralMode neutralMode = CANJaguar.NeutralMode.kBrake;
+        CANJaguar.SpeedReference speedReference = CANJaguar.SpeedReference.kQuadEncoder;
 
         // The proportional gain of the Jaguar's PID controller.
         double pValue = 30;
@@ -46,9 +45,10 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "
                     + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            leftFrontJag = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            leftFrontJag = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
             leftFrontJag.setPID(pValue, iValue, dValue);
-            leftFrontJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
+            leftFrontJag.setSpeedReference(speedReference);
+            leftFrontJag.configNeutralMode(neutralMode);
             leftFrontJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -57,9 +57,10 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing left rear CANJaguar to CAN bus address "
                     + RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            leftRearJag = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            leftRearJag = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
             leftRearJag.setPID(pValue, iValue, dValue);
-            leftRearJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
+            leftRearJag.setSpeedReference(speedReference);
+            leftRearJag.configNeutralMode(neutralMode);
             leftRearJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -68,9 +69,10 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing right front CANJaguar to CAN bus address "
                     + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            rightFrontJag = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            rightFrontJag = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
             rightFrontJag.setPID(pValue, iValue, dValue);
-            rightFrontJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
+            rightFrontJag.setSpeedReference(speedReference);
+            rightFrontJag.configNeutralMode(neutralMode);
             rightFrontJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -79,9 +81,10 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing right rear CANJaguar to CAN bus address "
                     + RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            rightRearJag = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            rightRearJag = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS,controlMode);
             rightRearJag.setPID(pValue, iValue, dValue);
-            rightRearJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
+            rightRearJag.setSpeedReference(speedReference);
+            rightRearJag.configNeutralMode(neutralMode);
             rightRearJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
