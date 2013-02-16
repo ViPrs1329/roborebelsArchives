@@ -31,8 +31,8 @@ public class CANDriveTrain extends Subsystem {
         Debug.println("[CANDriveTrain] Instantiating...");
 
         //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPercentVbus;
-        CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kCurrent;
-        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kSpeed;
+        //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kCurrent;
+        CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kSpeed;
         //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kPosition;
         //CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kVoltage;
 
@@ -48,6 +48,7 @@ public class CANDriveTrain extends Subsystem {
                     + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftFrontJag = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftFrontJag.setPID(pValue, iValue, dValue);
+            leftFrontJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             leftFrontJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -58,6 +59,7 @@ public class CANDriveTrain extends Subsystem {
                     + RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftRearJag = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             leftRearJag.setPID(pValue, iValue, dValue);
+            leftRearJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             leftRearJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -68,6 +70,7 @@ public class CANDriveTrain extends Subsystem {
                     + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightFrontJag = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightFrontJag.setPID(pValue, iValue, dValue);
+            rightFrontJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             rightFrontJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -78,6 +81,7 @@ public class CANDriveTrain extends Subsystem {
                     + RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightRearJag = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
             rightRearJag.setPID(pValue, iValue, dValue);
+            rightRearJag.setSpeedReference(CANJaguar.SpeedReference.kQuadEncoder);
             rightRearJag.enableControl();
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -185,7 +189,8 @@ public class CANDriveTrain extends Subsystem {
 
         drive.mecanumDrive_Cartesian(-right, forward, rotation, clockwise);
 
-        printJaguarOutputCurrent();
+        //printJaguarOutputCurrent();
+        printJaguarSpeed();
     }
 
     private void printJaguarOutputCurrent() {
