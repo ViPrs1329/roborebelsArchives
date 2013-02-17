@@ -120,13 +120,15 @@ public class CANDriveTrain extends Subsystem {
         jaguar.enableControl();
 
         Debug.println("[CANDriveTrain] CANJaguar configuration properties: ");
-        Debug.println("                Bus address      = "+busAddress);
-        Debug.println("                ControlMode      = "+getControlModeToString(controlMode));
-        Debug.println("                SpeedReference   = "+getSpeedReferenceToString(speedReference));
-        Debug.println("                NeutralModel     = "+getNeutralModeToString(neutralMode));
+        Debug.println("                Bus address      = "+jaguar.getDescription());
+        Debug.println("                ControlMode      = "+toString(jaguar.getControlMode()));
+        Debug.println("                SpeedReference   = "+toString(jaguar.getSpeedReference()));
+        Debug.println("                NeutralModel     = "+toString(neutralMode));
         Debug.println("                PID values       = "+jaguar.getP() + ", " + jaguar.getI() + ", " + jaguar.getD());
         Debug.println("                codesPerRev      = "+codesPerRev);
         Debug.println("                maxOutputVoltage = "+maxOutputVoltage);
+        Debug.println("                firmware version = "+jaguar.getFirmwareVersion());
+        Debug.println("                hardware version = "+jaguar.getHardwareVersion());
 
         return jaguar;
     }
@@ -236,7 +238,7 @@ public class CANDriveTrain extends Subsystem {
         mecanumDrive(joystick);
     }
 
-    private String getControlModeToString(CANJaguar.ControlMode controlMode) {
+    private String toString(CANJaguar.ControlMode controlMode) {
         switch (controlMode.value) {
             case 0: return "kPercentVbus";
             case 1: return "kCurrent";
@@ -247,7 +249,7 @@ public class CANDriveTrain extends Subsystem {
         }
     }
 
-    private String getNeutralModeToString(CANJaguar.NeutralMode neutralMode) {
+    private String toString(CANJaguar.NeutralMode neutralMode) {
         switch (neutralMode.value) {
             case 0: return "kJumper";
             case 1: return "kBrake";
@@ -256,7 +258,7 @@ public class CANDriveTrain extends Subsystem {
         }
     }
 
-    private String getSpeedReferenceToString(CANJaguar.SpeedReference speedReference) {
+    private String toString(CANJaguar.SpeedReference speedReference) {
         switch (speedReference.value) {
             case 0: return "kEncoder";
             case 1: return "kInvEncoder";
