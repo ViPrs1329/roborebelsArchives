@@ -30,18 +30,6 @@ public class CANDriveTrain extends Subsystem {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain] Instantiating...");
 
-        // CAN Jaguar configuration properties
-        CANJaguar.ControlMode controlMode = CANJaguar.ControlMode.kSpeed;
-        CANJaguar.NeutralMode neutralMode = CANJaguar.NeutralMode.kBrake;
-        CANJaguar.SpeedReference speedReference = CANJaguar.SpeedReference.kQuadEncoder;
-
-        // The proportional gain of the Jaguar's PID controller.
-        double pValue = 30;
-        // The integral gain of the Jaguar's PID controller.
-        double iValue = 0.005;
-        // The differential gain of the Jaguar's PID controller.
-        double dValue = 0.25;
-
         try {
             Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "
                     + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
@@ -110,6 +98,7 @@ public class CANDriveTrain extends Subsystem {
         double dValue = 0; //0.25;
 
         // http://www.chiefdelphi.com/forums/showthread.php?t=105641
+        // http://team2168.org/index.php/resources/electrical/210-can-jaguars
 
         CANJaguar jaguar = new CANJaguar(busAddress);
         //jaguar.configNeutralMode(neutralMode);
