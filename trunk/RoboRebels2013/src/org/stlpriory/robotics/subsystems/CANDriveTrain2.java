@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.misc.Constants;
@@ -17,18 +17,23 @@ import org.stlpriory.robotics.misc.Utils;
 
 /**
  *
+ * @author dfuglsan
  */
-public class CANDriveTrain extends Subsystem {
+public class CANDriveTrain2 extends PIDSubsystem {
 
     private RobotDrive drive;
     private static CANJaguar leftFrontJag;
     private static CANJaguar rightFrontJag;
     private static CANJaguar leftRearJag;
     private static CANJaguar rightRearJag;
-    private static double direction = 1;
 
-    public CANDriveTrain() {
-        super("CANDriveTrain");
+    private static final double Kp = Constants.KP;
+    private static final double Ki = Constants.KI;
+    private static final double Kd = Constants.KD;
+
+    // Initialize your subsystem here
+    public CANDriveTrain2() {
+        super("CANDriveTrain2", Kp, Ki, Kd);
         Debug.println("[CANDriveTrain] Instantiating...");
 
         try {
@@ -72,7 +77,7 @@ public class CANDriveTrain extends Subsystem {
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
-        drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
+        drive.setMaxOutput(1.0);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
@@ -101,37 +106,16 @@ public class CANDriveTrain extends Subsystem {
         setDefaultCommand(new DriveWithGamepad());
     }
 
-    public void setForwards() {
-        direction = 1;
+    protected double returnPIDInput() {
+        // Return your input value for the PID loop
+        // e.g. a sensor, like a potentiometer:
+        // yourPot.getAverageVoltage() / kYourMaxVoltage;
+        return 0.0;
     }
 
-    public void setBackwards() {
-        direction = -1;
-    }
-
-    public void stop() {
-        Debug.println("[CANDriveTrain.stop]");
-        drive.tankDrive(0.0, 0.0);
-    }
-
-    public boolean canDrive() {
-        return true;
-    }
-
-    public void tankDrive(double leftValue, double rightValue) {
-        leftValue *= direction;
-        rightValue *= direction;
-        if (canDrive()) {
-            drive.tankDrive(leftValue, rightValue);
-        }
-    }
-
-    public void arcadeDrive(double moveValue, double rotateValue) {
-        moveValue *= direction;
-        rotateValue *= direction;
-        if (canDrive()) {
-            drive.arcadeDrive(moveValue, rotateValue);
-        }
+    protected void usePIDOutput(double output) {
+        // Use output to drive your system, like a motor
+        // e.g. yourMotor.set(output);
     }
 
     /**
@@ -178,21 +162,6 @@ public class CANDriveTrain extends Subsystem {
         //printJaguarOutputCurrent();
         printJaguarOutputVoltage();
         //printJaguarSpeed();
-    }
-
-    public void straight(double speed) {
-        speed *= direction;
-        if (canDrive()) {
-            drive.mecanumDrive_Cartesian(0, speed, 0, 0);
-        }
-    }
-
-    public void turnLeft() { // sets the motor speeds to start a left turn
-        arcadeDrive(0.0, .3);
-    }
-
-    public void driveWithJoystick(Joystick joystick) {
-        drive.arcadeDrive(joystick);
     }
 
     public void driveWithGamepad(Joystick joystick) {

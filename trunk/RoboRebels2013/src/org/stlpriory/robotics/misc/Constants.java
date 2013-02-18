@@ -90,10 +90,21 @@ public class Constants {
     public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kPercentVbus;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERNCE = CANJaguar.SpeedReference.kQuadEncoder;
 
+    // RobotDrive configuration properties
+    // The DRIVE_MAX_OUTPUT is multiplied with the output percentage
+    // computed by the drive functions.  It signifies the speed that
+    // you want joystick full forward to mean
+    public static final double DRIVE_MAX_OUTPUT = 1;
+
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641
     // http://team2168.org/index.php/resources/electrical/210-can-jaguars
     // http://wpilib.screenstepslive.com/s/3120/m/7882/l/79335-writing-the-code-for-a-pidsubystem-in-java
     // http://www.youtube.com/watch?v=1WLk1_Ye_U8
-
+    // http://www.chiefdelphi.com/forums/showthread.php?t=110730
+    // http://www.chiefdelphi.com/forums/showthread.php?t=90508
+    // http://www.chiefdelphi.com/forums/showthread.php?t=104757
+    // http://www.youtube.com/watch?v=j2Xz8bRRcF0
+    // PID subsystems
+    // http://www.chiefdelphi.com/forums/showthread.php?t=105810
 }

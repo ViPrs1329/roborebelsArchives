@@ -283,4 +283,9 @@ public class RobotVision {
         total = 100 * total / (rowAverages.length);
         return total;
     }
+
+    // Image processing references
+    // http://www.chiefdelphi.com/forums/showthread.php?t=111100
+    // http://www.chiefdelphi.com/forums/showthread.php?t=112256
+    // 
 }
