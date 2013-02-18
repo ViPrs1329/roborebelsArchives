@@ -87,14 +87,14 @@ public class Constants {
 
     // The Jaguar configuration properties
     public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kJumper;
-    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kPercentVbus;
+    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kSpeed;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERNCE = CANJaguar.SpeedReference.kQuadEncoder;
 
     // RobotDrive configuration properties
     // The DRIVE_MAX_OUTPUT is multiplied with the output percentage
     // computed by the drive functions.  It signifies the speed that
     // you want joystick full forward to mean
-    public static final double DRIVE_MAX_OUTPUT = 1;
+    public static final double DRIVE_MAX_OUTPUT = 100;
 
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641
