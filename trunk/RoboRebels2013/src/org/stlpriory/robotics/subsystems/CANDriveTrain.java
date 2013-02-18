@@ -237,9 +237,8 @@ public class CANDriveTrain extends Subsystem {
     private String toString(CANJaguar.SpeedReference speedReference) {
         switch (speedReference.value) {
             case 0: return "kEncoder";
-            case 1: return "kInvEncoder";
-            case 2: return "kQuadEncoder";
-            case 3: return "kNone";
+            case 2: return "kInvEncoder";
+            case 3: return "kQuadEncoder";
             default: return "n/a";
         }
     }
