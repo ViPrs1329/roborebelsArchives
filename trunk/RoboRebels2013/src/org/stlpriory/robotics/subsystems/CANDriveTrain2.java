@@ -87,7 +87,7 @@ public class CANDriveTrain2 extends PIDSubsystem {
     private void initJaguar(CANJaguar jaguar) throws CANTimeoutException {
         jaguar.configNeutralMode(Constants.JAGUAR_NEUTRAL_MODE);
         jaguar.changeControlMode(Constants.JAGUAR_CONTROL_MODE);
-        jaguar.setSpeedReference(Constants.JAGUAR_SPEED_REFERNCE);
+        jaguar.setSpeedReference(Constants.JAGUAR_SPEED_REFERENCE);
         jaguar.configEncoderCodesPerRev(Constants.ENCODER_CODES_PER_REV);
         jaguar.configMaxOutputVoltage(Constants.JAGUAR_MAX_OUTPUT_VOLTAGE);
         jaguar.setVoltageRampRate(Constants.JAGUAR_VOLTAGE_RAMP_RATE);
@@ -172,7 +172,7 @@ public class CANDriveTrain2 extends PIDSubsystem {
         Debug.println("[CANDriveTrain] CANJaguar configuration properties: ");
         Debug.println("                Bus address         = "+jaguar.getDescription());
         Debug.println("                ControlMode         = "+toString(Constants.JAGUAR_CONTROL_MODE));
-        Debug.println("                SpeedReference      = "+toString(Constants.JAGUAR_SPEED_REFERNCE));
+        Debug.println("                SpeedReference      = "+toString(Constants.JAGUAR_SPEED_REFERENCE));
         Debug.println("                NeutralMode         = "+toString(Constants.JAGUAR_NEUTRAL_MODE));
         Debug.println("                PID values          = "+jaguar.getP() + ", " + jaguar.getI() + ", " + jaguar.getD());
         Debug.println("                codesPerRev         = "+Constants.ENCODER_CODES_PER_REV);

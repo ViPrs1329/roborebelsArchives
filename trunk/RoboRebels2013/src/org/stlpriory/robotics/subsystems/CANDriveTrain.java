@@ -82,7 +82,7 @@ public class CANDriveTrain extends Subsystem {
     private void initJaguar(CANJaguar jaguar) throws CANTimeoutException {
         jaguar.configNeutralMode(Constants.JAGUAR_NEUTRAL_MODE);
         jaguar.changeControlMode(Constants.JAGUAR_CONTROL_MODE);
-        jaguar.setSpeedReference(Constants.JAGUAR_SPEED_REFERNCE);
+        jaguar.setSpeedReference(Constants.JAGUAR_SPEED_REFERENCE);
         jaguar.configEncoderCodesPerRev(Constants.ENCODER_CODES_PER_REV);
         jaguar.configMaxOutputVoltage(Constants.JAGUAR_MAX_OUTPUT_VOLTAGE);
         jaguar.setVoltageRampRate(Constants.JAGUAR_VOLTAGE_RAMP_RATE);
@@ -91,6 +91,17 @@ public class CANDriveTrain extends Subsystem {
         jaguar.enableControl();
 
         printJaguarProperties(jaguar);
+    }
+
+    private void checkJaguarForReset(CANJaguar jaguar) {
+        try {
+            if (jaguar.getPowerCycled()) {
+                Debug.println("[CANDriveTrain] Re-initializing CANJaguar "+jaguar.getDescription());
+                initJaguar(jaguar);
+            }
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -173,10 +184,15 @@ public class CANDriveTrain extends Subsystem {
         double rotation  = -rawZ;
         double clockwise =  rawZ;
 
+        checkJaguarForReset(leftRearJag);
+        checkJaguarForReset(leftRearJag);
+        checkJaguarForReset(rightFrontJag);
+        checkJaguarForReset(rightRearJag);
+
         drive.mecanumDrive_Cartesian(-right, forward, rotation, clockwise);
 
         //printJaguarOutputCurrent();
-        printJaguarOutputVoltage();
+        //printJaguarOutputVoltage();
         //printJaguarSpeed();
     }
 
@@ -203,13 +219,14 @@ public class CANDriveTrain extends Subsystem {
         Debug.println("[CANDriveTrain] CANJaguar configuration properties: ");
         Debug.println("                Bus address         = "+jaguar.getDescription());
         Debug.println("                ControlMode         = "+toString(Constants.JAGUAR_CONTROL_MODE));
-        Debug.println("                SpeedReference      = "+toString(Constants.JAGUAR_SPEED_REFERNCE));
+        Debug.println("                SpeedReference      = "+toString(Constants.JAGUAR_SPEED_REFERENCE));
         Debug.println("                NeutralMode         = "+toString(Constants.JAGUAR_NEUTRAL_MODE));
         Debug.println("                PID values          = "+jaguar.getP() + ", " + jaguar.getI() + ", " + jaguar.getD());
         Debug.println("                codesPerRev         = "+Constants.ENCODER_CODES_PER_REV);
         Debug.println("                maxOutputVoltage    = "+Constants.JAGUAR_MAX_OUTPUT_VOLTAGE);
         Debug.println("                potentiometer turns = "+Constants.ENCODER_POTENTIOMETER_TURNS);
         Debug.println("                voltage ramp        = "+Constants.JAGUAR_VOLTAGE_RAMP_RATE);
+        Debug.println("                drive max output    = "+Constants.DRIVE_MAX_OUTPUT);
         Debug.println("                firmware version    = "+jaguar.getFirmwareVersion());
         Debug.println("                hardware version    = "+jaguar.getHardwareVersion());
     }

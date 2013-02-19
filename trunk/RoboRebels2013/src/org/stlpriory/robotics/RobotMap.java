@@ -46,6 +46,6 @@ public class RobotMap {
     public static final int LOADER_START_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 5;//3;
     public static final int LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 6;//4;
 
-    public static final int PROXY_SENSOR_IO_CHANNEL = 5;
+    public static final int PROXY_SENSOR_IO_CHANNEL = 8;
 
 }

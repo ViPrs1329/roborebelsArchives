@@ -78,23 +78,24 @@ public class Constants {
     // The maximum voltage change rate
     public static final double JAGUAR_VOLTAGE_RAMP_RATE = 20;
 
+    // RobotDrive configuration properties
+    // The DRIVE_MAX_OUTPUT is multiplied with the output percentage
+    // computed by the drive functions.  It signifies the speed that
+    // you want joystick full forward to mean
+    public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
+    //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
+
     // The proportional gain of the Jaguar's PID controller.
     public static final double KP = 0.5;
     // The integral gain of the Jaguar's PID controller.
     public static final double KI = 0; //0.005;
     // The differential gain of the Jaguar's PID controller.
-    public static final double KD = 0; //0.25;
+    public static final double KD = 0.1; //0.25;
 
     // The Jaguar configuration properties
-    public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kJumper;
+    public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kBrake;
     public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kSpeed;
-    public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERNCE = CANJaguar.SpeedReference.kQuadEncoder;
-
-    // RobotDrive configuration properties
-    // The DRIVE_MAX_OUTPUT is multiplied with the output percentage
-    // computed by the drive functions.  It signifies the speed that
-    // you want joystick full forward to mean
-    public static final double DRIVE_MAX_OUTPUT = 100;
+    public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERENCE = CANJaguar.SpeedReference.kQuadEncoder;
 
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641
