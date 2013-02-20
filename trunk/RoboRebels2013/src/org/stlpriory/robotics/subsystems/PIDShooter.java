@@ -25,8 +25,8 @@ public class PIDShooter extends PIDSubsystem {
     private static Encoder shooterEncoder;
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
-    private static final double Kp = 0.0;
-    private static final double Ki = 0.0;
+    private static final double Kp = 1.0;
+    private static final double Ki = 0.2;
     private static final double Kd = 0.0;
 
     // Initialize your subsystem here
