@@ -27,11 +27,8 @@ public class Constants {
     //-----------------------------------------------------------------------
     //     Constants for the Shooter subsystem
     //-----------------------------------------------------------------------
-    public static final double MIN_LOADER_SERVO_ANGLE = -45.0;
-    public static final double MAX_LOADER_SERVO_ANGLE = 65.0;
-
-    public static final double SHOOTER_WHEEL_MOTOR_SPEED = 0.5;
-    public static final double LOADER_MOTOR_SPEED = 0.5;
+    public static final double SHOOTER_WHEEL_MOTOR_SPEED = 1.0;
+    public static final double LOADER_MOTOR_SPEED = 1.0;
 
     //-----------------------------------------------------------------------
     //     Constants for the CANDriveTrain subsystem

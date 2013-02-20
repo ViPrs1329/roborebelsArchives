@@ -78,11 +78,13 @@ public class Shooter extends Subsystem {
             while ( !stopLimitSwitch.get() ) {
                 loaderVictor.set(-speed);
             }
+            printLimitSwitchValues();
             loaderVictor.set(0);
         }
     }
 
     public boolean isLoadDiscFinished() {
+        Debug.println("isLoadDiscFinished");
         return stopLimitSwitch.get();
     }
 
@@ -92,15 +94,17 @@ public class Shooter extends Subsystem {
         while (!startLimitSwitch.get()) {
             loaderVictor.set(speed);
         }
+        printLimitSwitchValues();
         loaderVictor.set(0);
     }
 
     public boolean isResetLoaderFinished() {
+        Debug.println("isResetLoaderFinished");
         return startLimitSwitch.get();
     }
 
     public void printLimitSwitchValues() {
-        System.out.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
+        Debug.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
     }
 
     public void startEncoder() {

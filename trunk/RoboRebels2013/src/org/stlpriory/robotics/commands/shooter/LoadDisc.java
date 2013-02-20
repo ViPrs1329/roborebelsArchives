@@ -12,6 +12,7 @@ import org.stlpriory.robotics.misc.Constants;
  * Command use to load frisbee disc into shooter
  */
 public class LoadDisc extends CommandBase {
+    private double timeout = 2;
 
     public LoadDisc() {
         super("LoadDisc");
@@ -22,6 +23,7 @@ public class LoadDisc extends CommandBase {
      * Called just before this Command runs the first time
      */
     protected void initialize() {
+        setTimeout(timeout);
         Debug.print("[" + getName() + "] initialize");
     }
 
@@ -38,7 +40,7 @@ public class LoadDisc extends CommandBase {
      * @return finished state
      */
     protected boolean isFinished() {
-        return shooter.isLoadDiscFinished();
+        return (shooter.isLoadDiscFinished() || isTimedOut());
     }
 
     /**

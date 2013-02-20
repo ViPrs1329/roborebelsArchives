@@ -36,15 +36,15 @@ public class RobotMap {
     public static final int RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 14;  // CAN bus channel
 
     // Loader and shooter speed controllers mappings to PWM channels on the digital sidecar module
-    public static final int LOADER_MOTOR_PWM_CHANNEL = 6;	         // PWM channel TODO: Change
+    public static final int LOADER_MOTOR_PWM_CHANNEL = 6;	         // PWM channel
     public static final int SHOOTER_WHEEL_MOTOR_PWM_CHANNEL = 5;	 // PWM channel
 
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A = 1;
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B = 2;
 
     // Limit switches used to extend and retract the loader arm
-    public static final int LOADER_START_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 5;//3;
-    public static final int LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 6;//4;
+    public static final int LOADER_START_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 1;//3;
+    public static final int LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 2;//4;
 
     public static final int PROXY_SENSOR_IO_CHANNEL = 8;
 
