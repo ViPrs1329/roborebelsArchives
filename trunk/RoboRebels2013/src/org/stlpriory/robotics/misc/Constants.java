@@ -97,6 +97,10 @@ public class Constants {
     public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kPercentVbus;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERENCE = CANJaguar.SpeedReference.kQuadEncoder;
 
+    // Multiplication factor used to scale down commanded drive inputs
+    // Must be a value between 0 and 1
+    public static final double DRIVE_SPEED_SCALE_FACTOR = 1.0;
+
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641
     // http://team2168.org/index.php/resources/electrical/210-can-jaguars

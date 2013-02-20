@@ -179,10 +179,10 @@ public class CANDriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = -scaledLeftX;
-        double forward   =  scaledLeftY;
-        double rotation  = -rawZ;
-        double clockwise =  rawZ;
+        double right     = -scaledLeftX * Constants.DRIVE_SPEED_SCALE_FACTOR;
+        double forward   =  scaledLeftY * Constants.DRIVE_SPEED_SCALE_FACTOR;
+        double rotation  = -rawZ * Constants.DRIVE_SPEED_SCALE_FACTOR;
+        double clockwise =  rawZ * Constants.DRIVE_SPEED_SCALE_FACTOR;
 
         checkJaguarForReset(leftRearJag);
         checkJaguarForReset(leftRearJag);
