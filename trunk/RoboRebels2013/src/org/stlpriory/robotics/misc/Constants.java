@@ -83,15 +83,15 @@ public class Constants {
     //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
 
     // The proportional gain of the Jaguar's PID controller.
-    public static final double KP = 0.5;
+    public static final double KP = 0.41;
     // The integral gain of the Jaguar's PID controller.
-    public static final double KI = 0; //0.005;
+    public static final double KI = 0.01;
     // The differential gain of the Jaguar's PID controller.
-    public static final double KD = 0.1; //0.25;
+    public static final double KD = 0.0;
 
     // The Jaguar configuration properties
-    public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kBrake;
-    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kPercentVbus;
+    public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kCoast;
+    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kSpeed;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERENCE = CANJaguar.SpeedReference.kQuadEncoder;
 
     // Multiplication factor used to scale down commanded drive inputs
