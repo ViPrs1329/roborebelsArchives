@@ -107,22 +107,14 @@ public class Shooter extends Subsystem {
         Debug.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
     }
 
-    public void startEncoder() {
-//        shooterEncoder.start();
-//        Debug.println("[Shooter] encoder started.");
-    }
-
-    public void stopEncoder() {
-//        shooterEncoder.stop();
-//        Debug.println("[Shooter] encoder stopped.");
-    }
-
     public void startShooter(double speed) {
+//      shooterEncoder.start();
         shooterVictor.set(speed);
     }
 
     public void stopShooter() {
         shooterVictor.set(0);
+//      shooterEncoder.stop();
     }
 
     public void initDefaultCommand() {

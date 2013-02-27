@@ -26,7 +26,6 @@ public class StartShooting extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
        shooter.startShooter(Constants.SHOOTER_WHEEL_MOTOR_SPEED);
-       shooter.startEncoder();
     }
 
     // Make this return true when this Command no longer needs to run execute()
