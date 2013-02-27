@@ -8,37 +8,33 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Encoder.PIDSourceParameter;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
  *
  */
-public class PIDShooter extends PIDSubsystem {
+public class PIDShooter extends Subsystem {
+
+    private static SpeedController loaderVictor = null;
+    private static Encoder shooterEncoder;
+    private final PIDController shooterPID;
 
     private static SpeedController shooterVictor = null;
-    private static SpeedController loaderVictor = null;
-    // Quadrature encoder used to measure shoot motor speed
-    private static Encoder shooterEncoder;
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
-    private static final double Kp = 1.0;
-    private static final double Ki = 0.2;
+    private static final double Kp = 0.5;
+    private static final double Ki = 0.01;
     private static final double Kd = 0.0;
 
     // Initialize your subsystem here
     public PIDShooter() {
-        super("PIDShooter", Kp, Ki, Kd);
-
         Debug.println("[PIDShooter] Instantiating...");
-
-        Debug.println("[PIDShooter] Initializing shooter wheel motor speed controller to PWM channel "
-                + RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL + " on the digital module.");
-        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
-
 
         Debug.println("[PIDShooter] Initializing loader motor speed controller to PWM channel "
                 + RobotMap.LOADER_MOTOR_PWM_CHANNEL + " on the digital module.");
@@ -53,13 +49,25 @@ public class PIDShooter extends PIDSubsystem {
         stopLimitSwitch = new DigitalInput(1, RobotMap.LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL);
 
 
+        Debug.println("[PIDShooter] Initializing shooter wheel motor speed controller to PWM channel "
+                + RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL + " on the digital module.");
+        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
+
+
         Debug.println("[PIDShooter] Initializing shooter motor encoder to channels "
                 + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A
                 + " and " + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B);
         shooterEncoder = new Encoder(1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A,
                                      1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B, true, EncodingType.k1X);
-        shooterEncoder.setDistancePerPulse(1.0);
-        shooterEncoder.setPIDSourceParameter(PIDSourceParameter.kRate);
+        shooterEncoder.setDistancePerPulse(1);
+        shooterEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+        shooterEncoder.start();
+
+        // Initialize the shooter PID Controller
+        shooterPID = new PIDController(Kp, Ki, Kd, shooterEncoder, shooterVictor);
+        shooterPID.setInputRange(0, Constants.SHOOTER_WHEEL_MOTOR_SPEED);
+        shooterPID.setOutputRange(0, 1);
+        shooterPID.setPercentTolerance(5);
 
         // Use these to get going:
         // setSetpoint() -  Sets where the PID controller should move the system
@@ -72,23 +80,6 @@ public class PIDShooter extends PIDSubsystem {
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
-    }
-
-    /**
-     * @return The value of the encoder used as the PID input device.
-     *         These values correspond to your PID setpoint.
-     */
-    protected double returnPIDInput() {
-        return shooterEncoder.getRate();
-    }
-
-    /**
-     * @param output The value to set the output to as determined by the PID
-     *               algorithm. This gets called each time through the PID loop
-     *               to update the output to the motor.
-     */
-    protected void usePIDOutput(double output) {
-        shooterVictor.set(output);
     }
 
     private boolean canLoadDisc() {
@@ -130,23 +121,15 @@ public class PIDShooter extends PIDSubsystem {
         System.out.println("start switch = " + startLimitSwitch.get() + ", stop switch = " + stopLimitSwitch.get());
     }
 
-    public void startEncoder() {
-        shooterEncoder.start();
-        Debug.println("[PIDShooter] encoder started.");
-    }
-
-    public void stopEncoder() {
-        shooterEncoder.stop();
-        Debug.println("[PIDShooter] encoder stopped.");
-    }
-
     public void startShooter(double speed) {
         shooterEncoder.start();
-        shooterVictor.set(speed);
+        shooterPID.setSetpoint(Constants.SHOOTER_WHEEL_MOTOR_SPEED);
+        //shooterVictor.set(speed);
     }
 
     public void stopShooter() {
-        shooterVictor.set(0);
+        shooterPID.setSetpoint(0);
+        //shooterVictor.set(0);
         shooterEncoder.stop();
     }
 }
