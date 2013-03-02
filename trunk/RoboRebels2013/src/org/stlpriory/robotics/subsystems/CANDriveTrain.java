@@ -27,6 +27,9 @@ public class CANDriveTrain extends Subsystem {
     private static CANJaguar rightRearJag;
     private static double direction = 1;
 
+    // History values for mecanum drive
+    private double[] currentValues = new double[4];
+
     public CANDriveTrain() {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain] Instantiating...");
@@ -48,7 +51,6 @@ public class CANDriveTrain extends Subsystem {
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
-
         try {
             Debug.println("[CANDriveTrain] Initializing right front CANJaguar to CAN bus address "
                     + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
@@ -179,10 +181,10 @@ public class CANDriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = -scaledLeftX;
-        double forward   =  scaledLeftY;
-        double rotation  = -rawZ;
-        double clockwise =  rawZ;
+        double right     = scaleInputValue(-scaledLeftX, 0);
+        double forward   = scaleInputValue( scaledLeftY, 1);
+        double rotation  = scaleInputValue(-rawZ, 2);
+        double clockwise = scaleInputValue( rawZ, 3);
 
         checkJaguarForReset(leftRearJag);
         checkJaguarForReset(leftRearJag);
@@ -194,6 +196,16 @@ public class CANDriveTrain extends Subsystem {
         //printJaguarOutputCurrent();
         //printJaguarOutputVoltage();
         //printJaguarSpeed();
+    }
+
+    private double scaleInputValue(double targetValue, int index) {
+        double currentValue = this.currentValues[index];
+        double change = targetValue - currentValue;
+        change = Math.min(change,  Constants.MOTOR_RAMP_INCREMENT);
+        change = Math.max(change, -Constants.MOTOR_RAMP_INCREMENT);
+        this.currentValues[index] += change;
+        System.out.println("currentValue="+currentValue+", targetValue="+targetValue+", scaledValue="+this.currentValues[index]);
+        return this.currentValues[index];
     }
 
     public void straight(double speed) {

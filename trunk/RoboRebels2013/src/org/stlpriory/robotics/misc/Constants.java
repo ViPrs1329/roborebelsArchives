@@ -58,12 +58,17 @@ public class Constants {
     public static final double JAGUAR_MAX_OUTPUT_VOLTAGE = 12;
     // The maximum voltage change rate
     public static final double JAGUAR_VOLTAGE_RAMP_RATE = 20;
+    // The increment added to the commanded motor speeds
+    // in order to gradually ramp up the speed
+    public static final double MOTOR_RAMP_INCREMENT = 0.02;
 
     // RobotDrive configuration properties
     // The DRIVE_MAX_OUTPUT is multiplied with the output percentage
     // computed by the drive functions.  It signifies the speed that
     // you want joystick full forward to mean
-    public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
+
+    public static final double DRIVE_MAX_OUTPUT = 200;  // speed control mode (rpm value)
+    //public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
 
     // The proportional gain of the Jaguar's PID controller.
