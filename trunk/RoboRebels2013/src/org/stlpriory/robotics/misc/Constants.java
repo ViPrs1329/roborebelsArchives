@@ -60,7 +60,8 @@ public class Constants {
     public static final double JAGUAR_VOLTAGE_RAMP_RATE = 20;
     // The increment added to the commanded motor speeds
     // in order to gradually ramp up the speed
-    public static final double MOTOR_RAMP_INCREMENT = 0.02;
+    public static final double MOTOR_RAMP_INCREMENT = 0.05;
+    public static final double MOTOR_RAMP_DOWN_INCREMENT = .1;
 
     // RobotDrive configuration properties
     // The DRIVE_MAX_OUTPUT is multiplied with the output percentage

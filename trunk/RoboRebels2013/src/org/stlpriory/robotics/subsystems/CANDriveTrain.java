@@ -202,12 +202,17 @@ public class CANDriveTrain extends Subsystem {
         double currentValue = this.currentValues[index];
         double change = targetValue - currentValue;
         double limit;
-        if ((currentValue < 0 && change < 0) ||
-            (currentValue > 0 && change > 0)) {
+        double testCValue = Math.abs(currentValue);
+        double testTValue = Math.abs(targetValue);
+        if (testCValue > testTValue) {
             // The signs are the same, so the robot is accelerating
-            limit = 0.02;
+            limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
+        } else if ((targetValue > 0) && (currentValue < 0)){
+            limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
+        } else if ((targetValue < 0) && (currentValue > 0)){
+            limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
         } else {
-            limit = 0.1;
+            limit = Constants.MOTOR_RAMP_INCREMENT;
         }
         change = Math.min(change,  limit);
         change = Math.max(change, -limit);
