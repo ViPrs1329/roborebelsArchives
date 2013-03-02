@@ -201,8 +201,16 @@ public class CANDriveTrain extends Subsystem {
     private double scaleInputValue(double targetValue, int index) {
         double currentValue = this.currentValues[index];
         double change = targetValue - currentValue;
-        change = Math.min(change,  Constants.MOTOR_RAMP_INCREMENT);
-        change = Math.max(change, -Constants.MOTOR_RAMP_INCREMENT);
+        double limit;
+        if ((currentValue < 0 && change < 0) ||
+            (currentValue > 0 && change > 0)) {
+            // The signs are the same, so the robot is accelerating
+            limit = 0.02;
+        } else {
+            limit = 0.1;
+        }
+        change = Math.min(change,  limit);
+        change = Math.max(change, -limit);
         this.currentValues[index] += change;
         System.out.println("currentValue="+currentValue+", targetValue="+targetValue+", scaledValue="+this.currentValues[index]);
         return this.currentValues[index];
