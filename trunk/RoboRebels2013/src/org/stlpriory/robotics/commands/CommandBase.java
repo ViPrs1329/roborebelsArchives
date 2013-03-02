@@ -17,8 +17,9 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     // Create a single static instance of all of your subsystems
 //    public static DriveTrain drivetrain = new DriveTrain();
-    public static CANDriveTrain drivetrain = new CANDriveTrain();
     public static Shooter shooter = new Shooter();
+    public static CANDriveTrain drivetrain = new CANDriveTrain();
+//    public static PIDShooter shooter = new PIDShooter();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

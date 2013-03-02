@@ -14,22 +14,6 @@ public class Constants {
     // Threshold below which joystick inputs will be ignored
     public static final double JOYSTICK_THRESHOLD = 0.2;
 
-    /**
-     * The servo angle, in degrees, used to load frisbee discs.
-     *
-     * Assume that the servo angle is linear with respect to the PWM value (big assumption, need to test).
-     *
-     * Servo angles that are out of the supported range of the servo simply "saturate" in that direction
-     * In other words, if the servo has a range of (X degrees to Y degrees) than angles of less than X
-     * result in an angle of X being set and angles of more than Y degrees result in an angle of Y being set.
-     */
-
-    //-----------------------------------------------------------------------
-    //     Constants for the Shooter subsystem
-    //-----------------------------------------------------------------------
-    public static final double SHOOTER_WHEEL_MOTOR_SPEED = 1.0;
-    public static final double LOADER_MOTOR_SPEED = 1.0;
-
     //-----------------------------------------------------------------------
     //     Constants for the CANDriveTrain subsystem
     //-----------------------------------------------------------------------
@@ -94,9 +78,12 @@ public class Constants {
     public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kSpeed;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERENCE = CANJaguar.SpeedReference.kQuadEncoder;
 
-    // Multiplication factor used to scale down commanded drive inputs
-    // Must be a value between 0 and 1
-    public static final double DRIVE_SPEED_SCALE_FACTOR = 1.0;
+    //-----------------------------------------------------------------------
+    //     Constants for the Shooter subsystem
+    //-----------------------------------------------------------------------
+    public static final double SHOOTER_WHEEL_MOTOR_SPEED = 1.0;
+    public static final double LOADER_MOTOR_SPEED = 1.0;
+    public static final double SHOOTER_WHEEL_MOTER_RATE = 20000;
 
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641

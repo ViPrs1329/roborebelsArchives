@@ -28,9 +28,10 @@ public class PIDShooter extends Subsystem {
     private static SpeedController shooterVictor = null;
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
-    private static final double Kp = 0.5;
+    private static final double Kp = 0.4;
     private static final double Ki = 0.01;
     private static final double Kd = 0.0;
+    private static final double Kf = Constants.SHOOTER_WHEEL_MOTOR_SPEED;
 
     // Initialize your subsystem here
     public PIDShooter() {
@@ -64,8 +65,9 @@ public class PIDShooter extends Subsystem {
         shooterEncoder.start();
 
         // Initialize the shooter PID Controller
-        shooterPID = new PIDController(Kp, Ki, Kd, shooterEncoder, shooterVictor);
-        shooterPID.setInputRange(0, Constants.SHOOTER_WHEEL_MOTOR_SPEED);
+        shooterPID = new PIDController(Kp, Ki, Kd, Kf, shooterEncoder, shooterVictor);
+        shooterPID.setContinuous();;
+        shooterPID.setInputRange(0, Constants.SHOOTER_WHEEL_MOTER_RATE);
         shooterPID.setOutputRange(0, 1);
         shooterPID.setPercentTolerance(5);
 
@@ -121,9 +123,14 @@ public class PIDShooter extends Subsystem {
         System.out.println("start switch = " + startLimitSwitch.get() + ", stop switch = " + stopLimitSwitch.get());
     }
 
+    public void printEncoderValues() {
+        System.out.println("encoder raw = " + shooterEncoder.getRaw() + ", rate = " + shooterEncoder.getRate());
+    }
+
     public void startShooter(double speed) {
         shooterEncoder.start();
-        shooterPID.setSetpoint(Constants.SHOOTER_WHEEL_MOTOR_SPEED);
+        System.out.println("[PIDShooter.startShooter] pidGet " + shooterEncoder.pidGet());
+        shooterPID.setSetpoint(Constants.SHOOTER_WHEEL_MOTER_RATE);
         //shooterVictor.set(speed);
     }
 
