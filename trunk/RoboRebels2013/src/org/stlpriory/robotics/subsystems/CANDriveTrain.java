@@ -217,7 +217,7 @@ public class CANDriveTrain extends Subsystem {
         change = Math.min(change,  limit);
         change = Math.max(change, -limit);
         this.currentValues[index] += change;
-        System.out.println("currentValue="+currentValue+", targetValue="+targetValue+", scaledValue="+this.currentValues[index]);
+        //System.out.println("currentValue="+currentValue+", targetValue="+targetValue+", scaledValue="+this.currentValues[index]);
         return this.currentValues[index];
     }
 

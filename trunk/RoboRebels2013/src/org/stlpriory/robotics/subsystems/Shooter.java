@@ -8,9 +8,11 @@ import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -71,21 +73,13 @@ public class Shooter extends Subsystem {
     }
 
     public void loadDisc(double speed) {
-        if (canLoadDisc()) {
-            // Until the stop position limit switch is triggered
-            // the value returned will be false
-            while ( !stopLimitSwitch.get() ) {
-                loaderVictor.set(-speed);
-                printEncoderValues();
-            }
-//            printLimitSwitchValues();
-            loaderVictor.set(0);
+        // Until the stop position limit switch is triggered
+        // the value returned will be false
+        while (!stopLimitSwitch.get()) {
+            loaderVictor.set(-speed);
         }
-    }
-
-    public boolean isLoadDiscFinished() {
-        Debug.println("isLoadDiscFinished");
-        return stopLimitSwitch.get();
+        loaderVictor.set(0);
+        printLimitSwitchValues();
     }
 
     public void resetLoader(double speed) {
@@ -94,13 +88,64 @@ public class Shooter extends Subsystem {
         while (!startLimitSwitch.get()) {
             loaderVictor.set(speed);
         }
+        loaderVictor.set(0);
         printLimitSwitchValues();
+    }
+
+    public void loadDisc2(double speed) {
+        // Create a timer to measure the execution time
+        // for attempting to load the disc.  If we exceed
+        // the timeout value then stop.
+        Timer timer = new Timer();
+        double timeOut = Constants.LOAD_DISC_TIMEOUT_IN_SECS * 1000000.0;
+
+        // Until the stop position limit switch is triggered
+        // the value returned will be false
+        timer.start();
+        while (!stopLimitSwitch.get()) {
+            Debug.println("timer = "+timer.get()+", timeOut ="+timeOut);
+            if (timer.get() < timeOut) {
+                Debug.println("Load disc timed out");
+                break;
+            }
+            loaderVictor.set(-speed);
+        }
+        timer.stop();
         loaderVictor.set(0);
     }
 
+    public void resetLoader2(double speed) {
+        // Create a timer to measure the execution time
+        // for attempting to reset the loader arm.  If we
+        // exceed the timeout value then stop.
+        Timer timer = new Timer();
+        double timeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS * 1000000.0;
+
+        // Until the start position limit switch is triggered
+        // the value returned will be false
+        timer.start();
+        while (!startLimitSwitch.get()) {
+            Debug.println("timer = "+timer.get()+", timeOut ="+timeOut);
+            if (timer.get() < timeOut) {
+                Debug.println("Reset loader is timed out");
+                break;
+            }
+            loaderVictor.set(speed);
+        }
+        timer.stop();
+        loaderVictor.set(0);
+    }
+
+    public boolean isLoadDiscFinished() {
+        boolean isFinished = stopLimitSwitch.get();
+        if (isFinished) Debug.println("Load disc is finished!");
+        return isFinished;
+    }
+
     public boolean isResetLoaderFinished() {
-        Debug.println("isResetLoaderFinished");
-        return startLimitSwitch.get();
+        boolean isFinished = startLimitSwitch.get();
+        if (isFinished)  Debug.println("Reset loader is finished!");
+        return isFinished;
     }
 
     public void printLimitSwitchValues() {
@@ -114,7 +159,7 @@ public class Shooter extends Subsystem {
     public void startShooter(double speed) {
 //      shooterEncoder.start();
         shooterVictor.set(speed);
-        printEncoderValues();
+//        printEncoderValues();
     }
 
     public void stopShooter() {
