@@ -66,7 +66,7 @@ public class PIDShooter extends Subsystem {
 
         // Initialize the shooter PID Controller
         shooterPID = new PIDController(Kp, Ki, Kd, Kf, shooterEncoder, shooterVictor);
-        shooterPID.setContinuous();;
+        shooterPID.setContinuous();
         shooterPID.setInputRange(0, Constants.SHOOTER_WHEEL_MOTER_RATE);
         shooterPID.setOutputRange(0, 1);
         shooterPID.setPercentTolerance(5);

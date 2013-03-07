@@ -32,10 +32,8 @@ public class Shooter extends Subsystem {
 
     private static final Timer loadDiscTimer    = new Timer();
     private static final Timer resetLoaderTimer = new Timer();
-//    private static double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS * 1000000.0;
-//    private static double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS * 1000000.0;
-    private static double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS;
-    private static double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS;
+    private static final double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS;
+    private static final double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS;
 
 
     public Shooter() {
@@ -112,9 +110,8 @@ public class Shooter extends Subsystem {
         // the value returned will be false
         while (!stopLimitSwitch.get()) {
             elapsedTime = loadDiscTimer.get();
-            Debug.println("timer = "+elapsedTime+", timeOut ="+loadDiscTimeOut);
             if (elapsedTime > loadDiscTimeOut) {
-                Debug.println("Load disc timed out");
+                Debug.println("Load disc action timed out");
                 break;
             }
             loaderVictor.set(-speed);
@@ -135,9 +132,8 @@ public class Shooter extends Subsystem {
         // the value returned will be false
         while (!startLimitSwitch.get()) {
             elapsedTime = resetLoaderTimer.get();
-            Debug.println("timer = "+elapsedTime+", timeOut ="+resetLoaderTimeOut);
             if (elapsedTime > resetLoaderTimeOut) {
-                Debug.println("Reset loader is timed out");
+                Debug.println("Reset loader action timed out");
                 break;
             }
             loaderVictor.set(speed);
