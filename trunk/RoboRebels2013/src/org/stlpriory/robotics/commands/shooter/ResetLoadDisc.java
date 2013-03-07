@@ -31,7 +31,7 @@ public class ResetLoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.resetLoader(Constants.LOADER_MOTOR_SPEED);
+        shooter.resetLoader2(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**
@@ -40,7 +40,6 @@ public class ResetLoadDisc extends CommandBase {
      * @return finished state
      */
     protected boolean isFinished() {
-        System.out.println("ResetLoadDisc.isFinished()");
 //        return (shooter.isResetLoaderFinished() || isTimedOut());
         return (shooter.isResetLoaderFinished());
     }

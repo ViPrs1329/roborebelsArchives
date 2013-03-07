@@ -31,7 +31,7 @@ public class LoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.loadDisc(Constants.LOADER_MOTOR_SPEED);
+        shooter.loadDisc2(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**
@@ -40,7 +40,6 @@ public class LoadDisc extends CommandBase {
      * @return finished state
      */
     protected boolean isFinished() {
-        System.out.println("LoadDisc.isFinished()");
 //        return (shooter.isLoadDiscFinished() || isTimedOut());
         return (shooter.isLoadDiscFinished());
     }

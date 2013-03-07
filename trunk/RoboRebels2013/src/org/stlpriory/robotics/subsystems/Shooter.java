@@ -30,6 +30,14 @@ public class Shooter extends Subsystem {
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
 
+    private static final Timer loadDiscTimer    = new Timer();
+    private static final Timer resetLoaderTimer = new Timer();
+//    private static double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS * 1000000.0;
+//    private static double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS * 1000000.0;
+    private static double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS;
+    private static double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS;
+
+
     public Shooter() {
         super("Shooter");
         Debug.println("[Shooter] Instantiating...");
@@ -96,44 +104,46 @@ public class Shooter extends Subsystem {
         // Create a timer to measure the execution time
         // for attempting to load the disc.  If we exceed
         // the timeout value then stop.
-        Timer timer = new Timer();
-        double timeOut = Constants.LOAD_DISC_TIMEOUT_IN_SECS * 1000000.0;
+        double elapsedTime = 0;
+        loadDiscTimer.reset();
+        loadDiscTimer.start();
 
         // Until the stop position limit switch is triggered
         // the value returned will be false
-        timer.start();
         while (!stopLimitSwitch.get()) {
-            Debug.println("timer = "+timer.get()+", timeOut ="+timeOut);
-            if (timer.get() < timeOut) {
+            elapsedTime = loadDiscTimer.get();
+            Debug.println("timer = "+elapsedTime+", timeOut ="+loadDiscTimeOut);
+            if (elapsedTime > loadDiscTimeOut) {
                 Debug.println("Load disc timed out");
                 break;
             }
             loaderVictor.set(-speed);
         }
-        timer.stop();
         loaderVictor.set(0);
+        loadDiscTimer.stop();
     }
 
     public void resetLoader2(double speed) {
         // Create a timer to measure the execution time
         // for attempting to reset the loader arm.  If we
         // exceed the timeout value then stop.
-        Timer timer = new Timer();
-        double timeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS * 1000000.0;
+        double elapsedTime = 0;
+        resetLoaderTimer.reset();
+        resetLoaderTimer.start();
 
         // Until the start position limit switch is triggered
         // the value returned will be false
-        timer.start();
         while (!startLimitSwitch.get()) {
-            Debug.println("timer = "+timer.get()+", timeOut ="+timeOut);
-            if (timer.get() < timeOut) {
+            elapsedTime = resetLoaderTimer.get();
+            Debug.println("timer = "+elapsedTime+", timeOut ="+resetLoaderTimeOut);
+            if (elapsedTime > resetLoaderTimeOut) {
                 Debug.println("Reset loader is timed out");
                 break;
             }
             loaderVictor.set(speed);
         }
-        timer.stop();
         loaderVictor.set(0);
+        resetLoaderTimer.stop();
     }
 
     public boolean isLoadDiscFinished() {
@@ -144,16 +154,8 @@ public class Shooter extends Subsystem {
 
     public boolean isResetLoaderFinished() {
         boolean isFinished = startLimitSwitch.get();
-        if (isFinished)  Debug.println("Reset loader is finished!");
+        if (isFinished) Debug.println("Reset loader is finished!");
         return isFinished;
-    }
-
-    public void printLimitSwitchValues() {
-        Debug.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
-    }
-
-    public void printEncoderValues() {
-        System.out.println("encoder raw = " + shooterEncoder.getRaw() + ", rate = " + shooterEncoder.getRate() + ", pidGet = " + shooterEncoder.pidGet());
     }
 
     public void startShooter(double speed) {
@@ -164,6 +166,7 @@ public class Shooter extends Subsystem {
 
     public void stopShooter() {
         shooterVictor.set(0);
+        resetLoader(Constants.LOADER_MOTOR_SPEED);
 //      shooterEncoder.stop();
     }
 
@@ -171,4 +174,13 @@ public class Shooter extends Subsystem {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
+
+    public void printLimitSwitchValues() {
+        Debug.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
+    }
+
+    public void printEncoderValues() {
+        Debug.println("encoder raw = " + shooterEncoder.getRaw() + ", rate = " + shooterEncoder.getRate() + ", pidGet = " + shooterEncoder.pidGet());
+    }
+
 }

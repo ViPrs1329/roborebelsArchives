@@ -90,8 +90,8 @@ public class Constants {
     public static final double SHOOTER_WHEEL_MOTOR_SPEED = 1.0;
     public static final double LOADER_MOTOR_SPEED = 1.0;
     public static final double SHOOTER_WHEEL_MOTER_RATE = 20000;
-    public static final double LOAD_DISC_TIMEOUT_IN_SECS = 2;
-    public static final double RESET_LOADER_TIMEOUT_IN_SECS = 2;
+    public static final double LOAD_DISC_TIMEOUT_IN_SECS = 1;
+    public static final double RESET_LOADER_TIMEOUT_IN_SECS = 1;
 
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641
