@@ -30,11 +30,14 @@ public class Shooter extends Subsystem {
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
 
-    private static final Timer loadDiscTimer    = new Timer();
-    private static final Timer resetLoaderTimer = new Timer();
     private static final double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS;
     private static final double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS;
 
+    private static Timer loadDiscTimer;
+    private static Timer resetLoaderTimer;
+
+    private static boolean loadDiscIsFinished;
+    private static boolean resetLoaderIsFinished;
 
     public Shooter() {
         super("Shooter");
@@ -68,6 +71,9 @@ public class Shooter extends Subsystem {
         shooterEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
         shooterEncoder.start();
 
+        loadDiscTimer = new Timer();
+        resetLoaderTimer = new Timer();
+
         Debug.println("[Shooter] Instantiation complete.");
     }
 
@@ -79,85 +85,83 @@ public class Shooter extends Subsystem {
     }
 
     public void loadDisc(double speed) {
+        loadDiscIsFinished = false;
+
         // Until the stop position limit switch is triggered
         // the value returned will be false
         while (!stopLimitSwitch.get()) {
             loaderVictor.set(-speed);
         }
         loaderVictor.set(0);
+
+        loadDiscIsFinished = true;
         printLimitSwitchValues();
     }
 
     public void resetLoader(double speed) {
+        resetLoaderIsFinished = false;
+
         // Until the start position limit switch is triggered
         // the value returned will be false
         while (!startLimitSwitch.get()) {
             loaderVictor.set(speed);
         }
         loaderVictor.set(0);
+
+        resetLoaderIsFinished = true;
         printLimitSwitchValues();
     }
 
     public void loadDisc2(double speed) {
-        // Create a timer to measure the execution time
-        // for attempting to load the disc.  If we exceed
-        // the timeout value then stop.
-        double elapsedTime = 0;
+        // Measure the execution time for loading the disc.
+        // If we exceed preset timeout value then stop the
+        // action and allow us to try and reset the loader.
+        loadDiscIsFinished = false;
         loadDiscTimer.reset();
         loadDiscTimer.start();
 
         // Until the stop position limit switch is triggered
         // the value returned will be false
-        while (!stopLimitSwitch.get()) {
-            elapsedTime = loadDiscTimer.get();
-            if (elapsedTime > loadDiscTimeOut) {
-                Debug.println("Load disc action timed out");
-                break;
-            }
+        while ((!stopLimitSwitch.get()) && (loadDiscTimer.get() < loadDiscTimeOut)) {
             loaderVictor.set(-speed);
         }
+
         loaderVictor.set(0);
         loadDiscTimer.stop();
+        loadDiscIsFinished = true;
     }
 
     public void resetLoader2(double speed) {
-        // Create a timer to measure the execution time
-        // for attempting to reset the loader arm.  If we
-        // exceed the timeout value then stop.
-        double elapsedTime = 0;
+        // Measure the execution time for resetting the loader.
+        // If we exceed preset timeout value then stop the action
+        // and allow us to try and load a disc.
+        resetLoaderIsFinished = false;
         resetLoaderTimer.reset();
         resetLoaderTimer.start();
 
         // Until the start position limit switch is triggered
         // the value returned will be false
-        while (!startLimitSwitch.get()) {
-            elapsedTime = resetLoaderTimer.get();
-            if (elapsedTime > resetLoaderTimeOut) {
-                Debug.println("Reset loader action timed out");
-                break;
-            }
+        while ((!startLimitSwitch.get()) && (resetLoaderTimer.get() < resetLoaderTimeOut)) {
             loaderVictor.set(speed);
         }
+
         loaderVictor.set(0);
         resetLoaderTimer.stop();
+        resetLoaderIsFinished = true;
     }
 
     public boolean isLoadDiscFinished() {
-        boolean isFinished = stopLimitSwitch.get();
-        if (isFinished) Debug.println("Load disc is finished!");
-        return isFinished;
+        return loadDiscIsFinished;
     }
 
     public boolean isResetLoaderFinished() {
-        boolean isFinished = startLimitSwitch.get();
-        if (isFinished) Debug.println("Reset loader is finished!");
-        return isFinished;
+        return resetLoaderIsFinished;
     }
 
     public void startShooter(double speed) {
 //      shooterEncoder.start();
         shooterVictor.set(speed);
-//        printEncoderValues();
+//      printEncoderValues();
     }
 
     public void stopShooter() {
