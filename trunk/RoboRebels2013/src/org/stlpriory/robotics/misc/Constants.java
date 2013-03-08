@@ -5,6 +5,7 @@
 package org.stlpriory.robotics.misc;
 
 import edu.wpi.first.wpilibj.CANJaguar;
+import edu.wpi.first.wpilibj.Encoder;
 
 /**
  *
@@ -87,11 +88,18 @@ public class Constants {
     //-----------------------------------------------------------------------
     //     Constants for the Shooter subsystem
     //-----------------------------------------------------------------------
-    public static final double SHOOTER_WHEEL_MOTOR_SPEED = 1.0;
-    public static final double LOADER_MOTOR_SPEED = 1.0;
-    public static final double SHOOTER_WHEEL_MOTER_RATE = 20000;
-    public static final double LOAD_DISC_TIMEOUT_IN_SECS = 1;
+
+    // Define the timeouts for the loadDisc and resetLoader actions
+    public static final double LOAD_DISC_TIMEOUT_IN_SECS    = 1;
     public static final double RESET_LOADER_TIMEOUT_IN_SECS = 1;
+
+    // Shooter wheel motor speed (must be within the range of -1 to 1)
+    public static final double SHOOTER_WHEEL_MOTOR_SPEED    = 1.0;
+    // Loader arm motor speed (must be within the range of -1 to 1)
+    public static final double LOADER_MOTOR_SPEED           = 1.0;
+    // For the shooter wheel encoder with PIDSourceParameter.kRate the
+    // PIDController setpoint value should be in units of RPM
+    public static final double SHOOTER_WHEEL_MOTER_RATE     = 20000;
 
     // Reference URLs:
     // http://www.chiefdelphi.com/forums/showthread.php?t=105641

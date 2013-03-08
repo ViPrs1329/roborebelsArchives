@@ -62,13 +62,10 @@ public class PIDShooter extends Subsystem {
                                      1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B, true, EncodingType.k1X);
         shooterEncoder.setDistancePerPulse(1);
         shooterEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-        shooterEncoder.start();
 
         // Initialize the shooter PID Controller
         shooterPID = new PIDController(Kp, Ki, Kd, Kf, shooterEncoder, shooterVictor);
         shooterPID.setContinuous();
-        shooterPID.setInputRange(0, Constants.SHOOTER_WHEEL_MOTER_RATE);
-        shooterPID.setOutputRange(0, 1);
         shooterPID.setPercentTolerance(5);
 
         // Use these to get going:
@@ -128,15 +125,18 @@ public class PIDShooter extends Subsystem {
     }
 
     public void startShooter(double speed) {
+        shooterVictor.set(speed);
+
         shooterEncoder.start();
-        System.out.println("[PIDShooter.startShooter] pidGet " + shooterEncoder.pidGet());
         shooterPID.setSetpoint(Constants.SHOOTER_WHEEL_MOTER_RATE);
-        //shooterVictor.set(speed);
+        shooterPID.enable();
+        System.out.println("[PIDShooter.startShooter] pidGet(rate) " + shooterEncoder.pidGet());
     }
 
     public void stopShooter() {
+        shooterVictor.set(0);
+        
         shooterPID.setSetpoint(0);
-        //shooterVictor.set(0);
         shooterEncoder.stop();
     }
 }
