@@ -31,7 +31,7 @@ public class ResetLoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.resetLoader2(Constants.LOADER_MOTOR_SPEED);
+        shooter.resetLoaderWithTimeout(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**

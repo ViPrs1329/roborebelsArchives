@@ -31,7 +31,7 @@ public class LoadDisc extends CommandBase {
      * Called repeatedly when this Command is scheduled to run
      */
     protected void execute() {
-        shooter.loadDisc2(Constants.LOADER_MOTOR_SPEED);
+        shooter.loadDiscWithTimeout(Constants.LOADER_MOTOR_SPEED);
     }
 
     /**

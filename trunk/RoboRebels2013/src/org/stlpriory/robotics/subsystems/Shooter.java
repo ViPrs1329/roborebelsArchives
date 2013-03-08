@@ -112,7 +112,7 @@ public class Shooter extends Subsystem {
         printLimitSwitchValues();
     }
 
-    public void loadDisc2(double speed) {
+    public void loadDiscWithTimeout(double speed) {
         // Measure the execution time for loading the disc.
         // If we exceed preset timeout value then stop the
         // action and allow us to try and reset the loader.
@@ -131,7 +131,7 @@ public class Shooter extends Subsystem {
         loadDiscIsFinished = true;
     }
 
-    public void resetLoader2(double speed) {
+    public void resetLoaderWithTimeout(double speed) {
         // Measure the execution time for resetting the loader.
         // If we exceed preset timeout value then stop the action
         // and allow us to try and load a disc.
