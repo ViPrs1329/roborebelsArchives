@@ -70,6 +70,7 @@ public class CANDriveTrain extends Subsystem {
         }
 
         Debug.println("[CANDriveTrain] Initializing RobotDrive");
+        Debug.println("[CANDriveTrain] MAX OUTPUT = " + Constants.DRIVE_MAX_OUTPUT);
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
@@ -92,7 +93,7 @@ public class CANDriveTrain extends Subsystem {
         jaguar.setPID(Constants.KP, Constants.KI, Constants.KD);
         jaguar.enableControl();
 
-        printJaguarProperties(jaguar);
+        //printJaguarProperties(jaguar);
     }
 
     private void checkJaguarForReset(CANJaguar jaguar) {

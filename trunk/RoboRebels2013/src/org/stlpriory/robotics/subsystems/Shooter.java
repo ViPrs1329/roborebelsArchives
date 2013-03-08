@@ -4,9 +4,7 @@
  */
 package org.stlpriory.robotics.subsystems;
 
-import edu.wpi.first.wpilibj.CounterBase;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
@@ -20,12 +18,8 @@ import org.stlpriory.robotics.misc.Debug;
  */
 public class Shooter extends Subsystem {
 
-    private static SpeedController shooterVictor = null;
-    private static SpeedController loaderVictor = null;
-    // Quadrature encoder used to measure shoot motor speed
-    private static Encoder shooterEncoder;
-
-    private static DigitalInput shooterProximitySensor;
+    protected static SpeedController shooterVictor;
+    protected static SpeedController loaderVictor;
 
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
@@ -43,11 +37,6 @@ public class Shooter extends Subsystem {
         super("Shooter");
         Debug.println("[Shooter] Instantiating...");
 
-        Debug.println("[Shooter] Initializing shooter wheel motor speed controller to PWM channel "
-                + RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL + " on the digital module.");
-        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
-
-
         Debug.println("[Shooter] Initializing loader motor speed controller to PWM channel "
                 + RobotMap.LOADER_MOTOR_PWM_CHANNEL + " on the digital module.");
         loaderVictor = new Victor(RobotMap.LOADER_MOTOR_PWM_CHANNEL);
@@ -61,15 +50,10 @@ public class Shooter extends Subsystem {
         stopLimitSwitch = new DigitalInput(1, RobotMap.LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL);
 
 
-        Debug.println("[PIDShooter] Initializing shooter motor encoder to channels "
-                + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A
-                + " and " + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B);
-        shooterEncoder = new Encoder(1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A,
-                                     1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B, true,
-                                     CounterBase.EncodingType.k1X);
-        shooterEncoder.setDistancePerPulse(1);
-        shooterEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
-        shooterEncoder.start();
+        Debug.println("[Shooter] Initializing shooter wheel motor speed controller to PWM channel "
+                + RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL + " on the digital module.");
+        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
+
 
         loadDiscTimer = new Timer();
         resetLoaderTimer = new Timer();
@@ -77,11 +61,9 @@ public class Shooter extends Subsystem {
         Debug.println("[Shooter] Instantiation complete.");
     }
 
-    private boolean canLoadDisc() {
-        // If the start position limit switch is triggered then
-        // the loader arm is retracted and ready to load another disc
-        return true;
-        //return startLimitSwitch.get();
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+        //setDefaultCommand(new MySpecialCommand());
     }
 
     public void loadDisc(double speed) {
@@ -170,17 +152,8 @@ public class Shooter extends Subsystem {
 //      shooterEncoder.stop();
     }
 
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
-    }
-
     public void printLimitSwitchValues() {
         Debug.println("start switch = " + startLimitSwitch.get() + ", stop switch = "+ stopLimitSwitch.get());
-    }
-
-    public void printEncoderValues() {
-        Debug.println("encoder raw = " + shooterEncoder.getRaw() + ", rate = " + shooterEncoder.getRate() + ", pidGet = " + shooterEncoder.pidGet());
     }
 
 }
