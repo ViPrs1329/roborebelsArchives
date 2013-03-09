@@ -21,32 +21,17 @@ public class Shoot extends CommandGroup {
         // these will run in order.
 
         double waitBeforeLoad  = 2;
-        double waitBeforeReset = 1;
+        double waitBeforeReset = 0.5;
 
         addSequential(new StartShooting());
-        addSequential(new WaitCommand(waitBeforeReset));
-
-        addSequential(new ResetLoadDisc());
-        addSequential(new WaitCommand(waitBeforeLoad));
-        addSequential(new LoadDisc());
-        addSequential(new WaitCommand(waitBeforeReset));
-        addSequential(new ResetLoadDisc());
         addSequential(new WaitCommand(waitBeforeLoad));
 
-        addSequential(new LoadDisc());
-        addSequential(new WaitCommand(waitBeforeReset));
-        addSequential(new ResetLoadDisc());
-        addSequential(new WaitCommand(waitBeforeLoad));
-
-        addSequential(new LoadDisc());
-        addSequential(new WaitCommand(waitBeforeReset));
-        addSequential(new ResetLoadDisc());
-        addSequential(new WaitCommand(waitBeforeLoad));
-
-        addSequential(new LoadDisc());
-        addSequential(new WaitCommand(waitBeforeReset));
-        addSequential(new ResetLoadDisc());
-        addSequential(new WaitCommand(waitBeforeLoad));
+        for (int i = 0; i < 5; i++) {
+            addSequential(new LoadDisc());
+            addSequential(new WaitCommand(waitBeforeReset));
+            addSequential(new ResetLoadDisc());
+            addSequential(new WaitCommand(waitBeforeLoad));
+        }
 
         addSequential(new StopShooting());
 

@@ -19,11 +19,15 @@ public class PIDShooter extends Shooter {
     private static Encoder shooterEncoder;
     private final PIDController shooterPID;
 
-    private static final double Kp = 0.4;
-    private static final double Ki = 0.01;
+    private static final double Kp = 0.0;
+    private static final double Ki = 0.0;
     private static final double Kd = 0.0;
-    private static final double Kf = 1.0;
+    private static final double Kf = 0.9;///Constants.SHOOTER_WHEEL_MOTER_RATE;
 //  private static final double Kf = Constants.SHOOTER_WHEEL_MOTOR_SPEED;
+
+    // The period is the loop time for doing PID calculations. This particularly effects
+    // calculations of the integral and differential terms. The default is 50ms.
+    private static final double PERIOD = 200;
 
     // Initialize your subsystem here
     public PIDShooter() {
@@ -57,7 +61,15 @@ public class PIDShooter extends Shooter {
         shooterEncoder.start();
         shooterPID.setSetpoint(Constants.SHOOTER_WHEEL_MOTER_RATE);
         shooterPID.enable();
+        printPIDControllerError();
+        printEncoderValues();
         Debug.println("[PIDShooter.startShooter] pidGet(rate) " + shooterEncoder.pidGet());
+    }
+
+    public void loadDiscWithTimeout(double speed) {
+        printPIDControllerError();
+        printEncoderValues();
+        super.loadDiscWithTimeout(speed);
     }
 
     public void stopShooter() {
@@ -70,6 +82,10 @@ public class PIDShooter extends Shooter {
 
     public void printEncoderValues() {
         Debug.println("encoder raw = " + shooterEncoder.getRaw() + ", rate = " + shooterEncoder.getRate());
+    }
+
+    public void printPIDControllerError() {
+        Debug.println("PID controller error = "+shooterPID.getError()+", pidGet = "+shooterEncoder.pidGet());
     }
 
 }

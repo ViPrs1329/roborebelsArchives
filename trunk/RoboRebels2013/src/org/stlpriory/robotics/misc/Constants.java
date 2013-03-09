@@ -94,6 +94,6 @@ public class Constants {
     public static final double LOADER_MOTOR_SPEED           = 1.0;
     // For the shooter wheel encoder with PIDSourceParameter.kRate the
     // PIDController setpoint value should be in units of RPM
-    public static final double SHOOTER_WHEEL_MOTER_RATE     = 20000;
+    public static final double SHOOTER_WHEEL_MOTER_RATE     = 1.0;//-20000;
 
 }

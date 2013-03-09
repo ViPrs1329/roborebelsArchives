@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
+import org.stlpriory.robotics.subsystems.PIDShooter;
 import org.stlpriory.robotics.subsystems.Shooter;
 
 /**
