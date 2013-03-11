@@ -18,8 +18,8 @@ import org.stlpriory.robotics.commands.shooter.StopShooting;
  *
  */
 public class AutonomousShoot extends CommandGroup {
-    private static final double DRIVING_SPEED = 0.5;
-    private static final double DRIVE_STAIGHT_TIMEOUT = 0.5;
+    private static final double DRIVING_SPEED = -0.4;
+    private static final double DRIVE_STAIGHT_TIMEOUT = 0.4;
 
     private static final double WAIT_BEFORE_LOAD  = 2;
     private static final double WAIT_BEFORE_RESET = 0.5;

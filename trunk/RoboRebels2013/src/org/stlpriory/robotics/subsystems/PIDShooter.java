@@ -38,7 +38,8 @@ public class PIDShooter extends Shooter {
                 + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A
                 + " and " + RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B);
         shooterEncoder = new Encoder(1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A,
-                                     1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B, true, EncodingType.k1X);
+                                     1, RobotMap.SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B,
+                                     true, EncodingType.k1X);
         shooterEncoder.setDistancePerPulse(1);
         shooterEncoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
 
