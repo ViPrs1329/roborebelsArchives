@@ -87,6 +87,7 @@ public class Constants {
     // Define the timeouts for the loadDisc and resetLoader actions
     public static final double LOAD_DISC_TIMEOUT_IN_SECS    = 1;
     public static final double RESET_LOADER_TIMEOUT_IN_SECS = 1;
+    public static final double RUMBLER_TIMEOUT_IN_SECS      = 0.3;
 
     // Shooter wheel motor speed (must be within the range of -1 to 1)
     public static final double SHOOTER_WHEEL_MOTOR_SPEED    = 1.0;

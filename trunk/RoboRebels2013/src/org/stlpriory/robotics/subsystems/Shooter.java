@@ -5,6 +5,7 @@
 package org.stlpriory.robotics.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
@@ -24,11 +25,15 @@ public class Shooter extends Subsystem {
     private static DigitalInput startLimitSwitch;
     private static DigitalInput stopLimitSwitch;
 
+    private static Relay rumbler;
+
     private static final double loadDiscTimeOut    = Constants.LOAD_DISC_TIMEOUT_IN_SECS;
     private static final double resetLoaderTimeOut = Constants.RESET_LOADER_TIMEOUT_IN_SECS;
+    private static final double rumblerTimeout     = Constants.RUMBLER_TIMEOUT_IN_SECS;
 
     private static Timer loadDiscTimer;
     private static Timer resetLoaderTimer;
+    private static Timer rumblerTimer;
 
     private static boolean loadDiscIsFinished;
     private static boolean resetLoaderIsFinished;
@@ -55,8 +60,14 @@ public class Shooter extends Subsystem {
         shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
 
 
+        Debug.println("[Shooter] Initializing shaker motor to relay channel "
+                + RobotMap.SHAKER_MOTOR_RELAY_CHANNEL + " on the digital module.");
+        rumbler = new Relay(RobotMap.SHAKER_MOTOR_RELAY_CHANNEL);
+
+
         loadDiscTimer = new Timer();
         resetLoaderTimer = new Timer();
+        rumblerTimer = new Timer();
 
         Debug.println("[Shooter] Instantiation complete.");
     }
@@ -138,6 +149,16 @@ public class Shooter extends Subsystem {
 
     public boolean isResetLoaderFinished() {
         return resetLoaderIsFinished;
+    }
+
+    public void rumble() {
+        rumblerTimer.reset();
+        rumblerTimer.start();
+        while (rumblerTimer.get() < rumblerTimeout) {
+            rumbler.set(Relay.Value.kOn);
+        }
+        rumbler.set(Relay.Value.kOff);
+        rumblerTimer.stop();
     }
 
     public void startShooter(double speed) {

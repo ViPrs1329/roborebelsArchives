@@ -42,6 +42,8 @@ public class RobotMap {
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_A = 1;
     public static final int SHOOTER_ENCODER_DIGITAL_IO_CHANNEL_B = 2;
 
+    public static final int SHAKER_MOTOR_RELAY_CHANNEL = 1;
+
     // Limit switches used to extend and retract the loader arm
     public static final int LOADER_START_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 4;
     public static final int LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL = 3;
