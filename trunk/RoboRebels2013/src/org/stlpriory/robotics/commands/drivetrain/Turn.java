@@ -13,12 +13,21 @@ import org.stlpriory.robotics.misc.Debug;
 public class Turn extends CommandBase {
 
     private double timeout;
-    private double speed;
+    private double rotation;
+    private double gyroAngle;
 
-    public Turn(double speed, double timeout) {
+    /**
+     * @param rotation The rate of rotation for the robot that is completely independent of
+     * the translation. [-1.0..1.0]
+     * @param gyroAngle The current angle reading from the gyro.  Use this to implement field-oriented controls.
+     * @param timeout The command timeout in seconds
+     */
+    public Turn(double rotation, double gyroAngle, double timeout) {
+        super("Turn");
         requires(drivetrain);
-        this.speed = speed;
-        this.timeout = timeout;
+        this.rotation  = rotation;
+        this.gyroAngle = gyroAngle;
+        this.timeout   = timeout;
     }
 
     /**
@@ -26,15 +35,17 @@ public class Turn extends CommandBase {
      */
     protected void initialize() {
         setTimeout(timeout);
-        Debug.print("[" + this.getName() + "] Speed: " + this.speed);
-        Debug.print("\tTimeout: " + timeout);
+        Debug.print("[" + this.getName()
+                + "] rotation: " + this.rotation
+                + ", gyroAngle: " + this.gyroAngle
+                + ", timeout: " + this.timeout);
     }
 
     /**
      * Called repeatedly while the command is running
      */
     protected void execute() {
-        drivetrain.turnLeft();
+        drivetrain.turn(rotation,gyroAngle);
     }
 
     /**
@@ -50,7 +61,7 @@ public class Turn extends CommandBase {
      * Called one after isFinished() returns true
      */
     protected void end() {
-        Debug.println("\t\tDONE");
+        Debug.print("[" + getName() + "] end");
         drivetrain.stop();
     }
 
@@ -59,7 +70,7 @@ public class Turn extends CommandBase {
      * canceled
      */
     protected void interrupted() {
-        Debug.println("\t[interrupted] " + getName());
+        Debug.print("[" + getName() + "] interrupted");
         drivetrain.stop();
     }
 }

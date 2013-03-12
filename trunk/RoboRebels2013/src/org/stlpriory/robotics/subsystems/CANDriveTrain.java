@@ -128,6 +128,17 @@ public class CANDriveTrain extends Subsystem {
         drive.tankDrive(0.0, 0.0);
     }
 
+    public void turn(double rotation, double gyroAngle) {
+        drive.mecanumDrive_Cartesian(0, 0, rotation, gyroAngle);
+    }
+
+    public void straight(double speed) {
+        speed *= direction;
+        if (canDrive()) {
+            drive.mecanumDrive_Cartesian(0, speed, 0, 0);
+        }
+    }
+
     public boolean canDrive() {
         return true;
     }
@@ -222,17 +233,6 @@ public class CANDriveTrain extends Subsystem {
         return this.currentValues[index];
     }
 
-    public void straight(double speed) {
-        speed *= direction;
-        if (canDrive()) {
-            drive.mecanumDrive_Cartesian(0, speed, 0, 0);
-        }
-    }
-
-    public void turnLeft() { // sets the motor speeds to start a left turn
-        arcadeDrive(0.0, .3);
-    }
-
     public void driveWithJoystick(Joystick joystick) {
         drive.arcadeDrive(joystick);
     }
@@ -318,5 +318,4 @@ public class CANDriveTrain extends Subsystem {
             ex.printStackTrace();
         }
     }
-
 }

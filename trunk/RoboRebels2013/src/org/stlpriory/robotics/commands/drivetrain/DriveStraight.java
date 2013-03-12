@@ -15,7 +15,12 @@ public class DriveStraight extends CommandBase {
     private double timeout;
     private double speed;
 
+    /**
+     * @param speed The forward speed of the robot [-1.0..1.0]
+     * @param timeout The command timeout in seconds
+     */
     public DriveStraight(double speed, double timeout) {
+        super("DriveStraight");
         requires(drivetrain);
         this.speed = speed;
         this.timeout = timeout;
@@ -26,7 +31,10 @@ public class DriveStraight extends CommandBase {
      */
     protected void initialize() {
         setTimeout(timeout);
-        Debug.print("[" + this.getName() + "] Speed: " + this.speed);
+        Debug.print("[" + this.getName()
+                + "] speed: " + this.speed
+                + ", timeout: " + this.timeout);
+
         Debug.print("\tTimeout: " + timeout);
     }
 
@@ -50,7 +58,7 @@ public class DriveStraight extends CommandBase {
      * Called one after isFinished() returns true
      */
     protected void end() {
-        Debug.println("\t\tDONE");
+        Debug.print("[" + getName() + "] end");
         drivetrain.stop();
     }
 
@@ -59,7 +67,7 @@ public class DriveStraight extends CommandBase {
      * canceled
      */
     protected void interrupted() {
-        Debug.println("\t[interrupted] " + getName());
+        Debug.print("[" + getName() + "] interrupted");
         drivetrain.stop();
     }
 }

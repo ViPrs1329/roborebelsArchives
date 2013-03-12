@@ -3,6 +3,7 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.stlpriory.robotics.commands.drivetrain.Turn;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
 import org.stlpriory.robotics.commands.shooter.ResetLoadDisc;
 import org.stlpriory.robotics.commands.shooter.Rumble;
@@ -103,9 +104,13 @@ public class OI {
         this.shooterStopButton = new JoystickButton(this.joystick, 1);
         this.shooterStopButton.whenPressed(new Shoot());
 
-        Debug.println("[OI] Initializing gamepad to execute a 1 second rumble when the X button is pressed");
+        Debug.println("[OI] Initializing gamepad to execute a .3 second rumble when the X button is pressed");
         this.shooterStopButton = new JoystickButton(this.joystick, 3);
         this.shooterStopButton.whenPressed(new Rumble());
+
+        Debug.println("[OI] Initializing gamepad to execute a 180 degree turn when the Y button is pressed");
+        this.shooterStopButton = new JoystickButton(this.joystick, 4);
+        this.shooterStopButton.whenPressed(new Turn(0.5, 180, 1));
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());

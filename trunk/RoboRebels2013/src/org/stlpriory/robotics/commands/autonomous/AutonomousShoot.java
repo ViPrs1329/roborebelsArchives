@@ -19,9 +19,9 @@ import org.stlpriory.robotics.commands.shooter.StopShooting;
  */
 public class AutonomousShoot extends CommandGroup {
     private static final double DRIVING_SPEED = -0.4;
-    private static final double DRIVE_STAIGHT_TIMEOUT = 0.4;
+    private static final double DRIVE_STAIGHT_TIMEOUT = 0.3;
 
-    private static final double WAIT_BEFORE_LOAD  = 2;
+    private static final double WAIT_BEFORE_LOAD  = 1;
     private static final double WAIT_BEFORE_RESET = 0.5;
 
     public AutonomousShoot() {
@@ -29,13 +29,12 @@ public class AutonomousShoot extends CommandGroup {
 
         addSequential(new StartShooting());
         addSequential(new DriveStraight(DRIVING_SPEED,DRIVE_STAIGHT_TIMEOUT));
-        addSequential(new WaitCommand(WAIT_BEFORE_LOAD));
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 4; i++) {
+            addSequential(new WaitCommand(WAIT_BEFORE_LOAD));
             addSequential(new LoadDisc());
             addSequential(new WaitCommand(WAIT_BEFORE_RESET));
             addSequential(new ResetLoadDisc());
-            addSequential(new WaitCommand(WAIT_BEFORE_LOAD));
         }
 
         addSequential(new StopShooting());
