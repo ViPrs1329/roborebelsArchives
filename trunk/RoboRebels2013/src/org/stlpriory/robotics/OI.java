@@ -74,9 +74,13 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
-    private JoystickButton loaderButton;
+    private JoystickButton loadDiscButton;
+    private JoystickButton resetLoaderButton;
     private JoystickButton shooterStartButton;
     private JoystickButton shooterStopButton;
+    private JoystickButton shootDiscsButton;
+    private JoystickButton rumbleButton;
+    private JoystickButton rotate180Button;
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -84,13 +88,13 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
 
-        Debug.println("[OI] Initializing gamepad to reset disc loader when the left bumper pressed");
-        this.loaderButton = new JoystickButton(this.joystick, 5);
-        this.loaderButton.whenPressed(new ResetLoadDisc());
-
         Debug.println("[OI] Initializing gamepad to load a disc when the right bumper pressed");
-        this.loaderButton = new JoystickButton(this.joystick, 6);
-        this.loaderButton.whenPressed(new LoadDisc());
+        this.loadDiscButton = new JoystickButton(this.joystick, 6);
+        this.loadDiscButton.whenPressed(new LoadDisc());
+
+        Debug.println("[OI] Initializing gamepad to reset disc loader when the left bumper pressed");
+        this.resetLoaderButton = new JoystickButton(this.joystick, 5);
+        this.resetLoaderButton.whenPressed(new ResetLoadDisc());
 
         Debug.println("[OI] Initializing gamepad to start the shooter motor when the start button is pressed");
         this.shooterStartButton = new JoystickButton(this.joystick, 8);
@@ -101,16 +105,16 @@ public class OI {
         this.shooterStopButton.whenPressed(new StopShooting());
 
         Debug.println("[OI] Initializing gamepad to execute the shooting sequence when the A button is pressed");
-        this.shooterStopButton = new JoystickButton(this.joystick, 1);
-        this.shooterStopButton.whenPressed(new Shoot());
+        this.shootDiscsButton = new JoystickButton(this.joystick, 1);
+        this.shootDiscsButton.whenPressed(new Shoot());
 
         Debug.println("[OI] Initializing gamepad to execute a .3 second rumble when the X button is pressed");
-        this.shooterStopButton = new JoystickButton(this.joystick, 3);
-        this.shooterStopButton.whenPressed(new Rumble());
+        this.rumbleButton = new JoystickButton(this.joystick, 3);
+        this.rumbleButton.whenPressed(new Rumble());
 
         Debug.println("[OI] Initializing gamepad to execute a 180 degree turn when the Y button is pressed");
-        this.shooterStopButton = new JoystickButton(this.joystick, 4);
-        this.shooterStopButton.whenPressed(new Turn(0.7, 180, 1));
+        this.rotate180Button = new JoystickButton(this.joystick, 4);
+        this.rotate180Button.whenPressed(new Turn(0.7, 180, 1));
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
