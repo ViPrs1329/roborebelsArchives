@@ -233,6 +233,10 @@ public class CANDriveTrain extends Subsystem {
         return this.currentValues[index];
     }
 
+    private double scaleInputValue2(double targetValue, int index) {
+        return targetValue;
+    }
+
     public void driveWithJoystick(Joystick joystick) {
         drive.arcadeDrive(joystick);
     }

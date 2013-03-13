@@ -110,7 +110,7 @@ public class OI {
 
         Debug.println("[OI] Initializing gamepad to execute a 180 degree turn when the Y button is pressed");
         this.shooterStopButton = new JoystickButton(this.joystick, 4);
-        this.shooterStopButton.whenPressed(new Turn(0.5, 180, 1));
+        this.shooterStopButton.whenPressed(new Turn(0.7, 180, 1));
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
