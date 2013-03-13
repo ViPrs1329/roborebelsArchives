@@ -11,6 +11,7 @@ import org.stlpriory.robotics.commands.drivetrain.DriveStraight;
 import org.stlpriory.robotics.commands.drivetrain.Turn;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
 import org.stlpriory.robotics.commands.shooter.ResetLoadDisc;
+import org.stlpriory.robotics.commands.shooter.Rumble;
 import org.stlpriory.robotics.commands.shooter.StartShooting;
 import org.stlpriory.robotics.commands.shooter.StopShooting;
 
@@ -35,6 +36,7 @@ public class AutonomousShoot extends CommandGroup {
             addSequential(new LoadDisc());
             addSequential(new WaitCommand(WAIT_BEFORE_RESET));
             addSequential(new ResetLoadDisc());
+            addSequential(new Rumble());
         }
 
         addSequential(new StopShooting());

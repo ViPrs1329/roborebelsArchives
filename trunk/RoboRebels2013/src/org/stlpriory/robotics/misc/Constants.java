@@ -64,7 +64,7 @@ public class Constants {
     public static final double MOTOR_RAMP_INCREMENT = 0.05;
     public static final double MOTOR_RAMP_DOWN_INCREMENT = .1;
 
-    public static final double DRIVE_MAX_OUTPUT = 200;  // speed control mode (rpm value)
+    public static final double DRIVE_MAX_OUTPUT = 300;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
 

@@ -24,12 +24,13 @@ import org.stlpriory.robotics.misc.Debug;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
+
 public class RoboRebels extends IterativeRobot {
 
     private Command autonomousCommand;
     private Timer timer = new Timer();
     private boolean firstTime = true;
-
+    private int loop = 0;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -87,7 +88,14 @@ public class RoboRebels extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+        loop++;
         Scheduler.getInstance().run();
+        if(!isNewDataAvailable()){
+            Debug.println("Driver Data Not Available----------------- "+timer.get()+" "+loop);
+        }else{
+            Debug.println("Driver Data Available "+timer.get()+" "+loop);
+        }
+        
     }
 
     /**
@@ -105,6 +113,11 @@ public class RoboRebels extends IterativeRobot {
      */
     public void testPeriodic() {
         LiveWindow.run();
+        
     }
-
+    public void teleopContinuous(){
+        if(!isNewDataAvailable()){
+            Debug.println("Driver Data Not Available! "+timer.get());
+        }
+    }
 }

@@ -114,8 +114,10 @@ public class OI {
 
         Debug.println("[OI] Initializing gamepad to execute a 180 degree turn when the Y button is pressed");
         this.rotate180Button = new JoystickButton(this.joystick, 4);
-        this.rotate180Button.whenPressed(new Turn(0.7, 180, 1));
-
+        this.rotate180Button.whenPressed(new Turn(0.4, 190, 1));
+        //Calibrate angle for 180 using robot testing. Also note a slower speed gives a more accurate rotation.
+        
+        
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
 //        SmartDashboard.putData("DriveInASquare", new DriveInASquare());
