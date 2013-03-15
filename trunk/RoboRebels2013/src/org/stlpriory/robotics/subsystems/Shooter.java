@@ -122,6 +122,8 @@ public class Shooter extends Subsystem {
         loaderVictor.set(0);
         loadDiscTimer.stop();
         loadDiscIsFinished = true;
+
+        printLimitSwitchValues();
     }
 
     public void resetLoaderWithTimeout(double speed) {
@@ -141,6 +143,8 @@ public class Shooter extends Subsystem {
         loaderVictor.set(0);
         resetLoaderTimer.stop();
         resetLoaderIsFinished = true;
+
+        printLimitSwitchValues();
     }
 
     public boolean isLoadDiscFinished() {
