@@ -4,6 +4,7 @@ package org.stlpriory.robotics;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.commands.drivetrain.Turn;
+import org.stlpriory.robotics.commands.shooter.JoystickShoot;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
 import org.stlpriory.robotics.commands.shooter.ResetLoadDisc;
 import org.stlpriory.robotics.commands.shooter.Rumble;
@@ -74,6 +75,7 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
+    private Joystick joystick2;
     private JoystickButton loadDiscButton;
     private JoystickButton resetLoaderButton;
     private JoystickButton shooterStartButton;
@@ -81,12 +83,14 @@ public class OI {
     private JoystickButton shootDiscsButton;
     private JoystickButton rumbleButton;
     private JoystickButton rotate180Button;
+    private JoystickButton shootButton;
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
 
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
+        this.joystick2 = new Joystick(RobotMap.DRIVER_STATION_USB_PORT2);
 
         Debug.println("[OI] Initializing gamepad to load a disc when the right bumper pressed");
         this.loadDiscButton = new JoystickButton(this.joystick, 6);
@@ -115,6 +119,9 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to execute a 180 degree turn when the Y button is pressed");
         this.rotate180Button = new JoystickButton(this.joystick, 4);
         this.rotate180Button.whenPressed(new Turn(0.63, 180, 1));
+        
+        this.shootButton = new JoystickButton(this.joystick2, 3);
+        this.shootButton.whenPressed(new JoystickShoot());
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());

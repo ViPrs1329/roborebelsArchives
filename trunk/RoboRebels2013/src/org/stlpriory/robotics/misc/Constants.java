@@ -67,6 +67,8 @@ public class Constants {
     public static final double DRIVE_MAX_OUTPUT = 300;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
+    
+    public static final double DRIVE_MAX_SPEED = .25;
 
     // The proportional gain of the Jaguar's PID controller.
     public static final double KP = 0.41;

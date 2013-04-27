@@ -185,6 +185,8 @@ public class CANDriveTrain extends Subsystem {
          * 5 - RightY
          * 6 - DPad Left/Right
          */
+        
+        double limit = Constants.DRIVE_MAX_SPEED;
 
         double rawLeftX = joystick.getRawAxis(1);
         double rawLeftY = joystick.getRawAxis(2);
@@ -202,6 +204,14 @@ public class CANDriveTrain extends Subsystem {
         checkJaguarForReset(leftRearJag);
         checkJaguarForReset(rightFrontJag);
         checkJaguarForReset(rightRearJag);
+        
+        right = Math.min(right,  limit);
+        right = Math.max(right, -limit);
+        forward = Math.min(forward,  limit);
+        forward = Math.max(forward, -limit);
+        rotation = Math.min(rotation,  limit);
+        rotation = Math.max(rotation, -limit);
+
 
         drive.mecanumDrive_Cartesian(-right, forward, rotation, clockwise);
 
