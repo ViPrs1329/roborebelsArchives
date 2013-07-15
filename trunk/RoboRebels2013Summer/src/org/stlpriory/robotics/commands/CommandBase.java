@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
-import org.stlpriory.robotics.subsystems.PIDShooter;
-import org.stlpriory.robotics.subsystems.Shooter;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -18,7 +16,6 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     // Create a single static instance of all of your subsystems
 //    public static DriveTrain drivetrain = new DriveTrain();
-    public static Shooter shooter = new Shooter();
     public static CANDriveTrain drivetrain = new CANDriveTrain();
 //    public static PIDShooter shooter = new PIDShooter();
 

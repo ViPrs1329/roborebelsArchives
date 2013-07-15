@@ -21,10 +21,10 @@ import org.stlpriory.robotics.misc.Utils;
 public class CANDriveTrain extends Subsystem {
 
     private RobotDrive drive;
-    private static CANJaguar leftFrontJag;
-    private static CANJaguar rightFrontJag;
-    private static CANJaguar leftRearJag;
-    private static CANJaguar rightRearJag;
+    private static CANJaguar leftJag1;
+    private static CANJaguar leftJag2;
+    private static CANJaguar rightJag1;
+    private static CANJaguar rightJag2;
     private static double direction = 1;
 
     // History values for mecanum drive
@@ -37,8 +37,8 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "
                     + RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            leftFrontJag = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            initJaguar(leftFrontJag);
+            leftJag1 = new CANJaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            initJaguar(leftJag1);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -46,16 +46,16 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing left rear CANJaguar to CAN bus address "
                     + RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            leftRearJag = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            initJaguar(leftRearJag);
+            leftJag2 = new CANJaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            initJaguar(leftJag2);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
         try {
             Debug.println("[CANDriveTrain] Initializing right front CANJaguar to CAN bus address "
                     + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            rightFrontJag = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            initJaguar(rightFrontJag);
+            rightJag1 = new CANJaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            initJaguar(rightJag1);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -63,15 +63,15 @@ public class CANDriveTrain extends Subsystem {
         try {
             Debug.println("[CANDriveTrain] Initializing right rear CANJaguar to CAN bus address "
                     + RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            rightRearJag = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
-            initJaguar(rightRearJag);
+            rightJag2 = new CANJaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS);
+            initJaguar(rightJag2);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
 
         Debug.println("[CANDriveTrain] Initializing RobotDrive");
         Debug.println("[CANDriveTrain] MAX OUTPUT = " + Constants.DRIVE_MAX_OUTPUT);
-        drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
+        drive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
@@ -200,10 +200,10 @@ public class CANDriveTrain extends Subsystem {
         double rotation  = scaleInputValue(-rawZ, 2);
         double clockwise = scaleInputValue( rawZ, 3);
 
-        checkJaguarForReset(leftRearJag);
-        checkJaguarForReset(leftRearJag);
-        checkJaguarForReset(rightFrontJag);
-        checkJaguarForReset(rightRearJag);
+        checkJaguarForReset(leftJag1);
+        checkJaguarForReset(leftJag2);
+        checkJaguarForReset(rightJag1);
+        checkJaguarForReset(rightJag2);
         
         right = Math.min(right,  limit);
         right = Math.max(right, -limit);
@@ -302,10 +302,10 @@ public class CANDriveTrain extends Subsystem {
 
     private void printJaguarOutputCurrent() {
         try {
-            System.out.println("Output current LF " + leftFrontJag.getOutputCurrent()
-                    + ", LR " + leftRearJag.getOutputCurrent()
-                    + ", RF " + rightFrontJag.getOutputCurrent()
-                    + ", RR " + rightRearJag.getOutputCurrent());
+            System.out.println("Output current LF " + leftJag1.getOutputCurrent()
+                    + ", LR " + leftJag2.getOutputCurrent()
+                    + ", RF " + rightJag1.getOutputCurrent()
+                    + ", RR " + rightJag2.getOutputCurrent());
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -313,10 +313,10 @@ public class CANDriveTrain extends Subsystem {
 
     private void printJaguarOutputVoltage() {
         try {
-            System.out.println("Output voltage LF " + leftFrontJag.getOutputVoltage()
-                    + ", LR " + leftRearJag.getOutputVoltage()
-                    + ", RF " + rightFrontJag.getOutputVoltage()
-                    + ", RR " + rightRearJag.getOutputVoltage());
+            System.out.println("Output voltage LF " + leftJag1.getOutputVoltage()
+                    + ", LR " + leftJag2.getOutputVoltage()
+                    + ", RF " + rightJag1.getOutputVoltage()
+                    + ", RR " + rightJag2.getOutputVoltage());
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -324,10 +324,10 @@ public class CANDriveTrain extends Subsystem {
 
     private void printJaguarSpeed() {
         try {
-            System.out.println("Speed LF " + leftFrontJag.getSpeed()
-                    + ", LR " + leftRearJag.getSpeed()
-                    + ", RF " + rightFrontJag.getSpeed()
-                    + ", RR " + rightRearJag.getSpeed());
+            System.out.println("Speed LF " + leftJag1.getSpeed()
+                    + ", LR " + leftJag2.getSpeed()
+                    + ", RF " + rightJag1.getSpeed()
+                    + ", RR " + rightJag2.getSpeed());
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }

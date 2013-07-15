@@ -23,10 +23,10 @@ import org.stlpriory.robotics.misc.Utils;
 public class DriveTrain extends Subsystem {
 
     private RobotDrive drive;
-    private static Jaguar leftFrontJag;
-    private static Jaguar rightFrontJag;
-    private static Jaguar leftRearJag;
-    private static Jaguar rightRearJag;
+    private static Jaguar leftJag1;
+    private static Jaguar leftJag2;
+    private static Jaguar rightJag1;
+    private static Jaguar rightJag2;
     private static double direction = 1;
 
     private boolean m_isCANInitialized = true;
@@ -36,19 +36,19 @@ public class DriveTrain extends Subsystem {
         Debug.println("[DriveTrain] Instantiating...");
 
         Debug.println("[DriveTrain] Initializing left front Jaguar to PWM channel " + RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
-        leftFrontJag = new Jaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        leftJag1 = new Jaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing left rear Jaguar to PWM channel " + RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
-        leftRearJag = new Jaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        leftJag2 = new Jaguar(RobotMap.LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing right front Jaguar to PWM channel " + RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
-        rightFrontJag = new Jaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
+        rightJag1 = new Jaguar(RobotMap.RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing right rear Jaguar to PWM channel " + RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
-        rightRearJag = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
+        rightJag2 = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain] Initializing RobotDrive");
-        drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
+        drive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
