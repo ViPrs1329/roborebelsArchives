@@ -47,7 +47,7 @@ public class RobotTemplate extends IterativeRobot {
         rdrive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);        // L: 1, 3   R: 2, 4
         drive = new RRDrive(rdrive, xboxController, leftShiftSol, rightShiftSol);
         
-        startUpCompressor();
+        
     }
 
     /**
@@ -61,6 +61,8 @@ public class RobotTemplate extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+        startUpCompressor();
+        
         drive.drive(false);
     }
     
