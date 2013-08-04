@@ -25,27 +25,27 @@ import edu.wpi.first.wpilibj.Solenoid;
 public class RobotTemplate extends IterativeRobot {
     
     RRDrive     drive;
-    Joystick    xboxController;
-    RobotDrive  rdrive;
-    Jaguar      leftJag1, leftJag2, rightJag1, rightJag2;
-    Compressor  compressor; 
-    Solenoid    leftShiftSol, rightShiftSol;
+//    Joystick    xboxController;
+//    RobotDrive  rdrive;
+//    Jaguar      leftJag1, leftJag2, rightJag1, rightJag2;
+//    Compressor  compressor; 
+//    Solenoid    leftShiftSol, rightShiftSol;
     
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
-        xboxController = new Joystick(1);
-        leftJag1 = new Jaguar(1);
-        leftJag2 = new Jaguar(3);
-        rightJag1 = new Jaguar(2);
-        rightJag2 = new Jaguar(4);
-        compressor = new Compressor(1, 1);
-        leftShiftSol = new Solenoid(1);
-        rightShiftSol = new Solenoid(2);
-        rdrive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);        // L: 1, 3   R: 2, 4
-        drive = new RRDrive(rdrive, xboxController, leftShiftSol, rightShiftSol);
+//        xboxController = new Joystick(1);
+//        leftJag1 = new Jaguar(1);
+//        leftJag2 = new Jaguar(3);
+//        rightJag1 = new Jaguar(2);
+//        rightJag2 = new Jaguar(4);
+//        compressor = new Compressor(1, 1);
+//        leftShiftSol = new Solenoid(1);
+//        rightShiftSol = new Solenoid(2);
+//        rdrive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);        // L: 1, 3   R: 2, 4
+//        drive = new RRDrive(rdrive, xboxController, leftShiftSol, rightShiftSol);
         
         
     }
@@ -61,14 +61,14 @@ public class RobotTemplate extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        startUpCompressor();
+//        startUpCompressor();
         
         drive.drive(false);
     }
     
     
     public void disabledPeriodic() {
-        shutDownCompressor();
+//        shutDownCompressor();
     }
     
     /**
@@ -79,17 +79,17 @@ public class RobotTemplate extends IterativeRobot {
     }
     
     
-    public void startUpCompressor() {
-        if (! compressor.enabled()) {
-            compressor.start();
-        }
-    }
-    
-    public void shutDownCompressor() {
-        if (compressor.enabled()) {
-            compressor.stop();
-        }
-
-    }
+//    public void startUpCompressor() {
+//        if (! compressor.enabled()) {
+//            compressor.start();
+//        }
+//    }
+//    
+//    public void shutDownCompressor() {
+//        if (compressor.enabled()) {
+//            compressor.stop();
+//        }
+//
+//    }
 
 }
