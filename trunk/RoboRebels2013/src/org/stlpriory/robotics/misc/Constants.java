@@ -76,6 +76,8 @@ public class Constants {
     public static final double KI = 0.01;
     // The differential gain of the Jaguar's PID controller.
     public static final double KD = 0.0;
+    
+    //public static final String hello = "HELLO WORLD";
 
     // The Jaguar configuration properties
     public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kBrake;
