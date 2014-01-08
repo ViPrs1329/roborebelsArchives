@@ -1,0 +1,6 @@
+MIDlet-Name: CameraTestProject
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: FIRST
+MIDlet-1: VisionSampleProject2013, , edu.wpi.first.wpilibj.templates.VisionSampleProject2013
+MicroEdition-Profile: IMP-1.0
+MicroEdition-Configuration: CLDC-1.1
