@@ -95,7 +95,7 @@ public class RoboDrive {
         {
             gearSwitched = false;
         }
-        
+  /*adf*/      
         if (highGear)
             engadgeHighGear();
         else
