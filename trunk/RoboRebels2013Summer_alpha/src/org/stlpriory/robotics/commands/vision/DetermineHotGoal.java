@@ -15,6 +15,11 @@ import org.stlpriory.robotics.commands.CommandBase;
  */
 public class DetermineHotGoal extends CommandBase {
     
+    public DetermineHotGoal ( ) {
+        super("DetermineHotGoal");
+        // TODO add requires for vision subsystem
+    }
+    
     protected void initialize ( ) {
         
     }
