@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
+import org.stlpriory.robotics.subsystems.Vision;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -18,6 +19,7 @@ public abstract class CommandBase extends Command {
 //    public static DriveTrain drivetrain = new DriveTrain();
     public static CANDriveTrain drivetrain = new CANDriveTrain();
 //    public static PIDShooter shooter = new PIDShooter();
+    public static Vision vision = new Vision();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

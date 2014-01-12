@@ -17,7 +17,7 @@ public class DetermineHotGoal extends CommandBase {
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
-        // TODO add requires for vision subsystem
+        requires(vision);
     }
     
     protected void initialize ( ) {
