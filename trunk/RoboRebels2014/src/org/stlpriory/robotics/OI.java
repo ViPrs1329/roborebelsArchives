@@ -1,8 +1,11 @@
 
 package org.stlpriory.robotics;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -40,5 +43,61 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+    
+    
+    /*
+     * The bottons on the XBox controller follow this mapping
+     * 1:  A
+     * 2:  B
+     * 3:  X
+     * 4:  Y
+     * 5:  Left Bumper
+     * 6:  Right Bumper
+     * 7:  Back
+     * 8:  Start
+     * 9:  Left thumbstick
+     * 10: Right thumbstick
+     *
+     * The axis on the controller follow this mapping
+     * (all output is between -1 to 1)
+     * 1:  Left stick X axis  (left:negative, right:positve)
+     * 2:  Left stick Y axis  (up:negative, down:positive)
+     * 3:  Triggers           (left:positive, right:negative)
+     * 4:  Right stick X axis (left:negative, right:positive)
+     * 5:  Right stick Y axis (up:negative, down:positive)
+     * 6:  Directional pad
+     */
+
+    private static OI instance = null;
+
+    public OI() {
+        Debug.println("[OI] Instantiating ...");
+
+        // SmartDashboard Buttons
+//        SmartDashboard.putData("Autonomous Command", new Auton1());
+//        SmartDashboard.putData("DriveInASquare", new DriveInASquare());
+//        SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
+//        SmartDashboard.putData("DriveWithGamepad", new DriveWithGamepad());
+//        SmartDashboard.putData("LoadDisc", new LoadDisc());
+//        SmartDashboard.putData("ShootDisc", new ShootDisc());
+
+        // associate the DriveInSquare command group with the
+        // trigger button on the right joystick. Whenever the
+        // joystick is pressed, the robot will drive
+        // in a square pattern. When the command is completed,
+        // the default command for the DriveLine subsystem will
+        // run - DriveViaJoysticks
+ //       this.trigger.whenPressed(new DriveInASquare());
+
+        Debug.println("[OI] Instantiation complete.");
+    }
+
+    public static OI getInstance() {
+        if (instance == null) {
+            instance = new OI();
+        }
+        return instance;
+    }
+
 }
 

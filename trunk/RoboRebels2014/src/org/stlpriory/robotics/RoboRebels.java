@@ -9,11 +9,13 @@ package org.stlpriory.robotics;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.ExampleCommand;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,20 +27,31 @@ import org.stlpriory.robotics.commands.ExampleCommand;
 public class RoboRebels extends IterativeRobot {
 
     Command autonomousCommand;
+    private Timer timer = new Timer();
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
     public void robotInit() {
+        Debug.println("[RoboRebels.robotInit()] Initializing...");
+        timer.start();
+
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
 
         // Initialize all subsystems
         CommandBase.init();
+
+        timer.stop();
+        Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
+        Debug.println("------------------------------------------");
+        Debug.println("           Robot ready!");
+        Debug.println("------------------------------------------");
     }
 
     public void autonomousInit() {
+        Debug.println("[mode] Autonomous");
         // schedule the autonomous command (example)
         autonomousCommand.start();
     }
@@ -55,7 +68,10 @@ public class RoboRebels extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        autonomousCommand.cancel();
+        Debug.println("[mode] Operator control");
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
     }
 
     /**
