@@ -55,9 +55,9 @@ public class Shooter extends Subsystem {
         stopLimitSwitch = new DigitalInput(1, RobotMap.LOADER_STOP_POSITION_LIMIT_SWITCH_DIGITAL_IO_CHANNEL);
 
 
-        Debug.println("[Shooter] Initializing shooter wheel motor speed controller to PWM channel "
+        /*Debug.println("[Shooter] Initializing shooter wheel motor speed controller to PWM channel "
                 + RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL + " on the digital module.");
-        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);
+        shooterVictor = new Victor(RobotMap.SHOOTER_WHEEL_MOTOR_PWM_CHANNEL);*/
 
 
         Debug.println("[Shooter] Initializing shaker motor to relay channel "

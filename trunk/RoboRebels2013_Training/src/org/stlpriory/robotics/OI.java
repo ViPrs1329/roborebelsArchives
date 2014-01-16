@@ -3,6 +3,8 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.stlpriory.robotics.commands.claw.LoadBall;
+import org.stlpriory.robotics.commands.claw.UnloadBall;
 import org.stlpriory.robotics.commands.drivetrain.Turn;
 import org.stlpriory.robotics.commands.shooter.JoystickShoot;
 import org.stlpriory.robotics.commands.shooter.LoadDisc;
@@ -12,10 +14,6 @@ import org.stlpriory.robotics.commands.shooter.Shoot;
 import org.stlpriory.robotics.commands.shooter.StartShooting;
 import org.stlpriory.robotics.commands.shooter.StopShooting;
 import org.stlpriory.robotics.misc.Debug;
-
-
-
-
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -88,6 +86,9 @@ public class OI {
     private JoystickButton rumbleButton;
     private JoystickButton rotate180Button;
     private JoystickButton shootButton;
+    
+    private JoystickButton loadBallButton;
+    private JoystickButton unloadBallButton;
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -113,8 +114,13 @@ public class OI {
         this.shooterStopButton.whenPressed(new StopShooting());
 
         Debug.println("[OI] Initializing gamepad to execute the shooting sequence when the A button is pressed");
-        this.shootDiscsButton = new JoystickButton(this.joystick, 1);
-        this.shootDiscsButton.whenPressed(new Shoot());
+        this.loadBallButton = new JoystickButton(this.joystick, 1);
+        this.loadBallButton.whenPressed(new LoadBall());
+        //this.shootDiscsButton.whenPressed(new Shoot());
+        
+        Debug.println("[OI] Initializing gamepad to execute the shooting sequence when the A button is pressed");
+        this.unloadBallButton = new JoystickButton(this.joystick, 2);
+        this.unloadBallButton.whenPressed(new UnloadBall());
 
         Debug.println("[OI] Initializing gamepad to execute a .3 second rumble when the X button is pressed");
         this.rumbleButton = new JoystickButton(this.joystick, 3);
