@@ -16,7 +16,7 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
 
 /**
- *
+ *robotics
  */
 public class CANDriveTrain extends Subsystem {
 
@@ -33,6 +33,12 @@ public class CANDriveTrain extends Subsystem {
     public CANDriveTrain() {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain] Instantiating...");
+//        if (true) {
+//            System.out.println("Can system disabled for now");
+//            return;
+//        }
+        //Note: temporary measure to prevent Can jaguar initialization
+        
 
         try {
             Debug.println("[CANDriveTrain] Initializing left front CANJaguar to CAN bus address "

@@ -3,13 +3,16 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.stlpriory.robotics.commands.drivetrain.Turn;
+import org.stlpriory.robotics.commands.claw.backward;
+import org.stlpriory.robotics.commands.claw.forward;
+import org.stlpriory.robotics.commands.claw.stop;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
+
 public class OI {
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
@@ -77,6 +80,8 @@ public class OI {
     private JoystickButton rumbleButton;
     private JoystickButton rotate180Button;
     private JoystickButton shootButton;
+    private JoystickButton clawButtonf;//button for forward on the claw
+    private JoystickButton clawButtonb;//button for backward on the claw
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -84,6 +89,15 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick = new Joystick(RobotMap.DRIVER_STATION_USB_PORT1);
         this.joystick2 = new Joystick(RobotMap.DRIVER_STATION_USB_PORT2);
+        clawButtonf = new JoystickButton(joystick,3);
+        clawButtonf.whenPressed(new forward());
+        clawButtonf.whenReleased(new stop());
+        clawButtonb = new JoystickButton(joystick,2);
+        clawButtonb.whenPressed(new backward());
+        clawButtonb.whenReleased(new stop());
+
+
+        
 
 //        Debug.println("[OI] Initializing gamepad to load a disc when the right bumper pressed");
 //        this.loadDiscButton = new JoystickButton(this.joystick, 6);
@@ -145,5 +159,6 @@ public class OI {
     public Joystick getJoystick() {
         return this.joystick;
     }
+
 
 }

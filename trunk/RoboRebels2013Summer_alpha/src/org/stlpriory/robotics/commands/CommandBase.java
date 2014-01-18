@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
+import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.Vision;
 
 /**
@@ -20,6 +21,8 @@ public abstract class CommandBase extends Command {
     public static CANDriveTrain drivetrain = new CANDriveTrain();
 //    public static PIDShooter shooter = new PIDShooter();
     public static Vision vision = new Vision();
+    
+    public static Claw claw = new Claw();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
+import org.stlpriory.robotics.OI;
 
 /**
  * The VM is configured to automatically run this class, and to call the
