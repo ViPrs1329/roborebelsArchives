@@ -13,7 +13,7 @@
 package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Solenoid;
 
 
 public class RRDrive
@@ -21,7 +21,7 @@ public class RRDrive
     RobotDrive m_robotDrive;
     Joystick m_xboxController;
 
-    public RRDrive(RobotDrive robotDrive, Joystick j)
+    public RRDrive(RobotDrive robotDrive, Joystick j, Solenoid ls, Solenoid rs)
     {
         m_robotDrive = robotDrive;
         m_xboxController = j;

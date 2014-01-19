@@ -8,10 +8,12 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +27,10 @@ public class RobotTemplate extends IterativeRobot {
     RRDrive     drive;
     Joystick    xboxController;
     RobotDrive  rdrive;
+    Jaguar      leftJag1, leftJag2, rightJag1, rightJag2;
+    Compressor  compressor; 
+    Solenoid    leftShiftSol, rightShiftSol;
+    
     
     /**
      * This function is run when the robot is first started up and should be
@@ -32,8 +38,17 @@ public class RobotTemplate extends IterativeRobot {
      */
     public void robotInit() {
         xboxController = new Joystick(1);
-        rdrive = new RobotDrive(1, 2, 3, 4);
-        drive = new RRDrive(rdrive, xboxController);
+        leftJag1 = new Jaguar(1);
+        leftJag2 = new Jaguar(3);
+        rightJag1 = new Jaguar(2);
+        rightJag2 = new Jaguar(4);
+        compressor = new Compressor(1, 1);
+        leftShiftSol = new Solenoid(1);
+        rightShiftSol = new Solenoid(2);
+        rdrive = new RobotDrive(leftJag1, leftJag2, rightJag1, rightJag2);        // L: 1, 3   R: 2, 4
+         drive = new RRDrive(rdrive, xboxController, leftShiftSol, rightShiftSol);
+        
+        startUpCompressor();
     }
 
     /**
@@ -54,7 +69,20 @@ public class RobotTemplate extends IterativeRobot {
      * This function is called periodically during test mode
      */
     public void testPeriodic() {
-        
+    
+    }
+    
+     public void startUpCompressor() {
+        if (! compressor.enabled()) {
+            compressor.start();
+        }
+    }
+    
+    public void shutDownCompressor() {
+        if (compressor.enabled()) {
+            compressor.stop();
+        }
+
     }
     
 }
