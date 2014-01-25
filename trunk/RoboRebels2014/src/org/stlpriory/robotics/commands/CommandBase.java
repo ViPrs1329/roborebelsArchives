@@ -1,10 +1,11 @@
 package org.stlpriory.robotics.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
+import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.ExampleSubsystem;
+import org.stlpriory.robotics.subsystems.Launcher;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -17,6 +18,10 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     // Create a single static instance of all of your subsystems
     public static ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    
+    public static Launcher launcher = new Launcher();
+    
+    public static Claw claw = new Claw();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

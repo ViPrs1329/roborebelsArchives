@@ -2,10 +2,9 @@
 package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.DigitalIOButton;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.misc.Debug;
+import org.stlpriory.robotics.commands.launcher.*;;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -69,9 +68,21 @@ public class OI {
      */
 
     private static OI instance = null;
-
+    Joystick joystick;
+    JoystickButton b;
+    JoystickButton b2;
+    JoystickButton b3;
     public OI() {
         Debug.println("[OI] Instantiating ...");
+        
+        joystick = new Joystick(1);
+        b = new JoystickButton(joystick,6);
+        b2 = new JoystickButton(joystick,5);
+        b.whenPressed(new Launch());
+        b2.whenPressed(new Retract());
+        b3 = new JoystickButton(joystick,3);
+        b3.whenPressed(new Reset());
+        b3.whenReleased(new Stop());
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
