@@ -6,6 +6,7 @@
 
 package org.stlpriory.robotics.commands.vision;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.stlpriory.robotics.commands.CommandBase;
 
 /**
@@ -18,6 +19,8 @@ public class DetermineHotGoal extends CommandBase {
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
         requires(vision);
+        // uncomment this in order to test the command with the smart dashboard
+        //SmartDashboard.putData(this);
     }
     
     protected void initialize ( ) {
