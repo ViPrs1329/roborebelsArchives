@@ -3,7 +3,6 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.stlpriory.robotics.commands.claw.Backward;
 import org.stlpriory.robotics.commands.claw.forward;
 import org.stlpriory.robotics.commands.claw.stop;
 import org.stlpriory.robotics.misc.Debug;
