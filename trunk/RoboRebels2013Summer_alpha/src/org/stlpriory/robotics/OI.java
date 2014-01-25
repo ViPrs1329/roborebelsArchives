@@ -3,7 +3,7 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.stlpriory.robotics.commands.claw.backward;
+import org.stlpriory.robotics.commands.claw.Backward;
 import org.stlpriory.robotics.commands.claw.forward;
 import org.stlpriory.robotics.commands.claw.stop;
 import org.stlpriory.robotics.misc.Debug;
@@ -93,7 +93,7 @@ public class OI {
         clawButtonf.whenPressed(new forward());
         clawButtonf.whenReleased(new stop());
         clawButtonb = new JoystickButton(joystick,2);
-        clawButtonb.whenPressed(new backward());
+        //clawButtonb.whenPressed(new Backward());
         clawButtonb.whenReleased(new stop());
 
 
