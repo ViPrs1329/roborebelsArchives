@@ -51,5 +51,17 @@ public class RobotMap {
     public static final int PROXY_SENSOR_IO_CHANNEL = 8;
     
     public static final int CLAW_VICTOR_PWM_CHANNEL = 5;
+    
+    public static final int KICKER_VICTOR1_PWM_CHANNEL = 8;
+    public static final int KICKER_VICTOR2_PWM_CHANNEL = 9;
+    
+    public static final int KICKER_ENCODER1_ACHANNEL = 10;
+    public static final int KICKER_ENCODER1_BCHANNEL = 11;
+    
+    
+    public static final int KICKER_ENCODER2_ACHANEL = 12;
+    public static final int KICKER_ENCODER2_BCHANEL = 13;
+    
+    public static final int KICKER_LIMITSWITCH_CHANNEL = 3;
 
 }

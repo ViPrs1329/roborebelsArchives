@@ -6,6 +6,7 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
 import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.Vision;
+import org.stlpriory.robotics.subsystems.Kicker;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -23,6 +24,8 @@ public abstract class CommandBase extends Command {
     public static Vision vision = new Vision();
     
     public static Claw claw = new Claw();
+    
+    public static Kicker kicker = new Kicker();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

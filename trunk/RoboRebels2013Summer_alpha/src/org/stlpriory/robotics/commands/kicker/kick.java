@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.stlpriory.robotics.commands.claw;
+package org.stlpriory.robotics.commands.kicker;
 
 import org.stlpriory.robotics.commands.CommandBase;
 
@@ -10,11 +10,12 @@ import org.stlpriory.robotics.commands.CommandBase;
  *
  * @author admin
  */
-public class Backward extends CommandBase {
-    public Backward() {
+public class kick extends CommandBase {
+    
+    public kick() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(claw);
+        requires(kicker);
     }
 
     // Called just before this Command runs the first time
@@ -23,12 +24,11 @@ public class Backward extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        claw.backward();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true
