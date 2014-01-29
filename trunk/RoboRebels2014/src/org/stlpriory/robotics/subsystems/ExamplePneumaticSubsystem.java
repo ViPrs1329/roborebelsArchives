@@ -53,7 +53,7 @@ public class ExamplePneumaticSubsystem extends Subsystem {
                 + COMPRESSOR_SOLENOID_CHANNEL_TWO);
         pistonRetract = new Solenoid(COMPRESSOR_SOLENOID_CHANNEL_TWO);
 
-        Debug.println("[Shooter] Instantiation complete.");
+        Debug.println("[ExamplePneumaticsSubsystem] Instantiation complete.");
     }
 
     // Put methods for controlling this subsystem
