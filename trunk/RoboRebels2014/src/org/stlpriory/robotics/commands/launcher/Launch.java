@@ -12,27 +12,28 @@ import org.stlpriory.robotics.commands.CommandBase;
  */
 public class Launch extends CommandBase {
     
+    private boolean executedCommand;
+    
     public Launch() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(launcher);
     }
-    boolean a;
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        a = false;
+        executedCommand = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.startSolenoid1();
-        a = true;
+        launcher.extendPiston();
+        executedCommand = true;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return a;
+        return executedCommand;
     }
 
     // Called once after isFinished returns true

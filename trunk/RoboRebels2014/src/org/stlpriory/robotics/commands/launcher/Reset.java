@@ -12,6 +12,8 @@ import org.stlpriory.robotics.commands.CommandBase;
  */
 public class Reset extends CommandBase {
     
+    private boolean executedCommand;
+    
     public Reset() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -19,20 +21,19 @@ public class Reset extends CommandBase {
     }
 
     // Called just before this Command runs the first time
-    boolean a;
     protected void initialize() {
-        a = false;
+        executedCommand = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.startMotors();
-        a = true;
+        launcher.loadLauncher();
+        executedCommand = true;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return a;
+        return executedCommand;
     }
 
     // Called once after isFinished returns true

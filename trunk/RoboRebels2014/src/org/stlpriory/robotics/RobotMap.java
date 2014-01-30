@@ -20,12 +20,19 @@ public class RobotMap {
     public static final int LAUNCHER_JAGUAR1_PWM_CHANNEL = 1;
     public static final int LAUNCHER_JAGUAR2_PWM_CHANNEL = 2;
     
-    public static final int LAUNCHER_COMPRESSOR_DIGITALIO_CHANNEL = 1;
-    public static final int LAUNCHER_COMPRESSOR_RELAY_CHANNEL = 1;
+    // Digital I/O and relay channels for the compressor
+    public static final int COMPRESSOR_DIGITALIO_CHANNEL = 1;
+    public static final int COMPRESSOR_RELAY_CHANNEL = 1;
     
+    // Solenoid channels for the ball launcher
     public static final int LAUNCHER_VALVE1_CHANNEL = 1;
     public static final int LAUNCHER_VALVE2_CHANNEL = 2;
     
+    // Solenoid channels for the tilting the claw assembly
+    public static final int CLAW_VALVE1_CHANNEL = 3;
+    public static final int CLAW_VALVE2_CHANNEL = 4;
+    
+    // Talon channels for the claw wheel motors
     public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 5;
     public static final int CLAW_WHEEL_RIGHT_PWM_CHANNEL = 6;
     public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 7;

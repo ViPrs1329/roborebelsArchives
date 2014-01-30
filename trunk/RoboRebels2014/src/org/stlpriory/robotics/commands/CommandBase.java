@@ -15,12 +15,11 @@ import org.stlpriory.robotics.subsystems.Launcher;
  */
 public abstract class CommandBase extends Command {
 
+    // Create a single static instance of the Operator Interface
     public static OI oi;
+    
     // Create a single static instance of all of your subsystems
-    public static ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-    
     public static Launcher launcher = new Launcher();
-    
     public static Claw claw = new Claw();
 
     public static void init() {

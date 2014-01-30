@@ -8,7 +8,6 @@
 package org.stlpriory.robotics;
 
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -28,7 +27,6 @@ import org.stlpriory.robotics.misc.Debug;
 public class RoboRebels extends IterativeRobot {
 
     Command autonomousCommand;
-    
         
     private Timer timer = new Timer();
 
@@ -45,9 +43,7 @@ public class RoboRebels extends IterativeRobot {
 
         // Initialize all subsystems
         CommandBase.init();
-        
-        
-
+       
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
         Debug.println("------------------------------------------");

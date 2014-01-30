@@ -92,7 +92,6 @@ public class ExamplePneumaticSubsystem extends Subsystem {
      */
     public void freeCompressor() {
         mainCompressor.free();
-
     }
 
     public void extendPiston() {
