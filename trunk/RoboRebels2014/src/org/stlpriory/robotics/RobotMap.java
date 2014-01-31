@@ -16,6 +16,15 @@ public class RobotMap {
     // number and the module. For example you with a rangefinder:
     // public static final int rangefinderPort = 1;
     // public static final int rangefinderModule = 1;
+
+    // Joysticks/gampads mappings to USB ports on the Driver station PC
+    public static final int DRIVER_STATION_USB_PORT1 = 1;  // USB Port
+
+    // Drive train speed controller mappings to PWM channels on the digital sidecar module
+    public static final int LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL  = 2;  // PWM channel
+    public static final int LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL   = 1;  // PWM channel
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 3;  // PWM channel
+    public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
     
     public static final int LAUNCHER_JAGUAR1_PWM_CHANNEL = 1;
     public static final int LAUNCHER_JAGUAR2_PWM_CHANNEL = 2;

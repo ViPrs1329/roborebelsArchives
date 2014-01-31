@@ -22,8 +22,8 @@ public class Claw extends Subsystem {
     private Talon wheel_right;
     private Talon wheel_center;
     private static Compressor compressor;
-    private static Solenoid pistonExtend;
-    private static Solenoid pistonRetract;
+    private static Solenoid value1;
+    private static Solenoid value2;
 
     public Claw() {
         super("Claw");
@@ -42,8 +42,8 @@ public class Claw extends Subsystem {
 
         Debug.println("[Claw Subsystem] Initializing first compressor solenoid to channel " + RobotMap.CLAW_VALVE1_CHANNEL);
         Debug.println("[Claw Subsystem] Initializing second compressor solenoid to channel " + RobotMap.CLAW_VALVE2_CHANNEL);
-        pistonExtend = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
-        pistonRetract = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
+        value1 = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
+        value2 = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
 
         if (! compressor.enabled()) {
             Debug.println("[Claw Subsystem] Starting compressor ...");
@@ -102,12 +102,12 @@ public class Claw extends Subsystem {
     }
 
     public void extendPiston() {
-        pistonExtend.set(true);    //turns the Solenoid on
-        pistonRetract.set(false);  //turns the Solenoid off
+        value1.set(true);    //turns the Solenoid on
+        value2.set(false);  //turns the Solenoid off
     }
 
     public void retractPiston() {
-        pistonExtend.set(false);
-        pistonRetract.set(true);
+        value1.set(false);
+        value2.set(true);
     }
 }

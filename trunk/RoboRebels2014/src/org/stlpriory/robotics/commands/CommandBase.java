@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Claw;
-import org.stlpriory.robotics.subsystems.ExampleSubsystem;
+import org.stlpriory.robotics.subsystems.DriveTrain;
 import org.stlpriory.robotics.subsystems.Launcher;
 
 /**
@@ -19,6 +19,7 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     
     // Create a single static instance of all of your subsystems
+    public static DriveTrain drivetrain = new DriveTrain();
     public static Launcher launcher = new Launcher();
     public static Claw claw = new Claw();
 

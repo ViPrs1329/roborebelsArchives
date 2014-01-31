@@ -69,17 +69,24 @@ public class OI {
 
     private static OI instance = null;
     Joystick joystick;
-    JoystickButton b;
+    JoystickButton b1;
     JoystickButton b2;
     JoystickButton b3;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         
+        Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         joystick = new Joystick(1);
-        b = new JoystickButton(joystick,6);
+        
+        Debug.println("[OI] Initializing gamepad to launch ball a disc when the right bumper pressed");
+        b1 = new JoystickButton(joystick,6);
+        b1.whenPressed(new Launch());
+
+        Debug.println("[OI] Initializing gamepad to reset launcher gearbox piston when the left bumper pressed");
         b2 = new JoystickButton(joystick,5);
-        b.whenPressed(new Launch());
         b2.whenPressed(new Retract());
+        
+        Debug.println("[OI] Initializing gamepad to load launcher when the X button is pressed");
         b3 = new JoystickButton(joystick,3);
         b3.whenPressed(new Reset());
         b3.whenReleased(new Stop());
@@ -108,6 +115,10 @@ public class OI {
             instance = new OI();
         }
         return instance;
+    }
+
+    public Joystick getJoystick() {
+        return this.joystick;
     }
 
 }
