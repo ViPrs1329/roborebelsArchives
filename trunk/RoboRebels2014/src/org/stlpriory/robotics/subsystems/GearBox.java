@@ -17,9 +17,13 @@ class GearBox {
     public GearBox(int channel) {
         valve = new Solenoid(channel);
     }
+    
+    //return the state of the valve
     public boolean getState() {
         return valve.get();
     }
+    
+    //shift gears
     public void shift() {
         boolean a = getState();
         valve.set(!a);
