@@ -21,8 +21,7 @@ public class Claw extends Subsystem {
     private Talon wheel_left;
     private Talon wheel_right;
     private Talon wheel_center;
-    private static Compressor compressor;
-    private static Solenoid value1;
+    private static Solenoid valve;
     private static Solenoid value2;
 
     public Claw() {
@@ -36,19 +35,12 @@ public class Claw extends Subsystem {
         wheel_right = new Talon(RobotMap.CLAW_WHEEL_RIGHT_PWM_CHANNEL);
         wheel_center = new Talon(RobotMap.CLAW_WHEEL_CENTRAL_PWM_CHANNEL);
         
-        Debug.println("[Claw Subsystem] Initializing compressor to IO channel "
-                + RobotMap.COMPRESSOR_DIGITALIO_CHANNEL + " and relay channel " + RobotMap.COMPRESSOR_RELAY_CHANNEL);
-        compressor = new Compressor(RobotMap.COMPRESSOR_DIGITALIO_CHANNEL, RobotMap.COMPRESSOR_RELAY_CHANNEL);
 
         Debug.println("[Claw Subsystem] Initializing first compressor solenoid to channel " + RobotMap.CLAW_VALVE1_CHANNEL);
         Debug.println("[Claw Subsystem] Initializing second compressor solenoid to channel " + RobotMap.CLAW_VALVE2_CHANNEL);
-        value1 = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
+        valve = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
         value2 = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
 
-        if (! compressor.enabled()) {
-            Debug.println("[Claw Subsystem] Starting compressor ...");
-            compressor.start();
-        }
 
         Debug.println("[Claw Subsystem] Instantiation complete.");
     }
@@ -70,44 +62,18 @@ public class Claw extends Subsystem {
         wheel_center.set(0);
     }
 
-    public boolean isCompressorStarted() {
-        return compressor.enabled();
-    }
-
-    /**
-     * Start the compressor. This method will allow the polling loop to actually operate the compressor. The is stopped
-     * by default and won't operate until starting it.
-     */
-    public void startCompressor() {
-        if (!isCompressorStarted()) {
-            compressor.start();
-        }
-    }
-
-    /**
-     * Stop the compressor. This method will stop the compressor from turning on.
-     */
-    public void stopCompressor() {
-        if (isCompressorStarted()) {
-            compressor.stop();
-        }
-    }
-
-    /**
-     * Delete the Compressor object. Delete the allocated resources for the compressor and kill the compressor task that
-     * is polling the pressure switch.
-     */
-    public void freeCompressor() {
-        compressor.free();
-    }
+    
 
     public void extendPiston() {
-        value1.set(true);    //turns the Solenoid on
+        valve.set(true);    //turns the Solenoid on
         value2.set(false);  //turns the Solenoid off
     }
 
     public void retractPiston() {
-        value1.set(false);
+        valve.set(false);
         value2.set(true);
+    }
+    public boolean getValveState() {
+        return valve.get();
     }
 }

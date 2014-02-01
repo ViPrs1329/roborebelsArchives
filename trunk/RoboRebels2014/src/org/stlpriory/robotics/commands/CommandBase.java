@@ -6,6 +6,7 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.DriveTrain;
 import org.stlpriory.robotics.subsystems.Launcher;
+import org.stlpriory.robotics.subsystems.Tank;
 
 /**
  * The base for all commands. All atomic commands should subclass CommandBase.
@@ -22,6 +23,7 @@ public abstract class CommandBase extends Command {
     public static DriveTrain drivetrain = new DriveTrain();
     public static Launcher launcher = new Launcher();
     public static Claw claw = new Claw();
+    public static Tank tank = new Tank();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

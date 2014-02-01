@@ -3,8 +3,13 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.stlpriory.robotics.commands.claw.InvertPiston;
+import org.stlpriory.robotics.commands.claw.StartClawWheels;
+import org.stlpriory.robotics.commands.claw.StopClawWheels;
+import org.stlpriory.robotics.commands.drivetrain.Shift;
 import org.stlpriory.robotics.misc.Debug;
-import org.stlpriory.robotics.commands.launcher.*;;
+import org.stlpriory.robotics.commands.launcher.*;
+import org.stlpriory.robotics.misc.Keymap;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -69,10 +74,12 @@ public class OI {
 
     private static OI instance = null;
     Joystick joystick;
-    JoystickButton b1;
-    JoystickButton b2;
-    JoystickButton b3;
+    JoystickButton launchButton;
+    JoystickButton retractButton;
+    JoystickButton resetButton;
     JoystickButton shiftButton;
+    JoystickButton expandRetractClawButton;
+    JoystickButton clawButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         
@@ -80,18 +87,32 @@ public class OI {
         joystick = new Joystick(1);
         
         Debug.println("[OI] Initializing gamepad to launch ball a disc when the right bumper pressed");
-        b1 = new JoystickButton(joystick,6);
-        b1.whenPressed(new Launch());
+        launchButton = new JoystickButton(joystick,Keymap.LAUNCH_BUTTON_KEY_MAP);
+        launchButton.whenPressed(new Launch());
 
         Debug.println("[OI] Initializing gamepad to reset launcher gearbox piston when the left bumper pressed");
-        b2 = new JoystickButton(joystick,5);
-        b2.whenPressed(new Retract());
+        retractButton = new JoystickButton(joystick,Keymap.RETRACT_BUTTON_KEY_MAP);
+        retractButton.whenPressed(new Retract());
         
         Debug.println("[OI] Initializing gamepad to load launcher when the X button is pressed");
-        b3 = new JoystickButton(joystick,3);
-        b3.whenPressed(new Reset());
-        b3.whenReleased(new Stop());
-        shiftButton = new JoystickButton(joystick,4);
+        resetButton = new JoystickButton(joystick,Keymap.RESET_BUTTON_KEY_MAP);
+        resetButton.whenPressed(new Reset());
+        resetButton.whenReleased(new Stop());
+        
+        Debug.println("[OI] Initializing gamepad to shift gears for the drivetrain wheels");
+        shiftButton = new JoystickButton(joystick,Keymap.SHIFT_BUTTON_KEY_MAP);
+        shiftButton.whenPressed(new Shift());
+        
+        Debug.println("[OI] Initializing gamepad to expand/retract the claw");
+        expandRetractClawButton = new JoystickButton(joystick,Keymap.CLAW_EXPAND_RETRACT_BUTTON_KEY_MAP);
+        expandRetractClawButton.whenPressed(new InvertPiston());
+        
+        Debug.println("[OI] Initializing gamepad to start/stop the claw wheels");
+        clawButton = new JoystickButton(joystick,Keymap.CLAW_START_STOP_BUTTON_KEY_MAP);
+        clawButton.whenPressed(new StartClawWheels());
+        clawButton.whenReleased(new StopClawWheels());
+        
+        
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());
