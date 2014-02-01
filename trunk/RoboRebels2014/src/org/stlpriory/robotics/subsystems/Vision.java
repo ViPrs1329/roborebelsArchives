@@ -16,8 +16,6 @@ import org.stlpriory.robotics.misc.Debug;
  */
 public class Vision extends Subsystem {
     
-    private DetermineHotGoal determineHotGoal;
-    
     public Vision () {
         super("Vision");
         Debug.println("Vision subsystem constructor");
@@ -25,8 +23,6 @@ public class Vision extends Subsystem {
 
     protected void initDefaultCommand() {
         Debug.println("[Vision.initDefaultCommand()] Setting default command to " + DetermineHotGoal.class.getName());
-        determineHotGoal = new DetermineHotGoal();
-        setDefaultCommand(determineHotGoal);
     }
     
 }
