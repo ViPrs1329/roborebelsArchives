@@ -22,7 +22,7 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     
     // Create a single static instance of all of your subsystems
-    public static DriveTrain drivetrain = new DriveTrain();
+    //public static DriveTrain drivetrain = new DriveTrain();
     public static Launcher launcher = new Launcher();
     public static Claw claw = new Claw();
     public static Tank tank = new Tank();
