@@ -46,6 +46,7 @@ public class DetermineHotGoal extends CommandBase {
             isFinished = true;
         } catch (Exception e) {
             Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
+            isFinished = true;
         }
     }
     
