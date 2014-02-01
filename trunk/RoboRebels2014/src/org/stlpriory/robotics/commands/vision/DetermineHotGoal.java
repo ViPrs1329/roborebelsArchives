@@ -19,29 +19,38 @@ import org.stlpriory.robotics.misc.Debug;
  */
 public class DetermineHotGoal extends CommandBase {
     
+    private boolean isFinished = false;
+    
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
+        requires(vision);
         Debug.println("DetermineHotGoal constructor called"); 
     }
     
     protected void initialize ( ) {
-        try {
-            ColorImage image;
-            image = new RGBImage("/center.jpg");
-            BinaryImage thresholdImage = image.thresholdHSV(105, 137, 230, 255, 133, 183);  
-            thresholdImage.write("/threshold.bmp");
-            
-        } catch (Exception e) {
-            Debug.err("Error in DetermineHotGoal initialize " + e.getMessage());
-        }
-    }
-    
-    protected void execute ( ) {
         
     }
     
+    protected void execute ( ) {
+
+        try {
+            isFinished = false;
+            ColorImage image;
+            Debug.println("DetermineHotGoal execute start");
+            image = new RGBImage("/center.jpg");
+            BinaryImage thresholdImage = image.thresholdHSV(130, 170, 0, 255, 250, 255);  
+            thresholdImage.write("/threshold.bmp");
+            thresholdImage.free();
+            image.free();
+            Debug.println("DetermineHotGoal execute finished");
+            isFinished = true;
+        } catch (Exception e) {
+            Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
+        }
+    }
+    
     protected boolean isFinished ( ) {
-        return true;
+        return isFinished;
     }
     
     protected void end ( ) {
