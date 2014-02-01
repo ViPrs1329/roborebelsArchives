@@ -32,20 +32,34 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void execute ( ) {
-
+        ColorImage image = null;
+        BinaryImage thresholdImage = null;
         try {
             isFinished = false;
-            ColorImage image;
             Debug.println("DetermineHotGoal execute start");
             image = new RGBImage("/center.jpg");
-            BinaryImage thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255);  
+            thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255);  
             thresholdImage.write("/threshold.bmp");
             thresholdImage.free();
             image.free();
             Debug.println("DetermineHotGoal execute finished");
-            isFinished = true;
         } catch (Exception e) {
             Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
+        } finally {
+            if ( image != null ) {
+                try {
+                    image.free();
+                } catch ( Exception e ) {
+                    Debug.err("Exception while trying to free image " + e.getMessage());
+                }
+            }
+            if ( thresholdImage != null ) {
+                try {
+                    thresholdImage.free();
+                } catch ( Exception e ) {
+                    Debug.err("Exception while trying to free threshold image " + e.getMessage());
+                }
+            }
             isFinished = true;
         }
     }
