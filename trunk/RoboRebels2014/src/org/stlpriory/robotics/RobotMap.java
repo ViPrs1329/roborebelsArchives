@@ -26,8 +26,13 @@ public class RobotMap {
     public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 3;  // PWM channel
     public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
     
-    public static final int LAUNCHER_JAGUAR1_PWM_CHANNEL = 1;
-    public static final int LAUNCHER_JAGUAR2_PWM_CHANNEL = 2;
+    // Talon channels for the claw wheel motors
+    public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 5;
+    public static final int CLAW_WHEEL_RIGHT_PWM_CHANNEL = 6;
+    public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 7;
+    
+    public static final int LAUNCHER_JAGUAR1_PWM_CHANNEL = 8;
+    public static final int LAUNCHER_JAGUAR2_PWM_CHANNEL = 9;
     
     // Digital I/O and relay channels for the compressor
     public static final int COMPRESSOR_DIGITALIO_CHANNEL = 1;
@@ -48,13 +53,9 @@ public class RobotMap {
     public static final int LAUNCHER_VALVE2_CHANNEL = 4;
     
     // Solenoid channels for the tilting the claw assembly
-    public static final int CLAW_VALVE1_CHANNEL = 3;
-    public static final int CLAW_VALVE2_CHANNEL = 4;
+    public static final int CLAW_VALVE1_CHANNEL = 5;
+    public static final int CLAW_VALVE2_CHANNEL = 6;
     
-    // Talon channels for the claw wheel motors
-    public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 5;
-    public static final int CLAW_WHEEL_RIGHT_PWM_CHANNEL = 6;
-    public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 7;
     
     //DigitalModule number of the Digital Sidecar
     public static final int DIGITAL_SIDECAR_MODULE_NUMBER = 2;
