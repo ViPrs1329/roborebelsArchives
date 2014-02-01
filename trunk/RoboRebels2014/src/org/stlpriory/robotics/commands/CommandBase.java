@@ -2,11 +2,11 @@ package org.stlpriory.robotics.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.stlpriory.robotics.OI;
-import org.stlpriory.robotics.commands.vision.DetermineHotGoal;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.DriveTrain;
 import org.stlpriory.robotics.subsystems.Launcher;
+import org.stlpriory.robotics.subsystems.Sensors;
 import org.stlpriory.robotics.subsystems.Tank;
 import org.stlpriory.robotics.subsystems.Vision;
 
@@ -27,6 +27,7 @@ public abstract class CommandBase extends Command {
     public static Claw claw = new Claw();
     public static Tank tank = new Tank();
     public static Vision vision = new Vision();
+    public static Sensors sensors = new Sensors();
 
     public static void init() {
         Debug.println("[CommandBase.init()] Initializing...");

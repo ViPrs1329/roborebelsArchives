@@ -56,4 +56,10 @@ public class RobotMap {
     public static final int CLAW_WHEEL_RIGHT_PWM_CHANNEL = 6;
     public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 7;
     
+    //DigitalModule number of the Digital Sidecar
+    public static final int DIGITAL_SIDECAR_MODULE_NUMBER = 2;
+    
+    //Adress for I2C with the Arduino
+    public static final int I2C_ADRESS_NUMBER = 4;
+    
 }
