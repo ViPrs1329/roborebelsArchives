@@ -38,7 +38,7 @@ public class DetermineHotGoal extends CommandBase {
             ColorImage image;
             Debug.println("DetermineHotGoal execute start");
             image = new RGBImage("/center.jpg");
-            BinaryImage thresholdImage = image.thresholdHSV(130, 170, 0, 255, 250, 255);  
+            BinaryImage thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255);  
             thresholdImage.write("/threshold.bmp");
             thresholdImage.free();
             image.free();
