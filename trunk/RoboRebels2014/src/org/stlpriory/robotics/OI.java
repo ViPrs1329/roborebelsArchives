@@ -72,6 +72,7 @@ public class OI {
     JoystickButton b1;
     JoystickButton b2;
     JoystickButton b3;
+    JoystickButton shiftButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         
@@ -90,6 +91,7 @@ public class OI {
         b3 = new JoystickButton(joystick,3);
         b3.whenPressed(new Reset());
         b3.whenReleased(new Stop());
+        shiftButton = new JoystickButton(joystick,4);
 
         // SmartDashboard Buttons
 //        SmartDashboard.putData("Autonomous Command", new Auton1());

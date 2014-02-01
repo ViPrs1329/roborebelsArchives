@@ -33,9 +33,19 @@ public class RobotMap {
     public static final int COMPRESSOR_DIGITALIO_CHANNEL = 1;
     public static final int COMPRESSOR_RELAY_CHANNEL = 1;
     
+    // Drive train speed controller mappings to the addresses of the Jaguars on the CAN bus
+    public static final int LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 12;  // CAN bus channel
+    public static final int LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS   = 11;  // CAN bus channel
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS = 13;  // CAN bus channel
+    public static final int RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 14;  // CAN bus channel
+    
+    //Solenoid channels for the gear boxes
+    public static final int GEARBOX1_VALVE_CHANNEL = 1;
+    public static final int GEARBOX2_VALVE_CHANNEL = 2;
+    
     // Solenoid channels for the ball launcher
-    public static final int LAUNCHER_VALVE1_CHANNEL = 1;
-    public static final int LAUNCHER_VALVE2_CHANNEL = 2;
+    public static final int LAUNCHER_VALVE1_CHANNEL = 3;
+    public static final int LAUNCHER_VALVE2_CHANNEL = 4;
     
     // Solenoid channels for the tilting the claw assembly
     public static final int CLAW_VALVE1_CHANNEL = 3;

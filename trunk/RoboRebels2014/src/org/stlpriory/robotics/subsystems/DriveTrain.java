@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
+import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
 
@@ -24,6 +26,9 @@ public class DriveTrain extends Subsystem {
     private static Jaguar leftRearJag;
     private static Jaguar rightRearJag;
     private static double direction = 1;
+    
+    GearBox box1;
+    GearBox box2;
     
     public DriveTrain() {
         super("DriveTrain");
@@ -46,16 +51,19 @@ public class DriveTrain extends Subsystem {
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
-        drive.setMaxOutput(1.0);
+        drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        
+        box1 = new GearBox(RobotMap.GEARBOX1_VALVE_CHANNEL);
+        box2 = new GearBox(RobotMap.GEARBOX2_VALVE_CHANNEL);
 
         Debug.println("[DriveTrain Subsystem] Instantiation complete.");
     }
 
     public void initDefaultCommand() {
         Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-        setDefaultCommand(new DriveWithGamepad());
+        setDefaultCommand(new DriveWithJoystick());
     }
  
     public void setForwards() {
@@ -150,6 +158,15 @@ public class DriveTrain extends Subsystem {
 
     public void driveWithGamepad(Joystick joystick) {
         mecanumDrive(joystick);
-    }   
+    }
+    public void shiftGears() {
+        if (box1.getState() == box2.getState()) {
+            box1.shift();
+            box2.shift();
+        }
+        else {
+            Debug.println("Error, gearboxes on different gears");
+        }
+    }
     
 }
