@@ -16,25 +16,26 @@ import org.stlpriory.robotics.misc.Debug;
 public class Tank extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
+
     Compressor compressor;
-    
+
     public Tank() {
         super("Tank");
         Debug.println("[Tank] Instantiating...");
-        
+
         Debug.println("[Tank Subsystem] Initializing compressor to IO channel "
                 + RobotMap.COMPRESSOR_DIGITALIO_CHANNEL + " and relay channel " + RobotMap.COMPRESSOR_RELAY_CHANNEL);
         compressor = new Compressor(RobotMap.COMPRESSOR_DIGITALIO_CHANNEL, RobotMap.COMPRESSOR_RELAY_CHANNEL);
-        
-        if (! compressor.enabled()) {
+
+        if (!compressor.enabled()) {
             Debug.println("[Tank Subsystem] Starting compressor ...");
             compressor.start();
         }
-        
-                Debug.println("[Tank Subsystem] Instantiation complete.");
+
+        Debug.println("[Tank Subsystem] Instantiation complete.");
 
     }
-    
+
     public boolean isCompressorStarted() {
         return compressor.enabled();
     }

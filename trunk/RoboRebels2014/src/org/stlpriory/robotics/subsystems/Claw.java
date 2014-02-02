@@ -21,8 +21,10 @@ public class Claw extends Subsystem {
     private Talon wheel_left;
     private Talon wheel_right;
     private Talon wheel_center;
-    private static Solenoid valve;
+    private static Solenoid valve1;
     private static Solenoid value2;
+    private static Solenoid valve3;
+    private static Solenoid value4;
 
     public Claw() {
         super("Claw");
@@ -35,12 +37,14 @@ public class Claw extends Subsystem {
         wheel_right = new Talon(RobotMap.CLAW_WHEEL_RIGHT_PWM_CHANNEL);
         wheel_center = new Talon(RobotMap.CLAW_WHEEL_CENTRAL_PWM_CHANNEL);
         
-
-        Debug.println("[Claw Subsystem] Initializing first compressor solenoid to channel " + RobotMap.CLAW_VALVE1_CHANNEL);
-        Debug.println("[Claw Subsystem] Initializing second compressor solenoid to channel " + RobotMap.CLAW_VALVE2_CHANNEL);
-        valve = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
+        Debug.println("[Claw Subsystem] Initializing first solenoid to relay channel " + RobotMap.CLAW_VALVE1_CHANNEL);
+        Debug.println("[Claw Subsystem] Initializing second solenoid to relay channel " + RobotMap.CLAW_VALVE2_CHANNEL);
+        Debug.println("[Claw Subsystem] Initializing third solenoid to relay channel " + RobotMap.CLAW_WHEEL_VALVE1_CHANNEL);
+        Debug.println("[Claw Subsystem] Initializing fourth solenoid to relay channel " + RobotMap.CLAW_WHEEL_VALVE2_CHANNEL);
+        valve1 = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
         value2 = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
-
+        valve3 = new Solenoid(RobotMap.CLAW_WHEEL_VALVE1_CHANNEL);
+        value4 = new Solenoid(RobotMap.CLAW_WHEEL_VALVE2_CHANNEL);
 
         Debug.println("[Claw Subsystem] Instantiation complete.");
     }
@@ -62,18 +66,17 @@ public class Claw extends Subsystem {
         wheel_center.set(0);
     }
 
-    
-
     public void extendPiston() {
-        valve.set(true);    //turns the Solenoid on
+        valve1.set(true);    //turns the Solenoid on
         value2.set(false);  //turns the Solenoid off
     }
 
     public void retractPiston() {
-        valve.set(false);
+        valve1.set(false);
         value2.set(true);
     }
-    public boolean getValveState() {
-        return valve.get();
+    
+    public boolean getClawTiltValveState() {
+        return valve1.get();
     }
 }

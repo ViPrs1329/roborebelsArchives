@@ -12,8 +12,9 @@ import org.stlpriory.robotics.misc.Debug;
  * @author William
  */
 public class InvertPiston extends CommandBase {
-    
+
     boolean commandExecuted;
+
     public InvertPiston() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -27,21 +28,18 @@ public class InvertPiston extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (claw.getValveState()) {
+        if (claw.getClawTiltValveState()) {
             claw.retractPiston();
             commandExecuted = true;
-        }
-        else if (! claw.getValveState()) {
+        } else if (!claw.getClawTiltValveState()) {
             claw.extendPiston();
             commandExecuted = true;
 
-        }
-        else {
+        } else {
             Debug.println("Error, failed to detect claw valve state");
-        }             
+        }
         commandExecuted = true;
 
-        
     }
 
     // Make this return true when this Command no longer needs to run execute()
