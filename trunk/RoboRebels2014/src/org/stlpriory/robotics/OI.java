@@ -9,6 +9,7 @@ import org.stlpriory.robotics.commands.claw.StopClawWheels;
 import org.stlpriory.robotics.commands.drivetrain.Shift;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.commands.launcher.*;
+import org.stlpriory.robotics.commands.sensors.ReadDistance;
 import org.stlpriory.robotics.misc.Keymap;
 
 /**
@@ -80,6 +81,7 @@ public class OI {
     JoystickButton shiftButton;
     JoystickButton expandRetractClawButton;
     JoystickButton clawButton;
+    JoystickButton sensorButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         
@@ -112,6 +114,9 @@ public class OI {
         clawButton.whenPressed(new StartClawWheels());
         clawButton.whenReleased(new StopClawWheels());
         
+        Debug.println("[OI] Initializing gamepad read distnace from the arduino");
+        sensorButton = new JoystickButton(joystick,Keymap.SENSOR_DISTANCE_BUTTON);
+        sensorButton.whenPressed(new ReadDistance());
         
 
         // SmartDashboard Buttons

@@ -2,35 +2,34 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.stlpriory.robotics.commands.drivetrain;
+package org.stlpriory.robotics.commands.sensors;
 
 import org.stlpriory.robotics.commands.CommandBase;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
  *
- * @author William
  */
-public class Shift extends CommandBase {
-    
-    public Shift() {
-        requires(drivetrain);
+public class ReadDistance extends CommandBase {
+
+    public ReadDistance() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
     }
 
     // Called just before this Command runs the first time
-    boolean executedCommand;
     protected void initialize() {
-        executedCommand = false;
+        Debug.println("Initialize ReadDistance() command");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        drivetrain.shiftGears();
-        executedCommand = true;
+        Debug.println(">>>> Arduino read value = " + sensors.arduino_read());
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return executedCommand;
+        return true;
     }
 
     // Called once after isFinished returns true

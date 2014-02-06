@@ -23,7 +23,7 @@ public class DetermineHotGoal extends CommandBase {
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
-        requires(vision);
+//        requires(vision);
         Debug.println("DetermineHotGoal constructor called"); 
     }
     

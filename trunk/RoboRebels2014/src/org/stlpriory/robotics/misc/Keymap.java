@@ -40,4 +40,5 @@ public class Keymap {
     public static final int SHIFT_BUTTON_KEY_MAP = 4;
     public static final int CLAW_EXPAND_RETRACT_BUTTON_KEY_MAP = 9;
     public static final int CLAW_START_STOP_BUTTON_KEY_MAP = 1;
+    public static final int SENSOR_DISTANCE_BUTTON = 2;
 }

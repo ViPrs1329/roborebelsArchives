@@ -14,8 +14,6 @@ import org.stlpriory.robotics.commands.CommandBase;
 public class DriveWithJoystick extends CommandBase {
     
     public DriveWithJoystick() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
         requires(drivetrain);
     }
 
