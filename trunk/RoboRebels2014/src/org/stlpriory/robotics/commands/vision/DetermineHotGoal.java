@@ -11,7 +11,9 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision;
+import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.RGBImage;
+import java.util.Vector;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -37,7 +39,7 @@ public class DetermineHotGoal extends CommandBase {
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
-//        requires(vision);
+        requires(vision);
         Debug.println("DetermineHotGoal constructor finished"); 
     }
     
@@ -82,31 +84,12 @@ public class DetermineHotGoal extends CommandBase {
                 largeParticleImage.write("/largeParticles.bmp");
             }
             
-            int particleCount = largeParticleImage.getNumberParticles();
-            Debug.println("DetermineHotGoal: There are " + particleCount + " large particles");
-            Pointer rawImage = largeParticleImage.image;
-            int imageWidth = largeParticleImage.getWidth();
-            int imageHeight = largeParticleImage.getHeight();
-            Debug.println("Image width/height is " + imageWidth + "/" + imageHeight);
-            for ( int particleNumber = 0; particleNumber < particleCount; particleNumber++ ) {
-                double orientation = NIVision.MeasureParticle(rawImage, particleNumber, 
-                        false, NIVision.MeasurementType.IMAQ_MT_ORIENTATION);
-                double particleWidth = NIVision.MeasureParticle(rawImage, particleNumber, 
-                        false, NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH);
-                double particleHeight = NIVision.MeasureParticle(rawImage, particleNumber, 
-                        false, NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT);
-                double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber, 
-                        false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
-                double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber, 
-                        false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
-                
-                Debug.println("Particle " + (particleNumber + 1) + " at (" +
-                    particleCenterOfMassX + "," + particleCenterOfMassY + ")\n" +
-                    "\tOrientation: " + orientation + "\n" +
-                    "\tWidth: " + particleWidth + "\n" +
-                    "\tHeight: " + particleHeight + "\n" +
-                    "\tWidth/Height: " + particleWidth / particleHeight + "\n");
-            }
+            Vector passingParticles = collectPassingParticles(largeParticleImage);
+            int numberPassingParticles = passingParticles.size();
+            Debug.println("DetermineHotGoal " + numberPassingParticles + " passed filtering");
+            
+            // TODO update the Vision subsystem with the results of the image analysis
+            
             
         } catch (Exception e) {
             Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
@@ -155,6 +138,87 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void interrupted ( ) {
         
+    }
+    
+    private Vector collectPassingParticles ( BinaryImage image ) throws NIVisionException {
+ 
+        int particleCount = image.getNumberParticles();
+        Debug.println("DetermineHotGoal: There are " + particleCount + " particles");
+        Pointer rawImage = image.image;
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        Debug.println("Image width/height is " + imageWidth + "/" + imageHeight);
+
+        Vector passingParticles = new Vector();
+        for (int particleNumber = 0; particleNumber < particleCount; particleNumber++) {
+
+            // use to distinquish between vertical and horizontal tape
+            double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_ORIENTATION);
+
+                // TODO if the orientation is not reasonably horizontal, then don't take any
+            // further measurements on the particle
+                // what is the aspect ratio of the equivalent rectangle which will
+            // divide the long dimension over the short dimension.  The equivalent
+            // rectangle is defined as one with the same area and perimeter as the particle
+            double equivalentRectAspectRatio = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_RATIO_OF_EQUIVALENT_RECT_SIDES);
+
+                // for horizontal tape, in order to make the particle width/height less sensitive
+            // to any camera angle in the roll axis, use the bounding rectangle for width but use
+            // the average vertical segment length for the height
+            double particleWidth = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH);
+            double particleHeight = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_AVERAGE_VERT_SEGMENT_LENGTH);
+            double calculatedAspectRatio = particleWidth > particleHeight
+                    ? particleWidth / particleHeight
+                    : particleHeight / particleWidth;
+
+                // TODO determine whether equivalentRectAspectRatio or calculatedAspectRatio should be
+            // used to determine the aspect ratio
+                // TODO if the aspect ratio is not within limits, then don't take any further
+            // measurements
+            // where is the particle
+            double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
+            double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
+
+            // log the particle measurements
+            Debug.println("Particle " + (particleNumber + 1) + " at ("
+                    + particleCenterOfMassX + "," + particleCenterOfMassY + ")\n"
+                    + "\tOrientation: " + orientation + "\n"
+                    + "\tWidth: " + particleWidth + "\n"
+                    + "\tHeight: " + particleHeight + "\n"
+                    + "\tEqivRectAspectRatio: " + equivalentRectAspectRatio + "\n"
+                    + "\tCalcAspectRatio: " + calculatedAspectRatio + "\n");
+
+            // passed all criteria, so add to the vector
+            PassingParticle pp = new PassingParticle();
+            pp.relativeX = -1 + 2 * (particleCenterOfMassX / imageWidth);
+            pp.relativeY = -1 + 2 * (particleCenterOfMassY / imageHeight);
+            pp.orientation = orientation;
+            pp.aspectRatio = calculatedAspectRatio;  // TODO which aspect ratio method to use?
+
+            passingParticles.addElement(pp);
+        }
+
+        return passingParticles;
+    }
+    
+    /**
+     * Used internally to store the critical measurements for a particle
+     */
+    class PassingParticle {
+        // normalized value from -1 to 1 with -1=far left, 0=center, 1=far right
+        double relativeX;
+        // normalized value from -1 to 1 with -1=far top, 0=center, 1=far bottom
+        double relativeY;
+        // value from 0 to 180 0=horizontal,90=verticle ????  // TODO confirm this
+        double orientation;
+        // long dimension / short dimension
+        double aspectRatio;
     }
     
 }
