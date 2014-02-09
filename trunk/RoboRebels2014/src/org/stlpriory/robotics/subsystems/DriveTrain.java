@@ -67,7 +67,7 @@ public class DriveTrain extends Subsystem {
 
     public void initDefaultCommand() {
         Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-        setDefaultCommand(new DriveWithJoystick());
+       // setDefaultCommand(new DriveWithJoystick());
     }
  
     public void setForwards() {
