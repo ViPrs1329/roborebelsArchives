@@ -97,28 +97,28 @@ public class DetermineHotGoal extends CommandBase {
             if ( image != null ) {
                 try {
                     image.free();
-                } catch ( Exception e ) {
+                } catch ( NIVisionException e ) {
                     Debug.err("Exception while trying to free image " + e.getMessage());
                 }
             }
             if ( thresholdImage != null ) {
                 try {
                     thresholdImage.free();
-                } catch ( Exception e ) {
+                } catch ( NIVisionException e ) {
                     Debug.err("Exception while trying to free threshold image " + e.getMessage());
                 }
             }
             if ( convexHullImage != null ) {
                 try {
                     convexHullImage.free();
-                } catch ( Exception e ) {
+                } catch ( NIVisionException e ) {
                     Debug.err("Exception while trying to free convex hull image " + e.getMessage());
                 }
             }
             if ( largeParticleImage != null ) {
                 try {
                     largeParticleImage.free();
-                } catch ( Exception e ) {
+                } catch ( NIVisionException e ) {
                     Debug.err("Exception while trying to free large particle image " + e.getMessage());
                 }
             }
