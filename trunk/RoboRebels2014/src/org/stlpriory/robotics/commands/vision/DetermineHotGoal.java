@@ -69,12 +69,14 @@ public class DetermineHotGoal extends CommandBase {
             image = null;
             if ( isDebug ) {
                 thresholdImage.write("/threshold.bmp");
+                Debug.println("DetermineHotGoal wrote threshold.bmp to file system");
             }
             convexHullImage = thresholdImage.convexHull(false);
             thresholdImage.free();
             thresholdImage = null;
             if ( isDebug ) {
                 convexHullImage.write("/convexHull.bmp");
+                Debug.println("DetermineHotGoal wrote convexHull.bmp to file system");
             }
             // filter out small particles
             largeParticleImage = convexHullImage.particleFilter(cc);  
@@ -82,6 +84,7 @@ public class DetermineHotGoal extends CommandBase {
             convexHullImage = null;
             if ( isDebug ) {
                 largeParticleImage.write("/largeParticles.bmp");
+                Debug.println("DetermineHotGoal wrote largePartlcles.bmp to file system");
             }
             
             Vector passingParticles = collectPassingParticles(largeParticleImage);
