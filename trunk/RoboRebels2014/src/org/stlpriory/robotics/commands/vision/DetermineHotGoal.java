@@ -159,15 +159,15 @@ public class DetermineHotGoal extends CommandBase {
             double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_ORIENTATION);
 
-                // TODO if the orientation is not reasonably horizontal, then don't take any
+            // TODO if the orientation is not reasonably horizontal, then don't take any
             // further measurements on the particle
-                // what is the aspect ratio of the equivalent rectangle which will
+            // what is the aspect ratio of the equivalent rectangle which will
             // divide the long dimension over the short dimension.  The equivalent
             // rectangle is defined as one with the same area and perimeter as the particle
             double equivalentRectAspectRatio = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_RATIO_OF_EQUIVALENT_RECT_SIDES);
 
-                // for horizontal tape, in order to make the particle width/height less sensitive
+            // for horizontal tape, in order to make the particle width/height less sensitive
             // to any camera angle in the roll axis, use the bounding rectangle for width but use
             // the average vertical segment length for the height
             double particleWidth = NIVision.MeasureParticle(rawImage, particleNumber,
@@ -176,12 +176,20 @@ public class DetermineHotGoal extends CommandBase {
                     false, NIVision.MeasurementType.IMAQ_MT_AVERAGE_VERT_SEGMENT_LENGTH);
             double calculatedAspectRatio = particleWidth > particleHeight
                     ? particleWidth / particleHeight
-                    : particleHeight / particleWidth;
+                    : particleHeight / particleWidth;     
 
-                // TODO determine whether equivalentRectAspectRatio or calculatedAspectRatio should be
+            // TODO determine whether equivalentRectAspectRatio or calculatedAspectRatio should be
             // used to determine the aspect ratio
-                // TODO if the aspect ratio is not within limits, then don't take any further
+            
+            // TODO if the aspect ratio is not within limits, then don't take any further
             // measurements
+            
+            // measure the compactness of the particle by dividing the area of the particle
+            // by the area of the bounding rectangle.  A perfectly rectangular particle with
+            // perfectly level camera image would have a value of 1
+            double compactness = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_COMPACTNESS_FACTOR);
+            
             // where is the particle
             double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
@@ -194,6 +202,7 @@ public class DetermineHotGoal extends CommandBase {
                     + "\tOrientation: " + orientation + "\n"
                     + "\tWidth: " + particleWidth + "\n"
                     + "\tHeight: " + particleHeight + "\n"
+                    + "\tCompactness: " + compactness + "\n"
                     + "\tEqivRectAspectRatio: " + equivalentRectAspectRatio + "\n"
                     + "\tCalcAspectRatio: " + calculatedAspectRatio + "\n");
 
