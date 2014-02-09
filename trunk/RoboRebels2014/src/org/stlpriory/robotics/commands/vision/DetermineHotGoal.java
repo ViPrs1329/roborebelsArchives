@@ -38,7 +38,7 @@ public class DetermineHotGoal extends CommandBase {
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
 //        requires(vision);
-        Debug.println("DetermineHotGoal constructor called"); 
+        Debug.println("DetermineHotGoal constructor finished"); 
     }
     
     protected void initialize ( ) {
@@ -47,10 +47,12 @@ public class DetermineHotGoal extends CommandBase {
         // intended to be a really big number.  We are filtering out the
         // small particles and the units are pixels squared
         cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 50, 65535, false);
+        Debug.println("DetermineHotGoal initialize finished");
     }
     
     protected void execute ( ) {
         isFinished = false;
+        long startTime = System.currentTimeMillis();
         Debug.println("DetermineHotGoal execute start");
         ColorImage image = null;
         BinaryImage thresholdImage = null;
@@ -137,7 +139,8 @@ public class DetermineHotGoal extends CommandBase {
                     Debug.err("Exception while trying to free large particle image " + e.getMessage());
                 }
             }
-            Debug.println("DetermineHotGoal execute finished");
+            long stopTime = System.currentTimeMillis();
+            Debug.println("DetermineHotGoal execute finished in " + (stopTime - startTime) + " msec");
             isFinished = true;
         }
     }
