@@ -59,19 +59,19 @@ public class Launcher extends Subsystem {
     }
 
     public void extendPiston() {
-        spike.set(Relay.Value.kOff);
-        spike.setDirection(Relay.Direction.kForward);
         spike.set(Relay.Value.kOn);
-        valve1.set(true);
-        valve2.set(false);
+        spike.setDirection(Relay.Direction.kForward);
+        //spike.set(Relay.Value.kOn);
+       /// valve1.set(true);
+      //  valve2.set(false);
     }
 
     public void retractPiston() {
-        spike.set(Relay.Value.kOff);
-        spike.setDirection(Relay.Direction.kReverse);
         spike.set(Relay.Value.kOn);
-        valve2.set(true);
-        valve1.set(false);
+        spike.setDirection(Relay.Direction.kReverse);
+       // spike.set(Relay.Value.kOn);
+       // valve2.set(true);
+       // valve1.set(false);
     }
 
     public void loadLauncher() {
