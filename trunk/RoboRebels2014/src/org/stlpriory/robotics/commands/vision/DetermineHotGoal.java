@@ -67,7 +67,7 @@ public class DetermineHotGoal extends CommandBase {
             
             logs.append("Forming images took " + (System.currentTimeMillis() - startTime) + " msec\n");
             
-            Vector passingParticles = collectPassingParticles(thresholdImage);
+            Vector passingParticles = filterParticles(thresholdImage);
             
             // free memory
             thresholdImage.free();
@@ -128,7 +128,7 @@ public class DetermineHotGoal extends CommandBase {
         
     }
     
-    private Vector collectPassingParticles ( BinaryImage image ) throws NIVisionException {
+    private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
         logs.append("DetermineHotGoal: There are " + particleCount + " particles\n");
