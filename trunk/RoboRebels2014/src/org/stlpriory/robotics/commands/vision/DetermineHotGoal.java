@@ -173,7 +173,7 @@ public class DetermineHotGoal extends CommandBase {
             
             // horizontal retroreflective tape is 4" wide X 1' 11.5" long
             // so the ideal aspect ratio is 5.875
-            if ( calculatedAspectRatio < 4.8 || calculatedAspectRatio > 6.8 ) {
+            if ( calculatedAspectRatio < 4.875 || calculatedAspectRatio > 6.875 ) {
                 // skip this particle since not of correct aspect ratio
                 logs.append("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio + "\n");
                 continue;
