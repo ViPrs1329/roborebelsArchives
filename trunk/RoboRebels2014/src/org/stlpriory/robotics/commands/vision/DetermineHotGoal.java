@@ -33,8 +33,6 @@ import org.stlpriory.robotics.misc.Debug;
 public class DetermineHotGoal extends CommandBase {
     
     private boolean isFinished = false;
-    private static final boolean isDebug = true;
-    private StringBuffer logs;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
@@ -48,7 +46,6 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void execute ( ) {
         isFinished = false;
-        logs = new StringBuffer();
         long startTime = System.currentTimeMillis();
         log("DetermineHotGoal execute start");
         ColorImage image = null;
@@ -59,6 +56,7 @@ public class DetermineHotGoal extends CommandBase {
             // 0-255 min/max values for hue, saturation, and value
             // optimized to pick up green LED reflection from retro reflective tape
             thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255); 
+            // thresholdImage.write("threshold.bmp");
             
             // free memory
             image.free();
@@ -107,11 +105,9 @@ public class DetermineHotGoal extends CommandBase {
                 }
             }
 
-            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");
-            String logsString = logs.toString();            
+            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");          
             
             isFinished = true;
-            Debug.println(logsString);
         }
     }
     
@@ -128,9 +124,7 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void log ( String msg ) {
-        if ( isDebug ) {
-            logs.append(msg + "\n");
-        }
+        Debug.println(msg);
     }
     
     private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
