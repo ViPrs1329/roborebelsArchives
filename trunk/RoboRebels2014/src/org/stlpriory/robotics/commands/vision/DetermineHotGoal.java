@@ -215,14 +215,21 @@ public class DetermineHotGoal extends CommandBase {
      * Used internally to store the critical measurements for a particle
      */
     class PassingParticle {
+        
         // normalized value from -1 to 1 with -1=far left, 0=center, 1=far right
         double relativeX;
+        
         // normalized value from -1 to 1 with -1=far top, 0=center, 1=far bottom
         double relativeY;
-        // value from 0 to 180 0=horizontal,90=verticle, 179=horizontal
+        
+        // value from 0 to 180 0=horizontal,90=verticle, 180=horizontal
         double orientation;
+        
         // long dimension / short dimension
         double aspectRatio;
+        
+        // area of particle/area of bounding rectangle - max value is 1.0
+        // This is a measure of the rectangularity of the particle
         double compactness;
     }
     
