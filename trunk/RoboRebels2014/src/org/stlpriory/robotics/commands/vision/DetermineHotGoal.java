@@ -73,6 +73,8 @@ public class DetermineHotGoal extends CommandBase {
             thresholdImage.free();
             thresholdImage = null;
             
+            // look at the particles passing criteria and see if can determine which one is
+            // the horizontal tape of the hot goal
             int numberPassingParticles = passingParticles.size();
             logs.append("DetermineHotGoal " + numberPassingParticles + " passed filtering\n");
             for ( int i = 0; i < numberPassingParticles; i++ ) {
@@ -169,7 +171,9 @@ public class DetermineHotGoal extends CommandBase {
                     ? particleWidth / particleHeight
                     : particleHeight / particleWidth;     
             
-            if ( calculatedAspectRatio < 3 || calculatedAspectRatio > 8 ) {
+            // horizontal retroreflective tape is 4" wide X 1' 11.5" long
+            // so the ideal aspect ratio is 5.875
+            if ( calculatedAspectRatio < 4.8 || calculatedAspectRatio > 6.8 ) {
                 // skip this particle since not of correct aspect ratio
                 logs.append("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio + "\n");
                 continue;
