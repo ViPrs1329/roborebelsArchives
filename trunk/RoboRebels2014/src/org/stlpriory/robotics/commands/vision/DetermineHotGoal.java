@@ -9,7 +9,6 @@ package org.stlpriory.robotics.commands.vision;
 import com.sun.cldc.jna.Pointer;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
-import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.RGBImage;
@@ -51,7 +50,7 @@ public class DetermineHotGoal extends CommandBase {
         isFinished = false;
         logs = new StringBuffer();
         long startTime = System.currentTimeMillis();
-        logs.append("DetermineHotGoal execute start\n");
+        log("DetermineHotGoal execute start");
         ColorImage image = null;
         BinaryImage thresholdImage = null;
         try {
@@ -65,7 +64,7 @@ public class DetermineHotGoal extends CommandBase {
             image.free();
             image = null;
             
-            logs.append("Forming images took " + (System.currentTimeMillis() - startTime) + " msec\n");
+            log("Forming images took " + (System.currentTimeMillis() - startTime) + " msec");
             
             Vector passingParticles = filterParticles(thresholdImage);
             
@@ -76,15 +75,15 @@ public class DetermineHotGoal extends CommandBase {
             // look at the particles passing criteria and see if can determine which one is
             // the horizontal tape of the hot goal
             int numberPassingParticles = passingParticles.size();
-            logs.append("DetermineHotGoal " + numberPassingParticles + " passed filtering\n");
+            log("DetermineHotGoal " + numberPassingParticles + " passed filtering");
             for ( int i = 0; i < numberPassingParticles; i++ ) {
                 PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
 
-                logs.append("Particle " + (i + 1) + " at ("
+                log("Particle " + (i + 1) + " at ("
                     + pp.relativeX + "," + pp.relativeY + ")\n"
                     + "\tOrientation: " + pp.orientation + "\n"
                     + "\tCompactness: " + pp.compactness + "\n"
-                    + "\tAspectRatio: " + pp.aspectRatio + "\n");
+                    + "\tAspectRatio: " + pp.aspectRatio);
             }
             
             // TODO update the Vision subsystem with the results of the image analysis
@@ -108,7 +107,7 @@ public class DetermineHotGoal extends CommandBase {
                 }
             }
 
-            logs.append("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");
+            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");
             String logsString = logs.toString();            
             
             isFinished = true;
@@ -128,25 +127,31 @@ public class DetermineHotGoal extends CommandBase {
         
     }
     
+    protected void log ( String msg ) {
+        if ( isDebug ) {
+            logs.append(msg + "\n");
+        }
+    }
+    
     private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
-        logs.append("DetermineHotGoal: There are " + particleCount + " particles\n");
+        log("DetermineHotGoal: There are " + particleCount + " particles");
         Pointer rawImage = image.image;
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        logs.append("Image width/height is " + imageWidth + "/" + imageHeight + "\n");
+        log("Image width/height is " + imageWidth + "/" + imageHeight);
 
         Vector passingParticles = new Vector();
         
         for ( int particleNumber = 0; particleNumber < particleCount; particleNumber++ ) {
-            logs.append("DetermineHotGoal: Analyzing particle number " + (particleNumber + 1) + "\n");
+            log("DetermineHotGoal: Analyzing particle number " + (particleNumber + 1));
             
             double area = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_AREA);
             if ( area < 50 ) {
                 // skip this particle since it is too small
-                logs.append("DetermineHotGoal: Skipping particle due to small area " + area + "\n");
+                log("DetermineHotGoal: Skipping particle due to small area " + area);
                 continue;
             }
 
@@ -156,7 +161,7 @@ public class DetermineHotGoal extends CommandBase {
             
             if ( !(orientation < 10) && !(orientation > 170) ) {
                 // skip this particle since not horizontal
-                logs.append("DetermineHotGoal: Skipping particle due to orientation " + orientation + "\n");
+                log("DetermineHotGoal: Skipping particle due to orientation " + orientation);
                 continue;
             }
 
@@ -175,7 +180,7 @@ public class DetermineHotGoal extends CommandBase {
             // so the ideal aspect ratio is 5.875
             if ( calculatedAspectRatio < 4.875 || calculatedAspectRatio > 6.875 ) {
                 // skip this particle since not of correct aspect ratio
-                logs.append("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio + "\n");
+                log("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio);
                 continue;
             }
             
@@ -186,7 +191,7 @@ public class DetermineHotGoal extends CommandBase {
                     false, NIVision.MeasurementType.IMAQ_MT_COMPACTNESS_FACTOR);
             
             if ( compactness < 0.9 ) {
-                logs.append("DetermineHotGoal: Skipping particle due to compactness " + compactness + "\n");
+                log("DetermineHotGoal: Skipping particle due to compactness " + compactness);
                 continue;
             }
             
@@ -196,7 +201,7 @@ public class DetermineHotGoal extends CommandBase {
             double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
 
-            logs.append("DetermineHotGoal: Particle passed all constraints. Adding to vector\n");
+            log("DetermineHotGoal: Particle passed all constraints. Adding to vector");
             // passed all criteria, so add to the vector
             PassingParticle pp = new PassingParticle();
             pp.relativeX = -1 + 2 * (particleCenterOfMassX / imageWidth);
