@@ -36,6 +36,7 @@ public class DetermineHotGoal extends CommandBase {
     private boolean isFinished = false;
     private static final boolean isDebug = true;
     private CriteriaCollection cc;
+    private StringBuffer logs;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
@@ -54,11 +55,12 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void execute ( ) {
         isFinished = false;
+        logs = new StringBuffer();
         long startTime = System.currentTimeMillis();
-        Debug.println("DetermineHotGoal execute start");
+        logs.append("DetermineHotGoal execute start\n");
         ColorImage image = null;
         BinaryImage thresholdImage = null;
-        BinaryImage convexHullImage = null;
+        //BinaryImage convexHullImage = null;
         BinaryImage largeParticleImage = null;
         try {
             image = new RGBImage("/center.jpg");
@@ -69,27 +71,39 @@ public class DetermineHotGoal extends CommandBase {
             image = null;
             if ( isDebug ) {
                 thresholdImage.write("/threshold.bmp");
-                Debug.println("DetermineHotGoal wrote threshold.bmp to file system");
+                logs.append("DetermineHotGoal wrote threshold.bmp to file system\n");
             }
-            convexHullImage = thresholdImage.convexHull(false);
-            thresholdImage.free();
-            thresholdImage = null;
-            if ( isDebug ) {
-                convexHullImage.write("/convexHull.bmp");
-                Debug.println("DetermineHotGoal wrote convexHull.bmp to file system");
-            }
+//            convexHullImage = thresholdImage.convexHull(false);
+//            thresholdImage.free();
+//            thresholdImage = null;
+//            if ( isDebug ) {
+//                convexHullImage.write("/convexHull.bmp");
+//                logs.append("DetermineHotGoal wrote convexHull.bmp to file system\n");
+//            }
             // filter out small particles
-            largeParticleImage = convexHullImage.particleFilter(cc);  
-            convexHullImage.free();
-            convexHullImage = null;
+            largeParticleImage = thresholdImage.particleFilter(cc);  
+//            convexHullImage.free();
+//            convexHullImage = null;
             if ( isDebug ) {
                 largeParticleImage.write("/largeParticles.bmp");
-                Debug.println("DetermineHotGoal wrote largePartlcles.bmp to file system");
+                logs.append("DetermineHotGoal wrote largePartlcles.bmp to file system\n");
             }
+            
+            long now = System.currentTimeMillis();
+            logs.append("Forming images took " + (now - startTime) + " msec\n");
             
             Vector passingParticles = collectPassingParticles(largeParticleImage);
             int numberPassingParticles = passingParticles.size();
-            Debug.println("DetermineHotGoal " + numberPassingParticles + " passed filtering");
+            logs.append("DetermineHotGoal " + numberPassingParticles + " passed filtering\n");
+            for ( int i = 0; i < numberPassingParticles; i++ ) {
+                PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
+
+                logs.append("Particle " + (i + 1) + " at ("
+                    + pp.relativeX + "," + pp.relativeY + ")\n"
+                    + "\tOrientation: " + pp.orientation + "\n"
+                    + "\tCompactness: " + pp.compactness + "\n"
+                    + "\tAspectRatio: " + pp.aspectRatio + "\n");
+            }
             
             // TODO update the Vision subsystem with the results of the image analysis
             
@@ -111,13 +125,15 @@ public class DetermineHotGoal extends CommandBase {
                     Debug.err("Exception while trying to free threshold image " + e.getMessage());
                 }
             }
-            if ( convexHullImage != null ) {
-                try {
-                    convexHullImage.free();
-                } catch ( NIVisionException e ) {
-                    Debug.err("Exception while trying to free convex hull image " + e.getMessage());
-                }
-            }
+            // it is taking about 1.4 seconds for command to execute, so try and
+            // get by without the convex hull operation if possible
+//            if ( convexHullImage != null ) {
+//                try {
+//                    convexHullImage.free();
+//                } catch ( NIVisionException e ) {
+//                    Debug.err("Exception while trying to free convex hull image " + e.getMessage());
+//                }
+//            }
             if ( largeParticleImage != null ) {
                 try {
                     largeParticleImage.free();
@@ -126,8 +142,14 @@ public class DetermineHotGoal extends CommandBase {
                 }
             }
             long stopTime = System.currentTimeMillis();
-            Debug.println("DetermineHotGoal execute finished in " + (stopTime - startTime) + " msec");
+            logs.append("DetermineHotGoal execute finished in " + (stopTime - startTime) + " msec");
+            String logsString = logs.toString();
+            
+            
             isFinished = true;
+            Debug.println(logsString);
+            Debug.println(logsString);
+            Debug.println(logsString);
         }
     }
     
@@ -146,26 +168,26 @@ public class DetermineHotGoal extends CommandBase {
     private Vector collectPassingParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
-        Debug.println("DetermineHotGoal: There are " + particleCount + " particles");
+        logs.append("DetermineHotGoal: There are " + particleCount + " particles\n");
         Pointer rawImage = image.image;
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        Debug.println("Image width/height is " + imageWidth + "/" + imageHeight);
+        logs.append("Image width/height is " + imageWidth + "/" + imageHeight + "\n");
 
         Vector passingParticles = new Vector();
-        for (int particleNumber = 0; particleNumber < particleCount; particleNumber++) {
+        
+        for ( int particleNumber = 0; particleNumber < particleCount; particleNumber++ ) {
+            logs.append("DetermineHotGoal: Analyzing particle number " + (particleNumber + 1) + "\n");
 
             // use to distinquish between vertical and horizontal tape
             double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_ORIENTATION);
-
-            // TODO if the orientation is not reasonably horizontal, then don't take any
-            // further measurements on the particle
-            // what is the aspect ratio of the equivalent rectangle which will
-            // divide the long dimension over the short dimension.  The equivalent
-            // rectangle is defined as one with the same area and perimeter as the particle
-            double equivalentRectAspectRatio = NIVision.MeasureParticle(rawImage, particleNumber,
-                    false, NIVision.MeasurementType.IMAQ_MT_RATIO_OF_EQUIVALENT_RECT_SIDES);
+            
+            if ( !(orientation < 10) && !(orientation > 170) ) {
+                // skip this particle since not horizontal
+                logs.append("DetermineHotGoal: Skipping particle due to orientation " + orientation + "\n");
+                continue;
+            }
 
             // for horizontal tape, in order to make the particle width/height less sensitive
             // to any camera angle in the roll axis, use the bounding rectangle for width but use
@@ -177,12 +199,12 @@ public class DetermineHotGoal extends CommandBase {
             double calculatedAspectRatio = particleWidth > particleHeight
                     ? particleWidth / particleHeight
                     : particleHeight / particleWidth;     
-
-            // TODO determine whether equivalentRectAspectRatio or calculatedAspectRatio should be
-            // used to determine the aspect ratio
             
-            // TODO if the aspect ratio is not within limits, then don't take any further
-            // measurements
+            if ( calculatedAspectRatio < 3 || calculatedAspectRatio > 8 ) {
+                // skip this particle since not of correct aspect ratio
+                logs.append("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio + "\n");
+                continue;
+            }
             
             // measure the compactness of the particle by dividing the area of the particle
             // by the area of the bounding rectangle.  A perfectly rectangular particle with
@@ -190,28 +212,25 @@ public class DetermineHotGoal extends CommandBase {
             double compactness = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_COMPACTNESS_FACTOR);
             
+            if ( compactness < 0.9 ) {
+                logs.append("DetermineHotGoal: Skipping particle due to compactness " + compactness + "\n");
+                continue;
+            }
+            
             // where is the particle
             double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
             double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
 
-            // log the particle measurements
-            Debug.println("Particle " + (particleNumber + 1) + " at ("
-                    + particleCenterOfMassX + "," + particleCenterOfMassY + ")\n"
-                    + "\tOrientation: " + orientation + "\n"
-                    + "\tWidth: " + particleWidth + "\n"
-                    + "\tHeight: " + particleHeight + "\n"
-                    + "\tCompactness: " + compactness + "\n"
-                    + "\tEqivRectAspectRatio: " + equivalentRectAspectRatio + "\n"
-                    + "\tCalcAspectRatio: " + calculatedAspectRatio + "\n");
-
+            logs.append("DetermineHotGoal: Particle passed all constraints. Adding to vector\n");
             // passed all criteria, so add to the vector
             PassingParticle pp = new PassingParticle();
             pp.relativeX = -1 + 2 * (particleCenterOfMassX / imageWidth);
             pp.relativeY = -1 + 2 * (particleCenterOfMassY / imageHeight);
             pp.orientation = orientation;
-            pp.aspectRatio = calculatedAspectRatio;  // TODO which aspect ratio method to use?
+            pp.aspectRatio = calculatedAspectRatio;
+            pp.compactness = compactness;
 
             passingParticles.addElement(pp);
         }
@@ -227,10 +246,11 @@ public class DetermineHotGoal extends CommandBase {
         double relativeX;
         // normalized value from -1 to 1 with -1=far top, 0=center, 1=far bottom
         double relativeY;
-        // value from 0 to 180 0=horizontal,90=verticle ????  // TODO confirm this
+        // value from 0 to 180 0=horizontal,90=verticle, 179=horizontal
         double orientation;
         // long dimension / short dimension
         double aspectRatio;
+        double compactness;
     }
     
 }
