@@ -35,7 +35,6 @@ public class DetermineHotGoal extends CommandBase {
     
     private boolean isFinished = false;
     private static final boolean isDebug = true;
-    private CriteriaCollection cc;
     private StringBuffer logs;
     
     public DetermineHotGoal ( ) {
@@ -45,11 +44,6 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void initialize ( ) {
-        cc = new CriteriaCollection();
-        // only the lower range is important because the upper range is just
-        // intended to be a really big number.  We are filtering out the
-        // small particles and the units are pixels squared
-        cc.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 50, 65535, false);
         Debug.println("DetermineHotGoal initialize finished");
     }
     
@@ -60,39 +54,25 @@ public class DetermineHotGoal extends CommandBase {
         logs.append("DetermineHotGoal execute start\n");
         ColorImage image = null;
         BinaryImage thresholdImage = null;
-        //BinaryImage convexHullImage = null;
-        BinaryImage largeParticleImage = null;
         try {
             image = new RGBImage("/center.jpg");
+            
             // 0-255 min/max values for hue, saturation, and value
             // optimized to pick up green LED reflection from retro reflective tape
             thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255); 
+            
+            // free memory
             image.free();
             image = null;
-            if ( isDebug ) {
-                thresholdImage.write("/threshold.bmp");
-                logs.append("DetermineHotGoal wrote threshold.bmp to file system\n");
-            }
-//            convexHullImage = thresholdImage.convexHull(false);
-//            thresholdImage.free();
-//            thresholdImage = null;
-//            if ( isDebug ) {
-//                convexHullImage.write("/convexHull.bmp");
-//                logs.append("DetermineHotGoal wrote convexHull.bmp to file system\n");
-//            }
-            // filter out small particles
-            largeParticleImage = thresholdImage.particleFilter(cc);  
-//            convexHullImage.free();
-//            convexHullImage = null;
-            if ( isDebug ) {
-                largeParticleImage.write("/largeParticles.bmp");
-                logs.append("DetermineHotGoal wrote largePartlcles.bmp to file system\n");
-            }
             
-            long now = System.currentTimeMillis();
-            logs.append("Forming images took " + (now - startTime) + " msec\n");
+            logs.append("Forming images took " + (System.currentTimeMillis() - startTime) + " msec\n");
             
-            Vector passingParticles = collectPassingParticles(largeParticleImage);
+            Vector passingParticles = collectPassingParticles(thresholdImage);
+            
+            // free memory
+            thresholdImage.free();
+            thresholdImage = null;
+            
             int numberPassingParticles = passingParticles.size();
             logs.append("DetermineHotGoal " + numberPassingParticles + " passed filtering\n");
             for ( int i = 0; i < numberPassingParticles; i++ ) {
@@ -125,30 +105,11 @@ public class DetermineHotGoal extends CommandBase {
                     Debug.err("Exception while trying to free threshold image " + e.getMessage());
                 }
             }
-            // it is taking about 1.4 seconds for command to execute, so try and
-            // get by without the convex hull operation if possible
-//            if ( convexHullImage != null ) {
-//                try {
-//                    convexHullImage.free();
-//                } catch ( NIVisionException e ) {
-//                    Debug.err("Exception while trying to free convex hull image " + e.getMessage());
-//                }
-//            }
-            if ( largeParticleImage != null ) {
-                try {
-                    largeParticleImage.free();
-                } catch ( NIVisionException e ) {
-                    Debug.err("Exception while trying to free large particle image " + e.getMessage());
-                }
-            }
-            long stopTime = System.currentTimeMillis();
-            logs.append("DetermineHotGoal execute finished in " + (stopTime - startTime) + " msec");
-            String logsString = logs.toString();
-            
+
+            logs.append("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");
+            String logsString = logs.toString();            
             
             isFinished = true;
-            Debug.println(logsString);
-            Debug.println(logsString);
             Debug.println(logsString);
         }
     }
@@ -178,6 +139,14 @@ public class DetermineHotGoal extends CommandBase {
         
         for ( int particleNumber = 0; particleNumber < particleCount; particleNumber++ ) {
             logs.append("DetermineHotGoal: Analyzing particle number " + (particleNumber + 1) + "\n");
+            
+            double area = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_AREA);
+            if ( area < 50 ) {
+                // skip this particle since it is too small
+                logs.append("DetermineHotGoal: Skipping particle due to small area " + area + "\n");
+                continue;
+            }
 
             // use to distinquish between vertical and horizontal tape
             double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
