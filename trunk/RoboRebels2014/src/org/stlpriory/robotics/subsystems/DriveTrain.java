@@ -134,6 +134,17 @@ public class DriveTrain extends Subsystem {
     public void driveWithJoystick(Joystick joystick) {
         arcadeDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
 
+//        double xValue  = joystick.getAxis(Joystick.AxisType.kX);
+//        double yValue  = joystick.getAxis(Joystick.AxisType.kY);
+//        
+//        double rhsSpeed = 0;
+//        double lhsSpeed = 0;
+//        leftFrontJag.set(-lhsSpeed);
+//        leftRearJag.set(lhsSpeed);
+//        rightFrontJag.set(rhsSpeed);
+//        rightRearJag.set(-rhsSpeed);
+
+        
 //        if (gearBox1.getState()) {
 //            updateDriverStationLCD(3,0,"GearBox1: 2");
 //        } else {
