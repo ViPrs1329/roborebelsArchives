@@ -156,7 +156,6 @@ public class DriveTrain extends Subsystem {
 
     public void driveWithJoystick(Joystick joystick) {
         drive.arcadeDrive(joystick);
-        boxes.printStates();
 
         
     }
