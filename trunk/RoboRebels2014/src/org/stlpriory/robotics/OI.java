@@ -4,6 +4,7 @@ package org.stlpriory.robotics;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.stlpriory.robotics.commands.claw.InvertPiston;
+import org.stlpriory.robotics.commands.claw.InvertWheelPiston;
 import org.stlpriory.robotics.commands.claw.StartClawWheels;
 import org.stlpriory.robotics.commands.claw.StopClawWheels;
 import org.stlpriory.robotics.commands.drivetrain.Shift;
@@ -82,6 +83,7 @@ public class OI {
     JoystickButton expandRetractClawButton;
     JoystickButton clawButton;
     JoystickButton sensorButton;
+    JoystickButton clawWheelButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         
@@ -117,6 +119,11 @@ public class OI {
         Debug.println("[OI] Initializing gamepad read distnace from the arduino");
         sensorButton = new JoystickButton(joystick,Keymap.SENSOR_DISTANCE_BUTTON);
         sensorButton.whenPressed(new ReadDistance());
+        
+        Debug.println("[OI] Initializing gamepad to expand/contract the claw wheels");
+        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_EXPAND_RETRACT_BUTTON_KEY_MAP);
+        clawWheelButton.whenPressed(new InvertWheelPiston());
+        
         
 
         // SmartDashboard Buttons

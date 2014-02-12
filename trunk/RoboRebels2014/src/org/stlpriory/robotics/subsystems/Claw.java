@@ -75,6 +75,18 @@ public class Claw extends Subsystem {
         valve1.set(false);
         value2.set(true);
     }
+    public void extendWheelPiston() {
+        valve3.set(true);
+        value4.set(false);
+    }
+    public void retractWheelPiston() {
+        valve3.set(false);
+        value4.set(true);
+    }
+    
+    public boolean getClawWheelValveState() {
+        return valve3.get();
+    }
     
     public boolean getClawTiltValveState() {
         return valve1.get();
