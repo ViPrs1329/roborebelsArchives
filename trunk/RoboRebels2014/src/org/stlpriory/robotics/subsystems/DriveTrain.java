@@ -4,13 +4,13 @@
  */
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
-import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
@@ -19,19 +19,19 @@ import org.stlpriory.robotics.misc.Utils;
  *
  */
 public class DriveTrain extends Subsystem {
-    
+
     private RobotDrive drive;
-    private static Jaguar leftFrontJag;
-    private static Jaguar rightFrontJag;
-    private static Jaguar leftRearJag;
-    private static Jaguar rightRearJag;
-    private static double direction = 1;
-    private static GearBox boxes;
+    private Jaguar leftFrontJag;
+    private Jaguar rightFrontJag;
+    private Jaguar leftRearJag;
+    private Jaguar rightRearJag;
+    private double direction = 1;
+    private GearBox gearBoxes;
+
 
     public DriveTrain() {
         super("DriveTrain");
         Debug.println("[DriveTrain Subsystem] Instantiating...");
-        
 
         Debug.println("[DriveTrain Subsystem] Initializing left front Jaguar to PWM channel " + RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
         leftFrontJag = new Jaguar(RobotMap.LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL);
@@ -45,6 +45,9 @@ public class DriveTrain extends Subsystem {
         Debug.println("[DriveTrain Subsystem] Initializing right rear Jaguar to PWM channel " + RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
         rightRearJag = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
+        Debug.println("[DriveTrain Subsystem] Initializing GearBoxes");
+//        gearBoxes = new GearBox();
+
         Debug.println("[DriveTrain Subsystem] Initializing RobotDrive");
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
         drive.setSafetyEnabled(false);
@@ -52,33 +55,18 @@ public class DriveTrain extends Subsystem {
         drive.setSensitivity(0.5);
         drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        
-        Debug.println("[DriveTrain Subsystem] Initializing GearBoxes");
-        boxes = new GearBox();
-        
-
-//        
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true); 
 
         Debug.println("[DriveTrain Subsystem] Instantiation complete.");
     }
 
     public void initDefaultCommand() {
         Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-       // setDefaultCommand(new DriveWithJoystick());
-    }
- 
-    public void setForwards() {
-        direction = 1;
-    }
-
-    public void setBackwards() {
-        direction = -1;
+        setDefaultCommand(new DriveWithGamepad());
     }
 
     public void stop() {
-        Debug.println("[DriveTrain.stop]");
-        drive.tankDrive(0.0, 0.0);
+        drive.stopMotor();
     }
 
     public boolean canDrive() {
@@ -135,38 +123,69 @@ public class DriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = -scaledLeftX;
-        double forward   =  scaledLeftY;
-        double rotation  = -rawZ;
-        double clockwise =  rawZ;
+        double right = -scaledLeftX;
+        double forward = scaledLeftY;
+        double rotation = -rawZ;
+        double clockwise = rawZ;
 
         drive.mecanumDrive_Cartesian(right, -forward, rotation, clockwise);
     }
 
-    public void straight(double speed) {
-        speed *= direction;
-        if (canDrive()) {
-            drive.tankDrive(speed, speed * 0.75);
-        }
-    }
-
-    public void turnLeft() { // sets the motor speeds to start a left turn
-        arcadeDrive(0.0, 1.0);
-    }
-
     public void driveWithJoystick(Joystick joystick) {
-        drive.arcadeDrive(joystick);
+        arcadeDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
 
-        
+//        if (gearBox1.getState()) {
+//            updateDriverStationLCD(3,0,"GearBox1: 2");
+//        } else {
+//            updateDriverStationLCD(3,0,"GearBox1: 1");
+//        }
+//        if (gearBox2.getState()) {
+//            updateDriverStationLCD(4,0,"GearBox2: 2");
+//        } else {
+//            updateDriverStationLCD(4,0,"GearBox2: 1");
+//        }
+
     }
 
     public void driveWithGamepad(Joystick joystick) {
-        mecanumDrive(joystick);
+        tankDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
     }
-    
+
     public void shiftGears() {
-        boxes.shiftBoxes();
+//        gearBoxes.shiftBoxes();
     }
 
     
+    /**
+     * @param lineNumber The line on the LCD to print to (range of values is 1-6).
+     * @param startingColumn The column to start printing to. This is a 1-based number.
+     * @param the text to print
+     */
+    public void updateDriverStationLCD(int lineNumber, int startingColumn, String text) {
+        switch (lineNumber) {
+            case 1:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, startingColumn, text);
+                break;
+            case 2:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser2, startingColumn, text);
+                break;
+            case 3:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, startingColumn, text);
+                break;
+            case 4:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, startingColumn, text);
+                break;
+            case 5:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser5, startingColumn, text);
+                break;
+            case 6:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser6, startingColumn, text);
+                break;
+            default:
+                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, startingColumn, text);
+                break;
+        }
+        DriverStationLCD.getInstance().updateLCD();
+    }
+
 }

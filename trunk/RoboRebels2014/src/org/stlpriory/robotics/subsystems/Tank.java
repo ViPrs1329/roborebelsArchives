@@ -28,10 +28,11 @@ public class Tank extends Subsystem {
 
     public Tank() {
         super("Tank");
-        Debug.println("[Tank] Instantiating...");
+        Debug.println("[Tank Subsystem] Instantiating...");
 
         Debug.println("[Tank Subsystem] Initializing compressor to IO channel "
-                + RobotMap.COMPRESSOR_DIGITALIO_CHANNEL + " and relay channel " + RobotMap.COMPRESSOR_RELAY_CHANNEL);
+                + RobotMap.COMPRESSOR_DIGITALIO_CHANNEL + " and relay channel " 
+                + RobotMap.COMPRESSOR_RELAY_CHANNEL);
         compressor = new Compressor(RobotMap.COMPRESSOR_DIGITALIO_CHANNEL, RobotMap.COMPRESSOR_RELAY_CHANNEL);
 
         if (!compressor.enabled()) {
