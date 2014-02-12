@@ -4,7 +4,6 @@
  */
 package org.stlpriory.robotics.subsystems;
 
-import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -27,11 +26,8 @@ public class DriveTrain extends Subsystem {
     private static Jaguar leftRearJag;
     private static Jaguar rightRearJag;
     private static double direction = 1;
-    DriverStationLCD DR;
-    
-    GearBox box1;
-    GearBox box2;
-    
+    private static GearBox boxes;
+
     public DriveTrain() {
         super("DriveTrain");
         Debug.println("[DriveTrain Subsystem] Instantiating...");
@@ -58,9 +54,11 @@ public class DriveTrain extends Subsystem {
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         
-        box1 = new GearBox(RobotMap.GEARBOX1_VALVE_CHANNEL);
-        box2 = new GearBox(RobotMap.GEARBOX2_VALVE_CHANNEL);
+        Debug.println("[DriveTrain Subsystem] Initializing GearBoxes");
+        boxes = new GearBox();
         
+
+//        
 
         Debug.println("[DriveTrain Subsystem] Instantiation complete.");
     }
@@ -158,34 +156,18 @@ public class DriveTrain extends Subsystem {
 
     public void driveWithJoystick(Joystick joystick) {
         drive.arcadeDrive(joystick);
-        if (box1.getState()) {
-        DR.println(DriverStationLCD.Line.kUser3 , 0, "GearBox1: 2");
-        }
-        else {
-            DR.println(DriverStationLCD.Line.kUser3 , 0, "GearBox1: 1");
+        boxes.printStates();
 
-        }
-        if (box2.getState()) {
-            DR.println(DriverStationLCD.Line.kUser4, 0, "GearBox2: 2");
-        }
-        else {
-            DR.println(DriverStationLCD.Line.kUser4, 0, "GearBox2: 1");
-        }
         
     }
 
     public void driveWithGamepad(Joystick joystick) {
         mecanumDrive(joystick);
     }
+    
     public void shiftGears() {
-        if (box1.getState() == box2.getState()) {
-            box1.shift();
-            box2.shift();
-        }
-        else {
-            Debug.println("Error, gearboxes on different gears");
-            box1.shift();
-        }
+        boxes.shiftBoxes();
     }
+
     
 }
