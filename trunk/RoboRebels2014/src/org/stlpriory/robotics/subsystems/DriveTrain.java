@@ -143,18 +143,11 @@ public class DriveTrain extends Subsystem {
 //        leftRearJag.set(lhsSpeed);
 //        rightFrontJag.set(rhsSpeed);
 //        rightRearJag.set(-rhsSpeed);
-
-        
-//        if (gearBox1.getState()) {
-//            updateDriverStationLCD(3,0,"GearBox1: 2");
-//        } else {
-//            updateDriverStationLCD(3,0,"GearBox1: 1");
-//        }
-//        if (gearBox2.getState()) {
-//            updateDriverStationLCD(4,0,"GearBox2: 2");
-//        } else {
-//            updateDriverStationLCD(4,0,"GearBox2: 1");
-//        }
+//
+        // For CAN Jaguar control with 1 encoder for 2 jaguars
+        // see http://www.chiefdelphi.com/forums/showthread.php?t=89282
+        // leftRearJag.set(leftFrontJag.getOutputVoltage() / leftFrontJag.getBusVoltage()); //For voltage control mode
+        // leftRearJag.set(leftFrontJag.getOutputCurrent()); //For current control mode
 
     }
 
@@ -163,9 +156,9 @@ public class DriveTrain extends Subsystem {
     }
 
     public void shiftGears() {
+//        updateDriverStationLCD(1,1,"Executing gear shift");
 //        gearBoxes.shiftBoxes();
     }
-
     
     /**
      * @param lineNumber The line on the LCD to print to (range of values is 1-6).
