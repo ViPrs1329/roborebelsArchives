@@ -61,6 +61,7 @@ public class DetermineHotGoal extends CommandBase {
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
         requires(vision);
+        setInterruptible(false);
         Debug.println("DetermineHotGoal constructor finished"); 
     }
     
@@ -162,7 +163,7 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void interrupted ( ) {
-
+        // should never be called because this command is not interruptable
     }
     
     protected void log ( String msg ) {
