@@ -31,8 +31,23 @@ import org.stlpriory.robotics.misc.Debug;
  * 
  */
 public class DetermineHotGoal extends CommandBase {
+
+    // measured in degrees from horizontal
+    public static final double FILTER_HORIZONTAL_VARIANCE = 10;
+    
+    // measured in pixels ^ 2
+    public static final double FILTER_MIN_AREA = 50;
+    
+    // particle area / particle bounding rectangle area
+    public static final double FILTER_MIN_COMPACTNESS = 0.9;
+    
+    // horizontal retroreflective tape is 4" wide X 1' 11.5" long
+    // so the ideal aspect ratio is 5.875
+    public static final double FILTER_ASPECT_RATION_IDEAL = 5.875;
+    public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
     
     private boolean isFinished = false;
+    private StringBuffer logs;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
@@ -46,6 +61,7 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void execute ( ) {
         isFinished = false;
+        logs = new StringBuffer();
         long startTime = System.currentTimeMillis();
         log("DetermineHotGoal execute start");
         ColorImage image = null;
@@ -86,7 +102,6 @@ public class DetermineHotGoal extends CommandBase {
             
             // TODO update the Vision subsystem with the results of the image analysis
             
-            
         } catch (Exception e) {
             Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
         } finally {
@@ -105,7 +120,11 @@ public class DetermineHotGoal extends CommandBase {
                 }
             }
 
-            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec");          
+            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec"); 
+            String logString = logs.toString();
+            Debug.println(logString);
+            Debug.println(logString);
+            Debug.println(logString);
             
             isFinished = true;
         }
@@ -124,10 +143,10 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void log ( String msg ) {
-        Debug.println(msg);
+        logs.append(msg + "\n");
     }
     
-    private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
+    protected Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
         log("DetermineHotGoal: There are " + particleCount + " particles");
@@ -143,7 +162,7 @@ public class DetermineHotGoal extends CommandBase {
             
             double area = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_AREA);
-            if ( area < 50 ) {
+            if ( area < FILTER_MIN_AREA ) {
                 // skip this particle since it is too small
                 log("DetermineHotGoal: Skipping particle due to small area " + area);
                 continue;
@@ -153,7 +172,7 @@ public class DetermineHotGoal extends CommandBase {
             double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_ORIENTATION);
             
-            if ( !(orientation < 10) && !(orientation > 170) ) {
+            if ( !(orientation < FILTER_HORIZONTAL_VARIANCE) && !(orientation > (180 - FILTER_HORIZONTAL_VARIANCE)) ) {
                 // skip this particle since not horizontal
                 log("DetermineHotGoal: Skipping particle due to orientation " + orientation);
                 continue;
@@ -170,9 +189,9 @@ public class DetermineHotGoal extends CommandBase {
                     ? particleWidth / particleHeight
                     : particleHeight / particleWidth;     
             
-            // horizontal retroreflective tape is 4" wide X 1' 11.5" long
-            // so the ideal aspect ratio is 5.875
-            if ( calculatedAspectRatio < 4.875 || calculatedAspectRatio > 6.875 ) {
+            // filter by aspect ratio
+            if ( calculatedAspectRatio < FILTER_ASPECT_RATION_IDEAL - FILTER_ASPECT_RATIO_VARIANCE || 
+                    calculatedAspectRatio > FILTER_ASPECT_RATION_IDEAL + FILTER_ASPECT_RATIO_VARIANCE ) {
                 // skip this particle since not of correct aspect ratio
                 log("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio);
                 continue;
@@ -184,7 +203,7 @@ public class DetermineHotGoal extends CommandBase {
             double compactness = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_COMPACTNESS_FACTOR);
             
-            if ( compactness < 0.9 ) {
+            if ( compactness < FILTER_MIN_COMPACTNESS ) {
                 log("DetermineHotGoal: Skipping particle due to compactness " + compactness);
                 continue;
             }
