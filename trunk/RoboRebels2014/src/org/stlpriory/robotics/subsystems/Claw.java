@@ -93,6 +93,12 @@ public class Claw extends Subsystem {
         valve4.set(true);
     }
     
+    public void lowGoalShoot() {
+        wheel_left.set(0);
+        wheel_right.set(0);
+        wheel_center.set(-MOTOR_SPEED);
+    }
+    
     public boolean isWheelLoweredForPickup() {
         return valve3.get();
     }
