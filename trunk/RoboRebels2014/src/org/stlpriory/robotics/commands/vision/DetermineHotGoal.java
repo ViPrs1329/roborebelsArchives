@@ -267,7 +267,7 @@ public class DetermineHotGoal extends CommandBase {
         // normalized value from -1 to 1 with -1=far top, 0=center, 1=far bottom
         double relativeY;
         
-        // value from 0 to 180 0=horizontal,90=verticle, 180=horizontal
+        // value in degrees from 0 to 180 0=horizontal,90=verticle, 180=horizontal
         double orientation;
         
         // long dimension / short dimension
