@@ -22,12 +22,17 @@ import org.stlpriory.robotics.misc.Debug;
  * tape which should reflect the green LED light back to the camera.
  * 
  * The strategy to determine which "particle" is the horizontal strip is to
- * measure the orientation and aspect ratio of the particle and if within the
- * expected values, then this is the single horizontal strip particle.  The hope
- * is that at most, a single particle will survive the filtering process
+ * measure the orientation, aspect ratio, and rectangularity of the particle and 
+ * if within the expected values, then this is the single horizontal strip particle.  
+ * The hope is that at most, a single particle will survive the filtering process,
+ * but may need to improve algorithm to choose best match particle if multiple are
+ * found.
  * 
  * The center of mass relative X value ( -1 to 1 value range ) of the single 
  * particle is then used to determine if the hot goal is left or right goal.
+ * 
+ * Performance goal is to execute in less than 1 second for processing of
+ * a 640X480 pixel image from the Axis camera.
  * 
  */
 public class DetermineHotGoal extends CommandBase {
