@@ -46,7 +46,13 @@ public class DetermineHotGoal extends CommandBase {
     public static final double FILTER_ASPECT_RATION_IDEAL = 5.875;
     public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
     
+    // used internally to keep track of whether command is finished executing
     private boolean isFinished = false;
+    
+    // having issue with System.out having gaps in text in Netbeans console,
+    // so temporarily storing logs to StringBuffer so can do System.out
+    // multiple times in order to see all of the logging
+    // TODO investigate why this is happening
     private StringBuffer logs;
     
     public DetermineHotGoal ( ) {
