@@ -18,7 +18,7 @@ import org.stlpriory.robotics.misc.Debug;
 public class Launcher extends Subsystem {
 
     private Talon launch1;
-    private Talon launch2;
+    //private Talon launch2;
     private Solenoid valve1;
     private Solenoid valve2;
     private static final double windSpeed = .6;
@@ -31,10 +31,10 @@ public class Launcher extends Subsystem {
         
         Debug.println("[Launcher Subsystem] Initializing speed controller to channel "
                 + RobotMap.LAUNCHER_JAGUAR1_PWM_CHANNEL);
-        Debug.println("[Launcher Subsystem] Initializing speed controller to channel "
-                + RobotMap.LAUNCHER_JAGUAR2_PWM_CHANNEL);
+//        Debug.println("[Launcher Subsystem] Initializing speed controller to channel "
+//                + RobotMap.LAUNCHER_JAGUAR2_PWM_CHANNEL);
         launch1 = new Talon(RobotMap.LAUNCHER_JAGUAR1_PWM_CHANNEL);
-        launch2 = new Talon(RobotMap.LAUNCHER_JAGUAR2_PWM_CHANNEL);
+//        launch2 = new Talon(RobotMap.LAUNCHER_JAGUAR2_PWM_CHANNEL);
 
         Debug.println("[Launcher Subsystem] Initializing first compressor solenoid to channel "
                 + RobotMap.LAUNCHER_VALVE1_CHANNEL);
@@ -91,12 +91,12 @@ public class Launcher extends Subsystem {
 
     public void startWindingLauncher() {
         launch1.set(windSpeed);
-        launch2.set(windSpeed);
+//        launch2.set(windSpeed);
     }
 
     public void stopWindingLauncher() {
         launch1.set(0);
-        launch2.set(0);
+//        launch2.set(0);
     }
     
 
