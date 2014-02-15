@@ -21,8 +21,8 @@ public class Launcher extends Subsystem {
     private Talon launch2;
     private Solenoid valve1;
     private Solenoid valve2;
-    private Relay spike;
-
+    private static final double windSpeed = .6;
+    
     public Launcher() {
         super("Launcher");
         Debug.println("[Launcher Subsystem] Instantiating...");
@@ -41,9 +41,7 @@ public class Launcher extends Subsystem {
         Debug.println("[Launcher Subsystem] Initializing second compressor solenoid to channel "
                 + RobotMap.LAUNCHER_VALVE2_CHANNEL);
         
-        Debug.println("[Launcher Subsystem] Initializing spike to PWM channel 7");
-        spike = new Relay(7);
-
+                       
         valve1 = new Solenoid(RobotMap.LAUNCHER_VALVE1_CHANNEL);
         valve2 = new Solenoid(RobotMap.LAUNCHER_VALVE2_CHANNEL);
 
@@ -56,28 +54,47 @@ public class Launcher extends Subsystem {
         //setDefaultCommand(new MySpecialCommand());
     }
 
-    public void extendPiston() {
-        spike.set(Relay.Value.kOn);
-        spike.setDirection(Relay.Direction.kForward);
-        //spike.set(Relay.Value.kOn);
-       /// valve1.set(true);
-      //  valve2.set(false);
+    public void disengageForShoot() {
+
+        valve1.set(true);
+        valve2.set(false);
     }
 
-    public void retractPiston() {
-        spike.set(Relay.Value.kOn);
-        spike.setDirection(Relay.Direction.kReverse);
-       // spike.set(Relay.Value.kOn);
-       // valve2.set(true);
-       // valve1.set(false);
+    public void engageForLoad() {
+        valve2.set(true);
+        valve1.set(false);
+    }
+    public boolean getValve1State() {
+        return valve1.get();
+    }
+    public boolean getValve2State() {
+        return valve2.get();
+    }
+    public boolean isDisengagedForShoot() {
+        if ((getValve1State()) && (!getValve2State())) {
+            return true;
+        }
+        else if ((!getValve1State()) && (getValve2State())) {
+            return false;
+        }
+        else {
+            Debug.println("[Launcher Subsystem]  Error: both Solenoids in same state");
+            engageForLoad();
+            return false;
+        }
+            
+    }
+    public boolean isEngagedForLoad() {
+        return !isDisengagedForShoot();
+        
     }
 
-    public void loadLauncher() {
-        launch1.set(.6);
-        launch2.set(.6);
+    public void startWindingLauncher() {
+        launch1.set(windSpeed);
+        launch2.set(windSpeed);
     }
 
-    public void fireLauncher() {
+    public void stopWindingLauncher() {
         launch1.set(0);
         launch2.set(0);
     }

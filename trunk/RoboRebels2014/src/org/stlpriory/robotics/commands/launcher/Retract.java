@@ -27,7 +27,7 @@ public class Retract extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.retractPiston();
+        launcher.engageForLoad();
         executedCommand = true;
     }
 

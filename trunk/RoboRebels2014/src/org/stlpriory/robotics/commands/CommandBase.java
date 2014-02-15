@@ -58,7 +58,7 @@ public abstract class CommandBase extends Command {
      * @param startingColumn The column to start printing to. This is a 1-based number.
      * @param the text to print
      */
-    public void updateDriverStationLCD(int lineNumber, int startingColumn, String text) {
+    public static void updateDriverStationLCD(int lineNumber, int startingColumn, String text) {
         switch (lineNumber) {
             case 1:
                 DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, startingColumn, text);

@@ -27,7 +27,11 @@ public class Reset extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.loadLauncher();
+        if (!launcher.isEngagedForLoad()) {
+            launcher.engageForLoad();
+        }
+        launcher.startWindingLauncher();
+        
         executedCommand = true;
     }
 

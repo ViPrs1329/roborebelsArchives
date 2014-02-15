@@ -24,33 +24,70 @@ class GearBox {
     }
     
     //return the state of the valve
-    public boolean getValve1State() {
+    private boolean getValve1State() {
         return valve1.get();
     }
     
     //shift gears
-    public boolean GetValve2State() {
+    private boolean getValve2State() {
         return valve2.get();
     }
-    public void shiftValve1() {
+    public boolean isLowGear() {
+        if ((getValve1State()) && (!getValve2State())) {
+            return true;
+        }
+        else if((!getValve1State()) && (getValve2State())) {
+            return false;
+        }
+        else {
+            Debug.println("[Gearboxes] Error: Solenoids in same state");
+            shiftValve1();
+            if (getValve1State()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    
+    public boolean isHighGear() {
+        return !isLowGear();
+    }
+    private void shiftValve1() {
         boolean state = getValve1State();
         valve1.set(!state);
     }
-    public void ShiftValve2() {
-        boolean state = GetValve2State();
+    private void shiftValve2() {
+        boolean state = getValve2State();
         valve2.set(!state);
     }
     public void shiftBoxes() {
         boolean state1 = getValve1State();
-        boolean state2 = GetValve2State();
+        boolean state2 = getValve2State();
         if (state1 != state2) {
             shiftValve1();
-            ShiftValve2();
+            shiftValve2();
         }
         else {
-            Debug.println("[GearBoxes] Error, Both Solenoids on");
+            Debug.println("[GearBoxes] Error, Both Solenoids in same state");
             shiftValve1();
         }
     }
+        
+        public void setHighGear() {
+            if (isHighGear()) {
+                return;
+            }
+            shiftBoxes();
 
+        }
+        public void setLowGear() {
+            if (isLowGear()) {
+                return;
+            }
+            shiftBoxes();
+        }
 }
+
+

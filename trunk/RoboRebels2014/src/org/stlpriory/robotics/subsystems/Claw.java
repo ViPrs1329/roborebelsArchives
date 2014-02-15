@@ -22,9 +22,9 @@ public class Claw extends Subsystem {
     private Talon wheel_right;
     private Talon wheel_center;
     private static Solenoid valve1;
-    private static Solenoid value2;
+    private static Solenoid valve2;
     private static Solenoid valve3;
-    private static Solenoid value4;
+    private static Solenoid valve4;
 
     public Claw() {
         super("Claw");
@@ -42,9 +42,9 @@ public class Claw extends Subsystem {
         Debug.println("[Claw Subsystem] Initializing third solenoid to relay channel " + RobotMap.CLAW_WHEEL_VALVE1_CHANNEL);
         Debug.println("[Claw Subsystem] Initializing fourth solenoid to relay channel " + RobotMap.CLAW_WHEEL_VALVE2_CHANNEL);
         valve1 = new Solenoid(RobotMap.CLAW_VALVE1_CHANNEL);
-        value2 = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
+        valve2 = new Solenoid(RobotMap.CLAW_VALVE2_CHANNEL);
         valve3 = new Solenoid(RobotMap.CLAW_WHEEL_VALVE1_CHANNEL);
-        value4 = new Solenoid(RobotMap.CLAW_WHEEL_VALVE2_CHANNEL);
+        valve4 = new Solenoid(RobotMap.CLAW_WHEEL_VALVE2_CHANNEL);
 
         Debug.println("[Claw Subsystem] Instantiation complete.");
     }
@@ -55,8 +55,9 @@ public class Claw extends Subsystem {
     }
 
     public void startClawMotors() {
+        //Todo: Set directions of motors
         wheel_left.set(MOTOR_SPEED);
-        wheel_right.set(MOTOR_SPEED);
+        wheel_right.set(-MOTOR_SPEED);
         wheel_center.set(MOTOR_SPEED);
     }
 
@@ -66,29 +67,38 @@ public class Claw extends Subsystem {
         wheel_center.set(0);
     }
 
-    public void extendPiston() {
+    public void lowerClawForPickup() {
+        
         valve1.set(true);    //turns the Solenoid on
-        value2.set(false);  //turns the Solenoid off
+        valve2.set(false);  //turns the Solenoid off
+        if (!isWheelLoweredForPickup()) {
+            lowerWheelForPickup();
+        }
     }
 
-    public void retractPiston() {
+    public void raiseClawForShoot() {
         valve1.set(false);
-        value2.set(true);
+        valve2.set(true);
+        if (isWheelLoweredForPickup()) {
+            raiseWheelForShoot();
+        }
     }
-    public void extendWheelPiston() {
+    public void lowerWheelForPickup() {
+        
         valve3.set(true);
-        value4.set(false);
+        valve4.set(false);
     }
-    public void retractWheelPiston() {
+    public void raiseWheelForShoot() {
         valve3.set(false);
-        value4.set(true);
+        valve4.set(true);
     }
     
-    public boolean getClawWheelValveState() {
+    public boolean isWheelLoweredForPickup() {
         return valve3.get();
     }
     
-    public boolean getClawTiltValveState() {
+    public boolean isClawLoweredForPickup() {
         return valve1.get();
     }
+
 }

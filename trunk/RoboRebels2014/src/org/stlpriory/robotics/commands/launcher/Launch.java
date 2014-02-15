@@ -27,7 +27,7 @@ public class Launch extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.extendPiston();
+        launcher.disengageForShoot();
         executedCommand = true;
     }
 

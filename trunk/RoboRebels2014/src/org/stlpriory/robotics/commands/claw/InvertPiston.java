@@ -28,11 +28,11 @@ public class InvertPiston extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (claw.getClawTiltValveState()) {
-            claw.retractPiston();
+        if (claw.isClawLoweredForPickup()) {
+            claw.raiseClawForShoot();
             commandExecuted = true;
-        } else if (!claw.getClawTiltValveState()) {
-            claw.extendPiston();
+        } else if (!claw.isClawLoweredForPickup()) {
+            claw.lowerClawForPickup();
             commandExecuted = true;
 
         } else {

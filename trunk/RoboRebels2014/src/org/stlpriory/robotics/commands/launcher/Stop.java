@@ -27,7 +27,7 @@ public class Stop extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        launcher.fireLauncher();
+        launcher.stopWindingLauncher();
         executedCommand = true;
     }
 

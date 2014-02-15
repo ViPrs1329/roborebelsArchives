@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
@@ -62,31 +64,26 @@ public class DriveTrain extends Subsystem {
 
     public void initDefaultCommand() {
         Debug.println("[DriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-        setDefaultCommand(new DriveWithGamepad());
+        setDefaultCommand(new DriveWithJoystick());
     }
 
     public void stop() {
         drive.stopMotor();
     }
 
-    public boolean canDrive() {
-        return true;
-    }
 
     public void tankDrive(double leftValue, double rightValue) {
         leftValue *= direction;
         rightValue *= direction;
-        if (canDrive()) {
             drive.tankDrive(leftValue, rightValue);
-        }
+        
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
         moveValue *= direction;
         rotateValue *= direction;
-        if (canDrive()) {
             drive.arcadeDrive(moveValue, rotateValue);
-        }
+        
     }
 
     /**
@@ -156,40 +153,10 @@ public class DriveTrain extends Subsystem {
     }
 
     public void shiftGears() {
-//        updateDriverStationLCD(1,1,"Executing gear shift");
-//        gearBoxes.shiftBoxes();
+        CommandBase.updateDriverStationLCD(1,1,"Executing gear shift");
+        gearBoxes.shiftBoxes();
     }
-    
-    /**
-     * @param lineNumber The line on the LCD to print to (range of values is 1-6).
-     * @param startingColumn The column to start printing to. This is a 1-based number.
-     * @param the text to print
-     */
-    public void updateDriverStationLCD(int lineNumber, int startingColumn, String text) {
-        switch (lineNumber) {
-            case 1:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, startingColumn, text);
-                break;
-            case 2:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser2, startingColumn, text);
-                break;
-            case 3:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, startingColumn, text);
-                break;
-            case 4:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, startingColumn, text);
-                break;
-            case 5:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser5, startingColumn, text);
-                break;
-            case 6:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser6, startingColumn, text);
-                break;
-            default:
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, startingColumn, text);
-                break;
-        }
-        DriverStationLCD.getInstance().updateLCD();
-    }
+
+  
 
 }

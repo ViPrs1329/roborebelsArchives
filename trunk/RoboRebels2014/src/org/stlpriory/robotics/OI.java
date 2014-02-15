@@ -121,7 +121,7 @@ public class OI {
         sensorButton.whenPressed(new ReadDistance());
         
         Debug.println("[OI] Initializing gamepad to expand/contract the claw wheels");
-        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_EXPAND_RETRACT_BUTTON_KEY_MAP);
+        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_WHEEL_EXPAND_RETRACT_BUTTON_KEY_MAP);
         clawWheelButton.whenPressed(new InvertWheelPiston());
         
         
