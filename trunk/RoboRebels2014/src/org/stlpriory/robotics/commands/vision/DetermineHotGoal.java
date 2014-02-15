@@ -84,7 +84,7 @@ public class DetermineHotGoal extends CommandBase {
             image.free();
             image = null;
             
-            log("Forming images took " + (System.currentTimeMillis() - startTime) + " msec");
+            log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
             
             Vector passingParticles = filterParticles(thresholdImage);
             
