@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.image.RGBImage;
 import java.util.Vector;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
@@ -50,38 +49,37 @@ public class DetermineHotGoal extends CommandBase {
     // used internally to keep track of whether command is running
     private boolean executing = false;
     
-    // having issue with System.out having gaps in text in Netbeans console,
-    // so temporarily storing logs to StringBuffer so can do System.out
-    // multiple times in order to see all of the logging
-    // TODO investigate why this is happening
-    private StringBuffer logs;
-    
-    private AxisCamera camera;          // the axis camera object
+    private AxisCamera camera;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
         requires(vision);
         setInterruptible(false);
-        Debug.println("DetermineHotGoal constructor finished"); 
+        log("constructor finished"); 
     }
     
     protected void initialize ( ) {
-        Debug.println("DetermineHotGoal initialize started");
-        Debug.println("DetermineHotGoal getting instance of AxisCamera");
+        log("initialize started");
+        log("getting instance of AxisCamera");
         camera = AxisCamera.getInstance();
-        logs = new StringBuffer();
+        if ( camera == null ) {
+            logError("Could not get singleton instance of AxisCamera");
+        } else {
+            log("Successfully retrieved singleton instance of AxisCamera");
+        }
         executing = false;
-        Debug.println("DetermineHotGoal initialize finished");
+        log("initialize finished");
     }
     
     protected void execute ( ) {
         if ( executing ) {
             // already executing, so don't restart
+            log("execute called but already executing");
             return;
         }
         executing = true;
         long startTime = System.currentTimeMillis();
-        log("DetermineHotGoal execute start");
+        log("execute start");
         ColorImage image = null;
         BinaryImage thresholdImage = null;
         try {
@@ -108,7 +106,7 @@ public class DetermineHotGoal extends CommandBase {
             // look at the particles passing criteria and see if can determine which one is
             // the horizontal tape of the hot goal
             int numberPassingParticles = passingParticles.size();
-            log("DetermineHotGoal " + numberPassingParticles + " passed filtering");
+            log(numberPassingParticles + " passed filtering");
             for ( int i = 0; i < numberPassingParticles; i++ ) {
                 PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
 
@@ -122,44 +120,40 @@ public class DetermineHotGoal extends CommandBase {
             // TODO update the Vision subsystem with the results of the image analysis
             
         } catch (Exception e) {
-            Debug.err("Error in DetermineHotGoal execute " + e.getMessage());
+            logError("Error in execute " + e.getMessage());
         } finally {
             if ( image != null ) {
                 try {
                     image.free();
                 } catch ( NIVisionException e ) {
-                    Debug.err("Exception while trying to free image " + e.getMessage());
+                    logError("Exception while trying to free image " + e.getMessage());
                 }
             }
             if ( thresholdImage != null ) {
                 try {
                     thresholdImage.free();
                 } catch ( NIVisionException e ) {
-                    Debug.err("Exception while trying to free threshold image " + e.getMessage());
+                    logError("Exception while trying to free threshold image " + e.getMessage());
                 }
             }
 
-            log("DetermineHotGoal execute finished in " + (System.currentTimeMillis() - startTime) + " msec"); 
-            String logString = logs.toString();
-            Debug.println(logString);
-            Debug.println(logString);
-            Debug.println(logString);
+            log("execute finished in " + (System.currentTimeMillis() - startTime) + " msec"); 
             
             executing = false;
         }
     }
     
     protected boolean isFinished ( ) {
+        log("isFinished called returning " + !executing);
         return !executing;
     }
     
     protected void end ( ) {
-        Debug.println("DetermineHotGoal end started");
+        log("end started");
         // free memory 
         camera = null;
-        logs = null;
         executing = false;
-        Debug.println("DetermineHotGoal end finished");
+        log("end finished");
     }
     
     protected void interrupted ( ) {
@@ -167,7 +161,11 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void log ( String msg ) {
-        logs.append(msg + "\n");
+        Debug.println("DetermineHotGoal: " + msg );
+    }
+    
+    protected void logError ( String msg ) {
+        Debug.err("DetermineHotGoal: " + msg);
     }
     
     protected Vector filterParticles ( BinaryImage image ) throws NIVisionException {
@@ -177,7 +175,7 @@ public class DetermineHotGoal extends CommandBase {
         Pointer rawImage = image.image;
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        log("Image width/height is " + imageWidth + "/" + imageHeight);
+        log("DetermineHotGoal: Image width/height is " + imageWidth + "/" + imageHeight);
 
         Vector passingParticles = new Vector();
         
