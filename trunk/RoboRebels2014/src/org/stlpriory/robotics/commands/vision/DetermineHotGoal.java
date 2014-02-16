@@ -129,12 +129,17 @@ public class DetermineHotGoal extends CommandBase {
             
             if ( numberPassingParticles == 0 ) {
                 // could not find the hot goal pattern
+                log("No particles passed filtering, so setting null for vision system hot goal relative X");
                 vision.setHotGoalRelativeX(null);
             } else if ( numberPassingParticles == 1 ) {
                 PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
+                log("Single particle passed filtering, so setting " + singleParticle.relativeX +
+                        " for vision system hot goal relative X");
                 vision.setHotGoalRelativeX(new Double(singleParticle.relativeX));
             } else {
                 PassingParticle bestParticle = determineBestParticle(passingParticles);
+                log("Multiple particles passed filtering, but best particle found, so setting " + 
+                        bestParticle.relativeX + " for vision system hot goal relative X");
                 vision.setHotGoalRelativeX(new Double(bestParticle.relativeX));
             }
             
