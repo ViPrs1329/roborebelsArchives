@@ -93,7 +93,7 @@ public class DetermineHotGoal extends CommandBase {
             
             // 0-255 min/max values for hue, saturation, and value
             // optimized to pick up green LED reflection from retro reflective tape
-            thresholdImage = image.thresholdHSV(99, 163, 0, 255, 230, 255); 
+            thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255); 
             // thresholdImage.write("threshold.bmp");
             
             // free memory
