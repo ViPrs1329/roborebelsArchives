@@ -43,13 +43,17 @@ public class DetermineHotGoal extends CommandBase {
     // measured in pixels ^ 2
     public static final double FILTER_MIN_AREA = 50;
     
-    // particle area / particle bounding rectangle area
-    public static final double FILTER_MIN_COMPACTNESS = 0.9;
+    // particle width / equivalent rectangle long dimension or
+    // vice versa so ratio <= 1.
+    public static final double FILTER_MIN_RECTANGULARITY = 0.9;
     
     // horizontal retroreflective tape is 4" wide X 1' 11.5" long
     // so the ideal aspect ratio is 5.875
     public static final double FILTER_ASPECT_RATION_IDEAL = 5.875;
     public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
+    
+    // TODO determine ideal value during testing
+    public static final double IDEAL_PARTICLE_RELATIVE_Y = 0.1;
     
     // used internally to keep track of whether command is running
     private boolean executing = false;
@@ -119,11 +123,20 @@ public class DetermineHotGoal extends CommandBase {
                 log("Particle " + (i + 1) + " at ("
                     + pp.relativeX + "," + pp.relativeY + ")\n"
                     + "\tOrientation: " + pp.orientation + "\n"
-                    + "\tCompactness: " + pp.compactness + "\n"
+                    + "\tRectangularity: " + pp.rectangluarity + "\n"
                     + "\tAspectRatio: " + pp.aspectRatio);
             }
             
-            // TODO update the Vision subsystem with the results of the image analysis
+            if ( numberPassingParticles == 0 ) {
+                // could not find the hot goal pattern
+                vision.setHotGoalRelativeX(null);
+            } else if ( numberPassingParticles == 1 ) {
+                PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
+                vision.setHotGoalRelativeX(new Double(singleParticle.relativeX));
+            } else {
+                PassingParticle bestParticle = determineBestParticle(passingParticles);
+                vision.setHotGoalRelativeX(new Double(bestParticle.relativeX));
+            }
             
         } catch (Exception e) {
             logError("Error in execute " + e.getMessage());
@@ -174,6 +187,38 @@ public class DetermineHotGoal extends CommandBase {
         Debug.err("DetermineHotGoal: " + msg);
     }
     
+    /**
+     * This method will be called only if multiple particles pass the filtering process
+     * and we need to determine which is the best particle.  Since the relative Y of
+     * the particle should be fairly consistent for the hot goal, the best particle
+     * is determined to be the one with the relative Y closest to the ideal relative Y
+     * @param particles
+     * @return 
+     */
+    protected PassingParticle determineBestParticle ( Vector particles ) {
+        PassingParticle bestParticle = null;
+        double bestParticleRelativeYDiffFromIdeal = 0;
+        for ( int i = 0; i < particles.size(); i++ ) {
+            PassingParticle thisParticle = (PassingParticle) particles.elementAt(i);
+            if ( bestParticle == null ) {
+                // initialize the values with the first element of the vector
+                bestParticle = thisParticle;
+                bestParticleRelativeYDiffFromIdeal = 
+                        Math.abs(IDEAL_PARTICLE_RELATIVE_Y - thisParticle.relativeY);
+            } else {
+                double thisParticleRelativeYDiffFromIdeal = 
+                        Math.abs(IDEAL_PARTICLE_RELATIVE_Y - thisParticle.relativeY);
+                if ( thisParticleRelativeYDiffFromIdeal < bestParticleRelativeYDiffFromIdeal ) {
+                    // this particle is closer to ideal, so use it as the best particle
+                    bestParticle = thisParticle;
+                    bestParticleRelativeYDiffFromIdeal = thisParticleRelativeYDiffFromIdeal;
+                }
+            }
+        }
+        
+        return bestParticle;
+    }
+    
     protected Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
@@ -195,6 +240,12 @@ public class DetermineHotGoal extends CommandBase {
                 log("DetermineHotGoal: Skipping particle due to small area " + area);
                 continue;
             }
+            
+            // where is the particle
+            double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
+            double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
 
             // use to distinquish between vertical and horizontal tape
             double orientation = NIVision.MeasureParticle(rawImage, particleNumber,
@@ -202,7 +253,8 @@ public class DetermineHotGoal extends CommandBase {
             
             if ( !(orientation < FILTER_HORIZONTAL_VARIANCE) && !(orientation > (180 - FILTER_HORIZONTAL_VARIANCE)) ) {
                 // skip this particle since not horizontal
-                log("DetermineHotGoal: Skipping particle due to orientation " + orientation);
+                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
+                    particleCenterOfMassY + ") due to orientation " + orientation);
                 continue;
             }
 
@@ -221,26 +273,26 @@ public class DetermineHotGoal extends CommandBase {
             if ( calculatedAspectRatio < FILTER_ASPECT_RATION_IDEAL - FILTER_ASPECT_RATIO_VARIANCE || 
                     calculatedAspectRatio > FILTER_ASPECT_RATION_IDEAL + FILTER_ASPECT_RATIO_VARIANCE ) {
                 // skip this particle since not of correct aspect ratio
-                log("DetermineHotGoal: Skipping particle due to aspect ratio " + calculatedAspectRatio);
+                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
+                    particleCenterOfMassY + ") due to aspect ratio " + calculatedAspectRatio);
                 continue;
             }
             
-            // measure the compactness of the particle by dividing the area of the particle
-            // by the area of the bounding rectangle.  A perfectly rectangular particle with
-            // perfectly level camera image would have a value of 1
-            double compactness = NIVision.MeasureParticle(rawImage, particleNumber,
-                    false, NIVision.MeasurementType.IMAQ_MT_COMPACTNESS_FACTOR);
+            // Even a 3 degree camera tilt will decrease the ratio of particle area 
+            // to bounding rectangle area to 0.76 for a particle with 5.875 aspect ration, 
+            // so it is too sensitive to camera tilt to use as a measure of rectangularity.  
+            // Instead we compare the particle length to equivalent rectangle ( same area and perimiter ) length.
+            double equivalentRectLength = NIVision.MeasureParticle(rawImage, particleNumber,
+                    false, NIVision.MeasurementType.IMAQ_MT_EQUIVALENT_RECT_LONG_SIDE);
+            double rectangularity = equivalentRectLength < particleWidth ?
+                    equivalentRectLength / particleWidth :
+                    particleWidth / equivalentRectLength;
             
-            if ( compactness < FILTER_MIN_COMPACTNESS ) {
-                log("DetermineHotGoal: Skipping particle due to compactness " + compactness);
+            if ( rectangularity < FILTER_MIN_RECTANGULARITY ) {
+                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
+                    particleCenterOfMassY + ") due to rectangularity " + rectangularity);
                 continue;
             }
-            
-            // where is the particle
-            double particleCenterOfMassX = NIVision.MeasureParticle(rawImage, particleNumber,
-                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_X);
-            double particleCenterOfMassY = NIVision.MeasureParticle(rawImage, particleNumber,
-                    false, NIVision.MeasurementType.IMAQ_MT_CENTER_OF_MASS_Y);
 
             log("DetermineHotGoal: Particle passed all constraints. Adding to vector");
             // passed all criteria, so add to the vector
@@ -249,7 +301,7 @@ public class DetermineHotGoal extends CommandBase {
             pp.relativeY = -1 + 2 * (particleCenterOfMassY / imageHeight);
             pp.orientation = orientation;
             pp.aspectRatio = calculatedAspectRatio;
-            pp.compactness = compactness;
+            pp.rectangluarity = rectangularity;
 
             passingParticles.addElement(pp);
         }
@@ -274,9 +326,9 @@ public class DetermineHotGoal extends CommandBase {
         // long dimension / short dimension
         double aspectRatio;
         
-        // area of particle/area of bounding rectangle - max value is 1.0
+        // compares particle width with equivalent rectangle long dimension - max value is 1.0
         // This is a measure of the rectangularity of the particle
-        double compactness;
+        double rectangluarity;
     }
     
 }
