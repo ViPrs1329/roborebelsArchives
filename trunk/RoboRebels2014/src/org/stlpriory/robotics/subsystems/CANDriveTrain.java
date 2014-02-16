@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
 import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
@@ -22,14 +24,14 @@ import org.stlpriory.robotics.misc.Utils;
 public class CANDriveTrain extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-    
+
     private RobotDrive drive;
     private static CANJaguar leftFrontJag;
     private static CANJaguar rightFrontJag;
     private static CANJaguar leftRearJag;
     private static CANJaguar rightRearJag;
     private static double direction = 1;
-
+    private GearBox gearBoxes;
     // History values for mecanum drive
     private double[] currentValues = new double[4];
 
@@ -72,6 +74,9 @@ public class CANDriveTrain extends Subsystem {
             ex.printStackTrace();
         }
 
+        Debug.println("[DriveTrain Subsystem] Initializing GearBoxes");
+        gearBoxes = new GearBox();
+
         Debug.println("[CANDriveTrain Subsystem] Initializing RobotDrive");
         Debug.println("[CANDriveTrain Subsystem] MAX OUTPUT = " + Constants.DRIVE_MAX_OUTPUT);
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);
@@ -103,17 +108,19 @@ public class CANDriveTrain extends Subsystem {
      * Initialize and set default command
      */
     public void initDefaultCommand() {
-        Debug.println("[CANDriveTrain.initDefaultCommand()] Setting default command to " + DriveWithGamepad.class.getName());
-        setDefaultCommand(new DriveWithGamepad());
+        Debug.println("[CANDriveTrain.initDefaultCommand()] Setting default command to " + DriveWithJoystick.class.getName());
+        setDefaultCommand(new DriveWithJoystick());
     }
 
     private void checkJaguarForReset(CANJaguar jaguar) {
         try {
             if (jaguar.getPowerCycled()) {
-                Debug.println("[CANDriveTrain] Re-initializing CANJaguar "+jaguar.getDescription());
+                Debug.println("[CANDriveTrain] Re-initializing CANJaguar " + jaguar.getDescription());
                 initJaguar(jaguar);
             }
         } catch (CANTimeoutException ex) {
+            Debug.println("[CANDriveTrain.checkJaguarForReset()] Setting default command to " + DriveWithGamepad.class.getName());
+            
             ex.printStackTrace();
         }
     }
@@ -196,10 +203,10 @@ public class CANDriveTrain extends Subsystem {
         double scaledLeftX = Utils.scale(rawLeftX);
         double scaledLeftY = Utils.scale(rawLeftY);
 
-        double right     = scaleInputValue(-scaledLeftX, 0);
-        double forward   = scaleInputValue( scaledLeftY, 1);
-        double rotation  = scaleInputValue(-rawZ, 2);
-        double clockwise = scaleInputValue( rawZ, 3);
+        double right = scaleInputValue(-scaledLeftX, 0);
+        double forward = scaleInputValue(scaledLeftY, 1);
+        double rotation = scaleInputValue(-rawZ, 2);
+        double clockwise = scaleInputValue(rawZ, 3);
 
         checkJaguarForReset(leftRearJag);
         checkJaguarForReset(leftRearJag);
@@ -213,6 +220,47 @@ public class CANDriveTrain extends Subsystem {
         //printJaguarSpeed();
     }
 
+    public void driveWithJoystick(Joystick joystick) {
+        checkJaguarForReset(leftRearJag);
+        checkJaguarForReset(leftRearJag);
+        checkJaguarForReset(rightFrontJag);
+        checkJaguarForReset(rightRearJag);
+
+        // For CAN Jaguar control with 1 encoder for 2 jaguars
+        // see http://www.chiefdelphi.com/forums/showthread.php?t=89282
+        int mode = Constants.JAGUAR_CONTROL_MODE.value;
+        try {
+            switch (mode) {
+                case 1:  // kCurrent
+                    leftRearJag.setX(leftFrontJag.getOutputCurrent());
+                    rightRearJag.setX(rightFrontJag.getOutputCurrent());
+                    break;
+                case 4:  // kVoltage
+                    leftRearJag.setX(leftFrontJag.getOutputVoltage() / leftFrontJag.getBusVoltage());
+                    rightRearJag.setX(rightFrontJag.getOutputVoltage() / rightFrontJag.getBusVoltage());
+                    break;
+                case 0:  // kPercentVbus
+                case 2:  // kSpeed
+                case 3:  // kPosition
+                default:
+                    arcadeDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
+                    break;
+            }
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void driveWithGamepad(Joystick joystick) {
+        tankDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
+    }
+
+    public void shiftGears() {
+        CommandBase.updateDriverStationLCD(1, 1, "Executing gear shift");
+        gearBoxes.shiftBoxes();
+    }
+
     private double scaleInputValue(double targetValue, int index) {
         double currentValue = this.currentValues[index];
         double change = targetValue - currentValue;
@@ -222,14 +270,14 @@ public class CANDriveTrain extends Subsystem {
         if (testCValue > testTValue) {
             // The signs are the same, so the robot is accelerating
             limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
-        } else if ((targetValue > 0) && (currentValue < 0)){
+        } else if ((targetValue > 0) && (currentValue < 0)) {
             limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
-        } else if ((targetValue < 0) && (currentValue > 0)){
+        } else if ((targetValue < 0) && (currentValue > 0)) {
             limit = Constants.MOTOR_RAMP_DOWN_INCREMENT;
         } else {
             limit = Constants.MOTOR_RAMP_INCREMENT;
         }
-        change = Math.min(change,  limit);
+        change = Math.min(change, limit);
         change = Math.max(change, -limit);
         this.currentValues[index] += change;
         //System.out.println("currentValue="+currentValue+", targetValue="+targetValue+", scaledValue="+this.currentValues[index]);
@@ -240,56 +288,62 @@ public class CANDriveTrain extends Subsystem {
         return targetValue;
     }
 
-    public void driveWithJoystick(Joystick joystick) {
-        drive.arcadeDrive(joystick);
-    }
-
-    public void driveWithGamepad(Joystick joystick) {
-        mecanumDrive(joystick);
-    }
-
     private void printJaguarProperties(CANJaguar jaguar) throws CANTimeoutException {
         Debug.println("[CANDriveTrain] CANJaguar configuration properties: ");
-        Debug.println("                Bus address         = "+jaguar.getDescription());
-        Debug.println("                ControlMode         = "+toString(Constants.JAGUAR_CONTROL_MODE));
-        Debug.println("                SpeedReference      = "+toString(Constants.JAGUAR_SPEED_REFERENCE));
-        Debug.println("                NeutralMode         = "+toString(Constants.JAGUAR_NEUTRAL_MODE));
-        Debug.println("                PID values          = "+jaguar.getP() + ", " + jaguar.getI() + ", " + jaguar.getD());
-        Debug.println("                codesPerRev         = "+Constants.ENCODER_CODES_PER_REV);
-        Debug.println("                maxOutputVoltage    = "+Constants.JAGUAR_MAX_OUTPUT_VOLTAGE);
-        Debug.println("                potentiometer turns = "+Constants.ENCODER_POTENTIOMETER_TURNS);
-        Debug.println("                voltage ramp        = "+Constants.JAGUAR_VOLTAGE_RAMP_RATE);
-        Debug.println("                drive max output    = "+Constants.DRIVE_MAX_OUTPUT);
-        Debug.println("                firmware version    = "+jaguar.getFirmwareVersion());
-        Debug.println("                hardware version    = "+jaguar.getHardwareVersion());
+        Debug.println("                Bus address         = " + jaguar.getDescription());
+        Debug.println("                ControlMode         = " + toString(Constants.JAGUAR_CONTROL_MODE));
+        Debug.println("                SpeedReference      = " + toString(Constants.JAGUAR_SPEED_REFERENCE));
+        Debug.println("                NeutralMode         = " + toString(Constants.JAGUAR_NEUTRAL_MODE));
+        Debug.println("                PID values          = " + jaguar.getP() + ", " + jaguar.getI() + ", " + jaguar.getD());
+        Debug.println("                codesPerRev         = " + Constants.ENCODER_CODES_PER_REV);
+        Debug.println("                maxOutputVoltage    = " + Constants.JAGUAR_MAX_OUTPUT_VOLTAGE);
+        Debug.println("                potentiometer turns = " + Constants.ENCODER_POTENTIOMETER_TURNS);
+        Debug.println("                voltage ramp        = " + Constants.JAGUAR_VOLTAGE_RAMP_RATE);
+        Debug.println("                drive max output    = " + Constants.DRIVE_MAX_OUTPUT);
+        Debug.println("                firmware version    = " + jaguar.getFirmwareVersion());
+        Debug.println("                hardware version    = " + jaguar.getHardwareVersion());
     }
 
     private String toString(CANJaguar.ControlMode controlMode) {
         switch (controlMode.value) {
-            case 0: return "kPercentVbus";
-            case 1: return "kCurrent";
-            case 2: return "kSpeed";
-            case 3: return "kPosition";
-            case 4: return "kVoltage";
-            default: return "n/a";
+            case 0:
+                return "kPercentVbus";
+            case 1:
+                return "kCurrent";
+            case 2:
+                return "kSpeed";
+            case 3:
+                return "kPosition";
+            case 4:
+                return "kVoltage";
+            default:
+                return "n/a";
         }
     }
 
     private String toString(CANJaguar.NeutralMode neutralMode) {
         switch (neutralMode.value) {
-            case 0: return "kJumper";
-            case 1: return "kBrake";
-            case 2: return "kCoast";
-            default: return "n/a";
+            case 0:
+                return "kJumper";
+            case 1:
+                return "kBrake";
+            case 2:
+                return "kCoast";
+            default:
+                return "n/a";
         }
     }
 
     private String toString(CANJaguar.SpeedReference speedReference) {
         switch (speedReference.value) {
-            case 0: return "kEncoder";
-            case 2: return "kInvEncoder";
-            case 3: return "kQuadEncoder";
-            default: return "n/a";
+            case 0:
+                return "kEncoder";
+            case 2:
+                return "kInvEncoder";
+            case 3:
+                return "kQuadEncoder";
+            default:
+                return "n/a";
         }
     }
 
@@ -325,5 +379,4 @@ public class CANDriveTrain extends Subsystem {
             ex.printStackTrace();
         }
     }
-
 }

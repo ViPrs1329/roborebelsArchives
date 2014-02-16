@@ -48,7 +48,7 @@ public class DriveTrain extends Subsystem {
         rightRearJag = new Jaguar(RobotMap.RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL);
 
         Debug.println("[DriveTrain Subsystem] Initializing GearBoxes");
-//        gearBoxes = new GearBox();
+        gearBoxes = new GearBox();
 
         Debug.println("[DriveTrain Subsystem] Initializing RobotDrive");
         drive = new RobotDrive(leftFrontJag, leftRearJag, rightFrontJag, rightRearJag);

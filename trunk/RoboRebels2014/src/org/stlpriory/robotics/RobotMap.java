@@ -39,10 +39,10 @@ public class RobotMap {
     public static final int COMPRESSOR_RELAY_CHANNEL = 1;
     
     // Drive train speed controller mappings to the addresses of the Jaguars on the CAN bus
-    public static final int LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS   = 11;  // CAN bus channel (master)
-    public static final int LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 12;  // CAN bus channel (slave)
-    public static final int RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 14;  // CAN bus channel (master)
-    public static final int RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS = 13;  // CAN bus channel (slave)
+    public static final int LEFT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS   = 14;  // CAN bus channel (slave)
+    public static final int LEFT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 13;  // CAN bus channel (master)
+    public static final int RIGHT_REAR_DRIVE_MOTOR_CAN_BUS_ADDRESS  = 12;  // CAN bus channel (slave)
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS = 11;  // CAN bus channel (master)
     
     //Solenoid relay channel on the cRIO channels for the sonic shifter gear boxes
     public static final int GEARBOX1_VALVE_CHANNEL = 7;
