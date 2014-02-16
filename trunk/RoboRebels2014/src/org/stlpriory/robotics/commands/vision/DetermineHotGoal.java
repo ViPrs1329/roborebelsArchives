@@ -184,11 +184,11 @@ public class DetermineHotGoal extends CommandBase {
         // should never be called because this command is not interruptable
     }
     
-    protected void log ( String msg ) {
+    private void log ( String msg ) {
         Debug.println("DetermineHotGoal: " + msg );
     }
     
-    protected void logError ( String msg ) {
+    private void logError ( String msg ) {
         Debug.err("DetermineHotGoal: " + msg);
     }
     
@@ -200,7 +200,7 @@ public class DetermineHotGoal extends CommandBase {
      * @param particles
      * @return 
      */
-    protected PassingParticle determineBestParticle ( Vector particles ) {
+    private PassingParticle determineBestParticle ( Vector particles ) {
         PassingParticle bestParticle = null;
         double bestParticleRelativeYDiffFromIdeal = 0;
         for ( int i = 0; i < particles.size(); i++ ) {
@@ -224,7 +224,7 @@ public class DetermineHotGoal extends CommandBase {
         return bestParticle;
     }
     
-    protected Vector filterParticles ( BinaryImage image ) throws NIVisionException {
+    private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
         log("DetermineHotGoal: There are " + particleCount + " particles");
