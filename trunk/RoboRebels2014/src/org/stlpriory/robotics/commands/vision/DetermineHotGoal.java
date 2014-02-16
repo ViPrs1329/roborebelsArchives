@@ -264,7 +264,7 @@ public class DetermineHotGoal extends CommandBase {
             }
 
             // for horizontal tape, in order to make the particle width/height less sensitive
-            // to any camera angle in the roll axis, use the bounding rectangle for width but use
+            // to any camera tilt in the roll axis, use the bounding rectangle for width but use
             // the average vertical segment length for the height
             double particleWidth = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH);
