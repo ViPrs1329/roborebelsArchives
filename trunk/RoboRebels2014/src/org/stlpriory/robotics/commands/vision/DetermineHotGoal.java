@@ -64,12 +64,10 @@ public class DetermineHotGoal extends CommandBase {
     
     private AxisCamera camera;
     
-    private boolean debug;
+    private boolean debug = false;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
-        // TODO change to use Debug.getMode
-        debug = false;
         requires(vision);
         setInterruptible(false);
         if ( debug ) {
@@ -131,18 +129,17 @@ public class DetermineHotGoal extends CommandBase {
             int numberPassingParticles = passingParticles.size();
             if ( debug ) {
                 log(numberPassingParticles + " passed filtering");
-            }
-            for ( int i = 0; i < numberPassingParticles; i++ ) {
-                PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
+            
+                for ( int i = 0; i < numberPassingParticles; i++ ) {
+                    PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
 
-                if ( debug ) {
                     log("Particle " + (i + 1) + " at ("
-                    + pp.x + "," + pp.y + ")\n"
-                    + "\tNormalizedX: " + pp.normalizedX + "\n"
-                    + "\tNormalizedY: " + pp.normalizedY + "\n"
-                    + "\tOrientation: " + pp.orientation + "\n"
-                    + "\tRectangularity: " + pp.rectangluarity + "\n"
-                    + "\tAspectRatio: " + pp.aspectRatio);
+                        + pp.x + "," + pp.y + ")\n"
+                        + "\tNormalizedX: " + pp.normalizedX + "\n"
+                        + "\tNormalizedY: " + pp.normalizedY + "\n"
+                        + "\tOrientation: " + pp.orientation + "\n"
+                        + "\tRectangularity: " + pp.rectangluarity + "\n"
+                        + "\tAspectRatio: " + pp.aspectRatio);
                 }
             }
             
@@ -165,18 +162,19 @@ public class DetermineHotGoal extends CommandBase {
         } catch (Exception e) {
             logError("Error in execute " + e.getMessage());
         } finally {
-            if ( image != null ) {
-                try {
-                    image.free();
-                } catch ( NIVisionException e ) {
-                    logError("Exception while trying to free image " + e.getMessage());
-                }
-            }
             if ( thresholdImage != null ) {
                 try {
                     thresholdImage.free();
                 } catch ( NIVisionException e ) {
                     logError("Exception while trying to free threshold image " + e.getMessage());
+                }
+            }
+            
+            if ( image != null ) {
+                try {
+                    image.free();
+                } catch ( NIVisionException e ) {
+                    logError("Exception while trying to free image " + e.getMessage());
                 }
             }
 
@@ -317,7 +315,8 @@ public class DetermineHotGoal extends CommandBase {
             // Even a 3 degree camera tilt will decrease the ratio of particle area 
             // to bounding rectangle area to 0.76 for a particle with 5.875 aspect ration, 
             // so it is too sensitive to camera tilt to use as a measure of rectangularity.  
-            // Instead we compare the particle length to equivalent rectangle ( same area and perimiter ) length.
+            // Instead we compare the particle width to long dimension of the
+            // equivalent rectangle ( same area and perimiter ).
             double equivalentRectLength = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_EQUIVALENT_RECT_LONG_SIDE);
             double rectangularity = equivalentRectLength < particleWidth ?
