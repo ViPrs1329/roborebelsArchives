@@ -134,7 +134,7 @@ public class DetermineHotGoal extends CommandBase {
                     PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
 
                     log("Particle " + (i + 1) + " at ("
-                        + pp.x + "," + pp.y + ")\n"
+                        + pp.x + ", " + pp.y + ")\n"
                         + "\tNormalizedX: " + pp.normalizedX + "\n"
                         + "\tNormalizedY: " + pp.normalizedY + "\n"
                         + "\tOrientation: " + pp.orientation + "\n"
