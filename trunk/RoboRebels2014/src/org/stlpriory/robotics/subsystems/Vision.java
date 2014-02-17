@@ -16,7 +16,7 @@ public class Vision extends Subsystem {
     // will be null if not known, else will be a double
     // in the range of -1 to 1 with -1=far left of image,
     // 0=center of the image, and 1=far right of image
-    private Double hotGoalRelativeX;
+    private Double hotGoalNormalizedX;
     
     public Vision () {
         super("Vision");
@@ -29,15 +29,15 @@ public class Vision extends Subsystem {
     
     /**
      * 
-     * @return null if the hot goal relative X value is not known
+     * @return null if the hot goal normalized X value is not known
      * else a double in the range of -1 to 1
      */
-    public synchronized Double getHotGoalRelativeX ( ) {
-        return hotGoalRelativeX;
+    public synchronized Double getHotGoalNormalizedX ( ) {
+        return hotGoalNormalizedX;
     }
     
-    public synchronized void setHotGoalRelativeX ( Double value ) {
-        hotGoalRelativeX = value;
+    public synchronized void setHotGoalNormalizedX ( Double value ) {
+        hotGoalNormalizedX = value;
     }
     
 }
