@@ -30,7 +30,10 @@ public class Vision extends Subsystem {
     /**
      * 
      * @return null if the hot goal normalized X value is not known
-     * else a double in the range of -1 to 1
+     * else a double in the range of -1 to 1.  Note that this is
+     * the normalized X value of the center of the horizontal
+     * retroreflective tape above the low goal and is not the center
+     * of the high or low goals themselves.
      */
     public synchronized Double getHotGoalNormalizedX ( ) {
         return hotGoalNormalizedX;
