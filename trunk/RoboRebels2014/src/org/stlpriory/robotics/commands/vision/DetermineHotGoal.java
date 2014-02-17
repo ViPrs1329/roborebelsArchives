@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.image.RGBImage;
 import java.util.Vector;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
@@ -21,18 +22,21 @@ import org.stlpriory.robotics.misc.Debug;
  * goal during autonomous phase.  The "hot" goal will have horizontal retroreflective
  * tape which should reflect the green LED light back to the camera.
  * 
- * The strategy to determine which "particle" is the horizontal strip is to
+ * The strategy to determine which "particle" is the horizontal tape strip is to
  * measure the orientation, aspect ratio, and rectangularity of the particle and 
  * if within the expected values, then this is the single horizontal strip particle.  
- * The hope is that at most, a single particle will survive the filtering process,
- * but may need to improve algorithm to choose best match particle if multiple are
- * found.
+ * The hope is that at most, a single particle will survive the filtering process.
+ * If multiple particles survive filtering, then the normalized Y value ( -1 to 1
+ * value range with -1 being top of image ) is compared to the ideal normalized Y
+ * value and the closest is considered the best match particle.
  * 
- * The center of mass relative X value ( -1 to 1 value range ) of the single 
- * particle is then used to determine if the hot goal is left or right goal.
+ * The center of mass normalized X value ( -1 to 1 value range ) of the single 
+ * particle is set on the Vision subsystem or set to null value if the tape pattern
+ * cannot be found.
  * 
  * Performance goal is to execute in less than 1 second for processing of
- * a 640X480 pixel image from the Axis camera.
+ * a 640X480 pixel image from the Axis camera.  Testing shows about 500 msec with
+ * logging turned off and around 1 sec with logging turned on.
  * 
  */
 public class DetermineHotGoal extends CommandBase {
@@ -53,94 +57,109 @@ public class DetermineHotGoal extends CommandBase {
     public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
     
     // TODO determine ideal value during testing
-    public static final double IDEAL_PARTICLE_RELATIVE_Y = 0.1;
+    public static final double IDEAL_PARTICLE_NORMALIZED_Y = 0.1;
     
     // used internally to keep track of whether command is running
     private boolean executing = false;
     
     private AxisCamera camera;
     
+    private boolean debug;
+    
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
+        // TODO change to use Debug.getMode
+        debug = false;
         requires(vision);
         setInterruptible(false);
-        log("constructor finished"); 
+        if ( debug ) {
+            log("constructor finished"); 
+        }
     }
     
     protected void initialize ( ) {
-        log("initialize started");
-        log("getting instance of AxisCamera");
-        camera = AxisCamera.getInstance();
-        if ( camera == null ) {
-            logError("Could not get singleton instance of AxisCamera");
-        } else {
-            log("Successfully retrieved singleton instance of AxisCamera");
+        if ( debug ) {
+            log("initialize started");
+            log("getting instance of AxisCamera");
         }
+//        camera = AxisCamera.getInstance();
+//        if ( camera == null ) {
+//            logError("Could not get singleton instance of AxisCamera");
+//        } else {
+//            log("Successfully retrieved singleton instance of AxisCamera");
+//        }
         executing = false;
-        log("initialize finished");
+        if ( debug ) {
+            log("initialize finished");
+        }
     }
     
     protected void execute ( ) {
         if ( executing ) {
             // already executing, so don't restart
-            log("execute called but already executing");
+            if ( debug ) {
+                log("execute called but already executing");
+            }
             return;
         }
         executing = true;
         long startTime = System.currentTimeMillis();
-        log("execute start");
+        if ( debug ) {
+            log("execute start");
+        }
         ColorImage image = null;
         BinaryImage thresholdImage = null;
         try {
-            image = camera.getImage();
-            // image = new RGBImage("/center.jpg");
+            //image = camera.getImage();
+            String fileName = "Center";
+            image = new RGBImage("/" + fileName + ".jpg");
             
             // 0-255 min/max values for hue, saturation, and value
             // just looking for bright spots on the image and will rely on 
             // particle filtering to ensure only find right shape
             thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255); 
-            // thresholdImage.write("threshold.bmp");
+            // thresholdImage.write("/" + fileName + ".bmp");
             
-            // free memory
-            image.free();
-            image = null;
-            
-            log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
+            if ( debug ) {
+                log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
+            }
             
             Vector passingParticles = filterParticles(thresholdImage);
-            
-            // free memory
-            thresholdImage.free();
-            thresholdImage = null;
             
             // look at the particles passing criteria and see if can determine which one is
             // the horizontal tape of the hot goal
             int numberPassingParticles = passingParticles.size();
-            log(numberPassingParticles + " passed filtering");
+            if ( debug ) {
+                log(numberPassingParticles + " passed filtering");
+            }
             for ( int i = 0; i < numberPassingParticles; i++ ) {
                 PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
 
-                log("Particle " + (i + 1) + " at ("
-                    + pp.relativeX + "," + pp.relativeY + ")\n"
+                if ( debug ) {
+                    log("Particle " + (i + 1) + " at ("
+                    + pp.x + "," + pp.y + ")\n"
+                    + "\tNormalizedX: " + pp.normalizedX + "\n"
+                    + "\tNormalizedY: " + pp.normalizedY + "\n"
                     + "\tOrientation: " + pp.orientation + "\n"
                     + "\tRectangularity: " + pp.rectangluarity + "\n"
                     + "\tAspectRatio: " + pp.aspectRatio);
+                }
             }
             
             if ( numberPassingParticles == 0 ) {
                 // could not find the hot goal pattern
-                log("No particles passed filtering, so setting null for vision system hot goal relative X");
-                vision.setHotGoalRelativeX(null);
+                log("No particles passed filtering, so setting null for vision system hot goal normalized X");
+                vision.setHotGoalNormalizedX(null);
             } else if ( numberPassingParticles == 1 ) {
                 PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
-                log("Single particle passed filtering, so setting " + singleParticle.relativeX +
-                        " for vision system hot goal relative X");
-                vision.setHotGoalRelativeX(new Double(singleParticle.relativeX));
+                log("Single particle passed filtering, so setting " + singleParticle.normalizedX +
+                    " for vision system hot goal normalized X");
+                vision.setHotGoalNormalizedX(new Double(singleParticle.normalizedX));
             } else {
                 PassingParticle bestParticle = determineBestParticle(passingParticles);
                 log("Multiple particles passed filtering, but best particle found, so setting " + 
-                        bestParticle.relativeX + " for vision system hot goal relative X");
-                vision.setHotGoalRelativeX(new Double(bestParticle.relativeX));
+                    bestParticle.normalizedX + " for vision system hot goal normalized X");
+                vision.setHotGoalNormalizedX(new Double(bestParticle.normalizedX));
             }
             
         } catch (Exception e) {
@@ -168,16 +187,22 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected boolean isFinished ( ) {
-        log("isFinished called returning " + !executing);
+        if ( debug ) {
+            log("isFinished called returning " + !executing);
+        }
         return !executing;
     }
     
     protected void end ( ) {
-        log("end started");
+        if ( debug ) {
+            log("end started");
+        }
         // free memory 
         camera = null;
         executing = false;
-        log("end finished");
+        if ( debug ) {
+            log("end finished");
+        }
     }
     
     protected void interrupted ( ) {
@@ -194,29 +219,29 @@ public class DetermineHotGoal extends CommandBase {
     
     /**
      * This method will be called only if multiple particles pass the filtering process
-     * and we need to determine which is the best particle.  Since the relative Y of
+     * and we need to determine which is the best particle.  Since the normalized Y of
      * the particle should be fairly consistent for the hot goal, the best particle
-     * is determined to be the one with the relative Y closest to the ideal relative Y
+     * is determined to be the one with the normalized Y closest to the ideal normalized Y
      * @param particles
      * @return 
      */
     private PassingParticle determineBestParticle ( Vector particles ) {
         PassingParticle bestParticle = null;
-        double bestParticleRelativeYDiffFromIdeal = 0;
+        double bestParticleNormalizedYDiffFromIdeal = 0;
         for ( int i = 0; i < particles.size(); i++ ) {
             PassingParticle thisParticle = (PassingParticle) particles.elementAt(i);
             if ( bestParticle == null ) {
                 // initialize the values with the first element of the vector
                 bestParticle = thisParticle;
-                bestParticleRelativeYDiffFromIdeal = 
-                        Math.abs(IDEAL_PARTICLE_RELATIVE_Y - thisParticle.relativeY);
+                bestParticleNormalizedYDiffFromIdeal = 
+                        Math.abs(IDEAL_PARTICLE_NORMALIZED_Y - thisParticle.normalizedY);
             } else {
-                double thisParticleRelativeYDiffFromIdeal = 
-                        Math.abs(IDEAL_PARTICLE_RELATIVE_Y - thisParticle.relativeY);
-                if ( thisParticleRelativeYDiffFromIdeal < bestParticleRelativeYDiffFromIdeal ) {
+                double thisParticleNormalizedYDiffFromIdeal = 
+                        Math.abs(IDEAL_PARTICLE_NORMALIZED_Y - thisParticle.normalizedY);
+                if ( thisParticleNormalizedYDiffFromIdeal < bestParticleNormalizedYDiffFromIdeal ) {
                     // this particle is closer to ideal, so use it as the best particle
                     bestParticle = thisParticle;
-                    bestParticleRelativeYDiffFromIdeal = thisParticleRelativeYDiffFromIdeal;
+                    bestParticleNormalizedYDiffFromIdeal = thisParticleNormalizedYDiffFromIdeal;
                 }
             }
         }
@@ -227,22 +252,24 @@ public class DetermineHotGoal extends CommandBase {
     private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
-        log("DetermineHotGoal: There are " + particleCount + " particles");
+        if ( debug ) {
+            log("There are " + particleCount + " particles");
+        }
         Pointer rawImage = image.image;
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        log("DetermineHotGoal: Image width/height is " + imageWidth + "/" + imageHeight);
+        if ( debug ) {
+            log("Image width/height is " + imageWidth + "/" + imageHeight);
+        }
 
         Vector passingParticles = new Vector();
         
         for ( int particleNumber = 0; particleNumber < particleCount; particleNumber++ ) {
-            log("DetermineHotGoal: Analyzing particle number " + (particleNumber + 1));
             
             double area = NIVision.MeasureParticle(rawImage, particleNumber,
                     false, NIVision.MeasurementType.IMAQ_MT_AREA);
             if ( area < FILTER_MIN_AREA ) {
                 // skip this particle since it is too small
-                log("DetermineHotGoal: Skipping particle due to small area " + area);
                 continue;
             }
             
@@ -258,8 +285,10 @@ public class DetermineHotGoal extends CommandBase {
             
             if ( !(orientation < FILTER_HORIZONTAL_VARIANCE) && !(orientation > (180 - FILTER_HORIZONTAL_VARIANCE)) ) {
                 // skip this particle since not horizontal
-                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
-                    particleCenterOfMassY + ") due to orientation " + orientation);
+                if ( debug ) {
+                    log("Skipping particle at (" + particleCenterOfMassX + ", " +
+                        particleCenterOfMassY + ") due to orientation " + orientation);
+                }
                 continue;
             }
 
@@ -278,8 +307,10 @@ public class DetermineHotGoal extends CommandBase {
             if ( calculatedAspectRatio < FILTER_ASPECT_RATION_IDEAL - FILTER_ASPECT_RATIO_VARIANCE || 
                     calculatedAspectRatio > FILTER_ASPECT_RATION_IDEAL + FILTER_ASPECT_RATIO_VARIANCE ) {
                 // skip this particle since not of correct aspect ratio
-                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
-                    particleCenterOfMassY + ") due to aspect ratio " + calculatedAspectRatio);
+                if ( debug ) {
+                    log("Skipping particle at (" + particleCenterOfMassX + ", " +
+                        particleCenterOfMassY + ") due to aspect ratio " + calculatedAspectRatio);
+                }
                 continue;
             }
             
@@ -294,16 +325,22 @@ public class DetermineHotGoal extends CommandBase {
                     particleWidth / equivalentRectLength;
             
             if ( rectangularity < FILTER_MIN_RECTANGULARITY ) {
-                log("DetermineHotGoal: Skipping particle at (" + particleCenterOfMassX + ", " +
-                    particleCenterOfMassY + ") due to rectangularity " + rectangularity);
+                if ( debug ) {
+                    log("Skipping particle at (" + particleCenterOfMassX + ", " +
+                        particleCenterOfMassY + ") due to rectangularity " + rectangularity);
+                }
                 continue;
             }
 
-            log("DetermineHotGoal: Particle passed all constraints. Adding to vector");
+            if ( debug ) {
+                log("Particle passed all constraints. Adding to vector");
+            }
             // passed all criteria, so add to the vector
             PassingParticle pp = new PassingParticle();
-            pp.relativeX = -1 + 2 * (particleCenterOfMassX / imageWidth);
-            pp.relativeY = -1 + 2 * (particleCenterOfMassY / imageHeight);
+            pp.x = particleCenterOfMassX;
+            pp.y = particleCenterOfMassY;
+            pp.normalizedX = -1 + 2 * (particleCenterOfMassX / imageWidth);
+            pp.normalizedY = -1 + 2 * (particleCenterOfMassY / imageHeight);
             pp.orientation = orientation;
             pp.aspectRatio = calculatedAspectRatio;
             pp.rectangluarity = rectangularity;
@@ -320,10 +357,16 @@ public class DetermineHotGoal extends CommandBase {
     class PassingParticle {
         
         // normalized value from -1 to 1 with -1=far left, 0=center, 1=far right
-        double relativeX;
+        double normalizedX;
         
         // normalized value from -1 to 1 with -1=far top, 0=center, 1=far bottom
-        double relativeY;
+        double normalizedY;
+        
+        // X coordinate center of mass of particle in pixels
+        double x;
+        
+        // Y coordinate center of mass of particle in pixels
+        double y;
         
         // value in degrees from 0 to 180 0=horizontal,90=verticle, 180=horizontal
         double orientation;
