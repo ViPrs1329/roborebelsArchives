@@ -7,6 +7,7 @@ import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.CANDriveTrain;
 import org.stlpriory.robotics.subsystems.Claw;
 import org.stlpriory.robotics.subsystems.Launcher;
+import org.stlpriory.robotics.subsystems.NoOpDriveTrain;
 import org.stlpriory.robotics.subsystems.Sensors;
 import org.stlpriory.robotics.subsystems.Tank;
 import org.stlpriory.robotics.subsystems.Vision;
@@ -23,8 +24,9 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     
     // Create a single static instance of all of your subsystems
-    //public static DriveTrain drivetrain = new DriveTrain();
-    public static CANDriveTrain drivetrain = new CANDriveTrain();
+    //p;blic static DriveTrain drivetrain = new DriveTrain();
+    //public static CANDriveTrain drivetrain = new CANDriveTrain();
+    public static NoOpDriveTrain drivetrain = new NoOpDriveTrain();
     public static Launcher launcher = new Launcher();
     public static Claw claw = new Claw();
     public static Tank tank = new Tank();

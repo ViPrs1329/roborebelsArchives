@@ -21,7 +21,7 @@ public class Launcher extends Subsystem {
     //private Talon launch2;
     private Solenoid valve1;
     private Solenoid valve2;
-    private static final double windSpeed = .6;
+    private static final double WINDING_SPEED = 1.0;
     
     public Launcher() {
         super("Launcher");
@@ -90,7 +90,7 @@ public class Launcher extends Subsystem {
     }
 
     public void startWindingLauncher() {
-        launch1.set(windSpeed);
+        launch1.set(WINDING_SPEED);
 //        launch2.set(windSpeed);
     }
 

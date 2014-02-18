@@ -16,7 +16,9 @@ import org.stlpriory.robotics.misc.Debug;
  */
 public class Claw extends Subsystem {
 
-    private static final double MOTOR_SPEED = 0.5;
+    private static final double MAX_MOTOR_SPEED = 1.0;
+    private static final double MOTOR_SPEED = 0.75;
+    private static final double HOLD_MOTOR_SPEED = 0.1;
     private Talon wheel_left;
     private Talon wheel_right;
     private Talon wheel_center;
@@ -55,20 +57,30 @@ public class Claw extends Subsystem {
 
     public void startClawMotors() {
         //Todo: Set directions of motors
-        wheel_left.set(MOTOR_SPEED);
-        wheel_right.set(-MOTOR_SPEED);
+        wheel_left.set(-MOTOR_SPEED);
+        wheel_right.set(MOTOR_SPEED);
         wheel_center.set(MOTOR_SPEED);
-    }
+     }
+
+    public void startClawMotorsForHold() {
+        //Todo: Set directions of motors
+        wheel_left.set(-HOLD_MOTOR_SPEED);
+        wheel_right.set(HOLD_MOTOR_SPEED);
+        wheel_center.set(HOLD_MOTOR_SPEED);
+     }
 
     public void stopClawMotors() {
         wheel_left.set(0);
         wheel_right.set(0);
         wheel_center.set(0);
     }
+    
+    public boolean isClawLoweredForPickup() {
+        return valve1.get();
+    }
 
     public void lowerClawForPickup() {
-        
-        valve1.set(true);    //turns the Solenoid on
+        valve1.set(true);   //turns the Solenoid on
         valve2.set(false);  //turns the Solenoid off
         if (!isWheelLoweredForPickup()) {
             lowerWheelForPickup();
@@ -76,14 +88,16 @@ public class Claw extends Subsystem {
     }
 
     public void raiseClawForShoot() {
+        startClawMotorsForHold();
         valve1.set(false);
         valve2.set(true);
-        if (isWheelLoweredForPickup()) {
-            raiseWheelForShoot();
-        }
+//        if (isWheelLoweredForPickup()) {
+//            raiseWheelForShoot();
+//        }
+//        stopClawMotors();
     }
+    
     public void lowerWheelForPickup() {
-        
         valve3.set(true);
         valve4.set(false);
     }
@@ -95,15 +109,11 @@ public class Claw extends Subsystem {
     public void lowGoalShoot() {
         wheel_left.set(0);
         wheel_right.set(0);
-        wheel_center.set(-MOTOR_SPEED);
+        wheel_center.set(-MAX_MOTOR_SPEED);
     }
     
     public boolean isWheelLoweredForPickup() {
         return valve3.get();
-    }
-    
-    public boolean isClawLoweredForPickup() {
-        return valve1.get();
     }
 
 }

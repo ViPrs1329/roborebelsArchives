@@ -109,21 +109,21 @@ public class OI {
         shiftButton = new JoystickButton(joystick,Keymap.SHIFT_BUTTON_KEY_MAP);
         shiftButton.whenPressed(new Shift());
         
-        Debug.println("[OI] Initializing gamepad to expand/retract the claw");
-        expandRetractClawButton = new JoystickButton(joystick,Keymap.CLAW_EXPAND_RETRACT_BUTTON_KEY_MAP);
+        Debug.println("[OI] Initializing gamepad to tilt the entiire claw assembly");
+        expandRetractClawButton = new JoystickButton(joystick,Keymap.CLAW_ASSEMBLY_TILT_BUTTON_KEY_MAP);
         expandRetractClawButton.whenPressed(new InvertPiston());
         
         Debug.println("[OI] Initializing gamepad to start/stop the claw wheels");
-        clawButton = new JoystickButton(joystick,Keymap.CLAW_START_STOP_BUTTON_KEY_MAP);
+        clawButton = new JoystickButton(joystick,Keymap.CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP);
         clawButton.whenPressed(new StartClawWheels());
         clawButton.whenReleased(new StopClawWheels());
         
-        Debug.println("[OI] Initializing gamepad read distnace from the arduino");
+        Debug.println("[OI] Initializing gamepad read distance from the arduino");
         sensorButton = new JoystickButton(joystick,Keymap.SENSOR_DISTANCE_BUTTON);
         sensorButton.whenPressed(new ReadDistance());
         
-        Debug.println("[OI] Initializing gamepad to expand/contract the claw wheels");
-        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_WHEEL_EXPAND_RETRACT_BUTTON_KEY_MAP);
+        Debug.println("[OI] Initializing gamepad to tilt the claw wheels");
+        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP);
         clawWheelButton.whenPressed(new InvertWheelPiston());
         
         Debug.println("[OI] Initializing gamepad to shoot for low goal");

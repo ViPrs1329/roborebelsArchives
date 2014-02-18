@@ -27,9 +27,9 @@ public class RobotMap {
     public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
     
     // Talon channels for the claw wheel motors
-    public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 1;
+    public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 2;
     public static final int CLAW_WHEEL_RIGHT_PWM_CHANNEL = 3;
-    public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 2;
+    public static final int CLAW_WHEEL_CENTRAL_PWM_CHANNEL = 1;
     
     public static final int LAUNCHER_JAGUAR1_PWM_CHANNEL = 4;
     //public static final int LAUNCHER_JAGUAR2_PWM_CHANNEL = 9;
@@ -45,20 +45,20 @@ public class RobotMap {
     public static final int RIGHT_FRONT_DRIVE_MOTOR_CAN_BUS_ADDRESS = 11;  // CAN bus channel (master)
     
     //Solenoid relay channel on the cRIO channels for the sonic shifter gear boxes
-    public static final int GEARBOX1_VALVE_CHANNEL = 7;
-    public static final int GEARBOX2_VALVE_CHANNEL = 8;
+    public static final int GEARBOX1_VALVE_CHANNEL = 1;
+    public static final int GEARBOX2_VALVE_CHANNEL = 2;
     
     // Solenoid relay channel on the cRIO channels for the ball launcher
-    public static final int LAUNCHER_VALVE1_CHANNEL = 1;
-    public static final int LAUNCHER_VALVE2_CHANNEL = 2;
+    public static final int LAUNCHER_VALVE1_CHANNEL = 5;
+    public static final int LAUNCHER_VALVE2_CHANNEL = 6;
     
     // Solenoid relay channel on the cRIO for tilting the claw assembly back and forth
     public static final int CLAW_VALVE1_CHANNEL = 3;
     public static final int CLAW_VALVE2_CHANNEL = 4;
     
     // Solenoid relay channel on the cRIO for tilting the ball grabber wheels out of the way
-    public static final int CLAW_WHEEL_VALVE1_CHANNEL = 5;
-    public static final int CLAW_WHEEL_VALVE2_CHANNEL = 6;
+    public static final int CLAW_WHEEL_VALVE1_CHANNEL = 7;
+    public static final int CLAW_WHEEL_VALVE2_CHANNEL = 8;
     
     // DigitalModule number of the Digital Sidecar
     public static final int DIGITAL_SIDECAR_MODULE_NUMBER = 2;
