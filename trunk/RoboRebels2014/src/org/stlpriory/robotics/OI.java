@@ -76,16 +76,17 @@ public class OI {
      */
 
     private static OI instance = null;
-    Joystick joystick;
-    JoystickButton launchButton;
-    JoystickButton retractButton;
-    JoystickButton resetButton;
-    JoystickButton shiftButton;
-    JoystickButton expandRetractClawButton;
-    JoystickButton clawButton;
-    JoystickButton sensorButton;
-    JoystickButton clawWheelButton;
-    JoystickButton lowGoalShootButton;
+    private Joystick joystick;
+    private JoystickButton launchButton;
+    private JoystickButton retractButton;
+    private JoystickButton resetButton;
+    private JoystickButton shiftButton;
+    private JoystickButton expandRetractClawButton;
+    private JoystickButton clawButton;
+    private JoystickButton sensorButton;
+    private JoystickButton clawWheelButton;
+    private JoystickButton lowGoalShootButton;
+    
     public OI() {
         Debug.println("[OI] Instantiating ...");
         

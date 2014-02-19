@@ -38,6 +38,7 @@ public class CANDriveTrain extends Subsystem {
     public CANDriveTrain() {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain Subsystem] Instantiating...");
+        Debug.println("[CANDriveTrain Subsystem] CANJaguar control mode is " + toString(Constants.JAGUAR_CONTROL_MODE));
 
         try {
             Debug.println("[CANDriveTrain Subsystem] Initializing left front CANJaguar to CAN bus address "
@@ -234,10 +235,14 @@ public class CANDriveTrain extends Subsystem {
                 case 1:  // kCurrent
                     leftRearJag.setX(leftFrontJag.getOutputCurrent());
                     rightRearJag.setX(rightFrontJag.getOutputCurrent());
+System.out.println("Output left jag current = "+leftFrontJag.getOutputCurrent());
+System.out.println("Output right jag current = "+rightFrontJag.getOutputCurrent());
                     break;
                 case 4:  // kVoltage
                     leftRearJag.setX(leftFrontJag.getOutputVoltage() / leftFrontJag.getBusVoltage());
                     rightRearJag.setX(rightFrontJag.getOutputVoltage() / rightFrontJag.getBusVoltage());
+System.out.println("Output left jag output voltage = "+leftFrontJag.getOutputVoltage());
+System.out.println("Output right jag output voltage = "+rightFrontJag.getOutputVoltage());
                     break;
                 case 0:  // kPercentVbus
                 case 2:  // kSpeed

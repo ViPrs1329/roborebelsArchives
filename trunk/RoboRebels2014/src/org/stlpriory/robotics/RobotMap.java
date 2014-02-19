@@ -21,10 +21,10 @@ public class RobotMap {
     public static final int DRIVER_STATION_USB_PORT1 = 1;  // USB Port
 
     // Drive train speed controller mappings to PWM channels on the digital sidecar module
-    public static final int LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL  = 2;  // PWM channel
-    public static final int LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL   = 1;  // PWM channel
-    public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 3;  // PWM channel
-    public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 4;  // PWM channel
+    public static final int LEFT_FRONT_DRIVE_MOTOR_PWM_CHANNEL  = 7;  // PWM channel
+    public static final int LEFT_REAR_DRIVE_MOTOR_PWM_CHANNEL   = 8;  // PWM channel
+    public static final int RIGHT_FRONT_DRIVE_MOTOR_PWM_CHANNEL = 5;  // PWM channel
+    public static final int RIGHT_REAR_DRIVE_MOTOR_PWM_CHANNEL  = 6;  // PWM channel
     
     // Talon channels for the claw wheel motors
     public static final int CLAW_WHEEL_LEFT_PWM_CHANNEL = 2;

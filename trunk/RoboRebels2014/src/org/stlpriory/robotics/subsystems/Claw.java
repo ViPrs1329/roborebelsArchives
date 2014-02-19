@@ -115,5 +115,23 @@ public class Claw extends Subsystem {
     public boolean isWheelLoweredForPickup() {
         return valve3.get();
     }
+    
+    public void calibrateTalonsMax() {
+        this.wheel_center.set(1.0);
+        this.wheel_left.set(1.0);
+        this.wheel_right.set(1.0);
+    }
+    
+    public void calibrateTalonsMin() {
+        this.wheel_center.set(-1.0);
+        this.wheel_left.set(-1.0);
+        this.wheel_right.set(-1.0);
+    }
+    
+    public void calibrateTalonsZero() {
+        this.wheel_center.set(0.0);
+        this.wheel_left.set(0.0);
+        this.wheel_right.set(0.0);
+    }
 
 }

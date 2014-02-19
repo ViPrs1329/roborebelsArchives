@@ -54,9 +54,9 @@ public class DriveTrain extends Subsystem {
         drive.setSafetyEnabled(false);
         drive.setExpiration(0.1);
         drive.setSensitivity(0.5);
-        drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true); 
+        //drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
+        //drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        //drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true); 
 
         Debug.println("[DriveTrain Subsystem] Instantiation complete.");
     }

@@ -27,6 +27,9 @@ public class Launch extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+//        if (claw.isClawLoweredForPickup()) {
+//            claw.raiseClawForShoot();
+//        }
         //claw.raiseClawForShoot();
         //claw.stopClawMotors();
         launcher.disengageForShoot();

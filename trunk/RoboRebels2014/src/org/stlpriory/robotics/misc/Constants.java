@@ -63,9 +63,9 @@ public class Constants {
     public static final double MOTOR_RAMP_INCREMENT = 0.05;
     public static final double MOTOR_RAMP_DOWN_INCREMENT = .1;
 
-    public static final double DRIVE_MAX_OUTPUT = 300;  // speed control mode (rpm value)
+    //public static final double DRIVE_MAX_OUTPUT = 300;  // speed control mode (rpm value)
     //public static final double DRIVE_MAX_OUTPUT = 400;  // speed control mode (rpm value)
-    //public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
+    public static final double DRIVE_MAX_OUTPUT = 100;  // voltage control mode (
 
     // The proportional gain of the Jaguar's PID controller.
     public static final double KP = 0.41;
@@ -76,7 +76,7 @@ public class Constants {
 
     // The Jaguar configuration properties
     public static final CANJaguar.NeutralMode JAGUAR_NEUTRAL_MODE = CANJaguar.NeutralMode.kBrake;
-    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kCurrent;
+    public static final CANJaguar.ControlMode JAGUAR_CONTROL_MODE = CANJaguar.ControlMode.kPercentVbus;
     public static final CANJaguar.SpeedReference JAGUAR_SPEED_REFERENCE = CANJaguar.SpeedReference.kQuadEncoder;
 
     //-----------------------------------------------------------------------
