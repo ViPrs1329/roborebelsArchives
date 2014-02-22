@@ -31,6 +31,7 @@ public abstract class CommandBase extends Command {
     public static Tank tank = new Tank();
     public static Vision vision = new Vision();
     public static Sensors sensors = new Sensors();
+    public static Mode mode = new Mode();
 
     
     public static void init() {
@@ -55,6 +56,7 @@ public abstract class CommandBase extends Command {
     public CommandBase() {
         super();
     }
+    
 
     /**
      * @param lineNumber The line on the LCD to print to (range of values is 1-6).

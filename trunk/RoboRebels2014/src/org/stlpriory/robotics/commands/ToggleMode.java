@@ -2,47 +2,34 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.stlpriory.robotics.commands.launcher;
-
-import org.stlpriory.robotics.commands.CommandBase;
-import org.stlpriory.robotics.misc.Constants;
+package org.stlpriory.robotics.commands;
 
 /**
  *
- * @author admin
+ * @author William
  */
-public class Retract extends CommandBase {
-    
-    private boolean executedCommand;
-    
-    public Retract() {
+public class ToggleMode extends CommandBase {
+    boolean commandExecuted;
+    public ToggleMode() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(launcher);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        executedCommand = false;
+        commandExecuted = false;
+    
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
-        launcher.engageForLoad();
-        executedCommand = true;
-        }
-        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
-            executedCommand = true;
-        }
-        else {
-            executedCommand = true;
-        }
+        mode.toggleState();
+        commandExecuted = true;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return executedCommand;
+        return commandExecuted;
     }
 
     // Called once after isFinished returns true

@@ -46,4 +46,6 @@ public class Keymap {
     public static final int SENSOR_DISTANCE_BUTTON = 2;
     public static final int CLAW_WHEEL_TILT_BUTTON_KEY_MAP = 10;
     public static final int CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP = 8;
+    
+    public static final int MODE_TOGGLE_STATE_BUTTON_KEY_MAP = 7;
 }

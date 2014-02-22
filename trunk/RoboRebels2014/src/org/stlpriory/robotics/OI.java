@@ -3,6 +3,7 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.stlpriory.robotics.commands.ToggleMode;
 import org.stlpriory.robotics.commands.claw.InvertPiston;
 import org.stlpriory.robotics.commands.claw.InvertWheelPiston;
 import org.stlpriory.robotics.commands.claw.ShootForLowGoal;
@@ -86,6 +87,7 @@ public class OI {
     private JoystickButton sensorButton;
     private JoystickButton clawWheelButton;
     private JoystickButton lowGoalShootButton;
+    private JoystickButton toggleModeStateButton;
     
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -131,6 +133,10 @@ public class OI {
         lowGoalShootButton = new JoystickButton(joystick,Keymap.CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP);
         lowGoalShootButton.whenPressed(new ShootForLowGoal());
         lowGoalShootButton.whenReleased(new StopClawWheels());
+        
+        Debug.println("[OI] Initializing gamepad to toggle mode(Automatic or Manual)");
+        toggleModeStateButton = new JoystickButton(joystick,Keymap.MODE_TOGGLE_STATE_BUTTON_KEY_MAP);
+        toggleModeStateButton.whenPressed(new ToggleMode());
         
         
 

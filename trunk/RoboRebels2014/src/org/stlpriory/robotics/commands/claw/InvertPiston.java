@@ -5,6 +5,7 @@
 package org.stlpriory.robotics.commands.claw;
 
 import org.stlpriory.robotics.commands.CommandBase;
+import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -28,6 +29,7 @@ public class InvertPiston extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
         if (claw.isClawLoweredForPickup()) {
             claw.raiseClawForShoot();
             commandExecuted = true;
@@ -39,6 +41,13 @@ public class InvertPiston extends CommandBase {
             Debug.println("Error, failed to detect claw valve state");
         }
         commandExecuted = true;
+        }
+        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
+            commandExecuted = true;
+        }
+        else {
+            commandExecuted = true;
+        }
 
     }
 

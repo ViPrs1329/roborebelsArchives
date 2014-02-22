@@ -5,6 +5,7 @@
 package org.stlpriory.robotics.commands.claw;
 
 import org.stlpriory.robotics.commands.CommandBase;
+import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -17,7 +18,9 @@ public class InvertWheelPiston extends CommandBase {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         requires(claw);
+        
     }
+
 
     // Called just before this Command runs the first time
     protected void initialize() {
@@ -26,6 +29,7 @@ public class InvertWheelPiston extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
         if (claw.isWheelLoweredForPickup()) {
             claw.raiseWheelForShoot();
             commandExecuted = true;
@@ -38,6 +42,13 @@ public class InvertWheelPiston extends CommandBase {
              Debug.println("Error, failed to detect claw wheel valve state");
         }
         commandExecuted = true;
+        }
+        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
+            commandExecuted = true;
+        }
+        else {
+            commandExecuted = true;
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
