@@ -3,7 +3,6 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.stlpriory.robotics.commands.ToggleMode;
 import org.stlpriory.robotics.commands.claw.InvertPiston;
 import org.stlpriory.robotics.commands.claw.InvertWheelPiston;
 import org.stlpriory.robotics.commands.claw.ShootForLowGoal;
@@ -12,7 +11,7 @@ import org.stlpriory.robotics.commands.claw.StopClawWheels;
 import org.stlpriory.robotics.commands.drivetrain.Shift;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.commands.launcher.*;
-import org.stlpriory.robotics.commands.sensors.ReadDistance;
+import org.stlpriory.robotics.misc.Gamepad;
 import org.stlpriory.robotics.misc.Keymap;
 
 /**
@@ -78,16 +77,20 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
-    private JoystickButton launchButton;
-    private JoystickButton retractButton;
-    private JoystickButton resetButton;
+    private Gamepad gamepad;
     private JoystickButton shiftButton;
     private JoystickButton expandRetractClawButton;
     private JoystickButton clawButton;
-    private JoystickButton sensorButton;
     private JoystickButton clawWheelButton;
     private JoystickButton lowGoalShootButton;
-    private JoystickButton toggleModeStateButton;
+    private JoystickButton launchButton;
+        private JoystickButton resetButton;
+        
+
+//    private JoystickButton toggleModeStateButton;
+//    private JoystickButton sensorButton;
+//    private JoystickButton retractButton;
+
     
     public OI() {
         Debug.println("[OI] Instantiating ...");
@@ -95,18 +98,22 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         joystick = new Joystick(1);
         
+        Debug.println("[OI] Initializing gamepad for non button triggers");
+        gamepad = new Gamepad();
+        
         Debug.println("[OI] Initializing gamepad to launch ball a disc when the right bumper pressed");
         launchButton = new JoystickButton(joystick,Keymap.LAUNCH_BUTTON_KEY_MAP);
         launchButton.whenPressed(new Launch());
-
-        Debug.println("[OI] Initializing gamepad to reset launcher gearbox piston when the left bumper pressed");
-        retractButton = new JoystickButton(joystick,Keymap.RETRACT_BUTTON_KEY_MAP);
-        retractButton.whenPressed(new Retract());
-        
+        launchButton.whenReleased(new Retract());
+//
+//        Debug.println("[OI] Initializing gamepad to reset launcher gearbox piston when the left bumper pressed");
+//        retractButton = new JoystickButton(joystick,Keymap.RETRACT_BUTTON_KEY_MAP);
+//        retractButton.whenPressed(new Retract());
+//        
         Debug.println("[OI] Initializing gamepad to load launcher when the X button is pressed");
         resetButton = new JoystickButton(joystick,Keymap.RESET_BUTTON_KEY_MAP);
-        resetButton.whenPressed(new Reset());
-        resetButton.whenReleased(new Stop());
+        resetButton.whenPressed(new RetractPunter());
+//        resetButton.whenReleased(new Stop());
         
         Debug.println("[OI] Initializing gamepad to shift gears for the drivetrain wheels");
         shiftButton = new JoystickButton(joystick,Keymap.SHIFT_BUTTON_KEY_MAP);
@@ -121,9 +128,9 @@ public class OI {
         clawButton.whenPressed(new StartClawWheels());
         clawButton.whenReleased(new StopClawWheels());
         
-        Debug.println("[OI] Initializing gamepad read distance from the arduino");
-        sensorButton = new JoystickButton(joystick,Keymap.SENSOR_DISTANCE_BUTTON);
-        sensorButton.whenPressed(new ReadDistance());
+//        Debug.println("[OI] Initializing gamepad read distance from the arduino");
+//        sensorButton = new JoystickButton(joystick,Keymap.SENSOR_DISTANCE_BUTTON);
+//        sensorButton.whenPressed(new ReadDistance());
         
         Debug.println("[OI] Initializing gamepad to tilt the claw wheels");
         clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP);
@@ -134,9 +141,9 @@ public class OI {
         lowGoalShootButton.whenPressed(new ShootForLowGoal());
         lowGoalShootButton.whenReleased(new StopClawWheels());
         
-        Debug.println("[OI] Initializing gamepad to toggle mode(Automatic or Manual)");
-        toggleModeStateButton = new JoystickButton(joystick,Keymap.MODE_TOGGLE_STATE_BUTTON_KEY_MAP);
-        toggleModeStateButton.whenPressed(new ToggleMode());
+//        Debug.println("[OI] Initializing gamepad to toggle mode(Automatic or Manual)");
+//        toggleModeStateButton = new JoystickButton(joystick,Keymap.MODE_TOGGLE_STATE_BUTTON_KEY_MAP);
+//        toggleModeStateButton.whenPressed(new ToggleMode());
         
         
 
@@ -155,6 +162,9 @@ public class OI {
         // the default command for the DriveLine subsystem will
         // run - DriveViaJoysticks
  //       this.trigger.whenPressed(new DriveInASquare());
+        
+        Debug.println("[OI] Inilizing Gamepad to shift gears when right trigger pulled");
+        gamepad.whenRightTriggerHeld(new Shift());
 
         Debug.println("[OI] Instantiation complete.");
     }

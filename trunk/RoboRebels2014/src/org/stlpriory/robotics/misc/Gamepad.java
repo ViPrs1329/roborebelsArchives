@@ -6,6 +6,9 @@ package org.stlpriory.robotics.misc;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Trigger;
+import edu.wpi.first.wpilibj.command.Command;
+import org.stlpriory.robotics.OI;
 
 /**
  * The buttons on the controller follow this mapping
@@ -30,24 +33,32 @@ import edu.wpi.first.wpilibj.Joystick;
  * 5: Right Stick Y Axis -Up:   Negative ; Down: Positive
  * 6: Directional Pad (Not recommended, buggy)
  */
-public class Gamepad extends Joystick {
+public class Gamepad  { //extends Joystick
 
     /**
      * Gamepad contructor
      *
      * @param port
      */
-    public Gamepad(int port) {
-        super(port);
-    }
+//    public Gamepad(int port) {
+//        super(port);
+//    }
 
     /**
      * @param port
      * @param numAxisTypes
      * @param numButtonTypes
      */
-    public Gamepad(int port, int numAxisTypes, int numButtonTypes) {
-        super(port, numAxisTypes, numButtonTypes);
+    RightTrigger rightTrigger;
+    public Gamepad() {
+//        super(port, numAxisTypes, numButtonTypes);
+        rightTrigger = new RightTrigger(OI.getInstance().getJoystick());
+    }
+     public void whenRightTriggerHeld(Command command) {
+        rightTrigger.whenTriggered(command);
+    }
+    public void whenRightTriggerReleased(Command command) {
+        rightTrigger.whenReleased(command);
     }
 
     /**
@@ -60,9 +71,10 @@ public class Gamepad extends Joystick {
      * @param button The button number to be read.
      * @return The state of the button.
      */
-    public boolean getButton(int button) {
-        return super.getRawButton(button);
-    }
+    
+//    public boolean getButton(int button) {
+//        return super.getRawButton(button);
+//    }
 
     /**
      * For the current joystick, return the axis determined by the argument.
@@ -74,9 +86,9 @@ public class Gamepad extends Joystick {
      * @param axis The axis to read.
      * @return The value of the axis.
      */
-    public double getAxis(int axis) {
-        return scale(super.getRawAxis(axis));
-    }
+//    public double getAxis(int axis) {
+//        return scale(super.getRawAxis(axis));
+//    }
 
     /**
      * Get the X value of the joystick. This depends on the mapping of the
@@ -85,9 +97,9 @@ public class Gamepad extends Joystick {
      * @param hand Unused
      * @return The X value of the joystick.
      */
-    public double getX(GenericHID.Hand hand) {
-        return scale(super.getX());
-    }
+//    public double getX(GenericHID.Hand hand) {
+//        return scale(super.getX());
+//    }
 
     /**
      * Get the Y value of the joystick. This depends on the mapping of the
@@ -96,9 +108,9 @@ public class Gamepad extends Joystick {
      * @param hand Unused
      * @return The Y value of the joystick.
      */
-    public double getY(GenericHID.Hand hand) {
-        return scale(super.getY());
-    }
+//    public double getY(GenericHID.Hand hand) {
+//        return scale(super.getY());
+//    }
 
     /**
      * Get the Z value of the joystick. This depends on the mapping of the
@@ -107,9 +119,9 @@ public class Gamepad extends Joystick {
      * @param hand Unused
      * @return The Z value of the joystick.
      */
-    public double getZ(GenericHID.Hand hand) {
-        return scale(super.getZ());
-    }
+//    public double getZ(GenericHID.Hand hand) {
+//        return scale(super.getZ());
+//    }
 
     /**
      * Get the value of the throttle on the joystick where 0 being the bottom
@@ -118,9 +130,9 @@ public class Gamepad extends Joystick {
      * @param axis The axis that the throttle is.
      * @return A scaled value of the throttle from 0.0 - 1.0.
      */
-    public double getJoystickThrottle(int axis) {
-        return scaleThrottle(-getAxis(axis));
-    }
+//    public double getJoystickThrottle(int axis) {
+//        return scaleThrottle(-getAxis(axis));
+//    }
 
     /**
      * Scale the value of the throttle from 0.0 - 1.0 instead of -1.0 - 1.0
@@ -128,9 +140,9 @@ public class Gamepad extends Joystick {
      * @param x The throttle value
      * @return scaled throttle value
      */
-    public double scaleThrottle(double x) {
-        return (x + 1) / 2;
-    }
+//    public double scaleThrottle(double x) {
+//        return (x + 1) / 2;
+//    }
 
     /**
      * Overwrite joystick values in a way that 0.0-1.0 is proportional to
@@ -138,16 +150,38 @@ public class Gamepad extends Joystick {
      *
      * @param x The joystick value that needs to be rounded up.
      */
-    private double scale(double x) {
-        if (Math.abs(x) < Constants.JOYSTICK_THRESHOLD) {
-            return 0;
+//    private double scale(double x) {
+//        if (Math.abs(x) < Constants.JOYSTICK_THRESHOLD) {
+//            return 0;
+//        }
+//        if (x > 0) {
+//            return (x - Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
+//        }
+//        if (x < 0) {
+//            return (x + Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
+//        }
+//        return 0;
+//    }
+    private class RightTrigger extends Trigger {
+        Joystick m_joystick;
+        public RightTrigger(Joystick joystick) {
+            m_joystick = joystick;
+            
         }
-        if (x > 0) {
-            return (x - Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
+        
+        public boolean get() {
+            if (m_joystick.getRawAxis(3) < -.5) {
+                return true;
+            }
+            return false;
         }
-        if (x < 0) {
-            return (x + Constants.JOYSTICK_THRESHOLD) / (1 - Constants.JOYSTICK_THRESHOLD);
+        public void whenTriggered(Command command) {
+            whenActive(command);
         }
-        return 0;
+        public void whenReleased(Command command) {
+            whenInactive(command);
+        }
+        
+        
     }
 }

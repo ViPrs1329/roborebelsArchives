@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
-import org.stlpriory.robotics.commands.ExampleCommand;
+import org.stlpriory.robotics.commands.autonomous.AutonomousCommand;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -39,7 +39,7 @@ public class RoboRebels extends IterativeRobot {
         timer.start();
 
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+        autonomousCommand = new AutonomousCommand();
 
         // Initialize all subsystems
         CommandBase.init();

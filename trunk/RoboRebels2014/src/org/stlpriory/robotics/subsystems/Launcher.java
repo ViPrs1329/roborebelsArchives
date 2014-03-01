@@ -4,6 +4,7 @@
  */
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -21,6 +22,7 @@ public class Launcher extends Subsystem {
     private Solenoid valve1;
     private Solenoid valve2;
     private static final double WINDING_SPEED = 1.0;
+    private DigitalInput punterLimitSwitch;
     
     public Launcher() {
         super("Launcher");
@@ -43,6 +45,9 @@ public class Launcher extends Subsystem {
                        
         valve1 = new Solenoid(RobotMap.LAUNCHER_VALVE1_CHANNEL);
         valve2 = new Solenoid(RobotMap.LAUNCHER_VALVE2_CHANNEL);
+        
+        Debug.println("[Launcher Subsystem] Initilizing limit switch for preventing retracting punter over limit");
+        punterLimitSwitch = new DigitalInput(RobotMap.LAUNCHER_PUNTER_LIMIT_SWITCH_DIGITAL_IO_CHANNEL);
 
         
         Debug.println("[Launcher Subsystem] Instantiation complete.");
@@ -96,6 +101,10 @@ public class Launcher extends Subsystem {
     public void stopWindingLauncher() {
         launch1.set(0);
 //        launch2.set(0);
+    }
+    
+    public boolean isPunterLimitReached() {
+        return punterLimitSwitch.get();
     }
     
 
