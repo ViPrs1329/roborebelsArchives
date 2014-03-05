@@ -22,6 +22,13 @@ import org.stlpriory.robotics.misc.Debug;
  * goal during autonomous phase.  The "hot" goal will have horizontal retroreflective
  * tape which should reflect the green LED light back to the camera.
  * 
+ * This is a long running command, takes about 500 msec to finish, so the execute
+ * method will start another thread to do the command's job and the execute
+ * method will return immediately.
+ * Because the Command base class run method calls execute and then calls isFinished,
+ * we have two internal boolean variables to keep track of the execution status: 
+ * started and finished.
+ * 
  * The strategy to determine which "particle" is the horizontal tape strip is to
  * measure the orientation, aspect ratio, and rectangularity of the particle and 
  * if within the expected values, then this is the single horizontal strip particle.  
@@ -59,8 +66,9 @@ public class DetermineHotGoal extends CommandBase {
     // TODO determine ideal value during testing
     public static final double IDEAL_PARTICLE_NORMALIZED_Y = 0.1;
     
-    // used internally to keep track of whether command is running
-    private boolean executing = false;
+    // used internally to keep track of execution status
+    private boolean started = false;
+    private boolean finished = false;
     
     private AxisCamera camera;
     
@@ -86,109 +94,123 @@ public class DetermineHotGoal extends CommandBase {
 //        } else {
 //            log("Successfully retrieved singleton instance of AxisCamera");
 //        }
-        executing = false;
+        started = false;
+        finished = false;
         if ( debug ) {
             log("initialize finished");
         }
     }
     
     protected void execute ( ) {
-        if ( executing ) {
-            // already executing, so don't restart
+        if ( started ) {
+            // already started, so don't restart
             if ( debug ) {
                 log("execute called but already executing");
             }
             return;
         }
-        executing = true;
-        long startTime = System.currentTimeMillis();
-        if ( debug ) {
-            log("execute start");
-        }
-        ColorImage image = null;
-        BinaryImage thresholdImage = null;
-        try {
-            //image = camera.getImage();
-            String fileName = "Center";
-            image = new RGBImage("/" + fileName + ".jpg");
-            
-            // 0-255 min/max values for hue, saturation, and value
-            // just looking for bright spots on the image and will rely on 
-            // particle filtering to ensure only find right shape
-            thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255); 
-            // thresholdImage.write("/" + fileName + ".bmp");
-            
-            if ( debug ) {
-                log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
-            }
-            
-            Vector passingParticles = filterParticles(thresholdImage);
-            
-            // look at the particles passing criteria and see if can determine which one is
-            // the horizontal tape of the hot goal
-            int numberPassingParticles = passingParticles.size();
-            if ( debug ) {
-                log(numberPassingParticles + " passed filtering");
-            
-                for ( int i = 0; i < numberPassingParticles; i++ ) {
-                    PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
-
-                    log("Particle " + (i + 1) + " at ("
-                        + pp.x + ", " + pp.y + ")\n"
-                        + "\tNormalizedX: " + pp.normalizedX + "\n"
-                        + "\tNormalizedY: " + pp.normalizedY + "\n"
-                        + "\tOrientation: " + pp.orientation + "\n"
-                        + "\tRectangularity: " + pp.rectangluarity + "\n"
-                        + "\tAspectRatio: " + pp.aspectRatio);
+        started = true;
+        finished = false;
+        Thread thread = new Thread () {
+            public void run ( ) {
+                long startTime = System.currentTimeMillis();
+                if (debug) {
+                    log("execute start");
                 }
-            }
-            
-            if ( numberPassingParticles == 0 ) {
-                // could not find the hot goal pattern
-                log("No particles passed filtering, so setting null for vision system hot goal normalized X");
-                vision.setHotGoalNormalizedX(null);
-            } else if ( numberPassingParticles == 1 ) {
-                PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
-                log("Single particle passed filtering, so setting " + singleParticle.normalizedX +
-                    " for vision system hot goal normalized X");
-                vision.setHotGoalNormalizedX(new Double(singleParticle.normalizedX));
-            } else {
-                PassingParticle bestParticle = determineBestParticle(passingParticles);
-                log("Multiple particles passed filtering, but best particle found, so setting " + 
-                    bestParticle.normalizedX + " for vision system hot goal normalized X");
-                vision.setHotGoalNormalizedX(new Double(bestParticle.normalizedX));
-            }
-            
-        } catch (Exception e) {
-            logError("Error in execute " + e.getMessage());
-        } finally {
-            if ( thresholdImage != null ) {
+                ColorImage image = null;
+                BinaryImage thresholdImage = null;
                 try {
-                    thresholdImage.free();
-                } catch ( NIVisionException e ) {
-                    logError("Exception while trying to free threshold image " + e.getMessage());
-                }
-            }
-            
-            if ( image != null ) {
-                try {
-                    image.free();
-                } catch ( NIVisionException e ) {
-                    logError("Exception while trying to free image " + e.getMessage());
-                }
-            }
+                    //image = camera.getImage();
+                    String fileName = "Center";
+                    image = new RGBImage("/" + fileName + ".jpg");
 
-            log("execute finished in " + (System.currentTimeMillis() - startTime) + " msec"); 
-            
-            executing = false;
-        }
+                    // 0-255 min/max values for hue, saturation, and value
+                    // just looking for bright spots on the image and will rely on 
+                    // particle filtering to ensure only find right shape
+                    thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255);
+                    // thresholdImage.write("/" + fileName + ".bmp");
+
+                    if (debug) {
+                        log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
+                    }
+
+                    Vector passingParticles = filterParticles(thresholdImage);
+
+                    // look at the particles passing criteria and see if can determine which one is
+                    // the horizontal tape of the hot goal
+                    int numberPassingParticles = passingParticles.size();
+                    if (debug) {
+                        log(numberPassingParticles + " passed filtering");
+
+                        for (int i = 0; i < numberPassingParticles; i++) {
+                            PassingParticle pp = (PassingParticle) passingParticles.elementAt(i);
+
+                            log("Particle " + (i + 1) + " at ("
+                                    + pp.x + ", " + pp.y + ")\n"
+                                    + "\tNormalizedX: " + pp.normalizedX + "\n"
+                                    + "\tNormalizedY: " + pp.normalizedY + "\n"
+                                    + "\tOrientation: " + pp.orientation + "\n"
+                                    + "\tRectangularity: " + pp.rectangluarity + "\n"
+                                    + "\tAspectRatio: " + pp.aspectRatio);
+                        }
+                    }
+
+                    if (numberPassingParticles == 0) {
+                        // could not find the hot goal pattern
+                        log("No particles passed filtering, so setting null for vision system hot goal normalized X");
+                        vision.setHotGoalNormalizedX(null);
+                    } else if (numberPassingParticles == 1) {
+                        PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
+                        log("Single particle passed filtering, so setting " + singleParticle.normalizedX
+                                + " for vision system hot goal normalized X");
+                        vision.setHotGoalNormalizedX(new Double(singleParticle.normalizedX));
+                    } else {
+                        PassingParticle bestParticle = determineBestParticle(passingParticles);
+                        log("Multiple particles passed filtering, but best particle found, so setting "
+                                + bestParticle.normalizedX + " for vision system hot goal normalized X");
+                        vision.setHotGoalNormalizedX(new Double(bestParticle.normalizedX));
+                    }
+
+                } catch (Exception e) {
+                    logError("Error in execute " + e.getMessage());
+                } finally {
+                    if (thresholdImage != null) {
+                        try {
+                            thresholdImage.free();
+                        } catch (NIVisionException e) {
+                            logError("Exception while trying to free threshold image " + e.getMessage());
+                        }
+                    }
+
+                    if (image != null) {
+                        try {
+                            image.free();
+                        } catch (NIVisionException e) {
+                            logError("Exception while trying to free image " + e.getMessage());
+                        }
+                    }
+
+                    log("execute finished in " + (System.currentTimeMillis() - startTime) + " msec");
+
+                    finished = true;
+                }
+            }
+        };
+        thread.start();
+        
     }
     
     protected boolean isFinished ( ) {
-        if ( debug ) {
-            log("isFinished called returning " + !executing);
+        boolean done = started && finished;
+        if ( done ) {
+            // completed executing, so reinitialize the state so can restart
+            started = false;
+            finished = false;
         }
-        return !executing;
+        if ( debug ) {
+            log("isFinished called returning " + done);
+        }
+        return done;
     }
     
     protected void end ( ) {
@@ -197,7 +219,8 @@ public class DetermineHotGoal extends CommandBase {
         }
         // free memory 
         camera = null;
-        executing = false;
+        started = false;
+        finished = false;
         if ( debug ) {
             log("end finished");
         }
