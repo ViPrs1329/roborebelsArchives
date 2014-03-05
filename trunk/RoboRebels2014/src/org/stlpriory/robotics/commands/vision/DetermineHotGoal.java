@@ -112,7 +112,8 @@ public class DetermineHotGoal extends CommandBase {
         started = true;
         finished = false;
         
-        // use anonymous inner class thread to perform the work of the command
+        // we don't want to block the Scheduler thread for 500 msec, so start
+        // another thread to do the work of the command
         Thread thread = new Thread () {
             public void run ( ) {
                 long startTime = System.currentTimeMillis();
