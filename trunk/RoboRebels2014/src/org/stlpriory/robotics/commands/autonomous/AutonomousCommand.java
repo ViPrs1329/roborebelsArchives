@@ -5,11 +5,11 @@
 package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.launcher.Launch;
 import org.stlpriory.robotics.commands.launcher.Retract;
+import org.stlpriory.robotics.subsystems.Vision;
 
 /**
  *
@@ -70,5 +70,26 @@ public class AutonomousCommand extends CommandGroup {
             
         }
         
+    }
+    
+    // TODO use this as an alternative to extending CommandBase
+    private class ShootingStrategyAlternative extends CommandGroup {
+        private boolean executed = false;
+        
+        // we don't need to call super.execute since CommandGroup's _execute
+        // method handles the internal command group execution logic
+        public void execute() {
+            if ( executed ) {
+                return;
+            }
+            
+            if (Vision.getInstance().getHotGoalNormalizedX() == null) {
+                addSequential(new WaitCommand(5));
+            }
+            addSequential(new Launch());
+            addSequential(new Retract());
+            
+            executed = true;
+        }
     }
 }
