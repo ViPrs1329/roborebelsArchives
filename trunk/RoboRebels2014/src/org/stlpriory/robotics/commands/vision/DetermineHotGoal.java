@@ -378,7 +378,7 @@ public class DetermineHotGoal extends CommandBase {
     /**
      * Used internally to store the critical measurements for a particle
      */
-    class PassingParticle {
+    private class PassingParticle {
         
         // normalized value from -1 to 1 with -1=far left, 0=center, 1=far right
         double normalizedX;
