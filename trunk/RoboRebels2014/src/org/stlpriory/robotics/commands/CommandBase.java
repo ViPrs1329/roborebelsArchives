@@ -29,7 +29,7 @@ public abstract class CommandBase extends Command {
     public static Launcher launcher = new Launcher();
     public static Claw claw = new Claw();
     public static Tank tank = new Tank();
-    public static Vision vision = new Vision();
+    public static Vision vision = Vision.getInstance();
     public static Sensors sensors = new Sensors();
 
 
