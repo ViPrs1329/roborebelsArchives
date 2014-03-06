@@ -54,7 +54,7 @@ public class AutonomousCommand extends CommandGroup {
             }
             testGroup.addSequential(new Launch());
             testGroup.addSequential(new Retract());
-            Scheduler.getInstance().add(testGroup);
+            testGroup.start();
         }
         
         public boolean isFinished() {
