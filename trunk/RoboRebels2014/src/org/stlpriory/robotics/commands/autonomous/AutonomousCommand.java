@@ -5,9 +5,9 @@
 package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import org.stlpriory.robotics.commands.drivetrain.DriveForward;
-import org.stlpriory.robotics.commands.drivetrain.StopDriving;
+import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.launcher.Launch;
 import org.stlpriory.robotics.commands.launcher.Retract;
 
@@ -34,10 +34,38 @@ public class AutonomousCommand extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-        addSequential(new DriveForward());
-        addSequential(new WaitCommand(.5));
-        addSequential(new StopDriving());
-        addSequential(new Launch());
-        addSequential(new Retract());
+
+        addSequential(new AutonomousFirstPart());
+        addSequential(new ShootingStrategy());
+        
+    }
+    
+    private class ShootingStrategy extends CommandBase {
+        
+        CommandGroup testGroup;
+        public void initialize() {
+            testGroup = new CommandGroup();
+        
+    }
+        public void execute() {
+            if (vision.getHotGoalNormalizedX() == null) {
+                testGroup.addSequential(new WaitCommand(5));
+            }
+                testGroup.addSequential(new Launch());
+                testGroup.addSequential(new Retract());
+                Scheduler.getInstance().add(testGroup);
+            
+            
+        }
+        public boolean isFinished() {
+            return true;
+        }
+        public void interrupted() {
+            
+        }
+        public void end() {
+            
+        }
+        
     }
 }
