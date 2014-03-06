@@ -87,6 +87,10 @@ public class DetermineHotGoal extends CommandBase {
             log("initialize started");
             log("getting instance of AxisCamera");
         }
+        // By default will connect to camera using IP address 10.x.y.11
+        // but a different IP address may be passed as a string to the
+        // getInstance method e.g. AxisCamera.getInstance("192.1.0.90")
+        // TODO put in correct camera IP address if not 10.13.29.11
         camera = AxisCamera.getInstance();
         if ( camera == null ) {
             logError("Could not get singleton instance of AxisCamera");
