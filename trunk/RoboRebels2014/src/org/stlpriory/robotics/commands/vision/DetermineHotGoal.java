@@ -109,7 +109,6 @@ public class DetermineHotGoal extends CommandBase {
             return;
         }
         started = true;
-        finished = false;
         
         // we don't want to block the Scheduler thread for 500 msec, so start
         // another thread to do the work of the command
@@ -204,11 +203,6 @@ public class DetermineHotGoal extends CommandBase {
     
     protected boolean isFinished ( ) {
         boolean done = started && finished;
-        if ( done ) {
-            // completed executing, so reinitialize the state so can restart
-            started = false;
-            finished = false;
-        }
         if ( debug ) {
             log("isFinished called returning " + done);
         }
@@ -233,8 +227,6 @@ public class DetermineHotGoal extends CommandBase {
     private void handleTermination ( ) {
         // free memory
         camera = null;
-        started = false;
-        finished = false;
     }
     
     private void log ( String msg ) {
