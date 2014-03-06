@@ -54,7 +54,7 @@ public class AutonomousCommand extends CommandGroup {
             }
             shootingSequence.addSequential(new Launch());
             shootingSequence.addSequential(new Retract());
-            // start will schedule the command to run with the Scheduler class
+            // start will schedule the command to run with the Scheduler singleton
             shootingSequence.start();
         }
         
