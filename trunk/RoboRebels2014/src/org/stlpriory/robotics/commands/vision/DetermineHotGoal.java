@@ -88,12 +88,12 @@ public class DetermineHotGoal extends CommandBase {
             log("initialize started");
             log("getting instance of AxisCamera");
         }
-//        camera = AxisCamera.getInstance();
-//        if ( camera == null ) {
-//            logError("Could not get singleton instance of AxisCamera");
-//        } else {
-//            log("Successfully retrieved singleton instance of AxisCamera");
-//        }
+        camera = AxisCamera.getInstance();
+        if ( camera == null ) {
+            logError("Could not get singleton instance of AxisCamera");
+        } else {
+            log("Successfully retrieved singleton instance of AxisCamera");
+        }
         started = false;
         finished = false;
         if ( debug ) {
@@ -123,9 +123,9 @@ public class DetermineHotGoal extends CommandBase {
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    //image = camera.getImage();
-                    String fileName = "Center";
-                    image = new RGBImage("/" + fileName + ".jpg");
+                    image = camera.getImage();
+                    //String fileName = "Center";
+                    //image = new RGBImage("/" + fileName + ".jpg");
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
