@@ -36,51 +36,17 @@ public class AutonomousCommand extends CommandGroup {
         // arm.
 
         addSequential(new AutonomousFirstPart());
-        // TODO consider using ShootingStrategyAlternate private class instead
         addSequential(new ShootingStrategy());
         
     }
     
-    private class ShootingStrategy extends CommandBase {
-        
-        CommandGroup shootingSequence;
-        
-        public void initialize() {
-            shootingSequence = new CommandGroup();
-        }
-        
-        public void execute() {
-            if (vision.getHotGoalNormalizedX() == null) {
-                shootingSequence.addSequential(new WaitCommand(5));
-            }
-            shootingSequence.addSequential(new Launch());
-            shootingSequence.addSequential(new Retract());
-            // start will schedule the command to run with the Scheduler singleton
-            shootingSequence.start();
-        }
-        
-        public boolean isFinished() {
-            return true;
-        }
-        
-        public void interrupted() {
-            
-        }
-        
-        public void end() {
-            
-        }
-        
-    }
-    
-    // TODO use this as an alternative to extending CommandBase
     /**
      * This command group will not have any child commands until it is
      * executed the first time, at which point it will examine the status
      * of the hot goal and add an appropriate sequence of commands in order
      * to execute the shooting strategy.
      */
-    private class ShootingStrategyAlternative extends CommandGroup {
+    private class ShootingStrategy extends CommandGroup {
         private boolean executed = false;
         
         // we don't need to call super.execute since CommandGroup's _execute
