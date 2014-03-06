@@ -73,6 +73,12 @@ public class AutonomousCommand extends CommandGroup {
     }
     
     // TODO use this as an alternative to extending CommandBase
+    /**
+     * This command group will not have any child commands until it is
+     * executed the first time, at which point it will examine the status
+     * of the hot goal and add an appropriate sequence of commands in order
+     * to execute the shooting strategy.
+     */
     private class ShootingStrategyAlternative extends CommandGroup {
         private boolean executed = false;
         
