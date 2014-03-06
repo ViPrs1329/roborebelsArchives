@@ -71,7 +71,7 @@ public class DetermineHotGoal extends CommandBase {
     
     private AxisCamera camera;
     
-    private boolean debug = false;
+    private final boolean debug = false;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
