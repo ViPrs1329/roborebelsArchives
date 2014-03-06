@@ -36,6 +36,7 @@ public class AutonomousCommand extends CommandGroup {
         // arm.
 
         addSequential(new AutonomousFirstPart());
+        // TODO consider using ShootingStrategyAlternate private class instead
         addSequential(new ShootingStrategy());
         
     }
