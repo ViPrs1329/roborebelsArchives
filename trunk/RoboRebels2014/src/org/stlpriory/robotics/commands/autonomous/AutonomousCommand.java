@@ -42,20 +42,20 @@ public class AutonomousCommand extends CommandGroup {
     
     private class ShootingStrategy extends CommandBase {
         
-        CommandGroup testGroup;
+        CommandGroup shootingSequence;
         
         public void initialize() {
-            testGroup = new CommandGroup();
+            shootingSequence = new CommandGroup();
         }
         
         public void execute() {
             if (vision.getHotGoalNormalizedX() == null) {
-                testGroup.addSequential(new WaitCommand(5));
+                shootingSequence.addSequential(new WaitCommand(5));
             }
-            testGroup.addSequential(new Launch());
-            testGroup.addSequential(new Retract());
+            shootingSequence.addSequential(new Launch());
+            shootingSequence.addSequential(new Retract());
             // start will schedule the command to run with the Scheduler class
-            testGroup.start();
+            shootingSequence.start();
         }
         
         public boolean isFinished() {
