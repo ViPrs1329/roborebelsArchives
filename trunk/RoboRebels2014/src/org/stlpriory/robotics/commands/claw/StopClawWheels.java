@@ -28,16 +28,10 @@ public class StopClawWheels extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
+ 
         claw.stopClawMotors();
         commandExecuted = true;
-        }
-        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
-            commandExecuted = true;
-        }
-        else {
-            commandExecuted = true;
-        }
+        
         
     }
 

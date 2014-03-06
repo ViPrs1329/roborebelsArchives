@@ -23,7 +23,7 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     
     // Create a single static instance of all of your subsystems
-    public static DriveTrain drivetrain = new DriveTrain();
+    public static DriveTrain drivetrain = new DriveTrain();//TODO: Set to CANDriveTrain
     //public static CANDriveTrain drivetrain = new CANDriveTrain();
     //public static NoOpDriveTrain drivetrain = new NoOpDriveTrain();
     public static Launcher launcher = new Launcher();
@@ -31,7 +31,7 @@ public abstract class CommandBase extends Command {
     public static Tank tank = new Tank();
     public static Vision vision = new Vision();
     public static Sensors sensors = new Sensors();
-    public static Mode mode = new Mode();
+
 
     
     public static void init() {

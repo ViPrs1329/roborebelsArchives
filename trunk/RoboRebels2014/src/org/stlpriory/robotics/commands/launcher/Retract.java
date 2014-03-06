@@ -28,16 +28,10 @@ public class Retract extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
+      
         launcher.engageForLoad();
         executedCommand = true;
-        }
-        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
-            executedCommand = true;
-        }
-        else {
-            executedCommand = true;
-        }
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()

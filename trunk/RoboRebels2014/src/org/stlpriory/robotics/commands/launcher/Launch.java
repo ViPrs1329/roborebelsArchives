@@ -33,16 +33,10 @@ public class Launch extends CommandBase {
 //        }
         //claw.raiseClawForShoot();
         //claw.stopClawMotors();
-        if (mode.getState() == Constants.ROBOT_MANUAL_MODE) {
+        
         launcher.disengageForShoot();
         executedCommand = true;
-        }
-        else if (mode.getState() == Constants.ROBOT_AUTOMATIC_MODE) {
-            executedCommand = true;
-        }
-        else {
-            executedCommand = true;
-        }
+        
     }
 
     // Make this return true when this Command no longer needs to run execute()

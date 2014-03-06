@@ -20,7 +20,7 @@ public class Launcher extends Subsystem {
     private Talon launch1;
     //private Talon launch2;
     private Solenoid valve1;
-    private Solenoid valve2;
+//    private Solenoid valve2;
     private static final double WINDING_SPEED = 1.0;
     private DigitalInput punterLimitSwitch;
     
@@ -44,7 +44,7 @@ public class Launcher extends Subsystem {
         
                        
         valve1 = new Solenoid(RobotMap.LAUNCHER_VALVE1_CHANNEL);
-        valve2 = new Solenoid(RobotMap.LAUNCHER_VALVE2_CHANNEL);
+//        valve2 = new Solenoid(RobotMap.LAUNCHER_VALVE2_CHANNEL);
         
         Debug.println("[Launcher Subsystem] Initilizing limit switch for preventing retracting punter over limit");
         punterLimitSwitch = new DigitalInput(RobotMap.LAUNCHER_PUNTER_LIMIT_SWITCH_DIGITAL_IO_CHANNEL);
@@ -61,31 +61,32 @@ public class Launcher extends Subsystem {
     public void disengageForShoot() {
 
         valve1.set(true);
-        valve2.set(false);
+//        valve2.set(false);
     }
 
     public void engageForLoad() {
-        valve2.set(true);
+//        valve2.set(true);
         valve1.set(false);
     }
     public boolean getValve1State() {
         return valve1.get();
     }
-    public boolean getValve2State() {
-        return valve2.get();
-    }
+//    public boolean getValve2State() {
+//        return valve2.get();
+//    }
     public boolean isDisengagedForShoot() {
-        if ((getValve1State()) && (!getValve2State())) {
-            return true;
-        }
-        else if ((!getValve1State()) && (getValve2State())) {
-            return false;
-        }
-        else {
-            Debug.println("[Launcher Subsystem]  Error: both Solenoids in same state");
-            engageForLoad();
-            return false;
-        }
+//        if ((getValve1State()) && (!getValve2State())) {
+//            return true;
+//        }
+//        else if ((!getValve1State()) && (getValve2State())) {
+//            return false;
+//        }
+//        else {
+//            Debug.println("[Launcher Subsystem]  Error: both Solenoids in same state");
+//            engageForLoad();
+//            return false;
+//        }
+        return getValve1State();
             
     }
     public boolean isEngagedForLoad() {
