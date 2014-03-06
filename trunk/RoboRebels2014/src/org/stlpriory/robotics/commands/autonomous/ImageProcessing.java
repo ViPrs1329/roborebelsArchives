@@ -15,22 +15,13 @@ import org.stlpriory.robotics.commands.vision.DetermineHotGoal;
 public class ImageProcessing extends CommandGroup {
     
     public ImageProcessing() {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
 
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+        // TODO the wait time should be adjusted to value based on practice
+        // the purpose of the wait is to allow time for the non-hot-goal tape
+        // to rotate to point up since at the start of the autonomous phase both
+        // left and right side will have tape pointing out horizontally toward
+        // the robot and we don't want to capture an image until after rotation
+        // has completed
         addSequential(new WaitCommand(.25));
         addSequential(new DetermineHotGoal());
     }
