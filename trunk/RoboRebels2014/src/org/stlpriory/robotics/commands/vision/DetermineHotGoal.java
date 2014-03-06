@@ -219,10 +219,7 @@ public class DetermineHotGoal extends CommandBase {
         if ( debug ) {
             log("end started");
         }
-        // free memory 
-        camera = null;
-        started = false;
-        finished = false;
+        handleTermination();
         if ( debug ) {
             log("end finished");
         }
@@ -230,6 +227,14 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void interrupted ( ) {
         // should never be called because this command is not interruptable
+        handleTermination();
+    }
+    
+    private void handleTermination ( ) {
+        // free memory
+        camera = null;
+        started = false;
+        finished = false;
     }
     
     private void log ( String msg ) {
