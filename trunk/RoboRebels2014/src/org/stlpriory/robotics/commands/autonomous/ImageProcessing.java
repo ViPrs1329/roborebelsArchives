@@ -20,7 +20,7 @@ public class ImageProcessing extends CommandGroup {
         // the purpose of the wait is to allow time for the non-hot-goal tape
         // to rotate to point up since at the start of the autonomous phase both
         // left and right side will have tape pointing out horizontally toward
-        // the robot and we don't want to capture an image until after rotation
+        // the robot and we don't want to capture an image until after tape rotation
         // has completed
         addSequential(new WaitCommand(.25));
         addSequential(new DetermineHotGoal());
