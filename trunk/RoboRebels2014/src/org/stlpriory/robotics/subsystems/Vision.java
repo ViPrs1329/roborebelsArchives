@@ -13,12 +13,26 @@ import org.stlpriory.robotics.misc.Debug;
  */
 public class Vision extends Subsystem {
     
+    private static Vision instance;
+    
+    public static Vision getInstance() {
+        if ( instance == null ) {
+            synchronized(Vision.class) {
+                // double check that instance is still null inside synchronized block
+                if ( instance == null ) {
+                    instance = new Vision();
+                }
+            }
+        }
+        return instance;
+    }
+    
     // will be null if not known, else will be a double
     // in the range of -1 to 1 with -1=far left of image,
     // 0=center of the image, and 1=far right of image
     private Double hotGoalNormalizedX;
     
-    public Vision () {
+    private Vision () {
         super("Vision");
         Debug.println("Vision subsystem constructor");
     }
