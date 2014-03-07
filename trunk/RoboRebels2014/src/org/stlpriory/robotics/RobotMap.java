@@ -66,6 +66,6 @@ public class RobotMap {
     // Address for I2C with the Arduino
     public static final int I2C_ADRESS_NUMBER = 4;
     
-    public static final int LAUNCHER_PUNTER_LIMIT_SWITCH_DIGITAL_IO_CHANNEL =  1;
+    public static final int LAUNCHER_PUNTER_LIMIT_SWITCH_DIGITAL_IO_CHANNEL =  2;
     
 }

@@ -77,7 +77,7 @@ public class OI {
 
     private static OI instance = null;
     private Joystick joystick;
-    private Gamepad gamepad;
+//    private Gamepad gamepad;
     private JoystickButton shiftButton;
     private JoystickButton expandRetractClawButton;
     private JoystickButton clawButton;
@@ -98,8 +98,9 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         joystick = new Joystick(1);
         
-        Debug.println("[OI] Initializing gamepad for non button triggers");
-        gamepad = new Gamepad();
+// COMMENTED OUT 3/7/2014
+//        Debug.println("[OI] Initializing gamepad for non button triggers");
+//        gamepad = new Gamepad();
         
         Debug.println("[OI] Initializing gamepad to launch ball a disc when the right bumper pressed");
         launchButton = new JoystickButton(joystick,Keymap.LAUNCH_BUTTON_KEY_MAP);
@@ -112,8 +113,9 @@ public class OI {
 //        
         Debug.println("[OI] Initializing gamepad to load launcher when the X button is pressed");
         resetButton = new JoystickButton(joystick,Keymap.RESET_BUTTON_KEY_MAP);
-        resetButton.whenPressed(new RetractPunter());
-//        resetButton.whenReleased(new Stop());
+//        resetButton.whenPressed(new RetractPunter());
+        resetButton.whenPressed(new Reset());
+        resetButton.whenReleased(new Stop());
         
         Debug.println("[OI] Initializing gamepad to shift gears for the drivetrain wheels");
         shiftButton = new JoystickButton(joystick,Keymap.SHIFT_BUTTON_KEY_MAP);
@@ -163,8 +165,9 @@ public class OI {
         // run - DriveViaJoysticks
  //       this.trigger.whenPressed(new DriveInASquare());
         
-        Debug.println("[OI] Inilizing Gamepad to shift gears when right trigger pulled");
-        gamepad.whenRightTriggerHeld(new Shift());
+// COMMENTED OUT 3/7/2014
+//        Debug.println("[OI] Inilizing Gamepad to shift gears when right trigger pulled");
+//        gamepad.whenRightTriggerHeld(new Shift());
 
         Debug.println("[OI] Instantiation complete.");
     }

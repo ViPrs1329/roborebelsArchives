@@ -82,19 +82,19 @@ public class Claw extends Subsystem {
     public void lowerClawForPickup() {
         valve1.set(true);   //turns the Solenoid on
 //        valve2.set(false);  //turns the Solenoid off
-        if (!isWheelLoweredForPickup()) {
-            lowerWheelForPickup();
-        }
+//        if (!isWheelLoweredForPickup()) {
+//            lowerWheelForPickup();
+//        }
     }
 
     public void raiseClawForShoot() {
         startClawMotorsForHold();
         valve1.set(false);
 //        valve2.set(true);
-        if (isWheelLoweredForPickup()) {
-            raiseWheelForShoot();
-        }
-        stopClawMotors();
+//        if (isWheelLoweredForPickup()) {
+//            raiseWheelForShoot();
+//        }
+//        stopClawMotors();
     }
     
     public void lowerWheelForPickup() {
