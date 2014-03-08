@@ -7,13 +7,18 @@
 package org.stlpriory.robotics.commands.vision;
 
 import com.sun.cldc.jna.Pointer;
-import edu.wpi.first.wpilibj.camera.AxisCamera;
+import com.sun.squawk.microedition.io.FileConnection;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.RGBImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Vector;
+import javax.microedition.io.Connector;
+import javax.microedition.io.StreamConnection;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -66,11 +71,13 @@ public class DetermineHotGoal extends CommandBase {
     // TODO determine ideal value during testing
     public static final double IDEAL_PARTICLE_NORMALIZED_Y = 0.1;
     
+    public static final String CAMERA_IP_ADDRESS = "10.13.29.11";
+    
+    public static final String RAW_IMAGE_NAME = "/rawImage.jpg";
+    
     // used internally to keep track of execution status
     private boolean started = false;
     private boolean finished = false;
-    
-    private AxisCamera camera;
     
     private final boolean debug = false;
     
@@ -86,24 +93,6 @@ public class DetermineHotGoal extends CommandBase {
     protected void initialize ( ) {
         if ( debug ) {
             log("initialize started");
-            log("getting instance of AxisCamera");
-        }
-        // By default will connect to camera using IP address 10.x.y.11
-        // but a different IP address may be passed as a string to the
-        // getInstance method e.g. AxisCamera.getInstance("192.1.0.90")
-        // Camera IP Adress: 10.13.29.11
-        try {
-            camera = AxisCamera.getInstance();
-            if ( camera == null ) {
-                logError("Could not get singleton instance of AxisCamera");
-            } else {
-                log("Successfully retrieved singleton instance of AxisCamera");
-                camera.writeResolution(AxisCamera.ResolutionT.k640x480);
-                System.out.println("Successfully set camera resolution");
-            }
-             
-        } catch ( Exception e ) {
-            logError("Error in initialize: " + e.getMessage());
         }
         started = false;
         finished = false;
@@ -133,11 +122,8 @@ public class DetermineHotGoal extends CommandBase {
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    image = camera.getImage();
-                    
-                    //String fileName = "Center";
-                    //image = new RGBImage("/" + fileName + ".jpg");
-                    image.write("/raw.jpg");
+                    retrieveImage();
+                    image = new RGBImage(RAW_IMAGE_NAME);
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
@@ -227,7 +213,6 @@ public class DetermineHotGoal extends CommandBase {
         if ( debug ) {
             log("end started");
         }
-        handleTermination();
         if ( debug ) {
             log("end finished");
         }
@@ -235,12 +220,6 @@ public class DetermineHotGoal extends CommandBase {
     
     protected void interrupted ( ) {
         // should never be called because this command is not interruptable
-        handleTermination();
-    }
-    
-    private void handleTermination ( ) {
-        // free memory
-        camera = null;
     }
     
     private void log ( String msg ) {
@@ -249,6 +228,42 @@ public class DetermineHotGoal extends CommandBase {
     
     private void logError ( String msg ) {
         Debug.err("DetermineHotGoal: " + msg);
+    }
+    
+    private void retrieveImage ( ) throws IOException {
+        final String url = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
+
+        StreamConnection c = null;
+        InputStream s = null;
+        FileConnection fc = null;
+        OutputStream os = null;
+        try {
+            c = (StreamConnection) Connector.open(url);
+            s = c.openInputStream();
+            fc = (FileConnection) Connector.open("file://" + RAW_IMAGE_NAME);
+            if (!fc.exists()) {
+                fc.create();
+            }
+            os = fc.openOutputStream();
+            int ch;
+            while ((ch = s.read()) != -1) {
+                os.write(ch);
+            }
+        } finally {
+            if (s != null) {
+                s.close();
+            }
+            if (c != null) {
+                c.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+            if (fc != null) {
+                fc.close();
+            }
+        }
+
     }
     
     /**
