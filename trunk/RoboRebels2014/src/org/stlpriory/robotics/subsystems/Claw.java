@@ -60,7 +60,6 @@ public class Claw extends Subsystem {
         wheel_left.set(-MOTOR_SPEED);
         wheel_right.set(-.75);
         wheel_center.set(MOTOR_SPEED);
-        System.out.println(wheel_right.get());
      }
 
     public void startClawMotorsForHold() {
