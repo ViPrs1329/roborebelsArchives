@@ -57,8 +57,8 @@ public class Claw extends Subsystem {
 
     public void startClawMotors() {
         //Todo: Set directions of motors
-        wheel_left.set(-MOTOR_SPEED);
-        wheel_right.set(-.75);
+        wheel_left.set(-1 * MOTOR_SPEED);
+        wheel_right.set(-1 * MOTOR_SPEED);
         wheel_center.set(MOTOR_SPEED);
      }
 
