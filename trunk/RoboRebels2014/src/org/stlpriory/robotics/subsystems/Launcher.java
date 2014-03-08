@@ -98,9 +98,9 @@ public class Launcher extends Subsystem {
     public void startWindingLauncher() {
         if (! isPunterLimitReached()){
             launch1.set(WINDING_SPEED);
-            Debug.println("Winding launcher since limit not hit yet");
+            CommandBase.updateDriverStationLCD(2, 1, "Retracting launcher");
         } else {
-            CommandBase.updateDriverStationLCD(2, 1, "Hit limit - stopped retracting launcher");
+            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");
         }
         
 //        launch2.set(windSpeed);
