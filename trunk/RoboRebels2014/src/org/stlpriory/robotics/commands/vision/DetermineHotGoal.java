@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.image.RGBImage;
 import java.util.Vector;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
@@ -125,17 +126,17 @@ public class DetermineHotGoal extends CommandBase {
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    image = camera.getImage();
+                    //image = camera.getImage();
                     
-                    //String fileName = "Center";
-                    //image = new RGBImage("/" + fileName + ".jpg");
+                    String fileName = "Center";
+                    image = new RGBImage("/" + fileName + ".jpg");
+                    //image.write("/raw.jpg");
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
                     // particle filtering to ensure only find right shape
                     thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255);
-                    image.write("/raw.jpg");
-                    thresholdImage.write("/threshold.bmp");
+                    //thresholdImage.write("/threshold.bmp");
 
                     if (debug) {
                         log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
