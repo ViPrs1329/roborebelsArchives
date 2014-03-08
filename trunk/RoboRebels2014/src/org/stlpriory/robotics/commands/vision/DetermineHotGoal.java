@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 import javax.microedition.io.Connector;
-import javax.microedition.io.StreamConnection;
+import javax.microedition.io.HttpConnection;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -233,34 +233,34 @@ public class DetermineHotGoal extends CommandBase {
     private void retrieveImage ( ) throws IOException {
         final String url = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
 
-        StreamConnection c = null;
-        InputStream s = null;
-        FileConnection fc = null;
-        OutputStream os = null;
+        HttpConnection httpConnection = null;
+        InputStream httpInputStream = null;
+        FileConnection fileConnection = null;
+        OutputStream fileOutputStream = null;
         try {
-            c = (StreamConnection) Connector.open(url);
-            s = c.openInputStream();
-            fc = (FileConnection) Connector.open("file://" + RAW_IMAGE_NAME);
-            if (!fc.exists()) {
-                fc.create();
+            httpConnection = (HttpConnection) Connector.open(url);
+            httpInputStream = httpConnection.openInputStream();
+            fileConnection = (FileConnection) Connector.open("file://" + RAW_IMAGE_NAME);
+            if (!fileConnection.exists()) {
+                fileConnection.create();
             }
-            os = fc.openOutputStream();
+            fileOutputStream = fileConnection.openOutputStream();
             int ch;
-            while ((ch = s.read()) != -1) {
-                os.write(ch);
+            while ((ch = httpInputStream.read()) != -1) {
+                fileOutputStream.write(ch);
             }
         } finally {
-            if (s != null) {
-                s.close();
+            if (httpInputStream != null) {
+                httpInputStream.close();
             }
-            if (c != null) {
-                c.close();
+            if (httpConnection != null) {
+                httpConnection.close();
             }
-            if (os != null) {
-                os.close();
+            if (fileOutputStream != null) {
+                fileOutputStream.close();
             }
-            if (fc != null) {
-                fc.close();
+            if (fileConnection != null) {
+                fileConnection.close();
             }
         }
 
