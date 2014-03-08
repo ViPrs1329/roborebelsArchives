@@ -34,7 +34,7 @@ public class Driving extends CommandGroup {
         // arm.
         
         addSequential(new DriveForward());
-        addSequential(new WaitCommand(.1));
+        addSequential(new WaitCommand(.5));
         addSequential(new StopDriving());
     }
 }
