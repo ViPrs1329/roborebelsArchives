@@ -22,7 +22,34 @@ public class ImageProcessing extends CommandGroup {
         // left and right side will have tape pointing out horizontally toward
         // the robot and we don't want to capture an image until after tape rotation
         // has completed
-        addSequential(new WaitCommand(.25));
-        addSequential(new DetermineHotGoal());
+        addSequential(new WaitCommand(.25) {
+            protected void execute ( ) {
+                System.out.println("ImageProcessing WaitCommand at " + System.currentTimeMillis());
+                super.execute();
+            }
+            protected void end() {
+            System.out.println("ImageProcessing WaitCommand ending at " + System.currentTimeMillis());
+            super.end();
+        }
+        });
+        addSequential(new DetermineHotGoal() {
+            protected void execute ( ) {
+                System.out.println("ImageProcessing DetermineHotGoal at " + System.currentTimeMillis());
+                super.execute();
+            }
+            protected void end() {
+            System.out.println("ImageProcessing DetermineHotGoal ending at " + System.currentTimeMillis());
+            super.end();
+        }
+        });
     }
+    
+    protected void execute ( ) {
+        System.out.println("ImageProcessing at " + System.currentTimeMillis());
+        super.execute();
+    }
+    protected void end() {
+            System.out.println("ImageProcessing ending at " + System.currentTimeMillis());
+            super.end();
+        }
 }

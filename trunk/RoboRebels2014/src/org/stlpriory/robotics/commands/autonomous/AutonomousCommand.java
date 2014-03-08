@@ -49,12 +49,46 @@ public class AutonomousCommand extends CommandGroup {
         
         public void initialize() {
             
+            CommandGroup commandGroup = new CommandGroup();
+            
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
-                addSequential(new WaitCommand(5));
+                commandGroup.addSequential(new WaitCommand(5) {
+
+                    protected void execute() {
+                        System.out.println("ShootingStrategy Wait at " + System.currentTimeMillis());
+                        super.execute();
+                    }
+                    
+                    protected void end() {
+                        System.out.println("ShootingStrategy Wait ending at " + System.currentTimeMillis());
+                        super.end();
+                    }
+                    
+                });
             }
             
-            addSequential(new Launch());
-            //addSequential(new Retract());
+            commandGroup.addSequential(new Launch() {
+                protected void execute() {
+                    System.out.println("ShootingStrategy Launch at " + System.currentTimeMillis());
+                    super.execute();
+                }
+                protected void end() {
+                    System.out.println("ShootingStrategy Launch ending at " + System.currentTimeMillis());
+                    super.end();
+                }
+            });
+            //commandGroup.addSequential(new Retract());
+            commandGroup.start();
+        }
+        
+        protected void execute() {
+            System.out.println("ShootingStrategy at " + System.currentTimeMillis());
+            super.execute();
+        }
+        
+        protected void end() {
+            System.out.println("ShootingStrategy ending at " + System.currentTimeMillis());
+            super.end();
         }
     }
 }

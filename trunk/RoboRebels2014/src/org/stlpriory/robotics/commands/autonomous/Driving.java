@@ -33,8 +33,44 @@ public class Driving extends CommandGroup {
         // a CommandGroup containing them would require both the chassis and the
         // arm.
         
-        addSequential(new DriveForward());
-        addSequential(new WaitCommand(.5));
-        addSequential(new StopDriving());
+        addSequential(new DriveForward() {
+            protected void execute ( ) {
+                System.out.println("Driving DriveForward at " + System.currentTimeMillis());
+                super.execute();
+            }
+            protected void end() {
+            System.out.println("Driving DriveForward ending at " + System.currentTimeMillis());
+            super.end();
+        }
+        });
+        addSequential(new WaitCommand(2) {
+            protected void execute ( ) {
+                System.out.println("Driving WaitCommand at " + System.currentTimeMillis());
+                super.execute();
+            }
+            protected void end() {
+            System.out.println("Driving WaitCommand ending at " + System.currentTimeMillis());
+            super.end();
+        }
+        });
+        addSequential(new StopDriving() {
+            protected void execute ( ) {
+                System.out.println("Driving StopDriving at " + System.currentTimeMillis());
+                super.execute();
+            }
+            protected void end() {
+            System.out.println("Driving StopDriving ending at " + System.currentTimeMillis());
+            super.end();
+        }
+        });
     }
+    
+    protected void execute ( ) {
+        System.out.println("Driving at " + System.currentTimeMillis());
+        super.execute();
+    }
+    protected void end() {
+            System.out.println("Driving ending at " + System.currentTimeMillis());
+            super.end();
+        }
 }
