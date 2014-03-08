@@ -29,8 +29,9 @@ public class AutonomousFirstPart extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-        addParallel(new Driving());
-        addParallel(new ImageProcessing());
+        addSequential(new Driving());
+//        addParallel(new Driving());
+//        addParallel(new ImageProcessing());
     }
     
     protected void execute ( ) {
