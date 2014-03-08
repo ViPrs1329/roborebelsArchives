@@ -12,7 +12,6 @@ import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithJoystick;
-import org.stlpriory.robotics.misc.Constants;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.misc.Utils;
 
@@ -28,7 +27,6 @@ public class DriveTrain extends Subsystem {
     private Jaguar rightRearJag;
     private double direction = 1;
     private GearBox gearBoxes;
-
 
     public DriveTrain() {
         super("DriveTrain");
@@ -70,19 +68,18 @@ public class DriveTrain extends Subsystem {
         drive.stopMotor();
     }
 
-
     public void tankDrive(double leftValue, double rightValue) {
         leftValue *= direction;
         rightValue *= direction;
-            drive.tankDrive(leftValue, rightValue);
-        
+        drive.tankDrive(leftValue, rightValue);
+
     }
 
     public void arcadeDrive(double moveValue, double rotateValue) {
         moveValue *= direction;
         rotateValue *= direction;
-            drive.arcadeDrive(moveValue, rotateValue);
-        
+        drive.arcadeDrive(moveValue, rotateValue);
+
     }
 
     /**
@@ -152,16 +149,11 @@ public class DriveTrain extends Subsystem {
     }
 
     public void shiftGears() {
-//        CommandBase.updateDriverStationLCD(1,1,"Executing gear shift");
         gearBoxes.shiftBoxes();
-        if (gearBoxes.isLowGear()){
-        CommandBase.updateDriverStationLCD(1,1,"Gearbox: Low Gear");
-        }
-        else if (gearBoxes.isHighGear()) {
+        if (gearBoxes.isLowGear()) {
+            CommandBase.updateDriverStationLCD(1, 1, "Gearbox: Low Gear");
+        } else if (gearBoxes.isHighGear()) {
             CommandBase.updateDriverStationLCD(1, 1, "Gearbox: High Gear");
         }
     }
-
-  
-
 }

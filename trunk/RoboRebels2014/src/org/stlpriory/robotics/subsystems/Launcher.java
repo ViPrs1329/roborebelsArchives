@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.RobotMap;
+import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
 
 /**
@@ -95,7 +96,13 @@ public class Launcher extends Subsystem {
     }
 
     public void startWindingLauncher() {
-        launch1.set(WINDING_SPEED);
+        if (! isPunterLimitReached()){
+            launch1.set(WINDING_SPEED);
+            Debug.println("Winding launcher since limit not hit yet");
+        } else {
+            CommandBase.updateDriverStationLCD(2, 1, "Hit limit - stopped retracting launcher");
+        }
+        
 //        launch2.set(windSpeed);
     }
 

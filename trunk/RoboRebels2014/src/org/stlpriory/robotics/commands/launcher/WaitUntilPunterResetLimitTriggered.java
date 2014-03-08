@@ -27,7 +27,7 @@ public class WaitUntilPunterResetLimitTriggered extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        if(launcher.isPunterLimitReached()){
+        if (launcher.isPunterLimitReached()){
             commandExecuted =  true;
         }
             
