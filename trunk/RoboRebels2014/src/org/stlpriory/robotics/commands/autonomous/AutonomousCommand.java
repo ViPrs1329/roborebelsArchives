@@ -41,30 +41,20 @@ public class AutonomousCommand extends CommandGroup {
     
     /**
      * This command group will not have any child commands until it is
-     * executed the first time, at which point it will examine the status
+     * initialized, at which point it will examine the status
      * of the hot goal and add an appropriate sequence of commands in order
      * to execute the shooting strategy.
      */
     private class ShootingStrategy extends CommandGroup {
-        private boolean executed = false;
-        CommandGroup commandGroup = new CommandGroup();
         
-        
-        // we don't need to call super.execute since CommandGroup's _execute
-        // method handles the internal command group execution logic
-        public void execute() {
-            if ( executed ) {
-                return;
-            }
+        public void initialize() {
             
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
-                commandGroup.addSequential(new WaitCommand(5));
+                addSequential(new WaitCommand(5));
             }
-            commandGroup.addSequential(new Launch());
-            //commandGroup.addSequential(new Retract());
-            commandGroup.start();
             
-            executed = true;
+            addSequential(new Launch());
+            //addSequential(new Retract());
         }
     }
 }
