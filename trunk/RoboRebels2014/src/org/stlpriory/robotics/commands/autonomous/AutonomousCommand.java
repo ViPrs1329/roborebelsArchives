@@ -6,7 +6,6 @@ package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.launcher.Launch;
 import org.stlpriory.robotics.commands.launcher.Retract;
 import org.stlpriory.robotics.subsystems.Vision;
@@ -48,7 +47,7 @@ public class AutonomousCommand extends CommandGroup {
      */
     private class ShootingStrategy extends CommandGroup {
         private boolean executed = false;
-        CommandGroup commandgroup = new CommandGroup();
+        CommandGroup commandGroup = new CommandGroup();
         
         
         // we don't need to call super.execute since CommandGroup's _execute
@@ -59,11 +58,11 @@ public class AutonomousCommand extends CommandGroup {
             }
             
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
-                commandgroup.addSequential(new WaitCommand(5));
+                commandGroup.addSequential(new WaitCommand(5));
             }
-            commandgroup.addSequential(new Launch());
-            commandgroup.addSequential(new Retract());
-            commandgroup.start();
+            commandGroup.addSequential(new Launch());
+            //commandGroup.addSequential(new Retract());
+            commandGroup.start();
             
             executed = true;
         }
