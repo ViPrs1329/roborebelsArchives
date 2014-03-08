@@ -92,11 +92,16 @@ public class DetermineHotGoal extends CommandBase {
         // but a different IP address may be passed as a string to the
         // getInstance method e.g. AxisCamera.getInstance("192.1.0.90")
         // Camera IP Adress: 10.13.29.11
-        camera = AxisCamera.getInstance("10.13.29.11");
-        if ( camera == null ) {
-            logError("Could not get singleton instance of AxisCamera");
-        } else {
-            log("Successfully retrieved singleton instance of AxisCamera");
+        try {
+            camera = AxisCamera.getInstance("10.13.29.11");
+            if ( camera == null ) {
+                logError("Could not get singleton instance of AxisCamera");
+            } else {
+                log("Successfully retrieved singleton instance of AxisCamera");
+            }
+            // camera.writeResolution(AxisCamera.ResolutionT.k640x480);
+        } catch ( Exception e ) {
+            logError("Error in initialize: " + e.getMessage());
         }
         started = false;
         finished = false;
