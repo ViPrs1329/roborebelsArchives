@@ -7,7 +7,9 @@ package org.stlpriory.robotics.commands.autonomous;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.stlpriory.robotics.commands.launcher.Launch;
+import org.stlpriory.robotics.commands.launcher.Reset;
 import org.stlpriory.robotics.commands.launcher.Retract;
+import org.stlpriory.robotics.commands.launcher.Stop;
 import org.stlpriory.robotics.subsystems.Vision;
 
 /**
@@ -67,6 +69,9 @@ public class AutonomousCommand extends CommandGroup {
                 });
             }
             
+            commandGroup.addSequential(new Reset());
+            commandGroup.addSequential(new WaitCommand(.4));
+            commandGroup.addSequential(new Stop());
             commandGroup.addSequential(new Launch() {
                 protected void execute() {
                     System.out.println("ShootingStrategy Launch at " + System.currentTimeMillis());
@@ -77,7 +82,9 @@ public class AutonomousCommand extends CommandGroup {
                     super.end();
                 }
             });
-            //commandGroup.addSequential(new Retract());
+            
+            commandGroup.addSequential(new WaitCommand(1));
+            commandGroup.addSequential(new Retract());
             commandGroup.start();
         }
         

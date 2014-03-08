@@ -77,6 +77,7 @@ public class OI {
 
     private static OI instance = null;
     private Joystick xboxControler;
+    private Joystick joystickControler;
     
     
 //    private Gamepad gamepad;
@@ -99,6 +100,7 @@ public class OI {
         
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
         xboxControler = new Joystick(1);
+        joystickControler = new Joystick(2);
         
 // COMMENTED OUT 3/7/2014
 //        Debug.println("[OI] Initializing gamepad for non button triggers");
@@ -119,8 +121,8 @@ public class OI {
         resetButton.whenPressed(new Reset());
         resetButton.whenReleased(new Stop());
         
-        Debug.println("[OI] Initializing gamepad to shift gears for the drivetrain wheels");
-        shiftButton = new JoystickButton(xboxControler,Keymap.SHIFT_BUTTON_KEY_MAP);
+        Debug.println("[OI] Initializing joystick to shift gears for the drivetrain wheels");
+        shiftButton = new JoystickButton(joystickControler,Keymap.SHIFT_JOYSTICK_BUTTON_KEY_MAP);
         shiftButton.whenPressed(new Shift());
         
         Debug.println("[OI] Initializing gamepad to tilt the entiire claw assembly");
@@ -183,6 +185,9 @@ public class OI {
 
     public Joystick getXboxControler() {
         return this.xboxControler;
+    }
+    public Joystick getJoystickControler() {
+        return this.joystickControler;
     }
 
 }
