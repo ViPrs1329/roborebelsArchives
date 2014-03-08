@@ -90,8 +90,8 @@ public class DetermineHotGoal extends CommandBase {
         // By default will connect to camera using IP address 10.x.y.11
         // but a different IP address may be passed as a string to the
         // getInstance method e.g. AxisCamera.getInstance("192.1.0.90")
-        // TODO put in correct camera IP address if not 10.13.29.11
-        camera = AxisCamera.getInstance();
+        // Camera IP Adress: 10.13.29.11
+        camera = AxisCamera.getInstance("10.13.29.11");
         if ( camera == null ) {
             logError("Could not get singleton instance of AxisCamera");
         } else {
@@ -126,6 +126,7 @@ public class DetermineHotGoal extends CommandBase {
                 BinaryImage thresholdImage = null;
                 try {
                     image = camera.getImage();
+                    
                     //String fileName = "Center";
                     //image = new RGBImage("/" + fileName + ".jpg");
 
@@ -133,7 +134,8 @@ public class DetermineHotGoal extends CommandBase {
                     // just looking for bright spots on the image and will rely on 
                     // particle filtering to ensure only find right shape
                     thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255);
-                    // thresholdImage.write("/" + fileName + ".bmp");
+                    image.write("/raw.jpg");
+                    thresholdImage.write("/threshold.bmp");
 
                     if (debug) {
                         log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");

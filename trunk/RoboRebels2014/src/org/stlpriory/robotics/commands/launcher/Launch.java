@@ -33,6 +33,7 @@ public class Launch extends CommandBase {
 //        }
         //claw.raiseClawForShoot();
         //claw.stopClawMotors();
+        claw.raiseWheelForShoot();
         
         launcher.disengageForShoot();
         executedCommand = true;

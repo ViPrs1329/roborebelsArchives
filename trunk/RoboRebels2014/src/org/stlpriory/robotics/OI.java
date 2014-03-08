@@ -76,7 +76,9 @@ public class OI {
      */
 
     private static OI instance = null;
-    private Joystick joystick;
+    private Joystick xboxControler;
+    
+    
 //    private Gamepad gamepad;
     private JoystickButton shiftButton;
     private JoystickButton expandRetractClawButton;
@@ -96,14 +98,14 @@ public class OI {
         Debug.println("[OI] Instantiating ...");
         
         Debug.println("[OI] Initializing gamepad to Drivers station USB port " + RobotMap.DRIVER_STATION_USB_PORT1);
-        joystick = new Joystick(1);
+        xboxControler = new Joystick(1);
         
 // COMMENTED OUT 3/7/2014
 //        Debug.println("[OI] Initializing gamepad for non button triggers");
 //        gamepad = new Gamepad();
         
         Debug.println("[OI] Initializing gamepad to launch ball a disc when the right bumper pressed");
-        launchButton = new JoystickButton(joystick,Keymap.LAUNCH_BUTTON_KEY_MAP);
+        launchButton = new JoystickButton(xboxControler,Keymap.LAUNCH_BUTTON_KEY_MAP);
         launchButton.whenPressed(new Launch());
         launchButton.whenReleased(new Retract());
 //
@@ -112,21 +114,21 @@ public class OI {
 //        retractButton.whenPressed(new Retract());
 //        
         Debug.println("[OI] Initializing gamepad to load launcher when the X button is pressed");
-        resetButton = new JoystickButton(joystick,Keymap.RESET_BUTTON_KEY_MAP);
+        resetButton = new JoystickButton(xboxControler,Keymap.RESET_BUTTON_KEY_MAP);
 //        resetButton.whenPressed(new RetractPunter());
         resetButton.whenPressed(new Reset());
         resetButton.whenReleased(new Stop());
         
         Debug.println("[OI] Initializing gamepad to shift gears for the drivetrain wheels");
-        shiftButton = new JoystickButton(joystick,Keymap.SHIFT_BUTTON_KEY_MAP);
+        shiftButton = new JoystickButton(xboxControler,Keymap.SHIFT_BUTTON_KEY_MAP);
         shiftButton.whenPressed(new Shift());
         
         Debug.println("[OI] Initializing gamepad to tilt the entiire claw assembly");
-        expandRetractClawButton = new JoystickButton(joystick,Keymap.CLAW_ASSEMBLY_TILT_BUTTON_KEY_MAP);
+        expandRetractClawButton = new JoystickButton(xboxControler,Keymap.CLAW_ASSEMBLY_TILT_BUTTON_KEY_MAP);
         expandRetractClawButton.whenPressed(new InvertPiston());
         
         Debug.println("[OI] Initializing gamepad to start/stop the claw wheels");
-        clawButton = new JoystickButton(joystick,Keymap.CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP);
+        clawButton = new JoystickButton(xboxControler,Keymap.CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP);
         clawButton.whenPressed(new StartClawWheels());
         clawButton.whenReleased(new StopClawWheels());
         
@@ -135,11 +137,11 @@ public class OI {
 //        sensorButton.whenPressed(new ReadDistance());
         
         Debug.println("[OI] Initializing gamepad to tilt the claw wheels");
-        clawWheelButton = new JoystickButton(joystick,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP);
+        clawWheelButton = new JoystickButton(xboxControler,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP);
         clawWheelButton.whenPressed(new InvertWheelPiston());
         
         Debug.println("[OI] Initializing gamepad to shoot for low goal");
-        lowGoalShootButton = new JoystickButton(joystick,Keymap.CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP);
+        lowGoalShootButton = new JoystickButton(xboxControler,Keymap.CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP);
         lowGoalShootButton.whenPressed(new ShootForLowGoal());
         lowGoalShootButton.whenReleased(new StopClawWheels());
         
@@ -179,8 +181,8 @@ public class OI {
         return instance;
     }
 
-    public Joystick getJoystick() {
-        return this.joystick;
+    public Joystick getXboxControler() {
+        return this.xboxControler;
     }
 
 }

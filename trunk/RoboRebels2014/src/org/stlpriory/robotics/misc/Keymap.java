@@ -42,7 +42,7 @@ public class Keymap {
     
     public static final int SHIFT_BUTTON_KEY_MAP = 4;
     public static final int CLAW_ASSEMBLY_TILT_BUTTON_KEY_MAP = 9;
-    public static final int CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP = 7;
+    public static final int CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP = 1;
 //    public static final int SENSOR_DISTANCE_BUTTON = 2;
     public static final int CLAW_WHEEL_TILT_BUTTON_KEY_MAP = 10;
     public static final int CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP = 8;

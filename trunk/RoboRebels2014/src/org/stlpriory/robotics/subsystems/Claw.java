@@ -58,8 +58,9 @@ public class Claw extends Subsystem {
     public void startClawMotors() {
         //Todo: Set directions of motors
         wheel_left.set(-MOTOR_SPEED);
-        wheel_right.set(MOTOR_SPEED);
+        wheel_right.set(-.75);
         wheel_center.set(MOTOR_SPEED);
+        System.out.println(wheel_right.get());
      }
 
     public void startClawMotorsForHold() {
@@ -80,7 +81,9 @@ public class Claw extends Subsystem {
     }
 
     public void lowerClawForPickup() {
+        if (isWheelLoweredForPickup()) {
         valve1.set(true);   //turns the Solenoid on
+        }
 //        valve2.set(false);  //turns the Solenoid off
 //        if (!isWheelLoweredForPickup()) {
 //            lowerWheelForPickup();
@@ -89,20 +92,26 @@ public class Claw extends Subsystem {
 
     public void raiseClawForShoot() {
         startClawMotorsForHold();
+        if (isWheelLoweredForPickup()) {
         valve1.set(false);
+        }
 //        valve2.set(true);
 //        if (isWheelLoweredForPickup()) {
 //            raiseWheelForShoot();
 //        }
-//        stopClawMotors();
+        stopClawMotors();
     }
     
     public void lowerWheelForPickup() {
-        valve3.set(true);
+        if (!isClawLoweredForPickup()) {
+        valve3.set(false);
+        }
 //        valve4.set(false);
     }
     public void raiseWheelForShoot() {
-        valve3.set(false);
+        if (!isClawLoweredForPickup()) {
+        valve3.set(true);
+        }
 //        valve4.set(true);
     }
     
@@ -113,7 +122,7 @@ public class Claw extends Subsystem {
     }
     
     public boolean isWheelLoweredForPickup() {
-        return valve3.get();
+        return !valve3.get();
     }
     
     public void calibrateTalonsMax() {

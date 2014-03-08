@@ -40,7 +40,7 @@ public class Gamepad { //extends Joystick
 
     public Gamepad() {
 //        super(port, numAxisTypes, numButtonTypes);
-        rightTrigger = new RightTrigger(OI.getInstance().getJoystick());
+        rightTrigger = new RightTrigger(OI.getInstance().getXboxControler());
     }
 
     public void whenRightTriggerHeld(Command command) {

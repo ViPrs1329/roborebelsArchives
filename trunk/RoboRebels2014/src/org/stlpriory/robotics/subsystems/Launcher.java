@@ -21,7 +21,7 @@ public class Launcher extends Subsystem {
     //private Talon launch2;
     private Solenoid valve1;
 //    private Solenoid valve2;
-    private static final double WINDING_SPEED = 1.0;
+    private static final double WINDING_SPEED = -1.0;
     private DigitalInput punterLimitSwitch;
     
     public Launcher() {

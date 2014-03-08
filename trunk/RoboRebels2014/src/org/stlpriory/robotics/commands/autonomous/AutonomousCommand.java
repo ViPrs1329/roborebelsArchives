@@ -48,6 +48,8 @@ public class AutonomousCommand extends CommandGroup {
      */
     private class ShootingStrategy extends CommandGroup {
         private boolean executed = false;
+        CommandGroup commandgroup = new CommandGroup();
+        
         
         // we don't need to call super.execute since CommandGroup's _execute
         // method handles the internal command group execution logic
@@ -57,10 +59,11 @@ public class AutonomousCommand extends CommandGroup {
             }
             
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
-                addSequential(new WaitCommand(5));
+                commandgroup.addSequential(new WaitCommand(5));
             }
-            addSequential(new Launch());
-            addSequential(new Retract());
+            commandgroup.addSequential(new Launch());
+            commandgroup.addSequential(new Retract());
+            commandgroup.start();
             
             executed = true;
         }

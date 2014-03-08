@@ -152,8 +152,14 @@ public class DriveTrain extends Subsystem {
     }
 
     public void shiftGears() {
-        CommandBase.updateDriverStationLCD(1,1,"Executing gear shift");
+//        CommandBase.updateDriverStationLCD(1,1,"Executing gear shift");
         gearBoxes.shiftBoxes();
+        if (gearBoxes.isLowGear()){
+        CommandBase.updateDriverStationLCD(1,1,"Gearbox: Low Gear");
+        }
+        else if (gearBoxes.isHighGear()) {
+            CommandBase.updateDriverStationLCD(1, 1, "Gearbox: High Gear");
+        }
     }
 
   
