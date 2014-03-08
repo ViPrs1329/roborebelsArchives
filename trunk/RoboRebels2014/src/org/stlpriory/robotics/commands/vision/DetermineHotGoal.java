@@ -231,16 +231,17 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     private void retrieveImage ( ) throws IOException {
-        final String url = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
+        final String httpUrl = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
+        final String fileUrl = "file://" + RAW_IMAGE_NAME;
 
         HttpConnection httpConnection = null;
         InputStream httpInputStream = null;
         FileConnection fileConnection = null;
         OutputStream fileOutputStream = null;
         try {
-            httpConnection = (HttpConnection) Connector.open(url);
+            httpConnection = (HttpConnection) Connector.open(httpUrl);
             httpInputStream = httpConnection.openInputStream();
-            fileConnection = (FileConnection) Connector.open("file://" + RAW_IMAGE_NAME);
+            fileConnection = (FileConnection) Connector.open(fileUrl);
             if (!fileConnection.exists()) {
                 fileConnection.create();
             }
