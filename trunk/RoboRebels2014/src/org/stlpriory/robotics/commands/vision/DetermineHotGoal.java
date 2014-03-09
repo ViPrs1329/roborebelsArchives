@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.image.RGBImage;
 import java.util.Vector;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
@@ -122,7 +121,6 @@ public class DetermineHotGoal extends CommandBase {
                         Debug.err("Vision subsystem returned null for camera instance");
                         return;
                     }
-                    camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
 
                     // 0-255 min/max values for hue, saturation, and value
