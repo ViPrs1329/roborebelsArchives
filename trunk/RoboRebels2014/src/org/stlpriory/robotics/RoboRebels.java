@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.autonomous.AutonomousCommand;
 import org.stlpriory.robotics.misc.Debug;
+import org.stlpriory.robotics.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -43,6 +44,7 @@ public class RoboRebels extends IterativeRobot {
 
         // Initialize all subsystems
         CommandBase.init();
+        Vision.getInstance().initializeCamera();
        
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
