@@ -63,6 +63,7 @@ public class Vision extends Subsystem {
     public void initializeCamera ( ) {
         try {
             camera = AxisCamera.getInstance();
+            camera.writeResolution(AxisCamera.ResolutionT.k640x480);
         } catch ( Exception e ) {
             Debug.err("Could not get instance of AxisCamera: " + e.getMessage());
         }
