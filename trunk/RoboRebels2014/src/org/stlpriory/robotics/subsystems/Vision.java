@@ -6,6 +6,7 @@
 
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -14,6 +15,8 @@ import org.stlpriory.robotics.misc.Debug;
 public class Vision extends Subsystem {
     
     private static Vision instance;
+    
+    private AxisCamera camera;
     
     public static Vision getInstance() {
         if ( instance == null ) {
@@ -55,6 +58,18 @@ public class Vision extends Subsystem {
     
     public synchronized void setHotGoalNormalizedX ( Double value ) {
         hotGoalNormalizedX = value;
+    }
+    
+    public void initializeCamera ( ) {
+        try {
+            camera = AxisCamera.getInstance();
+        } catch ( Exception e ) {
+            Debug.err("Could not get instance of AxisCamera: " + e.getMessage());
+        }
+    }
+    
+    public AxisCamera getCamera ( ) {
+        return camera;
     }
     
 }
