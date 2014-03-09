@@ -43,7 +43,6 @@ public class AutonomousCommand extends CommandGroup {
     }
     public void initialize() {
         startTime = System.currentTimeMillis();
-        
     }
     
     /**
@@ -60,10 +59,12 @@ public class AutonomousCommand extends CommandGroup {
             
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
                  long currentTime = System.currentTimeMillis();
-                 double timeRemaining = 5.5 - ((double) (currentTime-startTime))/1000.0;
+                 double timeTaken = (currentTime - startTime)/1000.0;
+                 System.out.println("Time Taken: " + timeTaken);
+                 double timeRemaining = 5.5 - timeTaken;
                  System.out.println("Time Remaining: " + timeRemaining);
                  if (timeRemaining > 0) {
-                commandGroup.addSequential(new WaitCommand(timeRemaining));
+                    commandGroup.addSequential(new WaitCommand(timeRemaining));
                  }
             }
             
