@@ -101,6 +101,7 @@ public class Launcher extends Subsystem {
             CommandBase.updateDriverStationLCD(2, 1, "Retracting launcher");
         } else {
             CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");
+            launch1.set(0);
         }
         
 //        launch2.set(windSpeed);

@@ -70,9 +70,7 @@ public class RoboRebels extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         Debug.println("[mode] Operator control");
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
-        }
+        Scheduler.getInstance().removeAll();
     }
 
     /**

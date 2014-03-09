@@ -231,6 +231,7 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     private void retrieveImage ( ) throws IOException {
+        long startTime = System.currentTimeMillis();
         final String httpUrl = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
         final String fileUrl = "file://" + RAW_IMAGE_NAME;
 
@@ -263,6 +264,7 @@ public class DetermineHotGoal extends CommandBase {
             if (fileConnection != null) {
                 fileConnection.close();
             }
+            System.out.println("retrieveImage took " + ( System.currentTimeMillis() - startTime) + " msec");
         }
 
     }

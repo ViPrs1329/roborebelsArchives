@@ -35,13 +35,5 @@ public class AutonomousFirstPart extends CommandGroup {
         addParallel(new ImageProcessing());
     }
     
-    protected void execute ( ) {
-        System.out.println("AutonoumousFirstPart at " + System.currentTimeMillis());
-        super.execute();
-    }
-    
-    protected void end() {
-            System.out.println("AutonoumousFirstPart ending at " + System.currentTimeMillis());
-            super.end();
-        }
+
 }

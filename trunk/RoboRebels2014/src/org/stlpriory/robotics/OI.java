@@ -85,6 +85,7 @@ public class OI {
     private JoystickButton expandRetractClawButton;
     private JoystickButton clawButton;
     private JoystickButton clawWheelButton;
+    private JoystickButton clawWheelButton2;
     private JoystickButton lowGoalShootButton;
     private JoystickButton launchButton;
         private JoystickButton resetButton;
@@ -141,6 +142,9 @@ public class OI {
         Debug.println("[OI] Initializing gamepad to tilt the claw wheels");
         clawWheelButton = new JoystickButton(xboxControler,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP);
         clawWheelButton.whenPressed(new InvertWheelPiston());
+        
+        clawWheelButton2 = new JoystickButton(xboxControler,Keymap.CLAW_WHEEL_TILT_BUTTON_KEY_MAP_2);
+        clawWheelButton2.whenPressed(new InvertWheelPiston());
         
         Debug.println("[OI] Initializing gamepad to shoot for low goal");
         lowGoalShootButton = new JoystickButton(xboxControler,Keymap.CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP);

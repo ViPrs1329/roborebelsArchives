@@ -34,17 +34,18 @@ package org.stlpriory.robotics.misc;
      */
 public class Keymap {
     
-    public static final int LAUNCH_BUTTON_KEY_MAP = 6;
+    public static final int LAUNCH_BUTTON_KEY_MAP = 4;
     // Retract only engages the gearbox so that we can wind the launcher
     public static final int RETRACT_BUTTON_KEY_MAP = 3;
     // Reset starts winding the launcher
-    public static final int RESET_BUTTON_KEY_MAP = 5;
+    public static final int RESET_BUTTON_KEY_MAP = 2;
     
     public static final int SHIFT_JOYSTICK_BUTTON_KEY_MAP = 1;
     public static final int CLAW_ASSEMBLY_TILT_BUTTON_KEY_MAP = 9;
     public static final int CLAW_START_STOP_WHEELS_BUTTON_KEY_MAP = 1;
 //    public static final int SENSOR_DISTANCE_BUTTON = 2;
     public static final int CLAW_WHEEL_TILT_BUTTON_KEY_MAP = 10;
+    public static final int CLAW_WHEEL_TILT_BUTTON_KEY_MAP_2 = 7;
     public static final int CLAW_LOW_GOAL_SHOOT_BUTTON_KEY_MAP = 8;
     
 //    public static final int MODE_TOGGLE_STATE_BUTTON_KEY_MAP = 7;

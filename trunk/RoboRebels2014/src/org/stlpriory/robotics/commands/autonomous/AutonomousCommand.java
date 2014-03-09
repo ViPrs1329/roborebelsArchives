@@ -17,6 +17,7 @@ import org.stlpriory.robotics.subsystems.Vision;
  * @author William
  */
 public class AutonomousCommand extends CommandGroup {
+    private long startTime;
     
     public AutonomousCommand() {
         // Add Commands here:
@@ -40,6 +41,10 @@ public class AutonomousCommand extends CommandGroup {
         addSequential(new ShootingStrategy());
         
     }
+    public void initialize() {
+        startTime = System.currentTimeMillis();
+        
+    }
     
     /**
      * This command group will not have any child commands until it is
@@ -54,48 +59,25 @@ public class AutonomousCommand extends CommandGroup {
             CommandGroup commandGroup = new CommandGroup();
             
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
-                commandGroup.addSequential(new WaitCommand(5) {
-
-                    protected void execute() {
-                        System.out.println("ShootingStrategy Wait at " + System.currentTimeMillis());
-                        super.execute();
-                    }
-                    
-                    protected void end() {
-                        System.out.println("ShootingStrategy Wait ending at " + System.currentTimeMillis());
-                        super.end();
-                    }
-                    
-                });
+                 long currentTime = System.currentTimeMillis();
+                 double timeRemaining = 5.5 - ((double) (currentTime-startTime))/1000.0;
+                 System.out.println("Time Remaining: " + timeRemaining);
+                 if (timeRemaining > 0) {
+                commandGroup.addSequential(new WaitCommand(timeRemaining));
+                 }
             }
             
             commandGroup.addSequential(new Reset());
             commandGroup.addSequential(new WaitCommand(.4));
             commandGroup.addSequential(new Stop());
-            commandGroup.addSequential(new Launch() {
-                protected void execute() {
-                    System.out.println("ShootingStrategy Launch at " + System.currentTimeMillis());
-                    super.execute();
-                }
-                protected void end() {
-                    System.out.println("ShootingStrategy Launch ending at " + System.currentTimeMillis());
-                    super.end();
-                }
-            });
+            commandGroup.addSequential(new Launch());
             
             commandGroup.addSequential(new WaitCommand(1));
             commandGroup.addSequential(new Retract());
             commandGroup.start();
         }
         
-        protected void execute() {
-            System.out.println("ShootingStrategy at " + System.currentTimeMillis());
-            super.execute();
-        }
-        
-        protected void end() {
-            System.out.println("ShootingStrategy ending at " + System.currentTimeMillis());
-            super.end();
-        }
+       
     }
+    
 }
