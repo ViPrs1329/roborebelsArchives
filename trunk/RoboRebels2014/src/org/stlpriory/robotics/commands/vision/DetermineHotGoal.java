@@ -117,7 +117,11 @@ public class DetermineHotGoal extends CommandBase {
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    AxisCamera camera = AxisCamera.getInstance();
+                    AxisCamera camera = vision.getCamera();
+                    if ( camera == null ) {
+                        Debug.err("Vision subsystem returned null for camera instance");
+                        return;
+                    }
                     camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
 
