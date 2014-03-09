@@ -7,18 +7,13 @@
 package org.stlpriory.robotics.commands.vision;
 
 import com.sun.cldc.jna.Pointer;
-import com.sun.squawk.microedition.io.FileConnection;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.RGBImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Vector;
-import javax.microedition.io.Connector;
-import javax.microedition.io.HttpConnection;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -122,8 +117,9 @@ public class DetermineHotGoal extends CommandBase {
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    retrieveImage();
-                    image = new RGBImage(RAW_IMAGE_NAME);
+                    AxisCamera camera = AxisCamera.getInstance();
+                    camera.writeResolution(AxisCamera.ResolutionT.k640x480);
+                    image = camera.getImage();
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
@@ -228,45 +224,6 @@ public class DetermineHotGoal extends CommandBase {
     
     private void logError ( String msg ) {
         Debug.err("DetermineHotGoal: " + msg);
-    }
-    
-    private void retrieveImage ( ) throws IOException {
-        long startTime = System.currentTimeMillis();
-        final String httpUrl = "http://" + CAMERA_IP_ADDRESS + "/axis-cgi/jpg/image.cgi?resolution=640x480";
-        final String fileUrl = "file://" + RAW_IMAGE_NAME;
-
-        HttpConnection httpConnection = null;
-        InputStream httpInputStream = null;
-        FileConnection fileConnection = null;
-        OutputStream fileOutputStream = null;
-        try {
-            httpConnection = (HttpConnection) Connector.open(httpUrl);
-            httpInputStream = httpConnection.openInputStream();
-            fileConnection = (FileConnection) Connector.open(fileUrl);
-            if (!fileConnection.exists()) {
-                fileConnection.create();
-            }
-            fileOutputStream = fileConnection.openOutputStream();
-            int ch;
-            while ((ch = httpInputStream.read()) != -1) {
-                fileOutputStream.write(ch);
-            }
-        } finally {
-            if (httpInputStream != null) {
-                httpInputStream.close();
-            }
-            if (httpConnection != null) {
-                httpConnection.close();
-            }
-            if (fileOutputStream != null) {
-                fileOutputStream.close();
-            }
-            if (fileConnection != null) {
-                fileConnection.close();
-            }
-            System.out.println("retrieveImage took " + ( System.currentTimeMillis() - startTime) + " msec");
-        }
-
     }
     
     /**
