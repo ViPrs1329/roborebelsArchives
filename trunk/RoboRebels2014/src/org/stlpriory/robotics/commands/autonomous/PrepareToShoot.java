@@ -16,9 +16,9 @@ import org.stlpriory.robotics.commands.launcher.Stop;
  *
  * @author William
  */
-public class Driving extends CommandGroup {
+public class PrepareToShoot extends CommandGroup {
     
-    public Driving() { 
+    public PrepareToShoot() { 
         
         // hold the ball while driving
         addSequential(new HoldBall());
