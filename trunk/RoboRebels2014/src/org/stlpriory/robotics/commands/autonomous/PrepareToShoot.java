@@ -23,6 +23,7 @@ public class PrepareToShoot extends CommandGroup {
         // hold the ball while driving
         addSequential(new HoldBall());
         
+        // drive forward
         addSequential(new DriveForward() );       
         // TODO determine amount of time to drive forward
         addSequential(new WaitCommand(2) );
