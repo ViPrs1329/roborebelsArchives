@@ -28,8 +28,6 @@ public class Driving extends CommandGroup {
         addSequential(new Reset());
         addSequential(new Stop());
             
-        // TODO do we really need to hold the ball when we are ready to shoot?
-        addSequential(new HoldBall());
     }
     
     
