@@ -6,8 +6,11 @@ package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import org.stlpriory.robotics.commands.claw.HoldBall;
 import org.stlpriory.robotics.commands.drivetrain.DriveForward;
 import org.stlpriory.robotics.commands.drivetrain.StopDriving;
+import org.stlpriory.robotics.commands.launcher.Reset;
+import org.stlpriory.robotics.commands.launcher.Stop;
 
 /**
  *
@@ -15,27 +18,18 @@ import org.stlpriory.robotics.commands.drivetrain.StopDriving;
  */
 public class Driving extends CommandGroup {
     
-    public Driving() {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
-        
-        addSequential(new DriveForward() );
+    public Driving() {        
+        addSequential(new DriveForward() );       
+        // TODO determine amount of time to drive forward
         addSequential(new WaitCommand(2) );
         addSequential(new StopDriving() );
+        
+        // retract the puncher to limit switch position and then stop
+        addSequential(new Reset());
+        addSequential(new Stop());
+            
+        // TODO do we really need to hold the ball when we are ready to shoot?
+        addSequential(new HoldBall());
     }
     
     
