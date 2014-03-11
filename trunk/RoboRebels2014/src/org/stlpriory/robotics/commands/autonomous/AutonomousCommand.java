@@ -39,7 +39,7 @@ public class AutonomousCommand extends CommandGroup {
         // arm.
 
         addSequential(new AutonomousFirstPart());
-//        addSequential(new ShootingStrategy());
+        addSequential(new ShootingStrategy());
         
     }
     public void initialize() {
@@ -69,13 +69,13 @@ public class AutonomousCommand extends CommandGroup {
                  }
             }
             
-//            commandGroup.addSequential(new Reset());
-//            commandGroup.addSequential(new Stop());
-//            commandGroup.addSequential(new HoldBall());
-//            commandGroup.addSequential(new Launch());
-//            
-//            commandGroup.addSequential(new WaitCommand(1));
-//            commandGroup.addSequential(new Retract());
+            commandGroup.addSequential(new Reset());
+            commandGroup.addSequential(new Stop());
+            commandGroup.addSequential(new HoldBall());
+            commandGroup.addSequential(new Launch());
+            
+            commandGroup.addSequential(new WaitCommand(1));
+            commandGroup.addSequential(new Retract());
             commandGroup.start();
         }
         
