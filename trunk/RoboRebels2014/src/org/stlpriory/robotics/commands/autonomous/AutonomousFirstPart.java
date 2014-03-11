@@ -19,7 +19,7 @@ public class AutonomousFirstPart extends CommandGroup {
         // command added to the command group prior to adding the two
         // parallel commands
         addSequential(new WaitCommand(0.03));
-        addParallel(new Driving());
+        addParallel(new PrepareToShoot());
         addParallel(new ImageProcessing());
     }
     
