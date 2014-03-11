@@ -74,7 +74,7 @@ public class AutonomousCommand extends CommandGroup {
                 }
             }
             
-            // TODO relocate the reset/stop/holdBall sequence
+            // TODO relocate the preparing to launch sequence
             // to a parallel branch running during driving and 
             // image processing
             // since we don't want to delay the shooting
