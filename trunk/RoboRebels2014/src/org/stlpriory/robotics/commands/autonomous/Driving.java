@@ -28,9 +28,10 @@ public class Driving extends CommandGroup {
         addSequential(new WaitCommand(2) );
         addSequential(new StopDriving() );
         
-        // retract the puncher to limit switch position and then stop
         // TODO should we stop holding the ball while retracting the puncher
         // in order to reduce the electrical load?
+        
+        // retract the puncher to limit switch position and then stop
         addSequential(new Reset());
         addSequential(new Stop());
             
