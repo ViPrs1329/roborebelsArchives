@@ -23,7 +23,7 @@ public class AutonomousCommand extends CommandGroup {
     
     // used to keep track of the amount of time that autonoumous phase
     // has been running
-    private Timer timer = new Timer();;
+    private final Timer timer = new Timer();;
     
     public AutonomousCommand() {
         // Add Commands here:
