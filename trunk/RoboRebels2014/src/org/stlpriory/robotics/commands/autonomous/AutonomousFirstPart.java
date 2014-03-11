@@ -6,7 +6,6 @@ package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import org.stlpriory.robotics.commands.claw.HoldBall;
 
 /**
  *
@@ -19,7 +18,7 @@ public class AutonomousFirstPart extends CommandGroup {
         // ImageProcessing to work, there has to be at least one sequential
         // command added to the command group prior to adding the two
         // parallel commands
-        addSequential(new HoldBall());
+        addSequential(new WaitCommand(0.03));
         addParallel(new Driving());
         addParallel(new ImageProcessing());
     }
