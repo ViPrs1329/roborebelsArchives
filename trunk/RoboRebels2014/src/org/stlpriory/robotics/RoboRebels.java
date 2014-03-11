@@ -44,13 +44,6 @@ public class RoboRebels extends IterativeRobot {
 
         // Initialize all subsystems
         CommandBase.init();
-        Debug.println("Initializing AxisCamera singleton");
-        // it is necessary to ask for the instance of the AxisCamera singleton
-        // instance in robotInit so that during autonoumous the getImage()
-        // will actually return an image instead of throwing a "no image available"
-        // exception
-        AxisCamera.getInstance();
-        Debug.println("AxisCamera singleton initialized");
        
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
