@@ -58,9 +58,9 @@ public class AutonomousCommand extends CommandGroup {
     }
     
     /**
-     * This command group will not have any child commands until it is
-     * initialized, at which point it will examine the status
-     * of the hot goal and add an appropriate sequence of commands in order
+     * This command group will not have any child commands, but during 
+     * initialize it will examine the status of the hot goal and 
+     * start an appropriate sequence of commands in order
      * to execute the shooting strategy.
      */
     private class ShootingStrategy extends CommandGroup {
