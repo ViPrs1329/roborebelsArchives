@@ -6,6 +6,7 @@ package org.stlpriory.robotics.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import org.stlpriory.robotics.commands.claw.HoldBall;
 
 /**
  *
@@ -30,8 +31,9 @@ public class AutonomousFirstPart extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-        addSequential(new WaitCommand(.0030));
-        addParallel(new Driving());
+//        addSequential(new WaitCommand(.0030));
+//        addSequential(new HoldBall());
+//        addParallel(new Driving());
         addParallel(new ImageProcessing());
     }
     

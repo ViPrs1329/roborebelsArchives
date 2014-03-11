@@ -24,7 +24,7 @@ public class Reset extends CommandBase {
         if (tank.isCompressorStarted()) {
             tank.stopCompressor();
         }
-            }
+    }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {

@@ -28,8 +28,6 @@ public class Launcher extends Subsystem {
     public Launcher() {
         super("Launcher");
         Debug.println("[Launcher Subsystem] Instantiating...");
-       
-        Debug.println(">>>>>>>>>>>>>  Go Robo Rebels");
         
         Debug.println("[Launcher Subsystem] Initializing speed controller to channel "
                 + RobotMap.LAUNCHER_JAGUAR1_PWM_CHANNEL);

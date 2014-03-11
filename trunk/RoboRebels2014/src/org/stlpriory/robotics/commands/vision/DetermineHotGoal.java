@@ -121,7 +121,9 @@ public class DetermineHotGoal extends CommandBase {
                         Debug.err("Vision subsystem returned null for camera instance");
                         return;
                     }
+                    camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
+                    //image.write("/rawImage.jpg");
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
