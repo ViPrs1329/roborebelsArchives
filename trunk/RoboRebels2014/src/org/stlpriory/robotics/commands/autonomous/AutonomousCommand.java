@@ -7,11 +7,8 @@ package org.stlpriory.robotics.commands.autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import org.stlpriory.robotics.commands.claw.HoldBall;
 import org.stlpriory.robotics.commands.launcher.Launch;
-import org.stlpriory.robotics.commands.launcher.Reset;
 import org.stlpriory.robotics.commands.launcher.Retract;
-import org.stlpriory.robotics.commands.launcher.Stop;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Vision;
 
@@ -22,7 +19,7 @@ import org.stlpriory.robotics.subsystems.Vision;
 public class AutonomousCommand extends CommandGroup {
     
     // measured in seconds
-    public static final double IDEAL_SHOOT_TIME_IF_NO_HOT_GOAL = 5.5;
+    public static final double IDEAL_SHOOT_TIME_IF_NO_HOT_GOAL = 7.0;
     
     // used to keep track of the amount of time that autonoumous phase
     // has been running
