@@ -6,6 +6,7 @@
 
 package org.stlpriory.robotics.subsystems;
 
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.misc.Debug;
 
@@ -35,6 +36,7 @@ public class Vision extends Subsystem {
     private Vision () {
         super("Vision");
         Debug.println("Vision subsystem constructor");
+        initializeVisionSubsystem();
     }
 
     protected void initDefaultCommand() {
@@ -55,6 +57,19 @@ public class Vision extends Subsystem {
     
     public synchronized void setHotGoalNormalizedX ( Double value ) {
         hotGoalNormalizedX = value;
+    }
+    
+    private void initializeVisionSubsystem ( ) {
+        Debug.println("Initializing AxisCamera singleton");
+        // it is necessary to ask for the instance of the AxisCamera singleton
+        // instance in robotInit so that during autonoumous the getImage()
+        // will actually return an image instead of throwing a "no image available"
+        // exception.  This method will be called during robotInit because
+        // the CommandBase init static method is called, which loads the
+        // CommandBase class which has a static reference to the Vision singleton
+        // object
+        AxisCamera.getInstance();
+        Debug.println("AxisCamera singleton initialized");
     }
     
 }
