@@ -79,6 +79,7 @@ public class AutonomousCommand extends CommandGroup {
             
             commandGroup.addSequential(new Reset());
             commandGroup.addSequential(new Stop());
+            // TODO do we really need to hold the ball when we are ready to shoot?
             commandGroup.addSequential(new HoldBall());
             commandGroup.addSequential(new Launch());
             commandGroup.addSequential(new WaitCommand(1));
