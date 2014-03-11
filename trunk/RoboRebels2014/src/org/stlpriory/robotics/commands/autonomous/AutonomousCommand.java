@@ -7,8 +7,11 @@ package org.stlpriory.robotics.commands.autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import org.stlpriory.robotics.commands.claw.HoldBall;
 import org.stlpriory.robotics.commands.launcher.Launch;
+import org.stlpriory.robotics.commands.launcher.Reset;
 import org.stlpriory.robotics.commands.launcher.Retract;
+import org.stlpriory.robotics.commands.launcher.Stop;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Vision;
 
@@ -74,14 +77,10 @@ public class AutonomousCommand extends CommandGroup {
                 }
             }
             
-            // TODO relocate the preparing to launch sequence
-            // to a parallel branch running during driving and 
-            // image processing since we don't want to delay shooting
-            //commandGroup.addSequential(new Reset());
-            //commandGroup.addSequential(new Stop());
-            //commandGroup.addSequential(new HoldBall());
+            commandGroup.addSequential(new Reset());
+            commandGroup.addSequential(new Stop());
+            commandGroup.addSequential(new HoldBall());
             commandGroup.addSequential(new Launch());
-            
             commandGroup.addSequential(new WaitCommand(1));
             commandGroup.addSequential(new Retract());
             commandGroup.start();
