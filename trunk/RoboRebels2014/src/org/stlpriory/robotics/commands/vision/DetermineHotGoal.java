@@ -65,10 +65,6 @@ public class DetermineHotGoal extends CommandBase {
     // TODO determine ideal value during testing
     public static final double IDEAL_PARTICLE_NORMALIZED_Y = 0.1;
     
-    public static final String CAMERA_IP_ADDRESS = "10.13.29.11";
-    
-    public static final String RAW_IMAGE_NAME = "/rawImage.jpg";
-    
     // used internally to keep track of execution status
     private boolean started = false;
     private boolean finished = false;
@@ -113,12 +109,14 @@ public class DetermineHotGoal extends CommandBase {
                 if (debug) {
                     log("execute start");
                 }
+                // initialize to null in case error out during processing
+                vision.setHotGoalNormalizedX(null);
                 ColorImage image = null;
                 BinaryImage thresholdImage = null;
                 try {
-                    AxisCamera camera = vision.getCamera();
+                    AxisCamera camera = AxisCamera.getInstance();
                     if ( camera == null ) {
-                        Debug.err("Vision subsystem returned null for camera instance");
+                        Debug.err("AxisCamera.getInstance() returned null for camera instance");
                         return;
                     }
                     camera.writeResolution(AxisCamera.ResolutionT.k640x480);
