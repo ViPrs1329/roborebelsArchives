@@ -6,7 +6,6 @@
 
 package org.stlpriory.robotics.subsystems;
 
-import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.stlpriory.robotics.misc.Debug;
 
