@@ -76,8 +76,7 @@ public class AutonomousCommand extends CommandGroup {
             
             // TODO relocate the preparing to launch sequence
             // to a parallel branch running during driving and 
-            // image processing
-            // since we don't want to delay the shooting
+            // image processing since we don't want to delay shooting
             //commandGroup.addSequential(new Reset());
             //commandGroup.addSequential(new Stop());
             //commandGroup.addSequential(new HoldBall());
