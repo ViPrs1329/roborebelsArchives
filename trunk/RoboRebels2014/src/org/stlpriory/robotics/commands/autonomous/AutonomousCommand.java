@@ -19,7 +19,7 @@ import org.stlpriory.robotics.subsystems.Vision;
 public class AutonomousCommand extends CommandGroup {
     
     // measured in seconds
-    public static final double IDEAL_SHOOT_TIME_IF_NO_HOT_GOAL = 7.0;
+    public static final double IDEAL_SHOOT_TIME_IF_NO_HOT_GOAL = 6.5;
     
     // used to keep track of the amount of time that autonoumous phase
     // has been running
