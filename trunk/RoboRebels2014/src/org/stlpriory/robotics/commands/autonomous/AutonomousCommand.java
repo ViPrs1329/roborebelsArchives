@@ -27,8 +27,7 @@ public class AutonomousCommand extends CommandGroup {
     
     public AutonomousCommand() {
         addSequential(new AutonomousFirstPart());
-        addSequential(new ShootingStrategy());
-        
+        addSequential(new ShootingStrategy()); 
     }
      
     protected void initialize() {
