@@ -16,8 +16,6 @@ public class Vision extends Subsystem {
     
     private static Vision instance;
     
-    private AxisCamera camera;
-    
     public static Vision getInstance() {
         if ( instance == null ) {
             synchronized(Vision.class) {
@@ -58,19 +56,6 @@ public class Vision extends Subsystem {
     
     public synchronized void setHotGoalNormalizedX ( Double value ) {
         hotGoalNormalizedX = value;
-    }
-    
-    public void initializeCamera ( ) {
-        try {
-            camera = AxisCamera.getInstance();
-            //writeResolution(AxisCamera.ResolutionT.k640x480);
-        } catch ( Exception e ) {
-            Debug.err("Could not get instance of AxisCamera: " + e.getMessage());
-        }
-    }
-    
-    public AxisCamera getCamera ( ) {
-        return camera;
     }
     
 }
