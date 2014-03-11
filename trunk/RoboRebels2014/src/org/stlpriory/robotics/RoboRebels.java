@@ -10,13 +10,13 @@ package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.autonomous.AutonomousCommand;
 import org.stlpriory.robotics.misc.Debug;
-import org.stlpriory.robotics.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,7 +44,13 @@ public class RoboRebels extends IterativeRobot {
 
         // Initialize all subsystems
         CommandBase.init();
-        Vision.getInstance().initializeCamera();
+        Debug.println("Initializing AxisCamera singleton");
+        // it is necessary to ask for the instance of the AxisCamera singleton
+        // instance in robotInit so that during autonoumous the getImage()
+        // will actually return an image instead of throwing a "no image available"
+        // exception
+        AxisCamera.getInstance();
+        Debug.println("AxisCamera singleton initialized");
        
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
