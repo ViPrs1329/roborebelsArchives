@@ -48,7 +48,7 @@ public class AutonomousCommand extends CommandGroup {
         
     }
      
-   protected void initialize() {
+    protected void initialize() {
         timer.start();
     }
     
