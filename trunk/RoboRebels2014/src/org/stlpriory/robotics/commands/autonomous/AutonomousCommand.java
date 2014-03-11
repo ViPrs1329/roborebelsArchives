@@ -74,6 +74,7 @@ public class AutonomousCommand extends CommandGroup {
             if (Vision.getInstance().getHotGoalNormalizedX() == null) {
                 double timeRemaining = IDEAL_SHOOT_TIME_IF_NO_HOT_GOAL - autonoumousTimeTakenSoFar;
                 if (timeRemaining > 0) {
+                    Debug.println("No hot goal detected, so waiting to shoot for " + timeRemaining + " sec");
                     commandGroup.addSequential(new WaitCommand(timeRemaining));
                 }
             }
