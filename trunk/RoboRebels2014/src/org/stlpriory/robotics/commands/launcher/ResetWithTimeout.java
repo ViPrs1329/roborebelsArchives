@@ -40,15 +40,11 @@ public class ResetWithTimeout extends CommandBase {
     protected boolean isFinished() {
         boolean switchHit = launcher.isPunterLimitReached();
         boolean timedOut  = timer.get() > TIME_OUT;
-        Debug.println("Limit switch hit = "+switchHit+", timedOut = "+timedOut);
+        if (switchHit || timedOut) {
+            launcher.stopWindingLauncher();
+            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch or timed out");
+        }
         return switchHit || timedOut;
-        
-//        boolean tripped = launcher.isPunterLimitReached();
-//        if (tripped) {
-//            launcher.stopWindingLauncher();
-//            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");            
-//        }
-//        return tripped;
     }
 
     // Called once after isFinished returns true

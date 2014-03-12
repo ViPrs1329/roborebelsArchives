@@ -37,14 +37,11 @@ public class Reset extends CommandBase {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
         boolean switchHit = launcher.isPunterLimitReached();
-        Debug.println("Limit switch hit = "+switchHit);
+        if (switchHit) {
+            launcher.stopWindingLauncher();
+            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");
+        }
         return switchHit;
-//        boolean tripped = launcher.isPunterLimitReached();
-//        if (tripped) {
-//            launcher.stopWindingLauncher();
-//            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");            
-//        }
-//        return tripped;
     }
 
     // Called once after isFinished returns true
