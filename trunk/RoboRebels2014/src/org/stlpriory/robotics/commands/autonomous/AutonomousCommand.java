@@ -7,8 +7,11 @@ package org.stlpriory.robotics.commands.autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import org.stlpriory.robotics.commands.claw.LiftWheelsForShooting;
+import org.stlpriory.robotics.commands.claw.StopClawWheels;
 import org.stlpriory.robotics.commands.launcher.Launch;
 import org.stlpriory.robotics.commands.launcher.Retract;
+import org.stlpriory.robotics.commands.launcher.Stop;
 import org.stlpriory.robotics.misc.Debug;
 import org.stlpriory.robotics.subsystems.Vision;
 
@@ -23,17 +26,22 @@ public class AutonomousCommand extends CommandGroup {
     
     // used to keep track of the amount of time that autonoumous phase
     // has been running
-    private final Timer timer = new Timer();;
+    private final Timer timer = new Timer();
+    
+    private boolean executedFirstTime = false;
     
     public AutonomousCommand() {
         addSequential(new AutonomousFirstPart());
         addSequential(new ShootingStrategy()); 
     }
      
-    protected void initialize() {
-        timer.start();
+    protected void execute() {
+        if (!executedFirstTime) {
+           timer.start();
+           executedFirstTime = true;
+        }
     }
-    
+        
     /**
      * This command group will not have any child commands, but during 
      * initialize it will examine the status of the hot goal and 
@@ -42,8 +50,8 @@ public class AutonomousCommand extends CommandGroup {
      */
     private class ShootingStrategy extends CommandGroup {
         
-        public void initialize() {
-
+        public void execute() {
+            Debug.println(">>>>>>>>>>  Executing shooting strategy");
             double autonoumousTimeTakenSoFar = timer.get();
             
             CommandGroup commandGroup = new CommandGroup();
@@ -57,12 +65,20 @@ public class AutonomousCommand extends CommandGroup {
             }
             
             // shoot the ball
+            commandGroup.addSequential(new StopClawWheels());
+            commandGroup.addSequential(new LiftWheelsForShooting());
+            commandGroup.addSequential(new WaitCommand(0.4));
             commandGroup.addSequential(new Launch());
+            commandGroup.addSequential(new Stop());
             
             // after short delay, prepare for loading ball
             commandGroup.addSequential(new WaitCommand(0.5));
             commandGroup.addSequential(new Retract());
             commandGroup.start();
+        }
+        
+        public boolean isFinished() {
+            return true;
         }
         
        

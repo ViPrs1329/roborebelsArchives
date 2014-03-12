@@ -18,7 +18,7 @@ public class Claw extends Subsystem {
 
     private static final double MAX_MOTOR_SPEED = 1.0;
     private static final double MOTOR_SPEED = 0.75;
-    private static final double HOLD_MOTOR_SPEED = 0.2;
+    private static final double HOLD_MOTOR_SPEED = 0.3;
     private Talon wheel_left;
     private Talon wheel_right;
     private Talon wheel_center;

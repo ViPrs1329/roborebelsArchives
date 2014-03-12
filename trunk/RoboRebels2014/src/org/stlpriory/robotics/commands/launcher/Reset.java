@@ -5,7 +5,7 @@
 package org.stlpriory.robotics.commands.launcher;
 
 import org.stlpriory.robotics.commands.CommandBase;
-import org.stlpriory.robotics.misc.Constants;
+import org.stlpriory.robotics.misc.Debug;
 
 /**
  *
@@ -36,7 +36,15 @@ public class Reset extends CommandBase {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return launcher.isPunterLimitReached();
+        boolean switchHit = launcher.isPunterLimitReached();
+        Debug.println("Limit switch hit = "+switchHit);
+        return switchHit;
+//        boolean tripped = launcher.isPunterLimitReached();
+//        if (tripped) {
+//            launcher.stopWindingLauncher();
+//            CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");            
+//        }
+//        return tripped;
     }
 
     // Called once after isFinished returns true

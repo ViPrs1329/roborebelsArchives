@@ -101,13 +101,10 @@ public class Launcher extends Subsystem {
             CommandBase.updateDriverStationLCD(2, 1, "Hit limit switch");
             launch1.set(0);
         }
-        
-//        launch2.set(windSpeed);
     }
 
     public void stopWindingLauncher() {
         launch1.set(0);
-//        launch2.set(0);
     }
     
     public boolean isPunterLimitReached() {

@@ -2,43 +2,36 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.stlpriory.robotics.commands.launcher;
+package org.stlpriory.robotics.commands.claw;
 
 import org.stlpriory.robotics.commands.CommandBase;
 
 /**
  *
- * @author admin
+ * @author dfuglsan
  */
-public class Stop extends CommandBase {
+public class LiftWheelsForShooting extends CommandBase {
     
-    private boolean executedCommand;
-    
-    public Stop() {
+    public LiftWheelsForShooting() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(launcher);
+        requires(claw);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-        if (!tank.isCompressorStarted()) {
-            tank.startCompressor();
-        }
-        executedCommand = false;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-     
-        launcher.stopWindingLauncher();
-        executedCommand = true;
-        
+        if (claw.isWheelLoweredForPickup()) {
+            claw.raiseWheelForShoot();
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return executedCommand;
+        return true;
     }
 
     // Called once after isFinished returns true

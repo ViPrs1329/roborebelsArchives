@@ -62,8 +62,7 @@ public class DetermineHotGoal extends CommandBase {
     public static final double FILTER_ASPECT_RATION_IDEAL = 5.875;
     public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
     
-    // TODO determine ideal value during testing
-    public static final double IDEAL_PARTICLE_NORMALIZED_Y = 0.1;
+    public static final double IDEAL_PARTICLE_NORMALIZED_Y = -0.55;
     
     // used internally to keep track of execution status
     private boolean started = false;
@@ -121,13 +120,13 @@ public class DetermineHotGoal extends CommandBase {
                     }
                     camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
-                    //image.write("/rawImage.jpg");
+                    image.write("/rawImage.jpg");
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
                     // particle filtering to ensure only find right shape
                     thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255);
-                    //thresholdImage.write("/threshold.bmp");
+                    thresholdImage.write("/threshold.bmp");
 
                     if (debug) {
                         log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
@@ -162,11 +161,15 @@ public class DetermineHotGoal extends CommandBase {
                         PassingParticle singleParticle = (PassingParticle) passingParticles.elementAt(0);
                         log("Single particle passed filtering, so setting " + singleParticle.normalizedX
                                 + " for vision system hot goal normalized X");
+                        log("Single particle at normalized X, Y of " + singleParticle.normalizedX
+                                + ", " + singleParticle.normalizedY);
                         vision.setHotGoalNormalizedX(new Double(singleParticle.normalizedX));
                     } else {
                         PassingParticle bestParticle = determineBestParticle(passingParticles);
                         log("Multiple particles passed filtering, but best particle found, so setting "
                                 + bestParticle.normalizedX + " for vision system hot goal normalized X");
+                        log("Best particle at normalized X, Y of " + bestParticle.normalizedX
+                                + ", " + bestParticle.normalizedY);
                         vision.setHotGoalNormalizedX(new Double(bestParticle.normalizedX));
                     }
 

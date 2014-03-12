@@ -20,21 +20,21 @@ public class PrepareToShoot extends CommandGroup {
     
     public PrepareToShoot() { 
         
+        // retract the puncher to limit switch position and then stop
+//        addSequential(new Reset());
+//        addSequential(new Stop());
+        
         // hold the ball while driving
-        addSequential(new HoldBall());
+//        addSequential(new HoldBall());
         
         // drive forward
         addSequential(new DriveForward() );       
         // TODO determine amount of time to drive forward
-        addSequential(new WaitCommand(2) );
+        addSequential(new WaitCommand(2.7) );
         addSequential(new StopDriving() );
         
         // TODO should we stop holding the ball while retracting the puncher
         // in order to reduce the electrical load?
-        
-        // retract the puncher to limit switch position and then stop
-        addSequential(new Reset());
-        addSequential(new Stop());
             
     }
     
