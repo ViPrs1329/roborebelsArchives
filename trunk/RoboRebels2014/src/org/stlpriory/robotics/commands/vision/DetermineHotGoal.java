@@ -29,12 +29,13 @@ import org.stlpriory.robotics.misc.Debug;
  * started and finished.
  * 
  * The strategy to determine which "particle" is the horizontal tape strip is to
- * measure the orientation, aspect ratio, and rectangularity of the particle and 
- * if within the expected values, then this is the single horizontal strip particle.  
- * The hope is that at most, a single particle will survive the filtering process.
- * If multiple particles survive filtering, then the normalized Y value ( -1 to 1
- * value range with -1 being top of image ) is compared to the ideal normalized Y
- * value and the closest is considered the best match particle.
+ * measure the orientation, aspect ratio, rectangularity, and normalized Y value
+ * of the particle and if within the expected values, then this is the single 
+ * horizontal strip particle.  The hope is that at most, a single particle will 
+ * survive the filtering process.  If multiple particles survive filtering, then 
+ * the normalized Y value ( -1 to 1 value range with -1 being top of image ) is 
+ * compared to the ideal normalized Y value and the closest is considered the best 
+ * match particle.
  * 
  * The center of mass normalized X value ( -1 to 1 value range ) of the single 
  * particle is set on the Vision subsystem or set to null value if the tape pattern
@@ -62,30 +63,33 @@ public class DetermineHotGoal extends CommandBase {
     public static final double FILTER_ASPECT_RATION_IDEAL = 5.875;
     public static final double FILTER_ASPECT_RATIO_VARIANCE = 1;
     
-    public static final double IDEAL_PARTICLE_NORMALIZED_Y = -0.55;
+    // used for filtering particles outside expected horizontal band
+    public static final double FILTER_NORMALIZED_Y = -0.55;
+    public static final double FILTER_NORMALIZED_Y_VARIANCE = 0.4;
     
     // used internally to keep track of execution status
     private boolean started = false;
     private boolean finished = false;
     
-    private final boolean debug = false;
+    // turn on for verbose logging of image processing
+    private final boolean trace = false;
     
     public DetermineHotGoal ( ) {
         super("DetermineHotGoal");
         requires(vision);
         setInterruptible(false);
-        if ( debug ) {
+        if ( trace ) {
             log("constructor finished"); 
         }
     }
     
     protected void initialize ( ) {
-        if ( debug ) {
+        if ( trace ) {
             log("initialize started");
         }
         started = false;
         finished = false;
-        if ( debug ) {
+        if ( trace ) {
             log("initialize finished");
         }
     }
@@ -93,7 +97,7 @@ public class DetermineHotGoal extends CommandBase {
     protected void execute ( ) {
         if ( started ) {
             // already started, so don't restart
-            if ( debug ) {
+            if ( trace ) {
                 log("execute called but already executing");
             }
             return;
@@ -105,7 +109,7 @@ public class DetermineHotGoal extends CommandBase {
         Thread thread = new Thread () {
             public void run ( ) {
                 long startTime = System.currentTimeMillis();
-                if (debug) {
+                if (trace) {
                     log("execute start");
                 }
                 // initialize to null in case error out during processing
@@ -128,7 +132,7 @@ public class DetermineHotGoal extends CommandBase {
                     thresholdImage = image.thresholdHSV(0, 255, 0, 255, 230, 255);
                     thresholdImage.write("/threshold.bmp");
 
-                    if (debug) {
+                    if (trace) {
                         log("Creating binary image took " + (System.currentTimeMillis() - startTime) + " msec");
                     }
 
@@ -137,7 +141,7 @@ public class DetermineHotGoal extends CommandBase {
                     // look at the particles passing criteria and see if can determine which one is
                     // the horizontal tape of the hot goal
                     int numberPassingParticles = passingParticles.size();
-                    if (debug) {
+                    if (trace) {
                         log(numberPassingParticles + " passed filtering");
 
                         for (int i = 0; i < numberPassingParticles; i++) {
@@ -204,23 +208,23 @@ public class DetermineHotGoal extends CommandBase {
     
     protected boolean isFinished ( ) {
         boolean done = started && finished;
-        if ( debug ) {
+        if ( trace ) {
             log("isFinished called returning " + done);
         }
         return done;
     }
     
     protected void end ( ) {
-        if ( debug ) {
+        if ( trace ) {
             log("end started");
         }
-        if ( debug ) {
+        if ( trace ) {
             log("end finished");
         }
     }
     
     protected void interrupted ( ) {
-        // should never be called because this command is not interruptable
+        // shouldn't be called because this command is not interruptable
     }
     
     private void log ( String msg ) {
@@ -248,10 +252,10 @@ public class DetermineHotGoal extends CommandBase {
                 // initialize the values with the first element of the vector
                 bestParticle = thisParticle;
                 bestParticleNormalizedYDiffFromIdeal = 
-                        Math.abs(IDEAL_PARTICLE_NORMALIZED_Y - thisParticle.normalizedY);
+                        Math.abs(FILTER_NORMALIZED_Y - thisParticle.normalizedY);
             } else {
                 double thisParticleNormalizedYDiffFromIdeal = 
-                        Math.abs(IDEAL_PARTICLE_NORMALIZED_Y - thisParticle.normalizedY);
+                        Math.abs(FILTER_NORMALIZED_Y - thisParticle.normalizedY);
                 if ( thisParticleNormalizedYDiffFromIdeal < bestParticleNormalizedYDiffFromIdeal ) {
                     // this particle is closer to ideal, so use it as the best particle
                     bestParticle = thisParticle;
@@ -266,13 +270,13 @@ public class DetermineHotGoal extends CommandBase {
     private Vector filterParticles ( BinaryImage image ) throws NIVisionException {
  
         int particleCount = image.getNumberParticles();
-        if ( debug ) {
+        if ( trace ) {
             log("There are " + particleCount + " particles");
         }
         Pointer rawImage = image.image;
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        if ( debug ) {
+        if ( trace ) {
             log("Image width/height is " + imageWidth + "/" + imageHeight);
         }
 
@@ -299,7 +303,7 @@ public class DetermineHotGoal extends CommandBase {
             
             if ( !(orientation < FILTER_HORIZONTAL_VARIANCE) && !(orientation > (180 - FILTER_HORIZONTAL_VARIANCE)) ) {
                 // skip this particle since not horizontal
-                if ( debug ) {
+                if ( trace ) {
                     log("Skipping particle at (" + particleCenterOfMassX + ", " +
                         particleCenterOfMassY + ") due to orientation " + orientation);
                 }
@@ -321,7 +325,7 @@ public class DetermineHotGoal extends CommandBase {
             if ( calculatedAspectRatio < FILTER_ASPECT_RATION_IDEAL - FILTER_ASPECT_RATIO_VARIANCE || 
                     calculatedAspectRatio > FILTER_ASPECT_RATION_IDEAL + FILTER_ASPECT_RATIO_VARIANCE ) {
                 // skip this particle since not of correct aspect ratio
-                if ( debug ) {
+                if ( trace ) {
                     log("Skipping particle at (" + particleCenterOfMassX + ", " +
                         particleCenterOfMassY + ") due to aspect ratio " + calculatedAspectRatio);
                 }
@@ -340,22 +344,37 @@ public class DetermineHotGoal extends CommandBase {
                     particleWidth / equivalentRectLength;
             
             if ( rectangularity < FILTER_MIN_RECTANGULARITY ) {
-                if ( debug ) {
+                // skip this particle due to not being rectangular shape
+                if ( trace ) {
                     log("Skipping particle at (" + particleCenterOfMassX + ", " +
                         particleCenterOfMassY + ") due to rectangularity " + rectangularity);
                 }
                 continue;
             }
+            
+            double normalizedX = -1 + 2 * (particleCenterOfMassX / imageWidth);
+            double normalizedY = -1 + 2 * (particleCenterOfMassY / imageHeight);
+            
+            // filter if particle is outside of an expected horizontal band
+            if ( normalizedY < FILTER_NORMALIZED_Y - FILTER_NORMALIZED_Y_VARIANCE ||
+                 normalizedY > FILTER_NORMALIZED_Y + FILTER_NORMALIZED_Y_VARIANCE ) {
+                // skip this particle since outside expected horizontal band
+                if ( trace ) {
+                    log("Skipping particle at (" + particleCenterOfMassX + ", " +
+                        particleCenterOfMassY + ") due to normalized Y " + normalizedY);
+                }
+                continue;
+            }
 
-            if ( debug ) {
+            if ( trace ) {
                 log("Particle passed all constraints. Adding to vector");
             }
             // passed all criteria, so add to the vector
             PassingParticle pp = new PassingParticle();
             pp.x = particleCenterOfMassX;
             pp.y = particleCenterOfMassY;
-            pp.normalizedX = -1 + 2 * (particleCenterOfMassX / imageWidth);
-            pp.normalizedY = -1 + 2 * (particleCenterOfMassY / imageHeight);
+            pp.normalizedX = normalizedX;
+            pp.normalizedY = normalizedY;
             pp.orientation = orientation;
             pp.aspectRatio = calculatedAspectRatio;
             pp.rectangluarity = rectangularity;
