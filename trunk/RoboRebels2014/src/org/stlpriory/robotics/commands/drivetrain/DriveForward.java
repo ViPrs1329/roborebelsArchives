@@ -20,6 +20,9 @@ public class DriveForward extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        if (drivetrain.isHighGear()) {
+            drivetrain.shiftGears();
+        }
         drivetrain.arcadeDrive(-.85, 0);
     }
 

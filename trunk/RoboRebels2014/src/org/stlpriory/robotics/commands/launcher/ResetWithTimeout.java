@@ -13,7 +13,7 @@ import org.stlpriory.robotics.misc.Debug;
  * @author admin
  */
 public class ResetWithTimeout extends CommandBase {
-    private static final double TIME_OUT = 0.5;
+    private static final double TIME_OUT = 2;
     private Timer timer;
 
     public ResetWithTimeout() {

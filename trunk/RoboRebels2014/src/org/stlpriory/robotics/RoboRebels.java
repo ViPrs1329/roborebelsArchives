@@ -71,6 +71,7 @@ public class RoboRebels extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         Debug.println("[mode] Operator control");
+        AxisCamera.getInstance().writeResolution(AxisCamera.ResolutionT.k320x240);
         Scheduler.getInstance().removeAll();
     }
 

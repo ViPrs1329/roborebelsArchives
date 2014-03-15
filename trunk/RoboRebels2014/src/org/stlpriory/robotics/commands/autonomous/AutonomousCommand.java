@@ -67,7 +67,7 @@ public class AutonomousCommand extends CommandGroup {
             // shoot the ball
             commandGroup.addSequential(new StopClawWheels());
             commandGroup.addSequential(new LiftWheelsForShooting());
-            commandGroup.addSequential(new WaitCommand(0.4));
+            commandGroup.addSequential(new WaitCommand(0.6));
             commandGroup.addSequential(new Launch());
             commandGroup.addSequential(new Stop());
             

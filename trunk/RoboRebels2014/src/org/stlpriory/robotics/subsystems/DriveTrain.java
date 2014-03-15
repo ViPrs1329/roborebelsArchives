@@ -81,6 +81,9 @@ public class DriveTrain extends Subsystem {
         drive.arcadeDrive(moveValue, rotateValue);
 
     }
+    public boolean isHighGear() {
+        return gearBoxes.isHighGear();
+    }
 
     /**
      * Drive method for Mecanum wheeled robots.

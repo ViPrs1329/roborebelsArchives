@@ -22,6 +22,7 @@ public class Vision extends Subsystem {
                 // double check that instance is still null inside synchronized block
                 if ( instance == null ) {
                     instance = new Vision();
+                    
                 }
             }
         }
@@ -68,7 +69,14 @@ public class Vision extends Subsystem {
         // the CommandBase init static method is called, which loads the
         // CommandBase class which has a static reference to the Vision singleton
         // object
+        try {
         AxisCamera.getInstance();
+        AxisCamera.getInstance().writeResolution(AxisCamera.ResolutionT.k640x480);
+        } catch (Exception e) {
+            Debug.err("Error caught exception: " + e.getMessage());
+            
+        }
+        
         Debug.println("AxisCamera singleton initialized");
     }
     

@@ -65,7 +65,7 @@ public class DetermineHotGoal extends CommandBase {
     
     // used for filtering particles outside expected horizontal band
     public static final double FILTER_NORMALIZED_Y = -0.55;
-    public static final double FILTER_NORMALIZED_Y_VARIANCE = 0.4;
+    public static final double FILTER_NORMALIZED_Y_VARIANCE = 2;
     
     // used internally to keep track of execution status
     private boolean started = false;
@@ -125,6 +125,7 @@ public class DetermineHotGoal extends CommandBase {
                     camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
                     image.write("/rawImage.jpg");
+                    camera.writeResolution(AxisCamera.ResolutionT.k320x240);
 
                     // 0-255 min/max values for hue, saturation, and value
                     // just looking for bright spots on the image and will rely on 
@@ -215,6 +216,7 @@ public class DetermineHotGoal extends CommandBase {
     }
     
     protected void end ( ) {
+        
         if ( trace ) {
             log("end started");
         }

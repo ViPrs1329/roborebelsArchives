@@ -22,7 +22,7 @@ public class ImageProcessing extends CommandGroup {
         // left and right side will have tape pointing out horizontally toward
         // the robot and we don't want to capture an image until after tape rotation
         // has completed
-        addSequential(new WaitCommand(.5) );
+        addSequential(new WaitCommand(.2) ); //Warning: Do not modify time without also modifying WaitCommand at beginning of PrepareToShoot by same amount 
         addSequential(new DetermineHotGoal() );
     }
     
