@@ -122,7 +122,6 @@ public class DetermineHotGoal extends CommandBase {
                         Debug.err("AxisCamera.getInstance() returned null for camera instance");
                         return;
                     }
-                    camera.writeResolution(AxisCamera.ResolutionT.k640x480);
                     image = camera.getImage();
                     image.write("/rawImage.jpg");
                     camera.writeResolution(AxisCamera.ResolutionT.k320x240);
