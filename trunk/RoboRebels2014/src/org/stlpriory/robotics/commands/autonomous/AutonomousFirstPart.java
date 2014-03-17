@@ -20,9 +20,6 @@ public class AutonomousFirstPart extends CommandGroup {
         // group prior to adding the parallel commands
         addSequential(new WaitCommand(0.03));
         
-        // hold the ball while driving
-        addSequential(new HoldBall());
-        
         addParallel(new PrepareLauncher());
         addParallel(new PrepareToShoot());
         addParallel(new ImageProcessing());
