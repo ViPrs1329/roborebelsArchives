@@ -18,7 +18,9 @@ public class PrepareToShoot extends CommandGroup {
     
     public PrepareToShoot() { 
         
-        addSequential(new WaitCommand(.25));
+        // waiting to drive until we have captured the image from the camera to
+        // avoid blurring the image
+        addSequential(new WaitCommand(.45));
         // drive forward
         addSequential(new DriveForward() );       
         // TODO determine amount of time to drive forward
