@@ -14,8 +14,6 @@ import org.stlpriory.robotics.commands.launcher.Stop;
 public class PrepareLauncher extends CommandGroup {
     
     public PrepareLauncher() { 
-        // TODO should we stop holding the ball while retracting the puncher
-        // in order to reduce the electrical load?
 
         // retract the puncher to limit switch position and then stop
         addSequential(new ResetWithTimeout()); 
