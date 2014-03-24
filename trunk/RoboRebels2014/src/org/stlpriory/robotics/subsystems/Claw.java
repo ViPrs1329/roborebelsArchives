@@ -102,8 +102,10 @@ public class Claw extends Subsystem {
     }
 
     public void lowGoalShoot() {
-        wheel_left.set(0);
-        wheel_right.set(0);
+        wheel_left.set(-1 * MOTOR_SPEED);
+        wheel_right.set(MOTOR_SPEED);
+        //wheel_left.set(0);
+        //wheel_right.set(0);
         wheel_center.set(-MAX_MOTOR_SPEED);
     }
 

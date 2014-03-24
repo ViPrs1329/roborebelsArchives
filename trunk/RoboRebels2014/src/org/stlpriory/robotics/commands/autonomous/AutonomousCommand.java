@@ -7,6 +7,7 @@ package org.stlpriory.robotics.commands.autonomous;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import org.stlpriory.robotics.commands.CommandBase;
 import org.stlpriory.robotics.commands.claw.LiftWheelsForShooting;
 import org.stlpriory.robotics.commands.claw.StopClawWheels;
 import org.stlpriory.robotics.commands.launcher.Launch;
@@ -51,7 +52,6 @@ public class AutonomousCommand extends CommandGroup {
     private class ShootingStrategy extends CommandGroup {
         
         public void execute() {
-            Debug.println(">>>>>>>>>>  Executing shooting strategy");
             double autonoumousTimeTakenSoFar = timer.get();
             
             CommandGroup commandGroup = new CommandGroup();
@@ -61,7 +61,10 @@ public class AutonomousCommand extends CommandGroup {
                 if (timeRemaining > 0) {
                     Debug.println("No hot goal detected, so waiting to shoot for " + timeRemaining + " sec");
                     commandGroup.addSequential(new WaitCommand(timeRemaining));
+                    CommandBase.updateDriverStationLCD(1, 1, "NO Hot Goal Detected");
                 }
+            } else {
+                    CommandBase.updateDriverStationLCD(1, 1, "Hot Goal Detected");                
             }
             
             // shoot the ball

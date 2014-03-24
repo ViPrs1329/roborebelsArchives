@@ -36,6 +36,7 @@ public class RoboRebels extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        Debug.setMode(false);
         Debug.println("[RoboRebels.robotInit()] Initializing...");
         timer.start();
 

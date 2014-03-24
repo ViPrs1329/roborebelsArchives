@@ -21,7 +21,7 @@ public class PrepareToShoot extends CommandGroup {
         
         // waiting to drive until we have captured the image from the camera to
         // avoid blurring the image
-        addSequential(new WaitCommand(.45));
+        addSequential(new WaitCommand(.55));
         
         // hold the ball while driving
         addSequential(new HoldBall());
