@@ -18,6 +18,8 @@ public class Jaguar {
         if ((v>=-1) && (v <= 1)){
             value = v;
         }
+        else if (v <-1) v = -1;
+        else if (v > 1) v = 1;
     }
     public double get() {
         return value;
