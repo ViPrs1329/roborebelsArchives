@@ -8,6 +8,9 @@ package edu.wpi.first.wpilibj.templates;
  * An interface which all other RRAuton classes
  * must implement
  * 
+ * 
+ * 
+ * 
  * @author Derek Ward
  */
 public interface RRAuton 
