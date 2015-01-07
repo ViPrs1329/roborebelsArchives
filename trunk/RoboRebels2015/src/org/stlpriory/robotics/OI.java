@@ -1,5 +1,6 @@
 package org.stlpriory.robotics;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 
 import org.stlpriory.robotics.commands.ExampleCommand;
@@ -35,5 +36,11 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+	static Joystick game_pad = new Joystick(1);
+	
+	
+	public static Joystick getGamePad() {
+		return game_pad;
+	}
 }
 
