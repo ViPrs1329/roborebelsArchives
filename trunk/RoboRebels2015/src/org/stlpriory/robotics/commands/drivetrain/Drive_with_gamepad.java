@@ -20,7 +20,7 @@ public class Drive_with_gamepad extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.mecanum_drive(OI.getGamePad().getRawAxis(1),OI.getGamePad().getRawAxis(0),OI.getGamePad().getRawAxis(2));
+    	Robot.drivetrain.mecanum_drive(Robot.oi.getGamePad().getRawAxis(1),Robot.oi.getGamePad().getRawAxis(0),Robot.oi.getGamePad().getRawAxis(2));
     }
 
     // Make this return true when this Command no longer needs to run execute()

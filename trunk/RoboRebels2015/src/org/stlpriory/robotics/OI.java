@@ -36,10 +36,14 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
-	static Joystick game_pad = new Joystick(1);
+	 private Joystick game_pad;
+	 
+	 public OI() {
+		 game_pad = new Joystick(1);
+	 }
 	
 	
-	public static Joystick getGamePad() {
+	public  Joystick getGamePad() {
 		return game_pad;
 	}
 }
