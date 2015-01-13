@@ -2,6 +2,7 @@
 package org.stlpriory.robotics;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import org.stlpriory.robotics.commands.ExampleCommand;
 import org.stlpriory.robotics.subsystems.Drivetrain;
 import org.stlpriory.robotics.subsystems.ExampleSubsystem;
+import org.stlpriory.robotics.utils.Debug;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,6 +24,7 @@ public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static OI oi;
+    private Timer timer = new Timer();
 
     Command autonomousCommand;
 
@@ -30,9 +33,18 @@ public class Robot extends IterativeRobot {
      * used for any initialization code.
      */
     public void robotInit() {
+        Debug.println("[Robot.robotInit()] Initializing...");
+        timer.start();
+        
 		oi = new OI();
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
+        
+        timer.stop();
+        Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
+        Debug.println("------------------------------------------");
+        Debug.println("           Robot ready!");
+        Debug.println("------------------------------------------");
     }
 	
 	public void disabledPeriodic() {
