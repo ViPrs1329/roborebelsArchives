@@ -9,6 +9,7 @@ import org.stlpriory.robotics.*;
 public class DriveWithGamepad extends Command {
 
     public DriveWithGamepad() {
+        super("DriveWithGamepad");
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.drivetrain);
@@ -20,6 +21,7 @@ public class DriveWithGamepad extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+        //Robot.drivetrain.mecanum_drive(Robot.oi.getGamePad());
     	Robot.drivetrain.mecanum_drive(Robot.oi.getGamePad().getRawAxis(1),Robot.oi.getGamePad().getRawAxis(0),Robot.oi.getGamePad().getRawAxis(2));
     }
 
