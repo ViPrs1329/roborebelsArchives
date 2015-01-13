@@ -6,9 +6,9 @@ import org.stlpriory.robotics.*;
 /**
  *
  */
-public class Drive_with_gamepad extends Command {
+public class DriveWithGamepad extends Command {
 
-    public Drive_with_gamepad() {
+    public DriveWithGamepad() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.drivetrain);
