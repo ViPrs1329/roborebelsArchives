@@ -1,11 +1,12 @@
 package org.stlpriory.robotics.subsystems;
 
 import org.stlpriory.robotics.RobotMap;
-import org.stlpriory.robotics.commands.drivetrain.Drive_with_gamepad;
+import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
+import org.stlpriory.robotics.utils.Constants;
 import org.stlpriory.robotics.utils.Debug;
+
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.can.CANNotInitializedException;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class CANDrivetrain extends Subsystem {
@@ -18,7 +19,7 @@ public class CANDrivetrain extends Subsystem {
 	public CANDrivetrain() {
 		super("CANDriveTrain");
 		Debug.println("[CANDriveTrain Subsystem] Instantiating...");
-		Debug.println("[CANDriveTrain Subsystem[] CANJaguar control mode is " + toString(Constants.JAGUAR_CONTROL_MODE));
+		Debug.println("[CANDriveTrain Subsystem] CANTalon control mode is " + (Constants.TALON_CONTROL_MODE));
 	
 		try
 		{
@@ -70,7 +71,7 @@ public class CANDrivetrain extends Subsystem {
 		Debug.println("[CANDriveTrain Subsystem] MAX OUTPUT = " + Constants.DRIVE_MAX_OUTPUT);
 		drive = new RobotDrive(left_front,left_rear,right_front,right_rear);
 		drive.setSafetyEnabled(false);
-		drive.setExpiration(0.1);
+		drive.setExpiration(0.1);				
 		drive.setSensitivity(0.5);
 		drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
 		drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
@@ -86,6 +87,6 @@ public class CANDrivetrain extends Subsystem {
 	public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
-    	setDefaultCommand(new Drive_with_gamepad());   
+    	setDefaultCommand(new DriveWithGamepad());   
     	}
 }

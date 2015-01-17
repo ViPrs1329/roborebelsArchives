@@ -20,4 +20,8 @@ public class RobotMap {
 	public static final int RIGHT_FRONT_WHEEL_JAGUAR_PWM_CHANNEL = 2;
 	public static final int LEFT_REAR_WHEEL_JAGUAR_PWM_CHANNEL = 3;
 	public static final int RIGHT_REAR_WHEEL_JAGUAR_PWM_CHANNEL = 4;
+	public static final int LEFT_FRONT_CAN_TALON_CHANNEL = 1;
+	public static final int RIGHT_FRONT_CAN_TALON_CHANNEL = 2;
+	public static final int LEFT_REAR_CAN_TALON_CHANNEL = 3;
+	public static final int RIGHT_REAR_CAN_TALON_CHANNEL = 4;
 }
