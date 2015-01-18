@@ -1,10 +1,20 @@
 package org.stlpriory.robotics.utils;
 
+import java.io.File;
+
 /**
  *
  */
 public class Debug {
-
+	public static File directory;
+	public static File outputFile;
+	public static FileUtils utils;
+	static {
+		utils = new FileUtils();
+		directory = utils.createDirectory("temporary");
+		outputFile = utils.createFile("Debug File", directory);
+	}
+	
     private static boolean DEBUG_MODE = true;
 
     /**
@@ -14,7 +24,8 @@ public class Debug {
      */
     public static void print(String s) {
         if (isDebugMode()) {
-            System.out.print(s);
+           // System.out.print(s);
+        	utils.writeTo(s, outputFile);
         }
     }
 
@@ -25,7 +36,8 @@ public class Debug {
      */
     public static void println(String s) {
         if (isDebugMode()) {
-            System.out.println(s);
+           // System.out.println(s);
+        	utils.writeTo(s, outputFile);
         }
     }
 
@@ -36,7 +48,8 @@ public class Debug {
      */
     public static void err(String s) {
         if (isDebugMode()) {
-            System.err.println(s);
+           // System.err.println(s);
+        	utils.writeTo(s, outputFile);
         }
     }
 
