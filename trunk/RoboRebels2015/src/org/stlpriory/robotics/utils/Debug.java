@@ -6,16 +6,10 @@ import java.io.File;
  *
  */
 public class Debug {
-	public static File directory;
-	public static File outputFile;
-	public static FileUtils utils;
-	static {
-		utils = new FileUtils();
-		directory = utils.createDirectory("temporary");
-		outputFile = utils.createFile("Debug File", directory);
-	}
 	
     private static boolean DEBUG_MODE = true;
+    public static File DEBUG_FOLDER = FileUtils.createDirectory("temp");
+    public static File DEBUG_FILE = FileUtils.createFile("debug.out", DEBUG_FOLDER);
 
     /**
      * If in debug mode, prints specified string without a newline
@@ -25,7 +19,7 @@ public class Debug {
     public static void print(String s) {
         if (isDebugMode()) {
            // System.out.print(s);
-        	utils.writeTo(s, outputFile);
+        	FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
@@ -37,7 +31,7 @@ public class Debug {
     public static void println(String s) {
         if (isDebugMode()) {
            // System.out.println(s);
-        	utils.writeTo(s, outputFile);
+            FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
@@ -49,7 +43,7 @@ public class Debug {
     public static void err(String s) {
         if (isDebugMode()) {
            // System.err.println(s);
-        	utils.writeTo(s, outputFile);
+            FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
