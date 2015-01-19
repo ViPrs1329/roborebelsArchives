@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import org.stlpriory.robotics.commands.ExampleCommand;
-import org.stlpriory.robotics.subsystems.Drivetrain;
+import org.stlpriory.robotics.subsystems.CANDrivetrain;
 import org.stlpriory.robotics.subsystems.ExampleSubsystem;
 import org.stlpriory.robotics.utils.Debug;
 
@@ -22,7 +22,7 @@ import org.stlpriory.robotics.utils.Debug;
 public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
-	public static final Drivetrain drivetrain = new Drivetrain();
+	public static final CANDrivetrain drivetrain = new CANDrivetrain();
 	public static OI oi;
     private Timer timer = new Timer();
 

@@ -35,12 +35,36 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
+	
+	
+	/*
+     * The bottons on the XBox controller follow this mapping
+     * 1:  A
+     * 2:  B
+     * 3:  X
+     * 4:  Y
+     * 5:  Left Bumper
+     * 6:  Right Bumper
+     * 7:  Back
+     * 8:  Start
+     * 9:  Left thumbstick
+     * 10: Right thumbstick
+     *
+     * The axis on the controller follow this mapping
+     * (all output is between -1 to 1)
+     * 1:  Left stick X axis  (left:negative, right:positve)
+     * 2:  Left stick Y axis  (up:negative, down:positive)
+     * 3:  Triggers           (left:positive, right:negative)
+     * 4:  Right stick X axis (left:negative, right:positive)
+     * 5:  Right stick Y axis (up:negative, down:positive)
+     * 6:  Directional pad
+     */
     private final Joystick game_pad;
 
     public OI() {
         Debug.println("[OI] Instantiating ...");
 
-        this.game_pad = new Joystick(1);
+        this.game_pad = new Joystick(0);
 
         Debug.println("[OI] Instantiation complete.");
     }
