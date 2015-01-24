@@ -8,6 +8,8 @@ public class Constants {
 	public static final double TALON_INTEGRATION = 0;
 	public static final double TALON_PROPORTION = 0;
 	public static final int TALON_CONTROL_MODE = 1;
+	//v  not sure what this is  v
+	public static final int ELEVATOR_SHAFT_HEIGHT = 20;
 
 }
 			
