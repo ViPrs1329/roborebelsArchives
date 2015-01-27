@@ -65,8 +65,8 @@ public class CANDrivetrain extends Subsystem {
         this.drive.setExpiration(0.1);
         this.drive.setSensitivity(0.5);
         this.drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
-        this.drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        this.drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        this.drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+        this.drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
     }
 
     private void initTalon(final CANTalon talon) {

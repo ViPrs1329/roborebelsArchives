@@ -67,6 +67,7 @@ public class Elevator extends Subsystem{
 		/**
 		 * This method tells the elevator motor to go up a certain distance at a certain speed. The speed must be between 1.0 and -1.0
 		 * To go down, please set speed to negative, not distance 
+		 * if you make the distance negative, and the speed positive for it to go down it will work, for we flip for you. aren't we just so nice. Read the flipping manual.
 		 */
 		boolean success = false;
 		boolean atTop = false;
@@ -74,6 +75,19 @@ public class Elevator extends Subsystem{
 		int distanceToTop = 0;
 		int distanceToBottom = 0;
 		int distanceTraveled = 0;
+		if (distance == 0.0)
+		{
+			return true;
+		}
+		if (distance < 0.0)
+		{
+			distance = distance*(-1.0);
+			if (speed >0)
+			{ 
+				speed =speed*(-1);
+			}
+			
+		}
 		double time = distance/speed; //Time motor should be turned on
 		Debug.println("[Elevator Subsystem] Trying to go up " + distance + " at " + speed);
 		if (speed > 0 && speed < 1)//splits method into two scenarios:Up or down

@@ -3,6 +3,7 @@ package org.stlpriory.robotics;
 import org.stlpriory.robotics.utils.Debug;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control
@@ -47,7 +48,7 @@ public class OI {
      * 6:  Right Bumper
      * 7:  Back
      * 8:  Start
-     * 9:  Left thumbstick
+     * 9:  Left thumbstickck
      * 10: Right thumbstick
      *
      * The axis on the controller follow this mapping
@@ -59,17 +60,37 @@ public class OI {
      * 5:  Right stick Y axis (up:negative, down:positive)
      * 6:  Directional pad
      */
-    private final Joystick game_pad;
-
+    private final Joystick xboxController;
+    private final Joystick leftThumbstick;
+    private final Joystick rightThumbstick;
+    private JoystickButton grabButton;
+    private JoystickButton releaseButton;
+    
     public OI() {
         Debug.println("[OI] Instantiating ...");
-
-        this.game_pad = new Joystick(0);
+        Debug.println("[OI] Intitalizing gamepad to Driver's station USB port" + );
+        
+        this.xboxController = new Joystick(1);
+        leftThumbstick = new Joystick(2);
+        rightThumbstick = new Joystick(3);
+       
+        Debug.println("[OI] Initializing gamepad to grab object when the left trigger is pressed");
+        grabButton = new JoystickButton(xboxController, Keymap.GRAB_BUTTON_KEY_MAP);
+      ///  grabbutton.whenpressed(new Grab();
+        grabButton.whenPressed(new Grab());
+        grabButton.whenReleased(new stopGrab());
+        
+        Debug.println("[OI] INitializing gamepad to drop object when the right trigger is pressed");
+        releaseButton = new JoystickButton(xboxController, Keymap.DROP_BUTTON_KEY_MAP);
+        releaseButton.whenPressed ( new Release());
+        releaseButton.whenReleased ( new stopRelease());
+        
+     
 
         Debug.println("[OI] Instantiation complete.");
     }
 
     public Joystick getGamePad() {
-        return this.game_pad;
+        return this.xboxController;
     }
 }
