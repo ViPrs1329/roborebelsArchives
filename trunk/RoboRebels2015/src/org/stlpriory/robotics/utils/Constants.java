@@ -10,6 +10,8 @@ public class Constants {
 	public static final int TALON_CONTROL_MODE = 1;
 	//v  not sure what this is  v
 	public static final int ELEVATOR_SHAFT_HEIGHT = 20;
+	public static final int DRIVER_STATION_USB_PORT1 = 1; //Fix this number
+	
 
 }
 			
