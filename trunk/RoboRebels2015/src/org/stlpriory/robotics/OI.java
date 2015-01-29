@@ -1,6 +1,11 @@
 package org.stlpriory.robotics;
 
+import org.stlpriory.robotics.commands.Grab;
+import org.stlpriory.robotics.commands.Release;
+import org.stlpriory.robotics.commands.StopGrab;
+import org.stlpriory.robotics.commands.StopRelease;
 import org.stlpriory.robotics.utils.Debug;
+import org.stlpriory.robotics.utils.Keymap;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -61,29 +66,25 @@ public class OI {
      * 6:  Directional pad
      */
     private final Joystick xboxController;
-    private final Joystick leftThumbstick;
-    private final Joystick rightThumbstick;
     private JoystickButton grabButton;
     private JoystickButton releaseButton;
     
     public OI() {
         Debug.println("[OI] Instantiating ...");
-        Debug.println("[OI] Intitalizing gamepad to Driver's station USB port" + );
+        Debug.println("[OI] Intitalizing gamepad to Driver's station USB port"  );
         
-        this.xboxController = new Joystick(1);
-        leftThumbstick = new Joystick(2);
-        rightThumbstick = new Joystick(3);
-       
+        this.xboxController = new Joystick(0);
+        
         Debug.println("[OI] Initializing gamepad to grab object when the left trigger is pressed");
         grabButton = new JoystickButton(xboxController, Keymap.GRAB_BUTTON_KEY_MAP);
       ///  grabbutton.whenpressed(new Grab();
         grabButton.whenPressed(new Grab());
-        grabButton.whenReleased(new stopGrab());
+        grabButton.whenReleased(new StopGrab());
         
         Debug.println("[OI] INitializing gamepad to drop object when the right trigger is pressed");
-        releaseButton = new JoystickButton(xboxController, Keymap.DROP_BUTTON_KEY_MAP);
+        releaseButton = new JoystickButton(xboxController, Keymap.RELEASE_BUTTON_KEY_MAP);
         releaseButton.whenPressed ( new Release());
-        releaseButton.whenReleased ( new stopRelease());
+        releaseButton.whenReleased ( new StopRelease());
         
      
 

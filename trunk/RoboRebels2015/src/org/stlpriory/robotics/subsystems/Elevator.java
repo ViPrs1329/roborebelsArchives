@@ -175,7 +175,7 @@ public class Elevator extends Subsystem{
 	//Code to initialize talon, add one time things here
 	private void initTalon(CANTalon c)
 	{
-		c.setPID(Constants.TALON_PROPORTION, Constants.TALON_INTEGRATION, Constants.TALON_DIFFERENTIAL, Constants.TALON_FEEDFORWARD, 0, 0, 0);
+		//c.setPID(Constants.TALON_PROPORTION, Constants.TALON_INTEGRATION, Constants.TALON_DIFFERENTIAL, Constants.TALON_FEEDFORWARD, 0, 0, 0);
 	}
 	
 	public void initDefaultCommand()

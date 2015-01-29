@@ -4,6 +4,7 @@ import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.utils.Constants;
 import org.stlpriory.robotics.utils.Debug;
+import org.stlpriory.robotics.utils.Utils;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -65,8 +66,8 @@ public class CANDrivetrain extends Subsystem {
         this.drive.setExpiration(0.1);
         this.drive.setSensitivity(0.5);
         this.drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
-        this.drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        this.drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        this.drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        this.drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
     }
 
     private void initTalon(final CANTalon talon) {
@@ -74,7 +75,10 @@ public class CANDrivetrain extends Subsystem {
                      0, 0);
     }
 
-    public void mecanum_drive(final double forward, final double right, final double rotation) {
+    public void mecanum_drive( double forward,  double right,  double rotation) {
+    	forward = Utils.scale(forward);
+    	right = Utils.scale(right);
+    	rotation = Utils.scale(rotation);
         this.drive.mecanumDrive_Cartesian(right, forward, rotation, 0);
     }
 
