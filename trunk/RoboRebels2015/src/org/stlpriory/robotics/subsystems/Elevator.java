@@ -81,10 +81,10 @@ public class Elevator extends Subsystem{
 		}
 		if (distance < 0.0)
 		{
-			distance = distance*(-1.0);
-			if (speed >0)
+			distance *= -1.0;
+			if (speed > 0)
 			{ 
-				speed =speed*(-1);
+				speed *= (-1);
 			}
 			
 		}
@@ -96,6 +96,7 @@ public class Elevator extends Subsystem{
 			if (atTop)
 			{
 				Debug.println("[Elevator Subsystem] Carrige is at top");
+				// This will always return false; nothing changes success. 
 				return success;
 			}
 			elevatorHeight = elevatorEncoder.get();
@@ -112,7 +113,7 @@ public class Elevator extends Subsystem{
 			t.start();
 			Debug.println("[Elevator Subsystem] Starting motor at "+speed);
 			elevatorMotor.set(speed);
-			while(t.hasPeriodPassed(time) == false)
+			while(!t.hasPeriodPassed(time))
 			{
 				if (topSwitch.get())//check to make sure not at top
 				{
@@ -128,7 +129,7 @@ public class Elevator extends Subsystem{
 			return success;
 		
 		}
-		else if (speed<0&&speed>-1)
+		else if (speed<0 && speed>-1)
 		{
 			atBottom = bottomSwitch.get();
 			if (atBottom)
