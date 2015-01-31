@@ -4,6 +4,7 @@ import org.stlpriory.robotics.RobotMap;
 import org.stlpriory.robotics.commands.drivetrain.DriveWithGamepad;
 import org.stlpriory.robotics.utils.Constants;
 import org.stlpriory.robotics.utils.Debug;
+import org.stlpriory.robotics.utils.Ramper;
 import org.stlpriory.robotics.utils.Utils;
 
 import edu.wpi.first.wpilibj.CANTalon;
@@ -17,7 +18,9 @@ public class CANDrivetrain extends Subsystem {
 
     CANTalon left_front, right_front, left_rear, right_rear;
     RobotDrive drive;
-
+    Ramper rotationRamper;
+    Ramper forwardRamper;
+    Ramper rightRamper;
     public CANDrivetrain() {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain Subsystem] Instantiating...");
@@ -69,6 +72,9 @@ public class CANDrivetrain extends Subsystem {
         this.drive.setMaxOutput(Constants.DRIVE_MAX_OUTPUT);
         this.drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         this.drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        rotationRamper = new Ramper();
+        forwardRamper = new Ramper();
+        rightRamper = new Ramper();
     }
 
     private void initTalon(final CANTalon talon) {
@@ -77,94 +83,13 @@ public class CANDrivetrain extends Subsystem {
     }
 
     public void mecanum_drive( double forward,  double right,  double rotation) {
-    	forward = Utils.scale(forward);
-    	right = Utils.scale(right);
-    	rotation = Utils.scale(rotation);
+    	forward = Utils.scale(forwardRamper.scale(forward));
+    	right = Utils.scale(rightRamper.scale(right));
+    	rotation = Utils.scale(rotationRamper.scale(rotation));
         this.drive.mecanumDrive_Cartesian(right, forward, rotation, 0);
     }
     
-    public void mecanum_drive(Joystick joystick){
-        /*
-          * Three-axis joystick mecanum control.
-             * Let x represent strafe left/right
-             * Let y represent rev/fwd
-             * Let z represent spin CCW/CW axes
-             * where each varies from -1 to +1.
-             * So:
-             * y = -1 corresponds to full speed reverse,
-             * y= +1 corresponds to full speed forward,
-             * x= -1 corresponds to full speed strafe left,
-             * x= +1 corresponds to full speed strafe right,
-             * z= -1 corresponds to full speed spin CCW,
-             * z= +1 corresponds to full speed spin CW
-             *
-             * Axis indexes:
-             * 1 - LeftX
-             * 2 - LeftY
-             * 3 - Triggers (Each trigger = 0 to 1, axis value = right - left)
-             * 4 - RightX
-             * 5 - RightY
-             * 6 - DPad Left/Right
-             */
-
-            double rawLeftX = joystick.getRawAxis(1);
-            double rawLeftY = joystick.getRawAxis(2);
-            double rawZ = joystick.getRawAxis(3);
-
-            double right = scaleInputValue(-rawLeftX, 0);
-            double forward = scaleInputValue(rawLeftY, 1);
-            double rotation = scaleInputValue(-rawZ, 2);
-            double clockwise = scaleInputValue(rawZ, 3);
-
-            checkTalonForReset(left_front);
-            checkTalonForReset(left_rear);
-            checkTalonForReset(right_front);
-            checkTalonForReset(right_rear);
-
-            drive.mecanumDrive_Cartesian(-right, forward, rotation, clockwise);
-
-            //printTalonOutputCurrent();
-            //printTalonOutputVoltage();
-            //printTalonSpeed();
-    }
-    private double scaleInputValue(double rawZ, int i) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public void driveWithJoystick(Joystick joystick) {
-        checkTalonForReset(leftRearTalon);
-        checkTalonForReset(leftRearTalon);
-        checkTalonForReset(rightFrontTalon);
-        checkTalonForReset(rightRearTalon);
-        
-        int mode = Constants.TALON_CONTROL_MODE;
-        try {
-            switch (mode) {
-                case 1:  // kCurrent
-                    leftRearTalon.setX(leftFrontTalon.getOutputCurrent());
-                    rightRearTalon.setX(rightFrontTalon.getOutputCurrent());
-System.out.println("Output left talon current = "+leftFrontTalon.getOutputCurrent());
-System.out.println("Output right talon current = "+rightFrontTalon.getOutputCurrent());
-                    break;
-                case 4:  // kVoltage
-                    leftRearTalon.setX(leftFrontTalon.getOutputVoltage() / leftFrontTalon.getBusVoltage());
-                    rightRearTalon.setX(rightFrontTalon.getOutputVoltage() / rightFrontTalon.getBusVoltage());
-System.out.println("Output left talon output voltage = "+leftFrontTalon.getOutputVoltage());
-System.out.println("Output right talon output voltage = "+rightFrontTalon.getOutputVoltage());
-                    break;
-                case 0:  // kPercentVbus
-                case 2:  // kSpeed
-                case 3:  // kPosition
-                default:
-                    arcadeDrive(joystick.getAxis(Joystick.AxisType.kY), joystick.getAxis(Joystick.AxisType.kX));
-                    break;
-            }
-        } 
-        catch (Exception e) {
-        	e.printStackTrace();
-        }
-        }
+    
 
     @Override
     public void initDefaultCommand() {
