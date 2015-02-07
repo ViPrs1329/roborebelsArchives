@@ -14,17 +14,16 @@ public class ElevatorStop extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		commandExecuted = false;
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		commandExecuted = Robot.elevator.stop();
+		Robot.elevator.stop();
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return commandExecuted;
+		return true;
 	}
 
 	// Called once after isFinished returns true

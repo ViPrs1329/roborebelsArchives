@@ -3,12 +3,9 @@ package org.stlpriory.robotics.commands;
 import edu.wpi.first.wpilibj.command.Command;
 
 import org.stlpriory.robotics.Robot;
+import org.stlpriory.robotics.utils.Constants;
 
-/**
- *
- */
 public class ElevatorDown extends Command {
-	boolean commandExecuted;
 
 	public ElevatorDown() {
 		// Use requires() here to declare subsystem dependencies
@@ -17,18 +14,16 @@ public class ElevatorDown extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		commandExecuted = false;
+		Robot.elevator.holdDown(Constants.ELEVATOR_SPEED);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.elevator.goDown();
-		
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return commandExecuted;
+		return true;
 	}
 
 	// Called once after isFinished returns true
