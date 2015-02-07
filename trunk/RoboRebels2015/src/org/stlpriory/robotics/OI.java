@@ -1,5 +1,8 @@
 package org.stlpriory.robotics;
 
+import org.stlpriory.robotics.commands.ElevatorDown;
+import org.stlpriory.robotics.commands.ElevatorStop;
+import org.stlpriory.robotics.commands.ElevatorUp;
 import org.stlpriory.robotics.commands.Grab;
 import org.stlpriory.robotics.commands.Release;
 import org.stlpriory.robotics.commands.StopGrab;
@@ -68,7 +71,8 @@ public class OI {
     private final Joystick xboxController;
     private JoystickButton grabButton;
     private JoystickButton releaseButton;
-    
+    private JoystickButton elevatorUpButton;
+    private JoystickButton elevatorDownButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         Debug.println("[OI] Intitalizing gamepad to Driver's station USB port"  );
@@ -86,7 +90,16 @@ public class OI {
         releaseButton.whenPressed ( new Release());
         releaseButton.whenReleased ( new StopRelease());
         
-     
+        Debug.println("[OI] INitializing gamepad to raise elevator when the y button is pressed is pressed");
+        elevatorUpButton = new JoystickButton(xboxController, Keymap.ELEVATOR_UP_BUTTON_KEY_MAP);
+        elevatorUpButton.whenPressed(new ElevatorUp());
+        elevatorUpButton.whenReleased(new ElevatorStop());
+        
+        Debug.println("[OI] INitializing gamepad to lower elevator when the a button is pressed is pressed");
+        elevatorDownButton = new JoystickButton(xboxController, Keymap.ELEVATOR_DOWN_BUTTON_KEY_MAP);
+        elevatorDownButton.whenPressed(new ElevatorDown());
+        elevatorDownButton.whenReleased(new ElevatorStop());
+        
 
         Debug.println("[OI] Instantiation complete.");
     }

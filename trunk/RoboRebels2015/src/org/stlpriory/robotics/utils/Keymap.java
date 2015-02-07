@@ -27,9 +27,12 @@ public class Keymap {
 	
 	
 	
-	public static final int GRAB_BUTTON_KEY_MAP = 1; // Fix this number
-	public static final int RELEASE_BUTTON_KEY_MAP = 2; // Fix this number
-	public static final int RIGHT_THUMB_STICK_KEY_MAP = 3; // Fix this number
-	public static final int LEFT_THUMB_STICK_KEY_MAP = 4; // Fix this number
+	
+	public static final int GRAB_BUTTON_KEY_MAP = 3; 
+	public static final int RELEASE_BUTTON_KEY_MAP = -3; 
+	public static final int RIGHT_THUMB_STICK_KEY_MAP = 10; 
+	public static final int LEFT_THUMB_STICK_KEY_MAP = 9; 
+	public static final int ELEVATOR_UP_BUTTON_KEY_MAP = 4;
+	public static final int ELEVATOR_DOWN_BUTTON_KEY_MAP = 1;
 	
 }

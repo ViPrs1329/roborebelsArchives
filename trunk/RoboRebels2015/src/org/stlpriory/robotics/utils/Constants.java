@@ -13,5 +13,6 @@ public class Constants {
 	public static final int DRIVER_STATION_USB_PORT1 = 1; //Fix this number
 	public static final double MAX_ACCELLERATION = .05;
 	public static final double MAX_DECELLERATION = .08;
+	public static final double ELEVATOR_SPEED = 1;
 }
 			

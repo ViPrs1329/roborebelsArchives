@@ -61,9 +61,49 @@ public class Elevator extends Subsystem{
 			
 	}
 
+	public void goUp() {
+		// This function called by elevator up command.
+		boolean atTop;
+		double distanceToTop;
+		atTop = topSwitch.get();//see if motor is at top; if so then end method
+		if (atTop)
+		{
+			Debug.println("[Elevator Subsystem] Carrige is at top");
+			// This will always return false; nothing changes success. 
+			return;
+		}
+		elevatorHeight = elevatorEncoder.get();
+		Debug.println("[Elevator Subsystem] Carrige is at " + elevatorHeight);
+		//Check if there is enough space above to go up for given time at given speed.
+		distanceToTop =  Constants.ELEVATOR_SHAFT_HEIGHT - elevatorHeight;
+		goUp(distanceToTop, Constants.ELEVATOR_SPEED);
+	}
+	public boolean stop()
+	{
+		elevatorMotor.set(0);
+		
+		return true;
+	}
+	public void goDown() {
+		//this function called by ElevatorDown command
+		boolean atBottom;
+		double distanceToBottom;
+		atBottom = bottomSwitch.get();//see if motor is at bottom; if so, then end method
+		if (atBottom)
+		{
+			Debug.println("[Elevator Subsystem] carriage is at bottom");
+			//this will always return false; nothing changes success.
+			return;
+		}
+		elevatorHeight = elevatorEncoder.get();
+		Debug.println("[Elevator Subsystem] Carrige is at " + elevatorHeight);
+		//Check if there is enough space above to go down for given time at given speed.
+		distanceToBottom =  elevatorHeight;
+		goUp(distanceToBottom, Constants.ELEVATOR_SPEED);
+	}
 
 	//Move elevator certain up distance at certain speed.
-	public boolean goUp(double distance, double speed) {
+	private boolean goUp(double distance, double speed) {
 		/**
 		 * This method tells the elevator motor to go up a certain distance at a certain speed. The speed must be between 1.0 and -1.0
 		 * To go down, please set speed to negative, not distance 
