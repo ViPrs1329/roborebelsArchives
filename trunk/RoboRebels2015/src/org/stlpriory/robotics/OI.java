@@ -4,9 +4,11 @@ import org.stlpriory.robotics.commands.ElevatorDown;
 import org.stlpriory.robotics.commands.ElevatorStop;
 import org.stlpriory.robotics.commands.ElevatorUp;
 import org.stlpriory.robotics.commands.Grab;
+import org.stlpriory.robotics.commands.HoldElevatorUp;
 import org.stlpriory.robotics.commands.Release;
 import org.stlpriory.robotics.commands.StopGrab;
 import org.stlpriory.robotics.commands.StopRelease;
+import org.stlpriory.robotics.triggers.ElevatorStill;
 import org.stlpriory.robotics.utils.Debug;
 import org.stlpriory.robotics.utils.Keymap;
 
@@ -73,6 +75,7 @@ public class OI {
     private JoystickButton releaseButton;
     private JoystickButton elevatorUpButton;
     private JoystickButton elevatorDownButton;
+    private ElevatorStill elevatorStill;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         Debug.println("[OI] Intitalizing gamepad to Driver's station USB port"  );
@@ -99,6 +102,9 @@ public class OI {
         elevatorDownButton = new JoystickButton(xboxController, Keymap.ELEVATOR_DOWN_BUTTON_KEY_MAP);
         elevatorDownButton.whenPressed(new ElevatorDown());
         elevatorDownButton.whenReleased(new ElevatorStop());
+        
+        elevatorStill = new ElevatorStill();
+        elevatorStill.whileActive(new HoldElevatorUp());
         
 
         Debug.println("[OI] Instantiation complete.");

@@ -16,9 +16,9 @@ public class DefaultElevatorCommand extends Command {
 
 	@Override
 	protected void execute() {
-		if (Robot.elevator.atBottom() && Robot.elevator.getSpeed() < 0) {
+		if (Robot.elevator.atBottom() && Robot.elevator.getSpeed() > 0) {
 			Robot.elevator.stop();
-		} else if (Robot.elevator.atTop() && Robot.elevator.getSpeed() > 0) {
+		} else if (Robot.elevator.atTop() && Robot.elevator.getSpeed() < 0) {
 			Robot.elevator.stop();
 		}
 	}

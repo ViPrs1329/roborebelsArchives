@@ -27,7 +27,7 @@ public class RobotMap {
 	public static final int ELEVATOR_CAN_TALON_CHANNEL = 5;
 	public static final int ELEVATOR_ENCODER_CHANNEL_A = 1;
 	public static final int ELEVATOR_ENCODER_CHANNEL_B = 2;
-	public static final int ELEVATOR_TOP_SWITCH_CHANNEL = 1;
-	public static final int ELEVATOR_BOTTOM_SWITCH_CHANNEL = 2;
+	public static final int ELEVATOR_TOP_SWITCH_CHANNEL = 0;
+	public static final int ELEVATOR_BOTTOM_SWITCH_CHANNEL = 1;
 	
 }

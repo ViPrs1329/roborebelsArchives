@@ -65,7 +65,7 @@ public class Elevator extends Subsystem {
 
 	public void holdUp(double speed) {
 		if (!atTop()) {
-			elevatorMotor.set(speed);
+			elevatorMotor.set(-1*Math.abs(speed));
 		}
 	}
 
@@ -75,20 +75,20 @@ public class Elevator extends Subsystem {
 
 	public void holdDown(double speed) {
 		if (!atBottom())
-			elevatorMotor.set(-1 * Math.abs(speed));
+			elevatorMotor.set( Math.abs(speed));
 	}
 	public double getSpeed() {
 		/*
 		 * This does not return the regular speed that you give it in get(). See
 		 * documentation for details.
 		 */
-		return elevatorMotor.getSpeed();
+		return elevatorMotor.get();
 	}
 
 	
 
 	public boolean atBottom() {
-		return bottomSwitch.get();
+		return !bottomSwitch.get();
 	}
 
 	public void goUp() {
@@ -129,7 +129,7 @@ public class Elevator extends Subsystem {
 	}
 
 	public boolean atTop() {
-		return topSwitch.get();
+		return !topSwitch.get();
 	}
 
 	// Move elevator certain up distance at certain speed.

@@ -18,8 +18,8 @@ public class Debug {
      */
     public static void print(String s) {
         if (isDebugMode()) {
-           // System.out.print(s);
-        	FileUtils.writeTo(s, DEBUG_FILE);
+            System.out.print(s);
+        	//FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
@@ -30,8 +30,8 @@ public class Debug {
      */
     public static void println(String s) {
         if (isDebugMode()) {
-           // System.out.println(s);
-            FileUtils.writeTo(s, DEBUG_FILE);
+            System.out.println(s);
+            //FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
@@ -42,8 +42,8 @@ public class Debug {
      */
     public static void err(String s) {
         if (isDebugMode()) {
-           // System.err.println(s);
-            FileUtils.writeTo(s, DEBUG_FILE);
+            System.err.println(s);
+            //FileUtils.writeTo(s, DEBUG_FILE);
         }
     }
 
