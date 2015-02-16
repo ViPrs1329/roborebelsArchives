@@ -21,11 +21,16 @@ public class CANDrivetrain extends Subsystem {
     Ramper rotationRamper;
     Ramper forwardRamper;
     Ramper rightRamper;
+    
+    private double modifier;
+    
     public CANDrivetrain() {
         super("CANDriveTrain");
         Debug.println("[CANDriveTrain Subsystem] Instantiating...");
         Debug.println("[CANDriveTrain Subsystem] CANTalon control mode is " + (Constants.TALON_CONTROL_MODE));
 
+        modifier = 1.0;
+        
         try {
             Debug.println("[CANDrivetrain Subsystem] Initializing left front CAN to CAN bus address"
                           + RobotMap.LEFT_FRONT_CAN_TALON_CHANNEL);
@@ -86,7 +91,15 @@ public class CANDrivetrain extends Subsystem {
     	forward = Utils.scale(forwardRamper.scale(forward));
     	right = Utils.scale(rightRamper.scale(right));
     	rotation = Utils.scale(rotationRamper.scale(rotation));
-        this.drive.mecanumDrive_Cartesian(right, forward, rotation, 0);
+        this.drive.mecanumDrive_Cartesian(modifier*right, modifier*forward, modifier*rotation, 0);
+    }
+    
+    public void shiftHigh() {
+    	modifier = 1.0;
+    }
+    
+    public void shiftLow() {
+    	modifier = .5;
     }
     
     

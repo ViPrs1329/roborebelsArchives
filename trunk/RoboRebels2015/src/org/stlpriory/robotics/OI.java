@@ -8,6 +8,8 @@ import org.stlpriory.robotics.commands.HoldElevatorUp;
 import org.stlpriory.robotics.commands.Release;
 import org.stlpriory.robotics.commands.StopGrab;
 import org.stlpriory.robotics.commands.StopRelease;
+import org.stlpriory.robotics.commands.drivetrain.ShiftHigh;
+import org.stlpriory.robotics.commands.drivetrain.ShiftLow;
 import org.stlpriory.robotics.triggers.ElevatorStill;
 import org.stlpriory.robotics.utils.Debug;
 import org.stlpriory.robotics.utils.Keymap;
@@ -71,27 +73,18 @@ public class OI {
      * 6:  Directional pad
      */
     private final Joystick xboxController;
-    private JoystickButton grabButton;
-    private JoystickButton releaseButton;
     private JoystickButton elevatorUpButton;
     private JoystickButton elevatorDownButton;
     private ElevatorStill elevatorStill;
+    private JoystickButton shiftHighButton;
+    private JoystickButton shiftLowButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         Debug.println("[OI] Intitalizing gamepad to Driver's station USB port"  );
         
         this.xboxController = new Joystick(0);
         
-        Debug.println("[OI] Initializing gamepad to grab object when the left trigger is pressed");
-        grabButton = new JoystickButton(xboxController, Keymap.GRAB_BUTTON_KEY_MAP);
-      ///  grabbutton.whenpressed(new Grab();
-        grabButton.whenPressed(new Grab());
-        grabButton.whenReleased(new StopGrab());
         
-        Debug.println("[OI] INitializing gamepad to drop object when the right trigger is pressed");
-        releaseButton = new JoystickButton(xboxController, Keymap.RELEASE_BUTTON_KEY_MAP);
-        releaseButton.whenPressed ( new Release());
-        releaseButton.whenReleased ( new StopRelease());
         
         Debug.println("[OI] INitializing gamepad to raise elevator when the y button is pressed is pressed");
         elevatorUpButton = new JoystickButton(xboxController, Keymap.ELEVATOR_UP_BUTTON_KEY_MAP);
@@ -105,6 +98,12 @@ public class OI {
         
         elevatorStill = new ElevatorStill();
         elevatorStill.whileActive(new HoldElevatorUp());
+        
+        shiftHighButton = new JoystickButton(xboxController,Keymap.DRIVETAIN_SHIFT_HIGH_BUTTON_KEY_MAP);
+        shiftHighButton.whenPressed(new ShiftHigh());
+        
+        shiftLowButton = new JoystickButton(xboxController,Keymap.DRIVETRAIN_SHIFT_LOW_BUTTON_KEY_MAP);
+        shiftLowButton.whenPressed(new ShiftLow());
         
 
         Debug.println("[OI] Instantiation complete.");

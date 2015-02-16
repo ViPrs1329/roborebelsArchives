@@ -1,15 +1,15 @@
 package org.stlpriory.robotics.commands.drivetrain;
 
+import org.stlpriory.robotics.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
-import org.stlpriory.robotics.*;
 
 /**
  *
  */
-public class DriveWithGamepad extends Command {
+public class ShiftHigh extends Command {
 
-    public DriveWithGamepad() {
-        super("DriveWithGamepad");
+    public ShiftHigh() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	requires(Robot.drivetrain);
@@ -21,13 +21,12 @@ public class DriveWithGamepad extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        //Robot.drivetrain.mecanum_drive(Robot.oi.getGamePad());
-    	Robot.drivetrain.mecanum_drive(Robot.oi.getGamePad().getRawAxis(1),Robot.oi.getGamePad().getRawAxis(3)-Robot.oi.getGamePad().getRawAxis(2),Robot.oi.getGamePad().getRawAxis(0));
+    	Robot.drivetrain.shiftHigh();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true

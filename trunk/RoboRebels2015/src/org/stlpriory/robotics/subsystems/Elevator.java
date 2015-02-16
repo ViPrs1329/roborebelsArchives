@@ -19,10 +19,12 @@ public class Elevator extends Subsystem {
 	Timer t = new Timer();
 
 	public Elevator() {
+		
 		super("Elevator");
 		Debug.println("[Elevator Subsystem] Instantiating...");
 		Debug.println("[Elevator Subsystem] CANTalon control mode is "
 				+ (Constants.TALON_CONTROL_MODE));
+		
 		// try initializing limit switches
 		try {
 			Debug.println("[Elevator Subsystem] Initializing top limit switch...");
