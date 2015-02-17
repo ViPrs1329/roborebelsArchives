@@ -14,7 +14,7 @@ public class ElevatorDown extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		Robot.elevator.holdDown(Constants.ELEVATOR_SPEED);
+		Robot.elevator.holdDown(Constants.ELEVATOR_SPEED*.75);
 	}
 
 	// Called repeatedly when this Command is scheduled to run

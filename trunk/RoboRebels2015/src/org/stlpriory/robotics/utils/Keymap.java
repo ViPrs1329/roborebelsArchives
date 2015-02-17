@@ -34,7 +34,7 @@ public class Keymap {
 	public static final int LEFT_THUMB_STICK_KEY_MAP = 9; 
 	public static final int ELEVATOR_UP_BUTTON_KEY_MAP = 4;
 	public static final int ELEVATOR_DOWN_BUTTON_KEY_MAP = 1;
-	public static final int DRIVETAIN_SHIFT_HIGH_BUTTON_KEY_MAP = 6;
-	public static final int DRIVETRAIN_SHIFT_LOW_BUTTON_KEY_MAP = 5;
+	public static final int DRIVETAIN_SHIFT_HIGH_BUTTON_KEY_MAP = 2;
+	public static final int DRIVETRAIN_SHIFT_LOW_BUTTON_KEY_MAP = 3;
 	
 }

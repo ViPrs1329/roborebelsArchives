@@ -23,10 +23,12 @@ public class HoldElevatorUp extends CommandGroup {
         // A command group will require all of the subsystems that each member
         // would require.
         // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
+        // a CommandGroup containing them would require both
+    	//the chassis and the
         // arm.
-    	addSequential(new ElevatorUp());
-    	addSequential(new WaitCommand(.1));
+    	addSequential(new ElevatorUpSlow());
+    	addSequential(new WaitCommand(.05));
     	addSequential(new ElevatorStop());
+    	addSequential(new WaitCommand(.005));
     }
 }

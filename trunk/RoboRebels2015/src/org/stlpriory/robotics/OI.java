@@ -96,7 +96,7 @@ public class OI {
         elevatorDownButton.whenPressed(new ElevatorDown());
         elevatorDownButton.whenReleased(new ElevatorStop());
         
-        elevatorStill = new ElevatorStill();
+        elevatorStill = new ElevatorStill(xboxController);
         elevatorStill.whileActive(new HoldElevatorUp());
         
         shiftHighButton = new JoystickButton(xboxController,Keymap.DRIVETAIN_SHIFT_HIGH_BUTTON_KEY_MAP);
