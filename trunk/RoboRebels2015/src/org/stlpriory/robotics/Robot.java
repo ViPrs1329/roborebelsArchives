@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 import org.stlpriory.robotics.commands.ExampleCommand;
+import org.stlpriory.robotics.commands.autonomous.AutonomousCommand;
 import org.stlpriory.robotics.subsystems.CANDrivetrain;
 import org.stlpriory.robotics.subsystems.Elevator;
 import org.stlpriory.robotics.subsystems.ExampleSubsystem;
@@ -40,7 +41,7 @@ public class Robot extends IterativeRobot {
         
 		oi = new OI();
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+        autonomousCommand = new AutonomousCommand();
         
         timer.stop();
         Debug.println("[RoboRebels.robotInit()] Done in " + timer.get() * 1e6 + " ms");
@@ -55,7 +56,9 @@ public class Robot extends IterativeRobot {
 
     public void autonomousInit() {
         // schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        if (autonomousCommand != null) { 
+        	autonomousCommand.start();
+        }
     }
 
     /**

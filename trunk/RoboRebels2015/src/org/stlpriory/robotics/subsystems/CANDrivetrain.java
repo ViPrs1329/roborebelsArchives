@@ -85,6 +85,7 @@ public class CANDrivetrain extends Subsystem {
     private void initTalon(final CANTalon talon) {
         talon.setPID(Constants.TALON_PROPORTION, Constants.TALON_INTEGRATION, Constants.TALON_DIFFERENTIAL, Constants.TALON_FEEDFORWARD, 0,
                      0, 0);
+        talon.reverseSensor(true);
     }
 
     public void mecanum_drive( double forward,  double right,  double rotation) {
@@ -100,6 +101,30 @@ public class CANDrivetrain extends Subsystem {
     
     public void shiftLow() {
     	modifier = .5;
+    }
+    
+    public double getRobotSpeed() {
+    	double leftFrontSpeed = left_front.getEncVelocity();
+    	double rightFrontSpeed = right_front.getEncVelocity();
+    	double leftRearSpeed = left_rear.getEncVelocity();
+    	double rightRearSpeed = right_rear.getEncVelocity();
+    	leftFrontSpeed = Math.abs(leftFrontSpeed);
+    	rightFrontSpeed = Math.abs(rightFrontSpeed);
+    	leftRearSpeed = Math.abs(leftRearSpeed);
+    	rightRearSpeed = Math.abs(rightRearSpeed);
+    	
+    	double speed = 0;
+    	if (leftFrontSpeed != 0) speed = leftFrontSpeed;
+    	if (rightFrontSpeed != 0) speed = rightFrontSpeed;
+    	if (leftRearSpeed != 0) speed = leftRearSpeed;
+    	if (rightRearSpeed != 0) speed = rightRearSpeed;
+    	
+    	if (leftFrontSpeed != 0) speed = Math.min(speed,leftFrontSpeed);
+    	if (rightFrontSpeed != 0) speed = Math.min(speed, rightFrontSpeed);
+    	if (leftRearSpeed != 0) speed = Math.min(speed, leftRearSpeed);
+    	if (rightRearSpeed != 0) speed = Math.min(speed, rightRearSpeed);
+    	
+    	return speed;
     }
     
     
