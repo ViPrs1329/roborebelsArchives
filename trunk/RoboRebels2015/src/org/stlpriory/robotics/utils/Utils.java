@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package org.stlpriory.robotics.utils;
+import org.stlpriory.robotics.utils.Constants;
 
 /**
  * Utility class
@@ -20,6 +21,11 @@ public class Utils {
      * @return The input number rounded to the number of decimal places
      * specified.
      */
+    public static double TALONdistance(double feet){
+    	double TALON;
+    	TALON = feet * (Constants.TALON_UNIT);
+    	return TALON;
+    }
     public static double roundDecimals(double x, int decimals) {
         if (decimals > 9) {
             return (Math.ceil(x * decimals) / decimals);

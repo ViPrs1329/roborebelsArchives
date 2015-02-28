@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.stlpriory.robotics.utils.TALONdistance;
+import org.stlpriory.robotics.utils.Utils;
 import org.stlpriory.robotics.Robot;
 
 public class DriveForward extends Command {
@@ -15,13 +17,17 @@ public class DriveForward extends Command {
 	double totalDistance = 0.0;
 	double timeCurrent;
 	Timer timer = new Timer();
+	boolean forward;
 	
-	public DriveForward(double din) {
+	public DriveForward(double din, boolean isForward) {
         super("DriveWithGamepad");
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
+        // Variable "din" needs to be in feet
+        //If isFoward is true, it will drive forwards, otherwise it will drive in reverse.
     	requires(Robot.drivetrain);
-    	goalDistance = din;
+    	goalDistance = Utils.TALONdistance(din);
+    	forward = isForward;
     }
 
     // Called just before this Command runs the first time
@@ -32,7 +38,11 @@ public class DriveForward extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (forward) {
         Robot.drivetrain.mecanum_drive(-.3,0,0);
+    	} else {
+    		Robot.drivetrain.mecanum_drive(.3,0,0);
+    	}
         SmartDashboard.putNumber("Robot Speed", Robot.drivetrain.getRobotSpeed());
     }
 
