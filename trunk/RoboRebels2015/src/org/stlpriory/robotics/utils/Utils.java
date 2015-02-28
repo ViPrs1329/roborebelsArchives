@@ -22,8 +22,7 @@ public class Utils {
      * specified.
      */
     public static double TALONdistance(double feet){
-    	double TALON;
-    	TALON = feet * (Constants.TALON_UNIT);
+    	double TALON = feet * (Constants.TALON_UNIT);
     	return TALON;
     }
     public static double roundDecimals(double x, int decimals) {

@@ -15,5 +15,6 @@ public class Constants {
 	public static final double MAX_DECELLERATION = .08;
 	public static final double ELEVATOR_SPEED = .5;
 	public static final double TALON_UNIT = 50; //this number is the conversion factor from feet to 'TALON' units.
+	public static final double DEFAULT_ROTATION_SPEED = -.3;
 }
 			

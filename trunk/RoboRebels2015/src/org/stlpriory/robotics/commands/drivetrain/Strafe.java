@@ -1,11 +1,10 @@
 package org.stlpriory.robotics.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.CANTalon;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.stlpriory.robotics.utils.TALONdistance;
 import org.stlpriory.robotics.utils.Utils;
 import org.stlpriory.robotics.Robot;
 
