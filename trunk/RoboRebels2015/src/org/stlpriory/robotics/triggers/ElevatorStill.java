@@ -1,6 +1,5 @@
 package org.stlpriory.robotics.triggers;
 
-import org.stlpriory.robotics.Robot;
 import org.stlpriory.robotics.utils.Keymap;
 
 import edu.wpi.first.wpilibj.Joystick;
