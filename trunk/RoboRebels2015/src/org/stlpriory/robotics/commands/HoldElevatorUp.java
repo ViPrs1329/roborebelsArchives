@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
  */
 public class HoldElevatorUp extends CommandGroup {
     
+	boolean on = false;
     public  HoldElevatorUp() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
@@ -26,6 +27,19 @@ public class HoldElevatorUp extends CommandGroup {
         // a CommandGroup containing them would require both
     	//the chassis and the
         // arm.
+   
+    		addThings();
+    	
+
+    }
+    
+    public HoldElevatorUp(boolean onin) {
+    	on = true;
+    	addThings();
+    }
+    
+    private void addThings() {
+    	if (!on) return;
     	addSequential(new ElevatorUpSlow());
     	addSequential(new WaitCommand(.05));
     	addSequential(new ElevatorStop());

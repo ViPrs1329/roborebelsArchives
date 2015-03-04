@@ -17,19 +17,22 @@ public class Rotate extends Command {
 	double totalAngle = 0.0;
 	double timeCurrent;
 	Timer timer = new Timer();
+	boolean clockwise = false;
 	
-	public Rotate(double inAngle) {
+	public Rotate(double inAngle, boolean direction) {
         super("DriveWithGamepad");
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
         // Variable "inAngle" needs to be in degrees
         //If isFoward is true, it will drive forwards, otherwise it will drive in reverse.
     	requires(Robot.drivetrain);
+    	clockwise =direction;
     	speed = Constants.DEFAULT_ROTATION_SPEED;
+    	if (direction) speed = speed*(-1.0);
     	goalAngle = inAngle;
     }
 	public Rotate(double inAngle,double speed){
-		this(inAngle);
+		this(inAngle,false);
 		this.speed = speed;
 	}
 
@@ -37,6 +40,7 @@ public class Rotate extends Command {
     protected void initialize() {
     	timer.start();
     	startTime =  timer.get();
+    	totalAngle = 0.;
     }
 
     // Called repeatedly when this Command is scheduled to run

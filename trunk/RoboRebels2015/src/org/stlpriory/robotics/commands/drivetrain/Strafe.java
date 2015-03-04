@@ -32,6 +32,7 @@ public class Strafe extends Command {
     protected void initialize() {
     	timer.start();
     	startTime =  timer.get();
+    	totalDistance=0.0;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -39,7 +40,7 @@ public class Strafe extends Command {
     	if (right) {
         Robot.drivetrain.mecanum_drive(0,.3,0);// this number may need to be changed
     	} else {
-    		Robot.drivetrain.mecanum_drive(0,-.3,0);
+    		Robot.drivetrain.mecanum_drive(0,-.3,0.);
     	}
         SmartDashboard.putNumber("Robot Speed", Robot.drivetrain.getRobotSpeed());
     }
@@ -59,7 +60,7 @@ public class Strafe extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-		Robot.drivetrain.mecanum_drive(0.0,0,0);
+		Robot.drivetrain.mecanum_drive(0.0,0.,0.);
 
     }
 

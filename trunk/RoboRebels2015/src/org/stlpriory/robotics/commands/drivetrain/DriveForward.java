@@ -28,12 +28,14 @@ public class DriveForward extends Command {
     	requires(Robot.drivetrain);
     	goalDistance = Utils.TALONdistance(din);
     	forward = isForward;
+    	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
     	timer.start();
     	startTime =  timer.get();
+    	totalDistance = 0.0;
     }
 
     // Called repeatedly when this Command is scheduled to run
