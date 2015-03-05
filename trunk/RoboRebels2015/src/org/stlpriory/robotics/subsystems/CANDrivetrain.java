@@ -20,7 +20,7 @@ public class CANDrivetrain extends Subsystem {
     Ramper rotationRamper;
     Ramper forwardRamper;
     Ramper rightRamper;
-    
+    public boolean isPulsing = true; 
     private double modifier;
     
     public CANDrivetrain() {

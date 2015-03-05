@@ -36,5 +36,5 @@ public class Keymap {
 	public static final int ELEVATOR_DOWN_BUTTON_KEY_MAP = 1;
 	public static final int DRIVETAIN_SHIFT_HIGH_BUTTON_KEY_MAP = 2;
 	public static final int DRIVETRAIN_SHIFT_LOW_BUTTON_KEY_MAP = 3;
-	
+	public static final int TOGGLE_PULSE = 5; // I just picked this at random. Change if necessary. 
 }
