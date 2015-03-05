@@ -16,5 +16,6 @@ public class Constants {
 	public static final double ELEVATOR_SPEED = .5;
 	public static final double TALON_UNIT = 63; //this number is the conversion factor from feet to 'TALON' units.
 	public static final double DEFAULT_ROTATION_SPEED = -.5; // Negative is counterclockwise
+	public static final double DEFAULT_STRAFE_SPEED = .3;
 }
 			

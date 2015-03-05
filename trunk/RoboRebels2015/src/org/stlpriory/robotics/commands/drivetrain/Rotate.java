@@ -17,59 +17,69 @@ public class Rotate extends Command {
 	double totalAngle = 0.0;
 	double timeCurrent;
 	Timer timer = new Timer();
-	boolean clockwise = false;
-	
-	public Rotate(double inAngle, boolean direction) {
-        super("DriveWithGamepad");
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
-        // Variable "inAngle" needs to be in degrees
-        //If isFoward is true, it will drive forwards, otherwise it will drive in reverse.
-    	requires(Robot.drivetrain);
-    	clockwise =direction;
-    	speed = Constants.DEFAULT_ROTATION_SPEED;
-    	if (direction) speed = speed*(-1.0);
-    	goalAngle = inAngle;
-    }
-	public Rotate(double inAngle,double speed){
-		this(inAngle,false);
+
+	public Rotate(double inAngle, double speed, boolean direction) {
+		super("DriveWithGamepad");
+		// Use requires() here to declare subsystem dependencies
+		// eg. requires(chassis);
+		// Variable "inAngle" needs to be in degrees
+		// If isFoward is true, it will drive forwards, otherwise it will drive
+		// in reverse.
+		requires(Robot.drivetrain);
 		this.speed = speed;
+		if (direction)
+			speed *= (-1.0);
+		goalAngle = inAngle;
 	}
 
-    // Called just before this Command runs the first time
-    protected void initialize() {
-    	timer.start();
-    	startTime =  timer.get();
-    	totalAngle = 0.;
-    }
+	public Rotate(double inAngle, double speed) {
+		this(inAngle, speed, false);
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-        Robot.drivetrain.mecanum_drive(0,0,speed);//this number may need to be fixed
-        SmartDashboard.putNumber("Robot Speed", Robot.drivetrain.getRobotSpeed());
-    }
+	public Rotate(double inAngle) {
+		this(inAngle, Constants.DEFAULT_ROTATION_SPEED, false);
+	}
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-    	timeCurrent = timer.get(); //fix this
-    	angle = (Robot.drivetrain.getRobotSpeed() * (timeCurrent - startTime));
-    	totalAngle = totalAngle + angle;
-    	if (totalAngle >= goalAngle) {
-    		return true;
-    	}
-    	startTime = timer.get();
-    	SmartDashboard.putNumber("Angle", totalAngle);
-        return false;
-    }
+	public Rotate(double inAngle, boolean direction) {
+		this(inAngle, Constants.DEFAULT_ROTATION_SPEED, direction);
+	}
 
-    // Called once after isFinished returns true
-    protected void end() {
-		Robot.drivetrain.mecanum_drive(0.0,0,0);
+	// Called just before this Command runs the first time
+	protected void initialize() {
+		timer.start();
+		startTime = timer.get();
+		totalAngle = 0.;
+	}
 
-    }
+	// Called repeatedly when this Command is scheduled to run
+	protected void execute() {
+		Robot.drivetrain.mecanum_drive(0, 0, speed);// this number may need to
+													// be fixed
+		SmartDashboard.putNumber("Robot Speed",
+				Robot.drivetrain.getRobotSpeed());
+	}
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    protected void interrupted() {
-    }
+	// Make this return true when this Command no longer needs to run execute()
+	protected boolean isFinished() {
+		timeCurrent = timer.get(); // fix this
+		angle = (Robot.drivetrain.getRobotSpeed() * (timeCurrent - startTime));
+		totalAngle = totalAngle + angle;
+		if (totalAngle >= goalAngle) {
+			return true;
+		}
+		startTime = timer.get();
+		SmartDashboard.putNumber("Angle", totalAngle);
+		return false;
+	}
+
+	// Called once after isFinished returns true
+	protected void end() {
+		Robot.drivetrain.mecanum_drive(0.0, 0, 0);
+
+	}
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	protected void interrupted() {
+	}
 }

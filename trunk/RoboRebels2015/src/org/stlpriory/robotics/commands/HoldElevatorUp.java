@@ -27,10 +27,7 @@ public class HoldElevatorUp extends CommandGroup {
         // a CommandGroup containing them would require both
     	//the chassis and the
         // arm.
-   
-    		addThings();
-    	
-
+    	addThings();
     }
     
     public HoldElevatorUp(boolean onin) {

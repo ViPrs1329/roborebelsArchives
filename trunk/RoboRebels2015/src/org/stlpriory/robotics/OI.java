@@ -82,12 +82,12 @@ public class OI {
         
         
         
-        Debug.println("[OI] INitializing gamepad to raise elevator when the y button is pressed is pressed");
+        Debug.println("[OI] Initializing gamepad to raise elevator when the y button is pressed is pressed");
         elevatorUpButton = new JoystickButton(xboxController, Keymap.ELEVATOR_UP_BUTTON_KEY_MAP);
         elevatorUpButton.whenPressed(new ElevatorUp());
         elevatorUpButton.whenReleased(new ElevatorStop());
         
-        Debug.println("[OI] INitializing gamepad to lower elevator when the a button is pressed is pressed");
+        Debug.println("[OI] Initializing gamepad to lower elevator when the a button is pressed is pressed");
         elevatorDownButton = new JoystickButton(xboxController, Keymap.ELEVATOR_DOWN_BUTTON_KEY_MAP);
         elevatorDownButton.whenPressed(new ElevatorDown());
         elevatorDownButton.whenReleased(new ElevatorStop());

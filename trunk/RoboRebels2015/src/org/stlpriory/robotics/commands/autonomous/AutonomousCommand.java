@@ -1,7 +1,7 @@
 package org.stlpriory.robotics.commands.autonomous;
 
-import org.stlpriory.robotics.commands.*;
-import org.stlpriory.robotics.commands.drivetrain.*;
+import org.stlpriory.robotics.commands.drivetrain.Rotate;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -35,7 +35,7 @@ public class AutonomousCommand extends CommandGroup {
 //		addSequential(new Release());
 //		addSequential(new DriveForward(2, false));
 //		addSequential(new Strafe(1, false));
-		addSequential(new Rotate(90,true));
+		addSequential(new Rotate(90, true));
 		addSequential(new Rotate(90, false));
 //		addSequential(new DriveForward(2, true));
 //		addSequential(new Grab());

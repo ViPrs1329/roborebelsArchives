@@ -87,7 +87,7 @@ public class CANDrivetrain extends Subsystem {
         talon.reverseSensor(true);
     }
 
-    public void mecanum_drive( double forward,  double right,  double rotation) {
+    public void mecanum_drive(double forward,  double right,  double rotation) {
     	forward = Utils.scale(forwardRamper.scale(forward));
     	right = Utils.scale(rightRamper.scale(right));
     	rotation = Utils.scale(rotationRamper.scale(rotation));
