@@ -6,15 +6,19 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class TogglePulse extends Command{
 
+	
+	public TogglePulse() {
+		requires(Robot.drivetrain);
+	}
+	
 	@Override
 	protected void initialize() {
-		requires(Robot.drivetrain);
 		
 	}
 
 	@Override
 	protected void execute() {
-		Robot.drivetrain.isPulsing = !Robot.drivetrain.isPulsing;
+//		Robot.drivetrain.setPulsing(!Robot.drivetrain.isPulsing());
 	}
 
 	@Override

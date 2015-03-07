@@ -20,8 +20,10 @@ public class CANDrivetrain extends Subsystem {
     Ramper rotationRamper;
     Ramper forwardRamper;
     Ramper rightRamper;
-    public boolean isPulsing = true; 
+//    private boolean isPulsing = true; 
     private double modifier;
+    
+    
     
     public CANDrivetrain() {
         super("CANDriveTrain");
@@ -126,6 +128,13 @@ public class CANDrivetrain extends Subsystem {
     	return speed;
     }
     
+//    public void setPulsing(boolean i) {
+//    	isPulsing = i;
+//    }
+//    public boolean isPulsing() {
+//    	return isPulsing;
+//    }
+//    
     
 
     @Override

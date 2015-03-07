@@ -42,6 +42,7 @@ public class DriveForward extends Command {
     protected void execute() {
     	if (forward) {
         Robot.drivetrain.mecanum_drive(-.3,0,0);
+        System.out.println("Driving forward");
     	} else {
     		Robot.drivetrain.mecanum_drive(.3,0,0);
     	}
@@ -64,6 +65,7 @@ public class DriveForward extends Command {
     // Called once after isFinished returns true
     protected void end() {
 		Robot.drivetrain.mecanum_drive(0.0,0,0);
+		System.out.println("I finished Driving");
 
     }
 
