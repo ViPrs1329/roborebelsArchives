@@ -17,6 +17,7 @@ public class Rotate extends Command {
 	double totalAngle = 0.0;
 	double timeCurrent;
 	Timer timer = new Timer();
+	boolean direction;
 
 	public Rotate(double inAngle, double speed, boolean direction) {
 		super("DriveWithGamepad");
@@ -27,8 +28,9 @@ public class Rotate extends Command {
 		// in reverse.
 		requires(Robot.drivetrain);
 		this.speed = speed;
-		if (direction)
-			speed *= (-1.0);
+		this.direction = direction;
+//		if (direction)
+//			speed *= (-1.0);
 		goalAngle = inAngle;
 	}
 
@@ -53,7 +55,12 @@ public class Rotate extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.drivetrain.mecanum_drive(0, 0, speed);// this number may need to
+		if (direction) {
+			Robot.drivetrain.mecanum_drive(0, 0, speed);
+		}
+		else {
+		Robot.drivetrain.mecanum_drive(0, 0, -speed);
+		}// this number may need to
 													// be fixed
 		SmartDashboard.putNumber("Robot Speed",
 				Robot.drivetrain.getRobotSpeed());

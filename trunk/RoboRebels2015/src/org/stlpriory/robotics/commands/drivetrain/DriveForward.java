@@ -26,6 +26,7 @@ public class DriveForward extends Command {
 		// If isFoward is true, it will drive forwards, otherwise it will drive
 		// in reverse.
 		requires(Robot.drivetrain);
+		setTimeout(.1);
 		goalDistance = Utils.TALONdistance(din);
 		forward = isForward;
 
@@ -56,6 +57,7 @@ public class DriveForward extends Command {
 		timeCurrent = timer.get(); // fix this
 		distance = (Robot.drivetrain.getRobotSpeed() * (timeCurrent - startTime));
 		totalDistance = totalDistance + distance;
+		System.out.println( "distance " + totalDistance);
 		if (totalDistance >= goalDistance) {
 			return true;
 		}
@@ -74,5 +76,6 @@ public class DriveForward extends Command {
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
+		Robot.drivetrain.mecanum_drive(0, 0, 0);
 	}
 }

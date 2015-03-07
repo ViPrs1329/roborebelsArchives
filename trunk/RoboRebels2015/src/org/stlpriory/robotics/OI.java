@@ -7,6 +7,7 @@ import org.stlpriory.robotics.commands.HoldElevatorUp;
 import org.stlpriory.robotics.commands.TogglePulse;
 import org.stlpriory.robotics.commands.drivetrain.ShiftHigh;
 import org.stlpriory.robotics.commands.drivetrain.ShiftLow;
+import org.stlpriory.robotics.commands.drivetrain.ShiftSuperLow;
 import org.stlpriory.robotics.triggers.ElevatorStill;
 import org.stlpriory.robotics.utils.Debug;
 import org.stlpriory.robotics.utils.Keymap;
@@ -76,6 +77,7 @@ public class OI {
     private JoystickButton shiftHighButton;
     private JoystickButton shiftLowButton;
     private JoystickButton pulseToggle;
+    private JoystickButton shiftSuperLowButton;
     public OI() {
         Debug.println("[OI] Instantiating ...");
         Debug.println("[OI] Intitalizing gamepad to Driver's station USB port"  );
@@ -105,6 +107,9 @@ public class OI {
         
         pulseToggle = new JoystickButton(xboxController, Keymap.TOGGLE_PULSE);
         pulseToggle.whenPressed(new TogglePulse());
+        
+        shiftSuperLowButton = new JoystickButton(xboxController, Keymap.SHIFT_SUPER_LOW_BUTTON);
+        shiftSuperLowButton.whenPressed(new ShiftSuperLow());
 
         Debug.println("[OI] Instantiation complete.");
     }

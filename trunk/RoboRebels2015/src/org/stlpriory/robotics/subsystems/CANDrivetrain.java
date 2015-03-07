@@ -103,6 +103,9 @@ public class CANDrivetrain extends Subsystem {
     public void shiftLow() {
     	modifier = .5;
     }
+    public void shiftSuperLow() {
+    	modifier = .2;
+    }
     
     public double getRobotSpeed() {
     	double leftFrontSpeed = left_front.getEncVelocity();

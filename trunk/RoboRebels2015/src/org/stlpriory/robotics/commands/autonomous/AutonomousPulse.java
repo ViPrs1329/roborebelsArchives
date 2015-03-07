@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutonomousPulse extends CommandGroup {
 
 	public AutonomousPulse() {
-		for (int i = 0; i < 1e6; i++)
+		for (int i = 0; i < 45; i++)
 			addSequential(new HoldElevatorUp());
 	}
 }

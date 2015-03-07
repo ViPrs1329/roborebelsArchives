@@ -27,7 +27,7 @@ public class Keymap {
 	
 	
 	
-	
+	public static final int SHIFT_SUPER_LOW_BUTTON = 8;
 	public static final int GRAB_BUTTON_KEY_MAP = 3; 
 	public static final int RELEASE_BUTTON_KEY_MAP = -3; 
 	public static final int RIGHT_THUMB_STICK_KEY_MAP = 10; 
