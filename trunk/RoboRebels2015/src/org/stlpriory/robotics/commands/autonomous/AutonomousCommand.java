@@ -1,11 +1,7 @@
 package org.stlpriory.robotics.commands.autonomous;
 
-import org.stlpriory.robotics.Robot;
-import org.stlpriory.robotics.commands.DisablePulsing;
 import org.stlpriory.robotics.commands.ElevatorStop;
 import org.stlpriory.robotics.commands.ElevatorUp;
-import org.stlpriory.robotics.commands.ElevatorUpSlow;
-import org.stlpriory.robotics.commands.TogglePulse;
 import org.stlpriory.robotics.commands.drivetrain.DriveForward;
 import org.stlpriory.robotics.commands.drivetrain.Rotate;
 
@@ -36,14 +32,14 @@ public class AutonomousCommand extends CommandGroup {
     	//the chassis and the
         // arm.
 //		addSequential(new DriveForward(0.5, true));
-		System.out.println("Drove Forward");
+//		System.out.println("Drove Forward");
 //		addSequential(new ElevatorUp(), 0.25); // this tells the elevator to go up for 1 second.
 		//addSequential(new HoldElevatorUp());
 //		addSequential(new ElevatorUp());
 		addSequential(new ElevatorUp());
 		addSequential(new WaitCommand(1));
 		addSequential(new ElevatorStop());
-		addSequential(new TogglePulse());
+		addParallel(new AutonomousPulse());
 //		if (!Robot.drivetrain.isPulsing) {
 //			addSequential(new TogglePulse());
 //		}
@@ -53,7 +49,7 @@ public class AutonomousCommand extends CommandGroup {
 //		addSequential(new DriveForward(2, false));
 //		addSequential(new Strafe(1, false));
 		addSequential(new Rotate(90, false));
-		addSequential(new DriveForward(10,true));
+		addSequential(new DriveForward(3,true));
 //		addSequential(new Rotate(90, false));
 //		addSequential(new DriveForward(2, true));
 //		addSequential(new Grab());
