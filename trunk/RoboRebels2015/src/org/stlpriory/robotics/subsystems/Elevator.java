@@ -16,6 +16,7 @@ public class Elevator extends Subsystem {
 	Encoder elevatorEncoder;
 	DigitalInput topSwitch, bottomSwitch;
 	int elevatorHeight;
+	boolean elevatorPulsing;
 	Timer t = new Timer();
 
 	public Elevator() {
@@ -24,6 +25,8 @@ public class Elevator extends Subsystem {
 		Debug.println("[Elevator Subsystem] Instantiating...");
 		Debug.println("[Elevator Subsystem] CANTalon control mode is "
 				+ (Constants.TALON_CONTROL_MODE));
+		
+		elevatorPulsing = true;
 		
 		// try initializing limit switches
 		try {
@@ -69,6 +72,13 @@ public class Elevator extends Subsystem {
 		if (!atTop()) {
 			elevatorMotor.set(-1*Math.abs(speed));
 		}
+	}
+	
+	public boolean isElevatorPulsing() {
+		return elevatorPulsing;
+	}
+	public void setElevatorPulsing(boolean p) {
+		elevatorPulsing = p;
 	}
 
 	public void stop() {

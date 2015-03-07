@@ -8,7 +8,7 @@ public class TogglePulse extends Command{
 
 	
 	public TogglePulse() {
-		requires(Robot.drivetrain);
+		requires(Robot.elevator);
 	}
 	
 	@Override
@@ -18,7 +18,7 @@ public class TogglePulse extends Command{
 
 	@Override
 	protected void execute() {
-//		Robot.drivetrain.setPulsing(!Robot.drivetrain.isPulsing());
+		Robot.elevator.setElevatorPulsing(!Robot.elevator.isElevatorPulsing());
 	}
 
 	@Override

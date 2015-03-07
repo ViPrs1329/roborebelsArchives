@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+import org.stlpriory.robotics.commands.DisablePulsing;
 import org.stlpriory.robotics.commands.autonomous.AutonomousCommand;
 import org.stlpriory.robotics.subsystems.CANDrivetrain;
 import org.stlpriory.robotics.subsystems.Elevator;
@@ -54,6 +55,7 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
+    	Robot.elevator.setElevatorPulsing(false);
         // schedule the autonomous command (example)
     //	autonomousCommand = new AutonomousCommand();
         if (autonomousCommand != null) { 
