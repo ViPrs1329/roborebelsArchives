@@ -30,7 +30,7 @@ public class CANDrivetrain extends Subsystem {
         Debug.println("[CANDriveTrain Subsystem] Instantiating...");
         Debug.println("[CANDriveTrain Subsystem] CANTalon control mode is " + (Constants.TALON_CONTROL_MODE));
 
-        modifier = 1.0;
+        modifier = 0.8;
         
         try {
             Debug.println("[CANDrivetrain Subsystem] Initializing left front CAN to CAN bus address"
@@ -97,7 +97,7 @@ public class CANDrivetrain extends Subsystem {
     }
     
     public void shiftHigh() {
-    	modifier = 1.0;
+    	modifier = 0.8;
     }
     
     public void shiftLow() {

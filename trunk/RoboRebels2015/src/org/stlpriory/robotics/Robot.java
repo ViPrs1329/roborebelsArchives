@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
     public void autonomousInit() {
     	Robot.elevator.setElevatorPulsing(false);
         // schedule the autonomous command (example)
-    //	autonomousCommand = new AutonomousCommand();
+    	autonomousCommand = new AutonomousCommand();
         if (autonomousCommand != null) { 
         	autonomousCommand.start();
         }

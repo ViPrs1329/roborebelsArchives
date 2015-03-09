@@ -39,7 +39,7 @@ public class AutonomousCommand extends CommandGroup {
 //		addSequential(new ElevatorUp());
 		addSequential(new ShiftHigh());
 		addSequential(new ElevatorUp());
-		addSequential(new WaitCommand(1));
+		addSequential(new WaitCommand(2));
 		addSequential(new ElevatorStop());
 		addParallel(new AutonomousPulse());
 //		if (!Robot.drivetrain.isPulsing) {
@@ -51,7 +51,7 @@ public class AutonomousCommand extends CommandGroup {
 //		addSequential(new DriveForward(2, false));
 //		addSequential(new Strafe(1, false));
 		addSequential(new Rotate(90, false));
-		addSequential(new DriveForward(9,true));
+		addSequential(new DriveForward(10,true));
 //		addSequential(new Rotate(90, false));
 //		addSequential(new DriveForward(2, true));
 //		addSequential(new Grab());
