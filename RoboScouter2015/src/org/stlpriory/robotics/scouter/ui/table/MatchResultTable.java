@@ -84,7 +84,7 @@ public class MatchResultTable extends JTable {
         
         setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));  
         setRowHeight(IMAGE_HEIGHT+10);
-        //setRowHeight(25);
+//        setRowHeight(25);
         
         JTableCellRenderer renderer = new JTableCellRenderer(theResult,theScoringCategories);
         renderer.setHorizontalAlignment( JLabel.CENTER );
@@ -124,11 +124,11 @@ public class MatchResultTable extends JTable {
             return;
         }
         
+        int imageColumnIndex  = 0;
+        int nameColumnIndex   = 1;
+        int buttonColumnIndex = this.categories.size() + 2;
+        
         for (int rowIndex = 0; rowIndex < getModel().getRowCount(); rowIndex++) {
-            int imageColumnIndex  = 0;
-            int nameColumnIndex   = 1;
-            int buttonColumnIndex = this.categories.size() + 2;
-
             TeamResult theTeamResult = this.matchResult.getTeamResults().get(rowIndex);
 
             // If the model data for this team result was updated then make those
@@ -198,14 +198,17 @@ public class MatchResultTable extends JTable {
             // Header for image column
             this.columnNames.add("Images");
             this.columnTypes.add(JLabel.class);
+            
             // Header for team name column
             this.columnNames.add("Teams");
             this.columnTypes.add(String.class);
+            
             // Headers for each scoring category column
             for (Category c : theScoringCategories) {
                 this.columnNames.add(c.getDisplayName());
                 this.columnTypes.add(Integer.class);
             }
+            
             // Header for JButton column
             this.columnNames.add("Match Scoring");
             this.columnTypes.add(JButton.class);
