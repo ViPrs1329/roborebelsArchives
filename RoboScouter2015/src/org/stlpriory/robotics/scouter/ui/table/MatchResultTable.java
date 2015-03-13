@@ -526,7 +526,7 @@ public class MatchResultTable extends JTable {
 
         @Override
         public void cancelCellEditing() {
-            fireEditingCanceled();
+            fireEditingCancelled();
         }
 
         @Override
@@ -538,10 +538,6 @@ public class MatchResultTable extends JTable {
         public void removeCellEditorListener(CellEditorListener l) {
             listenerList.remove(CellEditorListener.class, l);
         }
-
-//        public CellEditorListener[] getCellEditorListeners() {
-//            return listenerList.getListeners(CellEditorListener.class);
-//        }
 
         protected void fireEditingStopped() {
             // Guaranteed to return a non-null array
@@ -559,7 +555,7 @@ public class MatchResultTable extends JTable {
             }
         }
 
-        protected void fireEditingCanceled() {
+        protected void fireEditingCancelled() {
             // Guaranteed to return a non-null array
             Object[] listeners = listenerList.getListenerList();
             // Process the listeners last to first, notifying
