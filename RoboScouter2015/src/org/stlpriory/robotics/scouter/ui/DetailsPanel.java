@@ -50,7 +50,7 @@ public class DetailsPanel extends JPanel {
         Font labelFont = this.contentLabel.getFont();
         this.contentLabel.setFont(new Font(labelFont.getName(), Font.BOLD, 2*labelFont.getSize()));
         this.contentLabel.setText("My content label");
-
+        
         this.saveButton = new JButton();
         this.saveButton.setLabel("Save");
         this.saveButton.addActionListener(e -> previewSaveActionPerformed(e));

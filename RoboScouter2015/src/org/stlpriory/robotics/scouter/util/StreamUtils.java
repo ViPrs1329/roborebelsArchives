@@ -141,7 +141,7 @@ public class StreamUtils {
      * @throws IOException
      */
     public static File createTempFileFromResource(final Class<?> clazz, final String resourceName) throws IOException {
-        InputStream istream = clazz.getResourceAsStream("defaultImage.png");
+        InputStream istream = clazz.getResourceAsStream(resourceName);
         if (istream == null) {
             throw new IOException("A resource with the name '"+resourceName+"' cannot be found");
         }

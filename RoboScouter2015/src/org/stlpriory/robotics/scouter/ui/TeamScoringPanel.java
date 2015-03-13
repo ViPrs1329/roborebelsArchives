@@ -3,7 +3,6 @@ package org.stlpriory.robotics.scouter.ui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,6 +28,7 @@ import javax.swing.JTextField;
 import org.stlpriory.robotics.scouter.model.MatchInfo;
 import org.stlpriory.robotics.scouter.model.TeamAlliance;
 import org.stlpriory.robotics.scouter.model.TeamInfo;
+import org.stlpriory.robotics.scouter.util.UiUtils;
 
 public class TeamScoringPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -203,7 +203,7 @@ public class TeamScoringPanel extends JPanel {
         File imageFile = theTeam.getImageFile();
         BufferedImage robotImage = null;
         try {
-            robotImage = rescale(ImageIO.read(imageFile));
+            robotImage = UiUtils.rescale(ImageIO.read(imageFile),IMAGE_WIDTH, IMAGE_HEIGHT);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -433,14 +433,6 @@ public class TeamScoringPanel extends JPanel {
         add(panel, BorderLayout.LINE_START);
         panel.setBorder(BorderFactory.createEmptyBorder());
         return panel;
-    }
-
-    private BufferedImage rescale(final BufferedImage originalImage) {
-        BufferedImage resizedImage = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
-        g.dispose();
-        return resizedImage;
     }
     
     // ==================================================================================

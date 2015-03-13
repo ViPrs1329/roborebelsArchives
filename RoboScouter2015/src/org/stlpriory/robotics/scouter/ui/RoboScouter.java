@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -177,6 +178,7 @@ public class RoboScouter extends JFrame {
         this.jSplitPane1.setRightComponent(this.detailsPanel);
 
         setJMenuBar(this.jMenuBar1);
+        viewSplashScreen();
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -196,6 +198,12 @@ public class RoboScouter extends JFrame {
         );
 
         pack();
+    }
+
+    private void viewSplashScreen() {
+        JPanel thePanel = new SplashScreenPanel();
+        this.detailsPanel.setContentView(thePanel);
+        this.detailsPanel.setContentLabel("");
     }
 
     private void teamRankingItemActionPerformed(final ActionEvent evt) {
@@ -221,7 +229,7 @@ public class RoboScouter extends JFrame {
         
         JTable theTable = new MatchScheduleTable(theMatches,false,false);
         this.detailsPanel.setContentView(theTable);
-        this.detailsPanel.setContentLabel("Participating teams");
+        this.detailsPanel.setContentLabel("Match schedule ("+theMatches.size()+" matches)");
     }
 
     private void ImportTeamsActionPerformed(final ActionEvent evt) {
@@ -253,7 +261,7 @@ public class RoboScouter extends JFrame {
             
             JTable theTable = new MatchScheduleTable(theMatches,false,true);
             this.detailsPanel.setContentView(theTable);
-            this.detailsPanel.setContentLabel("Match schedule import results");
+            this.detailsPanel.setContentLabel("Match schedule import results ("+theMatches.size()+" matches)");
             
         } else {
             System.out.println("File access cancelled by user.");

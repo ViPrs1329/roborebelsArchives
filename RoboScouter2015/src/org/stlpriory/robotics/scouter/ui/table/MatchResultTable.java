@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -49,6 +48,7 @@ import org.stlpriory.robotics.scouter.model.MatchResult;
 import org.stlpriory.robotics.scouter.model.TeamInfo;
 import org.stlpriory.robotics.scouter.model.TeamResult;
 import org.stlpriory.robotics.scouter.ui.TeamScoringPanel;
+import org.stlpriory.robotics.scouter.util.UiUtils;
 
 import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Table;
@@ -175,14 +175,6 @@ public class MatchResultTable extends JTable {
         return !this.readOnly;
     }
     
-    private static BufferedImage rescale(final BufferedImage originalImage)  {
-        BufferedImage resizedImage = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
-        g.dispose();
-        return resizedImage;
-    }
-    
     // ==================================================================================
     //                        I N N E R   C L A S S
     // ==================================================================================
@@ -252,7 +244,7 @@ public class MatchResultTable extends JTable {
                 File imageFile = theTeam.getImageFile();
                 BufferedImage robotImage = null;
                 try {
-                    robotImage = rescale(ImageIO.read(imageFile));
+                    robotImage = UiUtils.rescale(ImageIO.read(imageFile),IMAGE_WIDTH, IMAGE_HEIGHT);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -376,7 +368,7 @@ public class MatchResultTable extends JTable {
                 File imageFile = theTeam.getImageFile();
                 BufferedImage robotImage = null;
                 try {
-                    robotImage = rescale(ImageIO.read(imageFile));
+                    robotImage = UiUtils.rescale(ImageIO.read(imageFile),IMAGE_WIDTH, IMAGE_HEIGHT);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

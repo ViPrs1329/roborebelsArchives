@@ -3,7 +3,6 @@ package org.stlpriory.robotics.scouter.ui.rater;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +26,10 @@ import javax.swing.border.TitledBorder;
 import org.stlpriory.robotics.scouter.model.Category;
 import org.stlpriory.robotics.scouter.model.MatchInfo;
 import org.stlpriory.robotics.scouter.model.TeamAlliance;
+import org.stlpriory.robotics.scouter.model.TeamAlliance.AllianceColor;
 import org.stlpriory.robotics.scouter.model.TeamInfo;
 import org.stlpriory.robotics.scouter.model.TeamResult;
-import org.stlpriory.robotics.scouter.model.TeamAlliance.AllianceColor;
+import org.stlpriory.robotics.scouter.util.UiUtils;
 
 public class TeamResultRater extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -67,7 +67,7 @@ public class TeamResultRater extends JPanel {
 
         File imageFile = theTeam.getImageFile();
         try {
-            this.robotImage = rescale(ImageIO.read(imageFile));
+            this.robotImage = UiUtils.rescale(ImageIO.read(imageFile),IMAGE_WIDTH, IMAGE_HEIGHT);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -150,14 +150,6 @@ public class TeamResultRater extends JPanel {
         if (!enabled) {
             repaint();
         }
-    }
-    
-    private BufferedImage rescale(final BufferedImage originalImage)  {
-        BufferedImage resizedImage = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
-        g.dispose();
-        return resizedImage;
     }
     
     public static void main(String[] args) {
