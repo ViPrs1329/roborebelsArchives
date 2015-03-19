@@ -56,7 +56,7 @@ public class MatchScheduleTable extends javax.swing.JTable {
         }
         
         setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));    
-        setRowHeight(25);
+        setRowHeight(30);
         
         JTableHeaderCellRenderer headerRenderer = new JTableHeaderCellRenderer();
         headerRenderer.setHorizontalAlignment( JLabel.CENTER );

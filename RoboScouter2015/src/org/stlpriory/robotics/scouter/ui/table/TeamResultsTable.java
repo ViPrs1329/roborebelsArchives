@@ -62,8 +62,8 @@ public class TeamResultsTable extends JTable {
         }
         
         setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));    
-        setRowHeight(25);
- 
+        setRowHeight(30);
+        
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
         setDefaultRenderer(String.class, centerRenderer);
@@ -147,11 +147,13 @@ public class TeamResultsTable extends JTable {
             // Header for first column
             this.columnNames.add("Matches");
             this.columnTypes.add(String.class);
+            
             // Headers for scoring category columns
             for (Category c : theScoringCategories) {
                 this.columnNames.add(c.getDisplayName());
                 this.columnTypes.add(Integer.class);
             }
+            
             // Header for JButton column
             this.columnNames.add("Match Notes");
             this.columnTypes.add(JButton.class);

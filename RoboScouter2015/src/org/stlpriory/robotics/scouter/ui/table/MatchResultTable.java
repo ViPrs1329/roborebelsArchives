@@ -76,7 +76,7 @@ public class MatchResultTable extends JTable {
         this.categories  = theScoringCategories;
         this.readOnly    = isReadOnly;
         
-        addMouseListener(new JTableButtonMouseListener(this));
+//        addMouseListener(new JTableButtonMouseListener(this));
         setRowSelectionAllowed(false);
         setColumnSelectionAllowed(false);
         setCellSelectionEnabled(true);
@@ -95,11 +95,10 @@ public class MatchResultTable extends JTable {
         setDefaultRenderer(JPanel.class, renderer);
 
         TableColumnModel tcm = getColumnModel();
+        int imageColumnIndex  = 0;
+        int nameColumnIndex   = 1;
+        int buttonColumnIndex = this.categories.size() + 2;
         for (int i = 0; i < tcm.getColumnCount(); i++) {
-            int imageColumnIndex  = 0;
-            int nameColumnIndex   = 1;
-            int buttonColumnIndex = this.categories.size() + 2;
-            
             if (i == imageColumnIndex) {
                 tcm.getColumn(i).setPreferredWidth(IMAGE_WIDTH);
                 
@@ -399,30 +398,30 @@ public class MatchResultTable extends JTable {
                 
     }
     
-    // ==================================================================================
-    //                        I N N E R   C L A S S
-    // ==================================================================================
-    
-    private static class JTableButtonMouseListener extends MouseAdapter {
-        private final JTable table;
-
-        public JTableButtonMouseListener(JTable table) {
-            this.table = table;
-        }
-
-        public void mouseClicked(MouseEvent e) {
-            int column = table.getColumnModel().getColumnIndexAtX(e.getX());
-            int row    = e.getY()/table.getRowHeight();
-
-            // Checking the row or column is valid or not
-            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
-                Object value = table.getValueAt(row, column);
-                if (value instanceof JButton) {
-                    ((JButton)value).doClick();
-                }
-            }
-        }
-    }    
+//    // ==================================================================================
+//    //                        I N N E R   C L A S S
+//    // ==================================================================================
+//    
+//    private static class JTableButtonMouseListener extends MouseAdapter {
+//        private final JTable table;
+//
+//        public JTableButtonMouseListener(JTable table) {
+//            this.table = table;
+//        }
+//
+//        public void mouseClicked(MouseEvent e) {
+//            int column = table.getColumnModel().getColumnIndexAtX(e.getX());
+//            int row    = e.getY()/table.getRowHeight();
+//
+//            // Checking the row or column is valid or not
+//            if (row < table.getRowCount() && row >= 0 && column < table.getColumnCount() && column >= 0) {
+//                Object value = table.getValueAt(row, column);
+//                if (value instanceof JButton) {
+//                    ((JButton)value).doClick();
+//                }
+//            }
+//        }
+//    }    
     
     // ==================================================================================
     //                        I N N E R   C L A S S

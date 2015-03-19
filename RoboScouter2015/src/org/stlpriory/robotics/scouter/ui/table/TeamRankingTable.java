@@ -50,7 +50,7 @@ public class TeamRankingTable extends JTable {
         }
         
         setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));    
-        setRowHeight(25);
+        setRowHeight(30);
         
         JTableCellRenderer renderer = new JTableCellRenderer(theScoringCategories);
         renderer.setHorizontalAlignment( JLabel.CENTER );
@@ -60,9 +60,13 @@ public class TeamRankingTable extends JTable {
         setDefaultRenderer(JButton.class, renderer);
         
         TableColumnModel tcm = getColumnModel();
+        int nameColumnIndex   = 0;
+        int buttonColumnIndex = theScoringCategories.size() + 1;
         for (int i = 0; i < tcm.getColumnCount(); i++) {
-            if (i == 0) {
-                tcm.getColumn(i).setPreferredWidth(120);
+            if (i == nameColumnIndex) {
+                tcm.getColumn(i).setPreferredWidth(100);
+            } else if (i == buttonColumnIndex) {
+                tcm.getColumn(i).setPreferredWidth(80);
             } else {
                 tcm.getColumn(i).setPreferredWidth(80);
             }
@@ -94,17 +98,16 @@ public class TeamRankingTable extends JTable {
             this.categories = theScoringCategories;
             this.resultsMap = ArrayListMultimap.create();
             
-            // Header for first column
-            this.columnNames.add("Teams");
+            this.columnNames.add("Team");
             this.columnTypes.add(String.class);
-            // Headers for scoring category columns
+            
             for (Category c : theScoringCategories) {
                 this.columnNames.add(c.getDisplayName());
                 //this.columnTypes.add(String.class);
                 this.columnTypes.add(Double.class);
             }
-            // Header for JButton column
-            this.columnNames.add("Summaries");
+            
+            this.columnNames.add("Summary");
             this.columnTypes.add(JButton.class);
             
             for (TeamResult teamResult : this.results) {
@@ -136,10 +139,14 @@ public class TeamRankingTable extends JTable {
         @Override 
         public Object getValueAt(final int rowIndex, final int columnIndex) {
             TeamInfo theTeam = this.teams.get(rowIndex);
-            if (columnIndex == 0) {
+            int nameColumnIndex   = 0;
+            int buttonColumnIndex = this.categories.size() + 1;
+            int categoryIndex     = columnIndex - 1;
+            
+            if (columnIndex == nameColumnIndex) {
                 return "Team "+Integer.toString(theTeam.getTeamNumber());
                 
-            } else if (columnIndex > this.categories.size()) {
+            } else if (columnIndex == buttonColumnIndex) {
                 final JButton button = new JButton("Summary");
                 button.addActionListener(e -> {
                     Collection<TeamResult> theTeamResults = this.resultsMap.get(theTeam);
@@ -157,12 +164,11 @@ public class TeamRankingTable extends JTable {
                 return button;
                 
             } else {
-                Category c = this.categories.get(columnIndex - 1);
+                Category c = this.categories.get(categoryIndex);
                 Collection<TeamResult> theTeamResults = this.resultsMap.get(theTeam);
                 Double avgScore = ModelUtils.averageScore(theTeamResults, c);
                 avgScore = Math.floor(avgScore * 100) / 100;
                 return avgScore;
-                //return String.format("%.2f", avgScore);
             }
         }   
         
@@ -176,25 +182,27 @@ public class TeamRankingTable extends JTable {
         private static final long serialVersionUID = 1L;
         private static final Color LIGHT_GRAY = new Color(240, 240, 240);
 
-        private final List<Category> cateogries;
+        private final List<Category> categories;
 
-        public JTableCellRenderer(final List<Category> theScoringCateogries) {
-            this.cateogries = theScoringCateogries;
+        public JTableCellRenderer(final List<Category> theScoringCategories) {
+            this.categories = theScoringCategories;
         }
 
         public Component getTableCellRendererComponent(JTable table, 
                                                        Object value, 
                                                        boolean isSelected, 
                                                        boolean hasFocus, 
-                                                       int row,
-                                                       int column) {
+                                                       int rowIndex,
+                                                       int columnIndex) {
             setValue(value);
-            if (row % 2 == 0) {
+            int buttonColumnIndex = this.categories.size() + 1;
+            
+            if (rowIndex % 2 == 0) {
                 setBackground(LIGHT_GRAY);
             } else {
                 setBackground(Color.WHITE);
             }
-            if (column > this.cateogries.size()) {
+            if (columnIndex == buttonColumnIndex) {
                 JButton button = (JButton) value;
                 return button;
             }
